@@ -1,0 +1,2 @@
+# Bioinfo_Macro_Genome_Resolved_Metagenomics
+Genome-resolved metagenomics pipeline.
