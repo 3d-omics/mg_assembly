@@ -1,0 +1,6 @@
+ name: metabinner
+ channels:
+    - conda-forge
+    - bioconda
+ dependencies:
+    - metabinner=1.4.4

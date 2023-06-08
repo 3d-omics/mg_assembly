@@ -1,0 +1,5 @@
+ name: dRep
+ channels:
+    - bioconda
+ dependencies:
+    - drep=3.4.3

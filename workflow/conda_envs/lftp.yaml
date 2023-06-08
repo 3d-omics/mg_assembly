@@ -1,0 +1,9 @@
+ name: lftp
+ channels:
+    - conda-forge
+    - bioconda
+    - defaults
+ dependencies:
+    - lftp=4.9.2
+    - pandas
+    - requests

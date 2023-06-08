@@ -1,0 +1,20 @@
+### Config file for assembly/binning pipeline
+### RE 04/2023
+
+
+abb: ASBATCH
+codedir: /projects/ehi/data/0_Code/EHI_bioinformatics_EHI_VERSION/workflow
+workdir: /projects/ehi/data/ASB/ASBATCH
+magdir: /projects/ehi/data/MAG/ASBATCH
+logdir: /projects/ehi/data/RUN/ASBATCH/logs
+#assembler you want to use (megahit or metaspades)
+assembler: megahit
+#path to checkmdb
+checkmdb: /projects/ehi/data/0_Environments/databases/checkm_2015
+GTDB_data: /projects/mjolnir1/data/databases/GTDBTK_DB/release214
+#min contig length for binning
+minlength: 1500
+# #pre-trained environment model for SemiBin (choice of: human_gut, dog_gut, ocean, soil, cat_gut, human_oral, mouse_gut, pig_gut, built_environment, wastewater, global)
+# #n.b. global is a generic model
+# #training a new model takes quite a bit of time, and I've not done enough research to deterine whether it's worth the time cost. Possible to implement this as an option in the future though.
+# env: global
