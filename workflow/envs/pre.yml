@@ -14,3 +14,12 @@ dependencies:
   - r-nonpareil=3.4.0
   - r-argparse=2.2.2
   - r-tidyverse=2.0.0
+  - diamond=2.1.8  # singlem
+  - hmmer=3.3.2  # singlem
+  - orfm=1.3  # singlem
+  - smafa=0.7.1  # singlem
+  - krona=2.8.1  # singlem
+  - pyranges=0.0.129  # singlem
+  - pip:
+    - zenodo_backpack==0.2.0
+    - "--editable=git+https://github.com/wwood/singlem.git@bf259fba764a8da59ee43dbd47b39da6cd2d9563#egg=singlem"

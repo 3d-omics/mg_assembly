@@ -1,7 +1,0 @@
- name: singlem
- channels:
-    - conda-forge
-    - bioconda
-    - defaults
- dependencies:
-    - singlem

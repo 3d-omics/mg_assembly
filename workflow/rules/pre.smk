@@ -296,6 +296,103 @@ rule pre_nonpareil:
         """
 
 
+rule pre_singlem_data:
+    """Download the singlem data
+
+    For reasons unknown, you have to specify the filename, that may change in
+    the future.
+    """
+    output:
+        directory(SINGLEM / "data/S3.2.0.GTDB_r214.metapackage_20230428.smpkg.zb"),
+    log:
+        SINGLEM / "data.log",
+    conda:
+        "../envs/pre.yml"
+    params:
+        output_prefix=SINGLEM / "data",
+    shell:
+        """
+        singlem data --output-directory {params.output_prefix} 2> {log} 1>&2
+        """
+
+
+rule pre_singlem_pipe_one:
+    """Run singlem over one sample
+
+    Note: SingleM asks in the documentation for the raw reads. Here we are
+    passing it the non-host and trimmed ones.
+    """
+    input:
+        forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
+        data=rules.pre_singlem_data.output,
+    output:
+        archive_otu_table=SINGLEM / "{sample_id}.{library_id}.archive.json",
+        otu_table=SINGLEM / "{sample_id}.{library_id}.otu_table.tsv",
+        condense=SINGLEM / "{sample_id}.{library_id}.condense.tsv",
+    log:
+        SINGLEM / "{sample_id}.{library_id}.log",
+    conda:
+        "../envs/pre.yml"
+    threads: 4
+    resources:
+        runtime=4 * 60,
+    shell:
+        """
+        singlem pipe \
+            --forward {input.forward_} \
+            --reverse {input.reverse_} \
+            --otu-table {output.otu_table} \
+            --archive-otu-table {output.archive_otu_table} \
+            --taxonomic-profile {output.condense} \
+            --metapackage {input.data} \
+            --threads {threads} \
+            --assignment-threads {threads} \
+        2> {log} 1>&2 || true
+        """
+
+
+rule stats_singlem_pipe_all:
+    """Run stats_singlem_one for all the samples"""
+    input:
+        [
+            SINGLEM / f"{sample_id}.{library_id}.otu_table.tsv"
+            for sample_id, library_id in SAMPLE_LIB
+        ],
+
+
+rule stats_singlem_condense:
+    """Aggregate all the singlem results into a single table"""
+    input:
+        archive_otu_tables=[
+            SINGLEM / f"{sample_id}.{library_id}.archive.json"
+            for sample_id, library_id in SAMPLE_LIB
+        ],
+        data=rules.pre_singlem_data.output,
+    output:
+        condense=SINGLEM / "singlem.tsv",
+    log:
+        SINGLEM / "singlem.log",
+    conda:
+        "../envs/pre.yml"
+    params:
+        input_dir=SINGLEM,
+    shell:
+        """
+        singlem condense \
+            --input-archive-otu-tables {input.archive_otu_tables} \
+            --taxonomic-profile {output.condense} \
+            --metapackage {input.data} \
+        2> {log} 1>&2
+        """
+
+
+rule pre_singlem:
+    """Run all stats singlem rules"""
+    input:
+        SINGLEM / "singlem.tsv",
+
+
 rule pre:
     input:
         rules.pre_fastp_trim_all.input,
@@ -303,3 +400,4 @@ rule pre:
         rules.pre_bowtie2_map_host_all.input,
         rules.pre_bowtie2_extract_nonhost_all.input,
         rules.pre_nonpareil.output,
+        rules.pre_singlem.input,
