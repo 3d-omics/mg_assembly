@@ -3,41 +3,29 @@
 rule upload_tables:
     input:
         count_table=os.path.join(
-            config["workdir"], 
-            "coverm/", 
-            config["dmb"] + "_count_table.tsv"
+            config["workdir"], "coverm/", config["dmb"] + "_count_table.tsv"
         ),
         mapping_rates=os.path.join(
-            config["workdir"], 
-            "coverm/", 
-            config["dmb"] + "_mapping_rate.tsv"
+            config["workdir"], "coverm/", config["dmb"] + "_mapping_rate.tsv"
         ),
         combined=os.path.join(
-            config["workdir"], 
-            config["dmb"] + "_gtdbtk_combined_summary.tsv"
+            config["workdir"], config["dmb"] + "_gtdbtk_combined_summary.tsv"
         ),
         tree=os.path.join(
-            config["workdir"],
-            config["dmb"] + "_gtdbtk.bac120.classify.tree"
+            config["workdir"], config["dmb"] + "_gtdbtk.bac120.classify.tree"
         ),
-        taxonomy=os.path.join(
-            config["workdir"],
-            config["dmb"] + "_taxon_table.tsv"
-        )
+        taxonomy=os.path.join(config["workdir"], config["dmb"] + "_taxon_table.tsv"),
     output:
-        os.path.join(
-            config["workdir"],
-            "tables_uploaded"
-        )
+        os.path.join(config["workdir"], "tables_uploaded"),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
     threads: 1
     resources:
         load=8,
         mem_gb=16,
-        time='00:15:00'
+        time="00:15:00",
     benchmark:
-        os.path.join(config["logdir"] + "/upload_tables_benchmark.tsv")    
+        os.path.join(config["logdir"] + "/upload_tables_benchmark.tsv")
     shell:
         """
         ## Add MAG mapping rates to airtable
@@ -50,7 +38,7 @@ rule upload_tables:
         bash {config[codedir]}/scripts/transpose_table.sh
 
         cat mapping_header.tsv longer.tsv > mapping_rates.tsv
-        
+
         python {config[codedir]}/airtable/add_mag_mapping_rates_airtable.py --report=mapping_rates.tsv
 
         ## Upload other files to AirTable (count table, tree)

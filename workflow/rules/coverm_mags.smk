@@ -4,22 +4,19 @@ rule coverM_mag:
     input:
         bam=expand(
             os.path.join(
-                config["workdir"], 
-                "bams/", 
-                "{combo[0]}_{combo[1]}_" + config["dmb"] + ".bam"
-            ), combo=valid_combinations
-        )
+                config["workdir"],
+                "bams/",
+                "{combo[0]}_{combo[1]}_" + config["dmb"] + ".bam",
+            ),
+            combo=valid_combinations,
+        ),
     output:
         count_table=os.path.join(
-            config["workdir"], 
-            "coverm/", 
-            config["dmb"] + "_count_table.tsv"
+            config["workdir"], "coverm/", config["dmb"] + "_count_table.tsv"
         ),
         mapping_rate=os.path.join(
-            config["workdir"], 
-            "coverm/", 
-            config["dmb"] + "_mapping_rate.tsv"
-        )
+            config["workdir"], "coverm/", config["dmb"] + "_mapping_rate.tsv"
+        ),
     conda:
         f"{config['codedir']}/conda_envs/coverm.yaml"
     threads: 4
@@ -30,7 +27,7 @@ rule coverM_mag:
     benchmark:
         os.path.join(config["logdir"] + "/coverm_benchmark.tsv")
     log:
-        os.path.join(config["logdir"] + "/coverm_log.log")
+        os.path.join(config["logdir"] + "/coverm_log.log"),
     message:
         "Calculating mag mapping rate with CoverM"
     shell:

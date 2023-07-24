@@ -1,8 +1,8 @@
 rule check_assembly_size:
     input:
-        os.path.join(config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta")
+        os.path.join(config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta"),
     output:
-        os.path.join(config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_checkpoint")
+        os.path.join(config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_checkpoint"),
     threads: 1
     resources:
         mem_gb=8,
@@ -20,10 +20,10 @@ rule check_assembly_size:
             mkdir -p {config[workdir]}/{wildcards.PRB}/{wildcards.EHI}/
             touch {config[workdir]}/{wildcards.PRB}/{wildcards.EHI}/{wildcards.EHA}_gtdbtk_combined_summary.tsv
             mkdir -p {config[workdir]}/{wildcards.PRB}_{wildcards.EHI}_{wildcards.EHA}_refinement
-            touch {config[workdir]}/{wildcards.PRB}_{wildcards.EHI}_{wildcards.EHA}_refinement/{wildcards.EHA}_metawrap_50_10_bins.stats            
+            touch {config[workdir]}/{wildcards.PRB}_{wildcards.EHI}_{wildcards.EHA}_refinement/{wildcards.EHA}_metawrap_50_10_bins.stats
             mkdir -p {config[workdir]}/{wildcards.PRB}_{wildcards.EHI}_assembly/
             touch {config[workdir]}/{wildcards.PRB}_{wildcards.EHI}_assembly/{wildcards.EHA}_contigs.fasta.gz
-     
+
 
 
             # Create sample table for airtable
@@ -46,6 +46,10 @@ rule check_assembly_size:
             touch {output}
         fi
         """
+
+
 onerrmsg = "Processing of sample {wildcards.EHI} stopped because the assembly size is below the minimum threshold"
+
+
 onerror:
     raise RuntimeError(onerrmsg)

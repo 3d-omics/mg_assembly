@@ -6,19 +6,17 @@ rule mag_index:
             config["workdir"],
             "drep/",
             "figures/",
-            config["dmb"] + "_Primary_clustering_dendrogram.pdf"
-        )
+            config["dmb"] + "_Primary_clustering_dendrogram.pdf",
+        ),
     output:
         mags=os.path.join(
-            config["workdir"],
-            "mag_catalogue/",
-            config["dmb"] + "_mags.fasta.gz"
+            config["workdir"], "mag_catalogue/", config["dmb"] + "_mags.fasta.gz"
         ),
         index=os.path.join(
             config["workdir"],
             "mag_catalogue/",
-            config["dmb"] + "_mags.fasta.gz.rev.2.bt2l"
-        )
+            config["dmb"] + "_mags.fasta.gz.rev.2.bt2l",
+        ),
     conda:
         f"{config['codedir']}/conda_envs/assembly_binning.yaml"
     threads: 16
@@ -28,7 +26,7 @@ rule mag_index:
     benchmark:
         os.path.join(config["logdir"] + "/index_mags_benchmark.tsv")
     log:
-        os.path.join(config["logdir"] + "/index_mags_log.log")
+        os.path.join(config["logdir"] + "/index_mags_log.log"),
     message:
         "Indexing mags using Bowtie2"
     shell:

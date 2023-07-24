@@ -2,28 +2,17 @@
 ### Fetch MAGs from ERDA
 rule download_mags:
     input:
-        os.path.join(
-            config["workdir"], 
-            "ERDA_folder_created"
-        )
+        os.path.join(config["workdir"], "ERDA_folder_created"),
     output:
-        mags=expand(
-            os.path.join(
-                config["magdir"], 
-                "{mag}.gz"
-            ), mag = MAG
-        ),
-        downloaded=os.path.join(
-            config["magdir"],
-            "mags_downloaded"
-        )
+        mags=expand(os.path.join(config["magdir"], "{mag}.gz"), mag=MAG),
+        downloaded=os.path.join(config["magdir"], "mags_downloaded"),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
     threads: 1
     resources:
         load=8,
         mem_gb=8,
-        time="02:00:00"
+        time="02:00:00",
     benchmark:
         os.path.join(config["logdir"] + "/download_mags_benchmark.tsv")
     message:

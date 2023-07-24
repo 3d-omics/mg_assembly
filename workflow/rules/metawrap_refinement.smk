@@ -3,27 +3,26 @@
 rule metaWRAP_refinement:
     input:
         binning=os.path.join(
-            config["workdir"], 
-            "{PRB}_{EHI}_{EHA}_binning/binning_complete"
-            ),
+            config["workdir"], "{PRB}_{EHI}_{EHA}_binning/binning_complete"
+        ),
         contigs=os.path.join(
             config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta"
-            )
+        ),
     output:
         stats=os.path.join(
             config["workdir"],
             "{PRB}_{EHI}_{EHA}_refinement/",
             "{EHA}_metawrap_50_10_bins.stats",
-            ),
+        ),
         contigmap=os.path.join(
             config["workdir"],
             "{PRB}_{EHI}_{EHA}_refinement/",
             "{EHA}_metawrap_50_10_bins.contigs",
-            )
+        ),
     params:
         binning=os.path.join(config["workdir"] + "/{PRB}_{EHI}_{EHA}_binning"),
         outdir=os.path.join(config["workdir"] + "/{PRB}_{EHI}_{EHA}_refinement"),
-        stats_dir=directory(os.path.join(config["workdir"], "{EHA}_stats/"))
+        stats_dir=directory(os.path.join(config["workdir"], "{EHA}_stats/")),
     threads: 8
     resources:
         mem_gb=164,
@@ -31,7 +30,7 @@ rule metaWRAP_refinement:
     benchmark:
         os.path.join(config["logdir"] + "/refinement_benchmark_{PRB}_{EHI}_{EHA}.tsv")
     log:
-        os.path.join(config["logdir"] + "/refinement_log_{PRB}_{EHI}_{EHA}.log")
+        os.path.join(config["logdir"] + "/refinement_log_{PRB}_{EHI}_{EHA}.log"),
     message:
         "Refining {wildcards.EHA} bins with MetaWRAP's bin refinement module"
     shell:
@@ -52,7 +51,7 @@ rule metaWRAP_refinement:
             # Setup checkM path (needed for conda, not module)
             # export checkmdb={config[checkmdb]}
             # printf $checkmdb | checkm data setRoot
-            
+
             metawrap bin_refinement \
                 -m {resources.mem_gb} \
                 -t {threads} \

@@ -11,7 +11,7 @@ rule log_finish:
             combo=valid_combinations,
         ),
     output:
-        os.path.join(config["workdir"], "{abb}_pipeline_finished")
+        os.path.join(config["workdir"], "{abb}_pipeline_finished"),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
     threads: 1

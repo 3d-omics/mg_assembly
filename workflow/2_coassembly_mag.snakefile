@@ -43,12 +43,12 @@ valid_combinations = set(
 rule all:
     input:
         os.path.join(
-                config["workdir"], 
+                config["workdir"],
                 "ERDA_folder_created"
         ),
         expand(
             os.path.join(
-                config["workdir"], 
+                config["workdir"],
                 "{combo[2]}_QUAST"
             ),
             combo=valid_combinations,

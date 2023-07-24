@@ -2,50 +2,27 @@
 ### Preprocess the reads using fastp
 rule fastp:
     input:
-        r1i=os.path.join(
-            config["workdir"],
-            "{sample}_raw_1.fq.gz"
-        ),
-        r2i=os.path.join(
-            config["workdir"],
-            "{sample}_raw_2.fq.gz"
-        )
+        r1i=os.path.join(config["workdir"], "{sample}_raw_1.fq.gz"),
+        r2i=os.path.join(config["workdir"], "{sample}_raw_2.fq.gz"),
     output:
-        r1o=temp(
-            os.path.join(
-                config["workdir"],
-                "{sample}_trimmed_1.fq.gz"
-            )
-        ),
-        r2o=temp(
-            os.path.join(
-                config["workdir"],
-                "{sample}_trimmed_2.fq.gz"
-            )
-        ),
-        fastp_html=os.path.join(
-            config["workdir"],
-            "misc/{sample}.html"
-        ),
-        fastp_json=os.path.join(
-            config["workdir"],
-            "misc/{sample}.json"
-        )
+        r1o=temp(os.path.join(config["workdir"], "{sample}_trimmed_1.fq.gz")),
+        r2o=temp(os.path.join(config["workdir"], "{sample}_trimmed_2.fq.gz")),
+        fastp_html=os.path.join(config["workdir"], "misc/{sample}.html"),
+        fastp_json=os.path.join(config["workdir"], "misc/{sample}.json"),
     params:
-        adapter1=expand("{adapter1}", adapter1=config['adapter1']),
-        adapter2=expand("{adapter2}", adapter2=config['adapter2'])
+        adapter1=expand("{adapter1}", adapter1=config["adapter1"]),
+        adapter2=expand("{adapter2}", adapter2=config["adapter2"]),
     conda:
         f"{config['codedir']}/conda_envs/1_Preprocess_QC.yaml"
-    threads:
-        8
+    threads: 8
     resources:
         load=1,
         mem_gb=10,
-        time=estimate_time_fastp
+        time=estimate_time_fastp,
     benchmark:
         os.path.join(config["logdir"] + "/{sample}_fastp.benchmark.tsv")
     log:
-        os.path.join(config["logdir"] + "/{sample}_fastp.log")
+        os.path.join(config["logdir"] + "/{sample}_fastp.log"),
     message:
         "Using FASTP to trim adapters and low quality sequences for {wildcards.sample}"
     shell:

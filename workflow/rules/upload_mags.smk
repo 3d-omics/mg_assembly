@@ -2,27 +2,18 @@
 ## Upload MAGs to ERDA and update AirTable MAG database
 rule upload_mags:
     input:
-        expand(
-            os.path.join(
-                config["magdir"],
-                "{MAG}_anno.tsv.gz"
-            ),
-            MAG=MAG
-        )
+        expand(os.path.join(config["magdir"], "{MAG}_anno.tsv.gz"), MAG=MAG),
     output:
-            os.path.join(
-                config["magdir"],
-                "MAGs_uploaded"
-                )
+        os.path.join(config["magdir"], "MAGs_uploaded"),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
     threads: 1
     resources:
         load=8,
         mem_gb=16,
-        time='01:00:00'
+        time="01:00:00",
     benchmark:
-        os.path.join(config["logdir"] + "/upload_mag_benchmark.tsv")    
+        os.path.join(config["logdir"] + "/upload_mag_benchmark.tsv")
     shell:
         """
         ## Upload MAGs and annotations to ERDA

@@ -113,7 +113,7 @@ def estimate_time_summary(wildcards, attempt):
 rule all:
     input:
         os.path.join(
-                config["workdir"], 
+                config["workdir"],
                 "ERDA_folder_created"
         ),
         expand(
@@ -155,5 +155,3 @@ onerror:
     shell("""
             echo "/projects/ehi/data/RUN/{config[abb]}" | mailx -s "{config[abb]} ERROR" EMAIL_ADD
           """)
-
-

@@ -2,10 +2,7 @@
 ### Create EHA folder on ERDA
 rule create_ASB_folder:
     output:
-        os.path.join(
-            config["workdir"], 
-            "ERDA_folder_created"
-        )
+        os.path.join(config["workdir"], "ERDA_folder_created"),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
     threads: 1

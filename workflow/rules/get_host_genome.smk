@@ -2,10 +2,7 @@
 ## Fetch host genome from ERDA, if not there already, download and index it.
 rule fetch_host_genome:
     input:
-        os.path.join(
-            config["workdir"], 
-            "ERDA_folder_created"
-        )
+        os.path.join(config["workdir"], "ERDA_folder_created"),
     output:
         bt2_index=os.path.join(
             config["workdir"],
@@ -15,18 +12,17 @@ rule fetch_host_genome:
         rn_catted_ref=os.path.join(
             config["workdir"],
             config["hostgenome"],
-            config["hostgenome"] + "_RN.fna.gz"
-        )
+            config["hostgenome"] + "_RN.fna.gz",
+        ),
     conda:
         f"{config['codedir']}/conda_envs/1_Preprocess_QC.yaml"
-    threads:
-        16
+    threads: 16
     resources:
         load=1,
         mem_gb=96,
-        time='03:00:00'
+        time="03:00:00",
     log:
-        os.path.join(config["logdir"] + "/host_genome_indexing.log")
+        os.path.join(config["logdir"] + "/host_genome_indexing.log"),
     message:
         "Fetching host genome"
     shell:
@@ -36,7 +32,7 @@ rule fetch_host_genome:
             then
                 echo "Genome is ready to go!"
 
-            elif 
+            elif
                 sftp_check=$(sftp erda:/EarthHologenomeInitiative/Data/GEN/{config[hostgenome]}.tar.gz 2>&1)
                 echo "$sftp_check" | grep -q "not found"
 
@@ -50,8 +46,8 @@ rule fetch_host_genome:
                     in={config[workdir]}/{config[hostgenome]}/{config[hostgenome]}.fna.gz \
                     out={output.rn_catted_ref} \
                     prefix={config[hostgenome]} \
-                    -Xmx{resources.mem_gb}G 
-                
+                    -Xmx{resources.mem_gb}G
+
                 rm {config[workdir]}/{config[hostgenome]}/{config[hostgenome]}.fna.gz
 
                 # Index catted genomes
@@ -71,7 +67,7 @@ rule fetch_host_genome:
                 # Log AirTable that a new genome has been indexed and uploaded to ERDA
                 python {config[codedir]}/airtable/log_genome_airtable.py --code={config[hostgenome]}
 
-            else 
+            else
                 echo "Indexed genome exists on erda, unpacking."
                 tar -xvzf {config[hostgenome]}.tar.gz --directory {config[workdir]}/{config[hostgenome]}/
                 rm {config[hostgenome]}.tar.gz

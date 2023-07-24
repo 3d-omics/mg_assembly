@@ -6,40 +6,42 @@ rule gtdbtk:
             config["workdir"],
             "{PRB}_{EHI}_{EHA}_refinement/",
             "{EHA}_metawrap_50_10_bins.stats",
-            ),
+        ),
         contigs=os.path.join(
             config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta"
-            )
+        ),
     output:
         bac=os.path.join(
-            config["workdir"], 
-            "{PRB}/", 
-            "{EHI}/", 
-            "{EHA}/", 
-            "gtdbtk/classify/gtdbtk.bac120.summary.tsv"
-            ),
-        combined=os.path.join(
-            config["workdir"], 
-            "{PRB}/", 
+            config["workdir"],
+            "{PRB}/",
             "{EHI}/",
-            "{EHA}_gtdbtk_combined_summary.tsv"
-            )
+            "{EHA}/",
+            "gtdbtk/classify/gtdbtk.bac120.summary.tsv",
+        ),
+        combined=os.path.join(
+            config["workdir"], "{PRB}/", "{EHI}/", "{EHA}_gtdbtk_combined_summary.tsv"
+        ),
     params:
-        GTDB_data=expand("{GTDB_data}", GTDB_data=config['GTDB_data']),
-        outdir=os.path.join(config["workdir"] + "/{PRB}" + "/{EHI}" + "/{EHA}" + "/gtdbtk"),
+        GTDB_data=expand("{GTDB_data}", GTDB_data=config["GTDB_data"]),
+        outdir=os.path.join(
+            config["workdir"] + "/{PRB}" + "/{EHI}" + "/{EHA}" + "/gtdbtk"
+        ),
         refinement=os.path.join(config["workdir"] + "/{PRB}_{EHI}_{EHA}_refinement"),
-        bins=os.path.join(config["workdir"] + "/{PRB}_{EHI}_{EHA}_refinement" + "/metawrap_50_10_bins")
+        bins=os.path.join(
+            config["workdir"]
+            + "/{PRB}_{EHI}_{EHA}_refinement"
+            + "/metawrap_50_10_bins"
+        ),
     conda:
         f"{config['codedir']}/conda_envs/GTDB-tk.yaml"
-    threads:
-        16
+    threads: 16
     resources:
         mem_gb=72,
-        time=estimate_time_gtdb
+        time=estimate_time_gtdb,
     benchmark:
         os.path.join(config["logdir"] + "/gtdb-tk_benchmark_{PRB}_{EHI}_{EHA}.tsv")
     log:
-        os.path.join(config["logdir"] + "/gtdb-tk_log_{PRB}_{EHI}_{EHA}.log")
+        os.path.join(config["logdir"] + "/gtdb-tk_log_{PRB}_{EHI}_{EHA}.log"),
     message:
         "Annotating taxonomy to {wildcards.EHA}'s bins using GTDB-tk"
     shell:
@@ -54,7 +56,7 @@ rule gtdbtk:
             # Create temp folder
             export TMPDIR={config[workdir]}/tmpdir
             mkdir -p $TMPDIR
-            
+
             # Specify path to reference data:
             export GTDBTK_DATA_PATH={params.GTDB_data}
 
@@ -83,8 +85,8 @@ rule gtdbtk:
             # Otherwise, just use the bacterial summary (if no archaeal bins)
             else
                 cat {output.bac} > {output.combined}
-            fi 
-            
+            fi
+
             # Parse the gtdb output for uploading to the EHI MAG database
             cut -f2 {output.combined} | sed '1d;' | tr ';' '\t' > {params.outdir}/taxonomy.tsv
             cut -f1,6,11,12 {output.combined} | sed '1d;' > {params.outdir}/id_ani.tsv

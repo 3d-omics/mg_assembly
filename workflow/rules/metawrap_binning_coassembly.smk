@@ -2,20 +2,19 @@
 ### Bin contigs using metaWRAP's binning module
 rule metaWRAP_binning:
     input:
-        bam=expand(os.path.join(
-            config["workdir"], "bams/", "{combo[0]}_{combo[1]}_{combo[2]}.bam"
+        bam=expand(
+            os.path.join(
+                config["workdir"], "bams/", "{combo[0]}_{combo[1]}_{combo[2]}.bam"
             ),
-            combo=valid_combinations
+            combo=valid_combinations,
         ),
         contigs=os.path.join(
             config["workdir"], "{EHA}_assembly/", "{EHA}_contigs.fasta"
-            ),
+        ),
     output:
-        os.path.join(
-            config["workdir"], "{EHA}_binning/binning_complete"
-            ),
+        os.path.join(config["workdir"], "{EHA}_binning/binning_complete"),
     params:
-        outdir=os.path.join(config["workdir"] + "/{EHA}_binning")
+        outdir=os.path.join(config["workdir"] + "/{EHA}_binning"),
     threads: 16
     resources:
         mem_gb=96,
@@ -23,7 +22,7 @@ rule metaWRAP_binning:
     benchmark:
         os.path.join(config["logdir"] + "/binning_benchmark_{EHA}.tsv")
     log:
-        os.path.join(config["logdir"] + "/binning_log_{EHA}.log")
+        os.path.join(config["logdir"] + "/binning_log_{EHA}.log"),
     message:
         "Binning {wildcards.EHA} contigs with MetaWRAP (concoct, maxbin2, metabat2)"
     shell:

@@ -1,32 +1,22 @@
 ################################################################################
 ### Calculate % of each sample's reads mapping to host genome/s (also upload PPR reads to ERDA)
 rule coverM:
-    input:  
-        npo=os.path.join(
-            config["workdir"],
-            "misc/{sample}.npo"
-        ),
-        bam=os.path.join(
-            config["workdir"],
-            "tmp/{sample}.bam"
-        )
+    input:
+        npo=os.path.join(config["workdir"], "misc/{sample}.npo"),
+        bam=os.path.join(config["workdir"], "tmp/{sample}.bam"),
     output:
-        os.path.join(
-            config["workdir"],
-            "misc/{sample}_coverM_mapped_host.tsv"
-        )
+        os.path.join(config["workdir"], "misc/{sample}_coverM_mapped_host.tsv"),
     conda:
         f"{config['codedir']}/conda_envs/coverm.yaml"
-    threads:
-        2
+    threads: 2
     resources:
         load=1,
         mem_gb=8,
-        time='00:10:00'
+        time="00:10:00",
     benchmark:
         os.path.join(config["logdir"] + "/{sample}_coverM.benchmark.tsv")
     log:
-        os.path.join(config["logdir"] + "/{sample}_coverM.log")
+        os.path.join(config["logdir"] + "/{sample}_coverM.log"),
     message:
         "Calculating percentage of reads mapped to host genome/s using coverM"
     shell:

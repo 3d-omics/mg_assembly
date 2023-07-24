@@ -6,34 +6,31 @@ rule gtdbtk:
             config["workdir"],
             "{EHA}_refinement/",
             "{EHA}_metawrap_50_10_bins.stats",
-            )
+        ),
     output:
         bac=os.path.join(
-            config["workdir"], 
-            "{EHA}/", 
-            "gtdbtk/classify/gtdbtk.bac120.summary.tsv"
-            ),
+            config["workdir"], "{EHA}/", "gtdbtk/classify/gtdbtk.bac120.summary.tsv"
+        ),
         combined=os.path.join(
-            config["workdir"], 
-            "{EHA}/",
-            "{EHA}_gtdbtk_combined_summary.tsv"
-            )
+            config["workdir"], "{EHA}/", "{EHA}_gtdbtk_combined_summary.tsv"
+        ),
     params:
-        GTDB_data=expand("{GTDB_data}", GTDB_data=config['GTDB_data']),
+        GTDB_data=expand("{GTDB_data}", GTDB_data=config["GTDB_data"]),
         outdir=os.path.join(config["workdir"] + "/{EHA}" + "/gtdbtk"),
         refinement=os.path.join(config["workdir"] + "/{EHA}_refinement"),
-        bins=os.path.join(config["workdir"] + "/{EHA}_refinement" + "/metawrap_50_10_bins")
+        bins=os.path.join(
+            config["workdir"] + "/{EHA}_refinement" + "/metawrap_50_10_bins"
+        ),
     conda:
         f"{config['codedir']}/conda_envs/GTDB-tk.yaml"
-    threads:
-        16
+    threads: 16
     resources:
         mem_gb=96,
-        time='08:00:00'
+        time="08:00:00",
     benchmark:
         os.path.join(config["logdir"] + "/gtdb-tk_benchmark_{EHA}.tsv")
     log:
-        os.path.join(config["logdir"] + "/gtdb-tk_log_{EHA}.log")
+        os.path.join(config["logdir"] + "/gtdb-tk_log_{EHA}.log"),
     message:
         "Annotating taxonomy to {wildcards.EHA}'s bins using GTDB-tk"
     shell:

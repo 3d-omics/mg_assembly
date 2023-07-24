@@ -16,7 +16,7 @@ rule coassembly_index:
     benchmark:
         os.path.join(config["logdir"] + "/index_assembly_benchmark_{EHA}.tsv")
     log:
-        os.path.join(config["logdir"] + "/index_assembly_log_{EHA}.log")
+        os.path.join(config["logdir"] + "/index_assembly_log_{EHA}.log"),
     message:
         "Indexing {wildcards.EHA} assembly using Bowtie2"
     shell:

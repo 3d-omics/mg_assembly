@@ -2,23 +2,19 @@
 ### Upload assembly BAMs to ERDA
 rule upload_bam_erda:
     input:
-        bam=os.path.join(
-            config["workdir"], 
-            "bams/" 
-            "{PRB}_{EHI}_{EHA}.bam"
-        ),
+        bam=os.path.join(config["workdir"], "bams/" "{PRB}_{EHI}_{EHA}.bam"),
         contigs=os.path.join(
             config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta"
-        )
+        ),
     output:
-        os.path.join(config["workdir"], "{PRB}_{EHI}_{EHA}_uploaded")
+        os.path.join(config["workdir"], "{PRB}_{EHI}_{EHA}_uploaded"),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
     threads: 1
     resources:
         load=8,
         mem_gb=16,
-        time=estimate_time_upload_bam
+        time=estimate_time_upload_bam,
     benchmark:
         os.path.join(config["logdir"] + "/upload_bam_benchmark_{PRB}_{EHI}_{EHA}.tsv")
     message:

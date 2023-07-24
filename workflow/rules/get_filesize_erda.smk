@@ -2,25 +2,16 @@
 ### Get file sizes from ERDA
 rule filesize_from_ERDA:
     input:
-        os.path.join(
-            config["workdir"], 
-            "ERDA_folder_created"
-        )
+        os.path.join(config["workdir"], "ERDA_folder_created"),
     output:
-        temp(
-            os.path.join(
-                config["workdir"],
-                "{sample}_filesize.txt"
-            )
-        )
+        temp(os.path.join(config["workdir"], "{sample}_filesize.txt")),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
-    threads:
-        1
+    threads: 1
     resources:
         load=8,
         mem_gb=8,
-        time='00:00:30'
+        time="00:00:30",
     message:
         "Fetching filesize for {wildcards.sample} from ERDA"
     shell:

@@ -4,24 +4,18 @@ rule coassembly:
     input:
         r1=expand(
             os.path.join(
-                config["workdir"],
-                "reads/",
-                "{combo[0]}/",
-                "{combo[1]}_M_1.fq.gz"
-                ),
-                combo=valid_combinations
+                config["workdir"], "reads/", "{combo[0]}/", "{combo[1]}_M_1.fq.gz"
+            ),
+            combo=valid_combinations,
         ),
         r2=expand(
             os.path.join(
-                config["workdir"],
-                "reads/",
-                "{combo[0]}/",
-                "{combo[1]}_M_2.fq.gz"
-                ),
-                combo=valid_combinations
-        )   
+                config["workdir"], "reads/", "{combo[0]}/", "{combo[1]}_M_2.fq.gz"
+            ),
+            combo=valid_combinations,
+        ),
     output:
-        os.path.join(config["workdir"], "{EHA}_assembly/", "{EHA}_contigs.fasta")
+        os.path.join(config["workdir"], "{EHA}_assembly/", "{EHA}_contigs.fasta"),
     params:
         assembler=expand("{assembler}", assembler=config["assembler"]),
     conda:
@@ -33,7 +27,7 @@ rule coassembly:
     benchmark:
         os.path.join(config["logdir"] + "/assembly_benchmark_{EHA}.tsv")
     log:
-        os.path.join(config["logdir"] + "/assembly_log_{EHA}.log")
+        os.path.join(config["logdir"] + "/assembly_log_{EHA}.log"),
     message:
         "Assembling {wildcards.EHA} using {params.assembler}"
     shell:

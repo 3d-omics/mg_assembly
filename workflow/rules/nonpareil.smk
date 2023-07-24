@@ -2,43 +2,20 @@
 ### Estimate diversity and required sequencing effort using nonpareil
 rule nonpareil:
     input:
-        non_host_r1=os.path.join(
-            config["workdir"],
-            "{sample}_M_1.fq"
-        ),
-        non_host_r2=os.path.join(
-            config["workdir"],
-            "{sample}_M_2.fq"
-        )
+        non_host_r1=os.path.join(config["workdir"], "{sample}_M_1.fq"),
+        non_host_r2=os.path.join(config["workdir"], "{sample}_M_2.fq"),
     output:
-        npo=os.path.join(
-            config["workdir"],
-            "misc/{sample}.npo"
-        ),
-        npstats=os.path.join(
-            config["workdir"],
-            "misc/{sample}_np.tsv"
-        ),
-        non_host_r1c=temp(
-            os.path.join(
-                config["workdir"],
-                "{sample}_M_1.fq.gz"
-            )
-        ),
-        non_host_r2c=temp(
-            os.path.join(
-                config["workdir"],
-                "{sample}_M_2.fq.gz"
-            )
-        )
+        npo=os.path.join(config["workdir"], "misc/{sample}.npo"),
+        npstats=os.path.join(config["workdir"], "misc/{sample}_np.tsv"),
+        non_host_r1c=temp(os.path.join(config["workdir"], "{sample}_M_1.fq.gz")),
+        non_host_r2c=temp(os.path.join(config["workdir"], "{sample}_M_2.fq.gz")),
     conda:
         f"{config['codedir']}/conda_envs/nonpareil.yaml"
-    threads:
-        8
+    threads: 8
     resources:
         load=1,
         mem_gb=8,
-        time=estimate_time_nonpareil
+        time=estimate_time_nonpareil,
     benchmark:
         os.path.join(config["logdir"] + "/{sample}_nonpareil.benchmark.tsv")
     message:

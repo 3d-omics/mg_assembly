@@ -2,18 +2,14 @@
 ### Create DMB folder on ERDA
 rule create_DMB_folder:
     output:
-        os.path.join(
-            config["workdir"], 
-            "ERDA_folder_created"
-            )
+        os.path.join(config["workdir"], "ERDA_folder_created"),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
-    threads:
-        1
+    threads: 1
     resources:
         load=1,
         mem_gb=8,
-        time='00:03:00'
+        time="00:03:00",
     message:
         "Creating DMB folder on ERDA"
     shell:

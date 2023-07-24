@@ -3,73 +3,38 @@
 rule report:
     input:
         coverm=expand(
-            os.path.join(
-                config["workdir"],
-                "misc/{sample}_coverM_mapped_host.tsv"
-            ),
-            sample=SAMPLE
+            os.path.join(config["workdir"], "misc/{sample}_coverM_mapped_host.tsv"),
+            sample=SAMPLE,
         ),
         fastp=expand(
-            os.path.join(
-                config["workdir"],
-                "misc/{sample}.json"
-            ),
-            sample=SAMPLE
+            os.path.join(config["workdir"], "misc/{sample}.json"), sample=SAMPLE
         ),
         read_fraction=expand(
-            os.path.join(
-                config["workdir"],
-                "misc/{sample}_readfraction.tsv"
-            ),
-            sample=SAMPLE
-        ),        
+            os.path.join(config["workdir"], "misc/{sample}_readfraction.tsv"),
+            sample=SAMPLE,
+        ),
         uploaded=expand(
-            os.path.join(
-                config["workdir"],
-                "misc/{sample}_uploaded"
-            ),
-            sample=SAMPLE
+            os.path.join(config["workdir"], "misc/{sample}_uploaded"), sample=SAMPLE
         ),
         npstats=expand(
-            os.path.join(
-                config["workdir"],
-                "misc/{sample}_np.tsv"
-            ),
-            sample=SAMPLE
-        )
+            os.path.join(config["workdir"], "misc/{sample}_np.tsv"), sample=SAMPLE
+        ),
     output:
-        report=os.path.join(
-            "/projects/ehi/data/REP/",
-            config["prb"] + ".tsv"
-        ),
+        report=os.path.join("/projects/ehi/data/REP/", config["prb"] + ".tsv"),
         npar_metadata=os.path.join(
-            config["workdir"],
-            config["prb"] + "_nonpareil_metadata.tsv"
-        )
+            config["workdir"], config["prb"] + "_nonpareil_metadata.tsv"
+        ),
     params:
-        tmpdir=os.path.join(
-            config["workdir"],
-            "tmp/"
-        ),
-        npar=expand(
-            os.path.join(
-                config["workdir"],
-                "misc/{sample}.npo"
-            ),
-            sample=SAMPLE
-        ),
-        misc_dir=os.path.join(
-            config["workdir"],
-            "misc/"
-        )
+        tmpdir=os.path.join(config["workdir"], "tmp/"),
+        npar=expand(os.path.join(config["workdir"], "misc/{sample}.npo"), sample=SAMPLE),
+        misc_dir=os.path.join(config["workdir"], "misc/"),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
-    threads:
-        1
+    threads: 1
     resources:
         load=1,
         mem_gb=24,
-        time='00:20:00'
+        time="00:20:00",
     message:
         "Creating a final preprocessing report"
     shell:
@@ -115,11 +80,11 @@ rule report:
         lftp sftp://erda -e "put {output.report} -o /EarthHologenomeInitiative/Data/REP/; bye"
 
         #Automatically update the AirTable with the preprocessing stats
-        python {config[codedir]}/airtable/add_prb_stats_airtable.py --report={output.report} --prb={config[prb]} 
+        python {config[codedir]}/airtable/add_prb_stats_airtable.py --report={output.report} --prb={config[prb]}
 
         #Indicate that the PRB is done in AirTable
         python {config[codedir]}/airtable/log_prb_done_airtable.py --code={config[prb]}
-       
+
         #Clean up the files/directories
         rm {config[workdir]}/{config[prb]}_stats.tar.gz
         rm -r {config[workdir]}/{config[hostgenome]}/

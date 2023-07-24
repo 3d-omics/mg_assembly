@@ -20,7 +20,7 @@ rule QUAST:
             -o {output} \
             --threads {threads} \
             {input}
-      
+
         # Parse select metrics for final report
         grep N50 {output}/report.tsv | cut -f2 > {output}/n50.tsv
         grep L50 {output}/report.tsv | cut -f2 > {output}/l50.tsv

@@ -2,14 +2,8 @@
 ### Map samples to host genomes, then split BAMs:
 rule map_to_ref:
     input:
-        r1i=os.path.join(
-            config["workdir"],
-            "{sample}_trimmed_1.fq.gz"
-        ),
-        r2i=os.path.join(
-            config["workdir"],
-            "{sample}_trimmed_2.fq.gz"
-        ),
+        r1i=os.path.join(config["workdir"], "{sample}_trimmed_1.fq.gz"),
+        r2i=os.path.join(config["workdir"], "{sample}_trimmed_2.fq.gz"),
         bt2_index=os.path.join(
             config["workdir"],
             config["hostgenome"],
@@ -18,39 +12,24 @@ rule map_to_ref:
         catted_ref=os.path.join(
             config["workdir"],
             config["hostgenome"],
-            config["hostgenome"] + "_RN.fna.gz"
-        )
+            config["hostgenome"] + "_RN.fna.gz",
+        ),
     output:
-        all_bam=temp(os.path.join(
-            config["workdir"],
-            "tmp/{sample}.bam"
-            )
-        ),
-        host_bam=temp(os.path.join(
-            config["workdir"],
-            "{sample}_G.bam"
-            )
-        ),
-        non_host_r1=os.path.join(
-            config["workdir"],
-            "{sample}_M_1.fq"
-        ),
-        non_host_r2=os.path.join(
-            config["workdir"],
-            "{sample}_M_2.fq"
-        )
+        all_bam=temp(os.path.join(config["workdir"], "tmp/{sample}.bam")),
+        host_bam=temp(os.path.join(config["workdir"], "{sample}_G.bam")),
+        non_host_r1=os.path.join(config["workdir"], "{sample}_M_1.fq"),
+        non_host_r2=os.path.join(config["workdir"], "{sample}_M_2.fq"),
     conda:
         f"{config['codedir']}/conda_envs/1_Preprocess_QC.yaml"
-    threads:
-        8
+    threads: 8
     resources:
         load=1,
         mem_gb=24,
-        time=estimate_time_mapping
+        time=estimate_time_mapping,
     benchmark:
         os.path.join(config["logdir"] + "/{sample}_mapping.benchmark.tsv")
     log:
-        os.path.join(config["logdir"] + "/{sample}_mapping.log")
+        os.path.join(config["logdir"] + "/{sample}_mapping.log"),
     message:
         "Mapping {wildcards.sample} reads to host genomes"
     shell:

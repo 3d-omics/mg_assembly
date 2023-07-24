@@ -2,49 +2,26 @@
 ### Estimate the fraction of bacterial and archaeal DNA using SingleM read fraction
 rule singlem:
     input:
-        npo=os.path.join(
-            config["workdir"],
-            "misc/{sample}.npo"
-        ),
-        non_host_r1=os.path.join(
-            config["workdir"],
-            "{sample}_M_1.fq.gz"
-        ),
-        non_host_r2=os.path.join(
-            config["workdir"],
-            "{sample}_M_2.fq.gz"
-        )
+        npo=os.path.join(config["workdir"], "misc/{sample}.npo"),
+        non_host_r1=os.path.join(config["workdir"], "{sample}_M_1.fq.gz"),
+        non_host_r2=os.path.join(config["workdir"], "{sample}_M_2.fq.gz"),
     output:
-        pipe=os.path.join(
-            config["workdir"],
-            "misc/{sample}_pipe.tsv.gz"
-        ),
-        condense=os.path.join(
-            config["workdir"],
-            "misc/{sample}_condense.tsv"
-        ),
-        read_fraction=os.path.join(
-            config["workdir"],
-            "misc/{sample}_readfraction.tsv"
-        )
+        pipe=os.path.join(config["workdir"], "misc/{sample}_pipe.tsv.gz"),
+        condense=os.path.join(config["workdir"], "misc/{sample}_condense.tsv"),
+        read_fraction=os.path.join(config["workdir"], "misc/{sample}_readfraction.tsv"),
     params:
-        pipe_uncompressed=os.path.join(
-            config["workdir"],
-            "misc/{sample}_pipe.tsv"
-        ),
+        pipe_uncompressed=os.path.join(config["workdir"], "misc/{sample}_pipe.tsv"),
         read_fraction_taxa=os.path.join(
-            config["workdir"],
-            "misc/{sample}_readfraction_per_taxa.tsv"
-        )
-# Current issue with snakemake and pre-built conda environments: https://github.com/snakemake/snakemake/pull/1708
+            config["workdir"], "misc/{sample}_readfraction_per_taxa.tsv"
+        ),
+    # Current issue with snakemake and pre-built conda environments: https://github.com/snakemake/snakemake/pull/1708
     conda:
         f"{config['codedir']}/conda_envs/singlem.yaml"
-    threads:
-        3
+    threads: 3
     resources:
         load=1,
         mem_gb=8,
-        time=estimate_time_singlem
+        time=estimate_time_singlem,
     benchmark:
         os.path.join(config["logdir"] + "/{sample}_singlem.benchmark.tsv")
     message:
@@ -81,8 +58,8 @@ rule singlem:
             if [ $(( $(stat -c '%s' {output.condense}) )) -eq 25 ]
             then
             echo -e "sample\tbacterial_archaeal_bases\tmetagenome_size\tread_fraction\n0\t0\t0\t0.0%" > {output.read_fraction}
-            
-            else        
+
+            else
             #Run singlem read_fraction
             singlem read_fraction \
                 -1 {input.non_host_r1} \
@@ -98,7 +75,7 @@ rule singlem:
         touch {output.condense}
         touch {output.pipe}
         echo -e "sample\tbacterial_archaeal_bases\tmetagenome_size\tread_fraction\n0\t0\t0\t0.0%" > {output.read_fraction}
-        
+
         fi
 
         #If statement for cases when singlem does not produce a condense output
@@ -110,5 +87,5 @@ rule singlem:
         else
         echo "no microbes in sample"
         fi
-        
+
         """

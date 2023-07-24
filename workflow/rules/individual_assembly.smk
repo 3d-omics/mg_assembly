@@ -5,7 +5,7 @@ rule assembly:
         r1=os.path.join(config["workdir"], "reads/", "{PRB}/", "{EHI}_M_1.fq.gz"),
         r2=os.path.join(config["workdir"], "reads/", "{PRB}/", "{EHI}_M_2.fq.gz"),
     output:
-        os.path.join(config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta")
+        os.path.join(config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta"),
     params:
         assembler=expand("{assembler}", assembler=config["assembler"]),
     conda:
@@ -13,11 +13,11 @@ rule assembly:
     threads: 16
     resources:
         mem_gb=72,
-        time=estimate_time_assembly
+        time=estimate_time_assembly,
     benchmark:
         os.path.join(config["logdir"] + "/assembly_benchmark_{PRB}_{EHI}_{EHA}.tsv")
     log:
-        os.path.join(config["logdir"] + "/assembly_log_{PRB}_{EHI}_{EHA}.log")
+        os.path.join(config["logdir"] + "/assembly_log_{PRB}_{EHI}_{EHA}.log"),
     message:
         "Assembling {wildcards.EHA} using {params.assembler}"
     shell:
@@ -50,7 +50,7 @@ rule assembly:
             mkdir -p {config[workdir]}/{wildcards.PRB}/{wildcards.EHI}/
             touch {config[workdir]}/{wildcards.PRB}/{wildcards.EHI}/{wildcards.EHA}_gtdbtk_combined_summary.tsv
             mkdir -p {config[workdir]}/{wildcards.PRB}_{wildcards.EHI}_{wildcards.EHA}_refinement
-            touch {config[workdir]}/{wildcards.PRB}_{wildcards.EHI}_{wildcards.EHA}_refinement/{wildcards.EHA}_metawrap_50_10_bins.stats            
+            touch {config[workdir]}/{wildcards.PRB}_{wildcards.EHI}_{wildcards.EHA}_refinement/{wildcards.EHA}_metawrap_50_10_bins.stats
 
             # Create sample table for airtable
             echo -e "sample\tEHA_number\tEHI_number\tN50\tL50\tnum_contigs\tlargest_contig\tassembly_length\tnum_bins\tassembly_mapping_percent" > headers.tsv

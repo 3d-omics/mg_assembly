@@ -2,25 +2,22 @@
 ### Automatically refine bins using metaWRAP's refinement module
 rule metaWRAP_refinement:
     input:
-        os.path.join(
-            config["workdir"], 
-            "{EHA}_binning/binning_complete"
-            ),
+        os.path.join(config["workdir"], "{EHA}_binning/binning_complete"),
     output:
         stats=os.path.join(
             config["workdir"],
             "{EHA}_refinement/",
             "{EHA}_metawrap_50_10_bins.stats",
-            ),
+        ),
         contigmap=os.path.join(
             config["workdir"],
             "{EHA}_refinement/",
             "{EHA}_metawrap_50_10_bins.contigs",
-            )
+        ),
     params:
         binning=os.path.join(config["workdir"] + "/{EHA}_binning"),
         outdir=os.path.join(config["workdir"] + "/{EHA}_refinement"),
-        stats_dir=directory(os.path.join(config["workdir"], "{EHA}_stats/"))
+        stats_dir=directory(os.path.join(config["workdir"], "{EHA}_stats/")),
     threads: 8
     resources:
         mem_gb=168,
@@ -28,7 +25,7 @@ rule metaWRAP_refinement:
     benchmark:
         os.path.join(config["logdir"] + "/refinement_benchmark_{EHA}.tsv")
     log:
-        os.path.join(config["logdir"] + "/refinement_log_{EHA}.log")
+        os.path.join(config["logdir"] + "/refinement_log_{EHA}.log"),
     message:
         "Refining {wildcards.EHA} bins with MetaWRAP's bin refinement module"
     shell:
@@ -42,7 +39,7 @@ rule metaWRAP_refinement:
         # Setup checkM path (needed for conda, not module)
         # export checkmdb={config[checkmdb]}
         # printf $checkmdb | checkm data setRoot
-        
+
         metawrap bin_refinement \
             -m {resources.mem_gb} \
             -t {threads} \

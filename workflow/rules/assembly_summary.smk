@@ -6,54 +6,37 @@ rule assembly_summary:
             config["workdir"],
             "{PRB}_{EHI}_{EHA}_refinement/",
             "{EHA}_metawrap_50_10_bins.stats",
-            ),
+        ),
         coverm=os.path.join(
-            config["workdir"], 
-            "coverm/", 
-            "{PRB}_{EHI}_{EHA}_assembly_coverM.txt"
-            ),
+            config["workdir"], "coverm/", "{PRB}_{EHI}_{EHA}_assembly_coverM.txt"
+        ),
         tarball=os.path.join(
-            config["workdir"], 
-            "coverm/", 
-            "{PRB}_{EHI}_{EHA}_coverm.tar.gz"
-            ),
+            config["workdir"], "coverm/", "{PRB}_{EHI}_{EHA}_coverm.tar.gz"
+        ),
         contigs=os.path.join(
-            config["workdir"], 
-            "{PRB}_{EHI}_assembly/", 
-            "{EHA}_contigs.fasta"
-            ),
+            config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta"
+        ),
         gtdb=os.path.join(
-            config["workdir"], 
-            "{PRB}/", 
-            "{EHI}/", 
-            "{EHA}_gtdbtk_combined_summary.tsv"
-            )
+            config["workdir"], "{PRB}/", "{EHI}/", "{EHA}_gtdbtk_combined_summary.tsv"
+        ),
     output:
         stats=os.path.join(
             "/projects/ehi/data/REP/",
             "{PRB}_{EHI}_{EHA}_final_stats.tsv",
         ),
         contigs=os.path.join(
-            config["workdir"], 
-            "{PRB}_{EHI}_assembly/", 
-            "{EHA}_contigs.fasta.gz"
-        )
+            config["workdir"], "{PRB}_{EHI}_assembly/", "{EHA}_contigs.fasta.gz"
+        ),
     conda:
         f"{config['codedir']}/conda_envs/lftp.yaml"
     params:
-        quast=directory(os.path.join(
-            config["workdir"], 
-            "{PRB}_{EHI}_{EHA}_QUAST")
-            ),
-        stats_dir=directory(os.path.join(
-            config["workdir"],
-            "{EHA}_stats/")
-            )
+        quast=directory(os.path.join(config["workdir"], "{PRB}_{EHI}_{EHA}_QUAST")),
+        stats_dir=directory(os.path.join(config["workdir"], "{EHA}_stats/")),
     threads: 1
     resources:
         load=8,
         mem_gb=16,
-        time=estimate_time_summary
+        time=estimate_time_summary,
     message:
         "Creating final assembly summary table for {wildcards.EHA}, uploading files to ERDA"
     shell:
@@ -95,7 +78,7 @@ rule assembly_summary:
 
             ### Upload contigs, coverm, & gtdb output to ERDA
             pigz -k -p {threads} {input.contigs}
-            
+
             lftp sftp://erda -e "put {output.contigs} -o /EarthHologenomeInitiative/Data/ASB/{config[abb]}/; bye"
             sleep 5
             lftp sftp://erda -e "put {output.stats} -o /EarthHologenomeInitiative/Data/REP/; bye"
@@ -103,6 +86,6 @@ rule assembly_summary:
             lftp sftp://erda -e "put {input.gtdb} -o /EarthHologenomeInitiative/Data/REP/; bye"
             sleep 5
             lftp sftp://erda -e "put {input.tarball} -o /EarthHologenomeInitiative/Data/ASB/{config[abb]}/; bye"
-            
+
         fi
         """
