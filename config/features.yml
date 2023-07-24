@@ -1,0 +1,4 @@
+# Paths and parameters relative to references
+---
+host:
+  fasta: resources/reference/chicken_39_sub.fa.gz

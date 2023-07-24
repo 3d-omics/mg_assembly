@@ -8,3 +8,5 @@ dependencies:
   - fastp=0.23.4
   - fastqc=0.12.1
   - gzip=1.10
+  - bowtie2=2.5.1
+  - samtools=1.17
