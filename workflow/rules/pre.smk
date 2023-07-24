@@ -266,7 +266,7 @@ rule pre_nonpareil_one:
 
 
 rule pre_nonpareil_all:
-    """Run stats_nonpareil_one for all the samples"""
+    """Run pre_nonpareil_one for all the samples"""
     input:
         [
             NONPAREIL / f"{sample_id}.{library_id}.{extension}"
@@ -352,8 +352,8 @@ rule pre_singlem_pipe_one:
         """
 
 
-rule stats_singlem_pipe_all:
-    """Run stats_singlem_one for all the samples"""
+rule pre_singlem_pipe_all:
+    """Run pre_singlem_one for all the samples"""
     input:
         [
             SINGLEM / f"{sample_id}.{library_id}.otu_table.tsv"
@@ -361,7 +361,7 @@ rule stats_singlem_pipe_all:
         ],
 
 
-rule stats_singlem_condense:
+rule pre_singlem_condense:
     """Aggregate all the singlem results into a single table"""
     input:
         archive_otu_tables=[
@@ -393,6 +393,88 @@ rule pre_singlem:
         SINGLEM / "singlem.tsv",
 
 
+rule pre_cram_to_mapped_bam:
+    """Convert cram to bam
+
+    Note: this step is needed because coverm probably does not support cram. The
+    log from coverm shows failures to get the reference online, but nonetheless
+    it works.
+    """
+    input:
+        cram=BOWTIE2 / "{sample}.{library_id}.cram",
+        reference=features["reference"]["fasta"],
+    output:
+        bam=temp(COVERM / "bams/{sample}.{library_id}.bam"),
+    log:
+        COVERM / "bams/{sample}.{library_id}.log",
+    conda:
+        "../envs/pre.yml"
+    threads: 24
+    resources:
+        runtime=1 * 60,
+        mem_mb=4 * 1024,
+    shell:
+        """
+        samtools view \
+            -F 4 \
+            --threads {threads} \
+            --reference {input.reference} \
+            --output {output.bam} \
+            --fast \
+            {input.cram} \
+        2> {log}
+        """
+
+
+rule pre_coverm_genome_one:
+    """Run coverm genome for one library and one mag catalogue"""
+    input:
+        bam=COVERM / "bams/{sample}.{library_id}.bam",
+    output:
+        tsv=touch(COVERM / "genome/{sample}.{library_id}.tsv"),
+    conda:
+        "../envs/pre.yml"
+    log:
+        COVERM / "genome/{sample}.{library_id}.log",
+    params:
+        methods=params["coverm"]["genome"]["methods"],
+        min_covered_fraction=params["coverm"]["genome"]["min_covered_fraction"],
+        separator=params["coverm"]["genome"]["separator"],
+    shell:
+        """
+        coverm genome \
+            --bam-files {input.bam} \
+            --methods {params.methods} \
+            --separator {params.separator} \
+            --min-covered-fraction {params.min_covered_fraction} \
+        > {output} 2> {log} || true \
+        """
+
+
+rule pre_coverm:
+    """Aggregate all the nonpareil results into a single table"""
+    input:
+        [
+            COVERM / f"genome/{sample_id}.{library_id}.tsv"
+            for sample_id, library_id in SAMPLE_LIB
+        ],
+    output:
+        COVERM / "coverm.tsv",
+    log:
+        COVERM / "coverm.log",
+    conda:
+        "../envs/pre.yml"
+    params:
+        input_dir=COVERM / "genome",
+    shell:
+        """
+        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+            --input-folder {params.input_dir} \
+            --output-file {output} \
+        2> {log} 1>&2
+        """
+
+
 rule pre:
     input:
         rules.pre_fastp_trim_all.input,
@@ -401,3 +483,4 @@ rule pre:
         rules.pre_bowtie2_extract_nonhost_all.input,
         rules.pre_nonpareil.output,
         rules.pre_singlem.input,
+        rules.pre_coverm.output,
