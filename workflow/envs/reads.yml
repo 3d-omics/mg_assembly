@@ -1,0 +1,9 @@
+# reads: environment to link and fastqc reads
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - coreutils=9.3
+  - fastqc=0.12.1

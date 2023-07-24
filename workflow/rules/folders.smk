@@ -1,0 +1,1 @@
+READS = Path("results/reads/")

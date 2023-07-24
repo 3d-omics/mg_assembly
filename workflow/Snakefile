@@ -1,0 +1,34 @@
+# Main entrypoint of the workflow.
+# Please follow the best practices:
+# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
+# in particular regarding the standardized folder structure mentioned there.
+
+import pandas as pd
+import yaml
+
+# Import configuration files
+params = yaml.load(open("config/params.yml", "r"), Loader=yaml.SafeLoader)
+features = yaml.load(open("config/features.yml", "r"), Loader=yaml.SafeLoader)
+samples = pd.read_table("config/samples.tsv", comment="#", dtype="str")
+
+# Generate useful variables
+SAMPLE_LIB = samples[["sample_id", "library_id"]].values.tolist()
+
+
+# Import subworkflows
+include: "rules/folders.smk"
+include: "rules/reads_functions.smk"
+include: "rules/reads.smk"
+
+
+# include: "workflows/rules/preprocessing.smk"
+# include: "workflows/rules/assembly.smk"
+# include: "workflows/rules/annotation.smk"
+# include: "workflows/rules/dereplication.smk"
+# include: "workflows/rules/phylogeny.smk"
+# include: "workflows/rules/quantification.smk"
+
+
+rule all:
+    input:
+        rules.reads.input,
