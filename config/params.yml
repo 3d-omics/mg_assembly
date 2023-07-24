@@ -1,0 +1,5 @@
+# Execution parameters
+---
+fastp:
+  length_required: 25  # nonpareil requires at least 25bp
+  extra: "--trim_poly_g --trim_poly_x"

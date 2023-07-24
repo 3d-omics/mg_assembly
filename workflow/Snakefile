@@ -19,9 +19,10 @@ SAMPLE_LIB = samples[["sample_id", "library_id"]].values.tolist()
 include: "rules/folders.smk"
 include: "rules/reads_functions.smk"
 include: "rules/reads.smk"
+include: "rules/pre_functions.smk"
+include: "rules/pre.smk"
 
 
-# include: "workflows/rules/preprocessing.smk"
 # include: "workflows/rules/assembly.smk"
 # include: "workflows/rules/annotation.smk"
 # include: "workflows/rules/dereplication.smk"
@@ -32,3 +33,4 @@ include: "rules/reads.smk"
 rule all:
     input:
         rules.reads.input,
+        rules.pre.input,
