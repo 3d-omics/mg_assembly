@@ -275,9 +275,31 @@ rule pre_nonpareil_all:
         ],
 
 
+rule pre_nonpareil:
+    """Aggregate all the nonpareil results into a single table"""
+    input:
+        rules.pre_nonpareil_all.input,
+    output:
+        NONPAREIL / "nonpareil.tsv",
+    log:
+        NONPAREIL / "nonpareil.log",
+    conda:
+        "../envs/pre.yml"
+    params:
+        input_dir=NONPAREIL,
+    shell:
+        """
+        Rscript --no-init-file workflow/scripts/aggregate_nonpareil.R \
+            --input-folder {params.input_dir} \
+            --output-file {output} \
+        2> {log} 1>&2
+        """
+
+
 rule pre:
     input:
         rules.pre_fastp_trim_all.input,
         rules.pre_fastp_fastqc_all.input,
         rules.pre_bowtie2_map_host_all.input,
         rules.pre_bowtie2_extract_nonhost_all.input,
+        rules.pre_nonpareil.output,
