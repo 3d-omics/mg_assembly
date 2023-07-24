@@ -21,7 +21,14 @@ def compose_rg_id(wildcards):
 
 def compose_rg_extra(wildcards):
     """Compose read group extra information for bowtie2"""
-    return (
-        f"LB:{wildcards.sample_id}_{wildcards.library_id}\t"
-        + f"PL:Illumina\tSM:{wildcards.sample_id}"
-    )
+    sample_id = wildcards.sample_id
+    library_id = wildcards.library_id
+    lb_field = f"LB:{sample_id}_{library_id}"
+    pl_field = "PL:Illumina"
+    sm_field = f"SM:{sample_id}"
+    return f"LB:{lb_field}\t" + f"PL:Illumina\t" + f"SM:{sm_field}"
+
+
+def compose_prefix_for_nonpareil(wildcards):
+    """Compose prefix for nonpareil output files"""
+    return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"

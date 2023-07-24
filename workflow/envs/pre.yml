@@ -10,3 +10,4 @@ dependencies:
   - gzip=1.10
   - bowtie2=2.5.1
   - samtools=1.17
+  - nonpareil=3.4.1
