@@ -162,3 +162,89 @@ rule assembly_bowtie2_all:
                 ["assembly_id", "sample_id", "library_id"]
             ].values.tolist()
         ],
+
+
+rule assembly_merge_bams_one:
+    input:
+        crams=get_crams_to_merge,
+        reference=MEGAHIT / "{assembly_id}" / "final.contigs.fa",
+    output:
+        bam=BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
+    log:
+        log=BOWTIE2_ASSEMBLY / "{assembly_id}.log",
+    conda:
+        "../envs/assembly.yml"
+    threads: 24
+    params:
+        n=get_number_of_libraries_in_assembly,
+    shell:
+        """
+        if [ {params.n} -eq 1 ] ; then
+            samtools view \
+                --bam \
+                --reference {input.reference} \
+                {input.crams} \
+            > {output.bam} \
+            2> {log}
+        else
+            samtools merge \
+                -@ {threads} \
+                -l 1 \
+                -o {output.bam} \
+                {input.crams} \
+            2> {log} 1>&2
+        fi
+        """
+
+
+rule assembly_merge_bams_all:
+    input:
+        [BOWTIE2_ASSEMBLY / f"{assembly_id}.bam" for assembly_id in samples.assembly_id],
+
+
+rule assembly_metawrap_binning_prepare_one:
+    input:
+        bam=BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
+    output:
+        folder=directory(METAWRAP_BINNING / "{assembly_id}"),
+        forward_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_1.fq",
+        reverse_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_2.fq",
+        bwt_index=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}.fa.bwt",
+        bam=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}.bam",
+    log:
+        METAWRAP_BINNING / "{assembly_id}.prepare.log",
+    conda:
+        "../envs/assembly.yml"
+    shell:
+        """
+        touch {output.forward_}
+        touch {output.reverse_}
+        touch {output.bwt_index}
+        ln {input.bam} {output.bam}
+        """
+
+
+rule assembly_metawrap_binning_prepare_all:
+    input:
+        [METAWRAP_BINNING / f"{assembly_id}" for assembly_id in samples.assembly_id],
+
+
+# rule assembly_metawrap_one:
+#     """Run metawrap over one assembly group
+#     Note: metawrap works with fastq files, but we can trick it into working by
+#     creating mock fastq and reference files. h/t: Raphael Eisenhofer
+#     Note2: metawrap is rotten. It is written in python2 and has a lot unmetabel dependencies in conda.
+#     Using a singularity container instead.
+#     """
+#     input:
+#         bam = BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
+#         assembly = MEGAHIT / "{assembly_id}/final.contigs.fa",
+#     output:
+#         directory(METAWRAP / "{assembly_id}"),
+#     log:
+#         METAWRAP / "{assembly_id}.log",
+#     conda:
+#         "../envs/assembly.yml"
+#     singularity:
+#         "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
+#     threads: 24

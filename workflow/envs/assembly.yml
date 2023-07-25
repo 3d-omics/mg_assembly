@@ -1,4 +1,4 @@
-# reads: environment to preprocess reads before mag assembly
+# assembly: environment to assemble mags
 ---
 channels:
   - conda-forge
