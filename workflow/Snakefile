@@ -12,6 +12,7 @@ features = yaml.load(open("config/features.yml", "r"), Loader=yaml.SafeLoader)
 samples = pd.read_table("config/samples.tsv", comment="#", dtype="str")
 
 # Generate useful variables
+SAMPLES = samples.sample_id.unique()
 SAMPLE_LIB = samples[["sample_id", "library_id"]].values.tolist()
 
 
@@ -21,9 +22,10 @@ include: "rules/reads_functions.smk"
 include: "rules/reads.smk"
 include: "rules/pre_functions.smk"
 include: "rules/pre.smk"
+include: "rules/assembly_functions.smk"
+include: "rules/assembly.smk"
 
 
-# include: "workflows/rules/assembly.smk"
 # include: "workflows/rules/annotation.smk"
 # include: "workflows/rules/dereplication.smk"
 # include: "workflows/rules/phylogeny.smk"
@@ -34,3 +36,4 @@ rule all:
     input:
         rules.reads.input,
         rules.pre.input,
+        rules.assembly.input,

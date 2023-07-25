@@ -16,3 +16,8 @@ coverm:
     separator: "^"
   contig:
     methods: "count"
+
+assembly:
+  megahit:
+    extra: ""
+    min_contig_len: 1500

@@ -167,9 +167,9 @@ rule all:
         ),
 
 
-include: os.path.join(config["codedir"], "rules/create_ASB_folder.smk")
-include: os.path.join(config["codedir"], "rules/download_preprocessed.smk")
-include: os.path.join(config["codedir"], "rules/individual_assembly.smk")
+# include: os.path.join(config["codedir"], "rules/create_ASB_folder.smk")
+# include: os.path.join(config["codedir"], "rules/download_preprocessed.smk")
+# include: os.path.join(config["codedir"], "rules/individual_assembly.smk")
 include: os.path.join(config["codedir"], "rules/QUAST.smk")
 include: os.path.join(config["codedir"], "rules/index_assembly.smk")
 include: os.path.join(config["codedir"], "rules/assembly_mapping.smk")
@@ -186,6 +186,7 @@ include: os.path.join(config["codedir"], "rules/log_ASB_finish.smk")
 onerror:
     shell(
         """
-            echo "/projects/ehi/data/RUN/{config[abb]}" | mailx -s "{config[abb]} ERROR" EMAIL_ADD
-          """
+        echo "/projects/ehi/data/RUN/{config[abb]}" \
+        | mailx -s "{config[abb]} ERROR" EMAIL_ADD
+        """
     )
