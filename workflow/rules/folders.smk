@@ -11,3 +11,4 @@ COVERM = PRE / "coverm/"
 
 ASSEMBLY = Path("results/assembly/")
 MEGAHIT = ASSEMBLY / "megahit/"
+QUAST = ASSEMBLY / "quast/"
