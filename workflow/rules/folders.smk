@@ -12,4 +12,5 @@ COVERM = PRE / "coverm/"
 ASSEMBLY = Path("results/assembly/")
 MEGAHIT = ASSEMBLY / "megahit/"
 QUAST = ASSEMBLY / "quast/"
+BOWTIE2_INDEXES_ASSEMBLY = ASSEMBLY / "bowtie2_indexes/"
 BOWTIE2_ASSEMBLY = ASSEMBLY / "bowtie2/"

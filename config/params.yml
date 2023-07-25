@@ -22,3 +22,11 @@ assembly:
   megahit:
     extra: ""
     min_contig_len: 1500
+  quast:
+    extra: ""
+  bowtie2-build:
+    extra: ""
+  bowtie2:
+    extra: ""
+  samtools:
+    mem: 1G
