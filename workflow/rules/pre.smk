@@ -17,8 +17,8 @@ rule pre_fastp_trim_one:
     params:
         adapter_forward=get_forward_adapter,
         adapter_reverse=get_reverse_adapter,
-        extra=params["fastp"]["extra"],
-        length_required=params["fastp"]["length_required"],
+        extra=params["pre"]["fastp"]["extra"],
+        length_required=params["pre"]["fastp"]["length_required"],
     threads: 16
     resources:
         mem_mb=4 * 1024,
@@ -87,7 +87,7 @@ rule pre_fastp_fastqc_all:
 
 
 rule pre_bowtie2_index_host:
-    """Build bowtie2 index for the human reference
+    """Build BOWTIE2_PRE index for the human reference
 
     Let the script decide to use a small or a large index based on the size of
     the reference genome.
@@ -95,13 +95,13 @@ rule pre_bowtie2_index_host:
     input:
         reference=features["host"]["fasta"],
     output:
-        mock=touch(BOWTIE2 / "host"),
+        mock=touch(BOWTIE2_PRE / "host"),
     log:
-        BOWTIE2 / "host_index.log",
+        BOWTIE2_PRE / "host_index.log",
     conda:
         "../envs/pre.yml"
     params:
-        extra=params["bowtie2"]["extra"],
+        extra=params["pre"]["bowtie2-build"]["extra"],
     threads: 8
     resources:
         mem_mb=32 * 1024,
@@ -125,17 +125,17 @@ rule pre_bowtie2_map_host_one:
     input:
         forward_=FASTP / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=FASTP / "{sample_id}.{library_id}_2.fq.gz",
-        mock=BOWTIE2 / "host",
+        mock=BOWTIE2_PRE / "host",
         reference=features["host"]["fasta"],
     output:
-        cram=BOWTIE2 / "{sample_id}.{library_id}.cram",
+        cram=BOWTIE2_PRE / "{sample_id}.{library_id}.cram",
     log:
-        BOWTIE2 / "{sample_id}.{library_id}.log",
+        BOWTIE2_PRE / "{sample_id}.{library_id}.log",
     conda:
         "../envs/pre.yml"
     params:
-        extra=params["bowtie2"]["extra"],
-        samtools_mem=params["bowtie2"]["samtools"]["mem_per_thread"],
+        extra=params["pre"]["bowtie2"]["extra"],
+        samtools_mem=params["pre"]["bowtie2"]["samtools"]["mem_per_thread"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     threads: 24
@@ -167,7 +167,7 @@ rule pre_bowtie2_map_host_all:
     """Map all libraries to reference genome using bowtie2"""
     input:
         [
-            BOWTIE2 / f"{sample_id}.{library_id}.cram"
+            BOWTIE2_PRE / f"{sample_id}.{library_id}.cram"
             for sample_id, library_id in SAMPLE_LIB
         ],
 
@@ -181,7 +181,7 @@ rule pre_bowtie2_extract_nonhost_one:
     than by coordinate, and convert to FASTQ.
     """
     input:
-        cram=BOWTIE2 / "{sample_id}.{library_id}.cram",
+        cram=BOWTIE2_PRE / "{sample_id}.{library_id}.cram",
         reference=features["host"]["fasta"],
     output:
         forward_=temp(NONHOST / "{sample_id}.{library_id}_1.fq.gz"),
@@ -401,7 +401,7 @@ rule pre_cram_to_mapped_bam:
     it works.
     """
     input:
-        cram=BOWTIE2 / "{sample}.{library_id}.cram",
+        cram=BOWTIE2_PRE / "{sample}.{library_id}.cram",
         reference=features["host"]["fasta"],
     output:
         bam=temp(COVERM / "bams/{sample}.{library_id}.bam"),
@@ -437,9 +437,9 @@ rule pre_coverm_genome_one:
     log:
         COVERM / "genome/{sample}.{library_id}.log",
     params:
-        methods=params["coverm"]["genome"]["methods"],
-        min_covered_fraction=params["coverm"]["genome"]["min_covered_fraction"],
-        separator=params["coverm"]["genome"]["separator"],
+        methods=params["pre"]["coverm"]["genome"]["methods"],
+        min_covered_fraction=params["pre"]["coverm"]["genome"]["min_covered_fraction"],
+        separator=params["pre"]["coverm"]["genome"]["separator"],
     shell:
         """
         coverm genome \

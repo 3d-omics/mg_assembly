@@ -1,21 +1,22 @@
 # Execution parameters
 ---
-fastp:
-  length_required: 25  # nonpareil requires at least 25bp
-  extra: "--trim_poly_g --trim_poly_x"
-
-bowtie2:
-  extra: ""
-  samtools:
-    mem_per_thread: 1G
-
-coverm:
-  genome:
-    methods: "count"
-    min_covered_fraction: 0.0
-    separator: "^"
-  contig:
-    methods: "count"
+pre:
+  fastp:
+    length_required: 25  # nonpareil requires at least 25bp
+    extra: "--trim_poly_g --trim_poly_x"
+  bowtie2-build:
+    extra: ""
+  bowtie2:
+    extra: ""
+    samtools:
+      mem_per_thread: 1G
+  coverm:
+    genome:
+      methods: "count"
+      min_covered_fraction: 0.0
+      separator: "^"
+    contig:
+      methods: "count"
 
 assembly:
   megahit:
