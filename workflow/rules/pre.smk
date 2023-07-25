@@ -402,7 +402,7 @@ rule pre_cram_to_mapped_bam:
     """
     input:
         cram=BOWTIE2 / "{sample}.{library_id}.cram",
-        reference=features["reference"]["fasta"],
+        reference=features["host"]["fasta"],
     output:
         bam=temp(COVERM / "bams/{sample}.{library_id}.bam"),
     log:

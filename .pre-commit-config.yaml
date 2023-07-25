@@ -19,29 +19,3 @@ repos:
     rev: 3.0.0
     hooks:
       - id: shellcheck
-  - repo: https://github.com/lorenzwalthert/precommit
-    rev: f3498c421d68a1db26de1a1fe3ecc91dd6f03b5e
-    hooks:
-      - id: style-files
-        args:
-          ['--ignore-start="^# styler: off$"', '--ignore-stop="^# styler: on$"']
-        exclude: >
-          (?x)^(
-          tests/testthat/.*/.*\.R(md|nw)?|
-          vignettes/customizing_styler\.Rmd|
-          tests/testthat/public-api/xyzfile-rnw/random4\.Rnw|
-          vignettes/detect-alignment\.Rmd|
-          tests/testmanual/addins/.*invalid.*|
-          tests/testmanual/addins/r-valid\.R|
-          )$
-      - id: lintr
-        additional_dependencies:
-          - r-lib/lintr
-        exclude: >
-          (?x)^(
-          inst/.*|
-          man/.*|
-          tests/.*|
-          touchstone/.*|
-          vignettes/.*|
-          )$

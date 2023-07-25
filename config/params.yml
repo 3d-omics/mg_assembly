@@ -8,3 +8,11 @@ bowtie2:
   extra: ""
   samtools:
     mem_per_thread: 1G
+
+coverm:
+  genome:
+    methods: "count"
+    min_covered_fraction: 0.0
+    separator: "^"
+  contig:
+    methods: "count"
