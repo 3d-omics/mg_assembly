@@ -34,7 +34,8 @@ df = pd.read_csv("asb_input.tsv", sep="\t")
 
 # Use set to create a list of valid combinations of wildcards.
 valid_combinations = set(
-    (row["PR_batch"], row["EHI_number"], row["Assembly_code"]) for _, row in df.iterrows()
+    (row["PR_batch"], row["EHI_number"], row["Assembly_code"])
+    for _, row in df.iterrows()
 )
 
 
@@ -42,15 +43,9 @@ valid_combinations = set(
 ### Setup the desired outputs
 rule all:
     input:
-        os.path.join(
-                config["workdir"],
-                "ERDA_folder_created"
-        ),
+        os.path.join(config["workdir"], "ERDA_folder_created"),
         expand(
-            os.path.join(
-                config["workdir"],
-                "{combo[2]}_QUAST"
-            ),
+            os.path.join(config["workdir"], "{combo[2]}_QUAST"),
             combo=valid_combinations,
         ),
         expand(
@@ -62,7 +57,7 @@ rule all:
         expand(
             os.path.join(config["workdir"], "{abb}_pipeline_finished"),
             abb=config["abb"],
-        )
+        ),
 
 
 include: os.path.join(config["codedir"], "rules/create_ASB_folder.smk")
@@ -79,7 +74,10 @@ include: os.path.join(config["codedir"], "rules/gtdbtk_coassembly.smk")
 include: os.path.join(config["codedir"], "rules/coassembly_summary.smk")
 include: os.path.join(config["codedir"], "rules/log_coASB_finish.smk")
 
+
 onerror:
-    shell("""
+    shell(
+        """
             echo "/projects/ehi/data/RUN/{config[abb]}" | mailx -s "{config[abb]} ERROR" EMAIL_ADD
-          """)
+          """
+    )

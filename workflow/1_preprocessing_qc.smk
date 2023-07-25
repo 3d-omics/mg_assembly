@@ -20,7 +20,9 @@
 
 ### Setup sample inputs and config
 
+
 configfile: "preprocess_qc_config.yaml"
+
 
 import glob
 import pandas as pd
@@ -39,15 +41,17 @@ print(SAMPLE)
 ### Scaling is based on benchmark data for ~280 jobs 3/4/2023 RE
 import os
 
+
 def estimate_time_download(wildcards):
     fs_sample = f"{config['workdir']}/{wildcards.sample}_filesize.txt"
-    with open(fs_sample, 'r') as f:
+    with open(fs_sample, "r") as f:
         input_size = int(f.read().strip())
     # convert from bytes to gigabytes
     input_size_gb = input_size / (1024 * 1024 * 1024)
     # Multiply by 2, and set time based on 30 MB/s download speed.
-    estimate_time_download = ((input_size_gb * 2.1 ) + 12 ) / 1.25
+    estimate_time_download = ((input_size_gb * 2.1) + 12) / 1.25
     return int(estimate_time_download)
+
 
 def estimate_time_fastp(wildcards):
     r1_path = f"{config['workdir']}/{wildcards.sample}_raw_1.fq.gz"
@@ -57,8 +61,9 @@ def estimate_time_fastp(wildcards):
     # convert from bytes to gigabytes
     input_size_gb = input_size / (1024 * 1024 * 1024)
     # Add scaling (* 2.5 is for the Gbp to .gz compressed filesize scaling -- e.g. 3 Gbp sample ~ 1.5 GBytes)
-    estimate_time_fastp = ((input_size_gb * 2.5 ) + 6) / 2
+    estimate_time_fastp = ((input_size_gb * 2.5) + 6) / 2
     return int(estimate_time_fastp)
+
 
 def estimate_time_mapping(wildcards):
     r1_path = f"{config['workdir']}/{wildcards.sample}_trimmed_1.fq.gz"
@@ -67,8 +72,9 @@ def estimate_time_mapping(wildcards):
     input_size = sum(os.path.getsize(f) for f in input_files)
     # convert from bytes to gigabytes
     input_size_gb = input_size / (1024 * 1024 * 1024)
-    estimate_time_mapping = ((input_size_gb * 2 ) + 2) * 12
+    estimate_time_mapping = ((input_size_gb * 2) + 2) * 12
     return int(estimate_time_mapping)
+
 
 def estimate_time_nonpareil(wildcards):
     r1_path = f"{config['workdir']}/{wildcards.sample}_M_1.fq"
@@ -92,13 +98,12 @@ def estimate_time_singlem(wildcards):
     estimate_time_singlem = ((input_size_gb) + 7) * 4.5
     return int(estimate_time_singlem)
 
+
 ################################################################################
 ### Setup the desired outputs
 rule all:
     input:
-        expand("/projects/ehi/data/REP/{prb}.tsv",
-                prb=config["prb"]
-        )
+        expand("/projects/ehi/data/REP/{prb}.tsv", prb=config["prb"]),
 
 
 include: os.path.join(config["codedir"], "rules/create_PRB_folder.smk")
@@ -115,6 +120,8 @@ include: os.path.join(config["codedir"], "rules/prb_summary.smk")
 
 
 onerror:
-    shell("""
+    shell(
+        """
             echo "/projects/ehi/data/RUN/{config[prb]}" | mailx -s "{config[prb]} ERROR" EMAIL_ADD
-          """)
+          """
+    )

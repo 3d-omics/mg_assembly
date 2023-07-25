@@ -20,7 +20,9 @@
 
 ### Setup MAG inputs and config
 
+
 configfile: "dereplication_mapping.yaml"
+
 
 import os
 import glob
@@ -53,10 +55,8 @@ print(MAG)
 
 rule all:
     input:
-        os.path.join(
-            config["workdir"],
-            "tables_uploaded"
-        )
+        os.path.join(config["workdir"], "tables_uploaded"),
+
 
 include: os.path.join(config["codedir"], "rules/create_DMB_folder.smk")
 include: os.path.join(config["codedir"], "rules/download_preprocessed.smk")
