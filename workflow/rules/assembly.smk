@@ -206,9 +206,8 @@ rule assembly_metawrap_binning_prepare_one:
     input:
         bam=BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
     output:
-        folder=directory(METAWRAP_BINNING / "{assembly_id}"),
-        forward_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_1.fq",
-        reverse_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_2.fq",
+        forward_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_1.fastq",
+        reverse_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_2.fastq",
         bwt_index=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}.fa.bwt",
         bam=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}.bam",
     log:
@@ -217,8 +216,8 @@ rule assembly_metawrap_binning_prepare_one:
         "../envs/assembly.yml"
     shell:
         """
-        touch {output.forward_}
-        touch {output.reverse_}
+        echo "@" > {output.forward_}
+        echo "@" > {output.reverse_}
         touch {output.bwt_index}
         ln {input.bam} {output.bam}
         """
@@ -229,22 +228,43 @@ rule assembly_metawrap_binning_prepare_all:
         [METAWRAP_BINNING / f"{assembly_id}" for assembly_id in samples.assembly_id],
 
 
-# rule assembly_metawrap_one:
-#     """Run metawrap over one assembly group
-#     Note: metawrap works with fastq files, but we can trick it into working by
-#     creating mock fastq and reference files. h/t: Raphael Eisenhofer
-#     Note2: metawrap is rotten. It is written in python2 and has a lot unmetabel dependencies in conda.
-#     Using a singularity container instead.
-#     """
-#     input:
-#         bam = BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
-#         assembly = MEGAHIT / "{assembly_id}/final.contigs.fa",
-#     output:
-#         directory(METAWRAP / "{assembly_id}"),
-#     log:
-#         METAWRAP / "{assembly_id}.log",
-#     conda:
-#         "../envs/assembly.yml"
-#     singularity:
-#         "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
-#     threads: 24
+rule assembly_metawrap_binning_one:
+    """Run metawrap over one assembly group
+    Note: metawrap works with fastq files, but we can trick it into working by
+    creating mock fastq and reference files. h/t: Raphael Eisenhofer
+    Note2: metawrap is rotten. It is written in python2 and has a lot unmetabel dependencies in conda.
+    Using a singularity container instead.
+    """
+    input:
+        bam=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}.bam",
+        forward_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_1.fastq",
+        reverse_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_2.fastq",
+        assembly=MEGAHIT / "{assembly_id}/final.contigs.fa",
+    output:
+        touch(METAWRAP_BINNING / "{assembly_id}.txt"),
+    log:
+        METAWRAP_BINNING / "{assembly_id}.log",
+    singularity:
+        "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
+    threads: 24
+    params:
+        min_length=1500,
+        out_folder=lambda wildcards: METAWRAP_BINNING / f"{wildcards.assembly_id}",
+    shell:
+        """
+        metawrap binning \
+            -o {params.out_folder} \
+            -a {input.assembly} \
+            -l {params.min_length} \
+            --metabat2 \
+            --maxbin2 \
+            --concoct \
+            {input.forward_} \
+            {input.reverse_} \
+        2> {log} 1>&2
+        """
+
+
+rule assembly_metawrap_binning_all:
+    input:
+        [METAWRAP_BINNING / f"{assembly_id}.txt" for assembly_id in samples.assembly_id],
