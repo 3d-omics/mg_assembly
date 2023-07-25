@@ -28,8 +28,15 @@ dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 
 files <- list.files(args$input_folder, pattern = "*.tsv", full.names = TRUE)
 
-files %>%
+nonempty_files <-
+  files %>%
   map(function(x) read_tsv(x, col_types = cols()), .progress = TRUE) %>%
-  keep(function(x) nrow(x) > 0) %>%  # Discard empty files
+  keep(function(x) nrow(x) > 0)
+
+if (length(nonempty_files) > 0) {
+  nonempty_files %>%
   reduce(left_join) %>%
   write_tsv(output_file)
+} else {
+  write_tsv(x = tibble(Contig = NA), file = output_file)
+}
