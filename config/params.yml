@@ -30,3 +30,10 @@ assembly:
     extra: ""
   samtools:
     mem: 1G
+  metawrap_binning:
+    min_length: 1500
+    extra: ""
+  metawrap_bin_refinement:
+    completeness: 50
+    contamination: 10
+    extra: "--quick"

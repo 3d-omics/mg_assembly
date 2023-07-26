@@ -241,14 +241,17 @@ rule assembly_metawrap_binning_one:
         reverse_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_2.fastq",
         assembly=MEGAHIT / "{assembly_id}/final.contigs.fa",
     output:
-        touch(METAWRAP_BINNING / "{assembly_id}.txt"),
+        metabat2_bins=directory(METAWRAP_BINNING / "{assembly_id}/metabat2_bins"),
+        maxbin2_bins=directory(METAWRAP_BINNING / "{assembly_id}/maxbin2_bins"),
+        concoct_bins=directory(METAWRAP_BINNING / "{assembly_id}/concoct_bins"),
     log:
         METAWRAP_BINNING / "{assembly_id}.log",
     singularity:
         "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
     threads: 24
     params:
-        min_length=1500,
+        min_length=params["assembly"]["metawrap_binning"]["min_length"],
+        extra=params["assembly"]["metawrap_binning"]["extra"],
         out_folder=lambda wildcards: METAWRAP_BINNING / f"{wildcards.assembly_id}",
     shell:
         """
@@ -259,6 +262,7 @@ rule assembly_metawrap_binning_one:
             --metabat2 \
             --maxbin2 \
             --concoct \
+            {params.extra} \
             {input.forward_} \
             {input.reverse_} \
         2> {log} 1>&2
@@ -267,4 +271,63 @@ rule assembly_metawrap_binning_one:
 
 rule assembly_metawrap_binning_all:
     input:
-        [METAWRAP_BINNING / f"{assembly_id}.txt" for assembly_id in samples.assembly_id],
+        [
+            METAWRAP_BINNING / f"{assembly_id}/{binner}"
+            for assembly_id in samples.assembly_id
+            for binner in ["concoct_bins", "maxbin2_bins", "metabat2_bins"]
+        ],
+
+
+rule assembly_metawrap_bin_refinement_one:
+    input:
+        metabat2_bins=METAWRAP_BINNING / "{assembly_id}/metabat2_bins",
+        maxbin2_bins=METAWRAP_BINNING / "{assembly_id}/maxbin2_bins",
+        concoct_bins=METAWRAP_BINNING / "{assembly_id}/concoct_bins",
+    output:
+        stats=METAWRAP_REFINEMENT / "{assembly_id}.stats",
+        contigs=METAWRAP_REFINEMENT / "{assembly_id}.contigs",
+        # folder = directory(METAWRAP_REFINEMENT / "{assembly_id}"),
+    log:
+        METAWRAP_REFINEMENT / "{assembly_id}.log",
+    singularity:
+        "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
+    threads: 24
+    params:
+        completeness=params["assembly"]["metawrap_bin_refinement"]["completeness"],
+        contamination=params["assembly"]["metawrap_bin_refinement"]["contamination"],
+        extra=params["assembly"]["metawrap_bin_refinement"]["extra"],
+        folder=lambda wildcards: METAWRAP_REFINEMENT / f"{wildcards.assembly_id}",
+    resources:
+        mem_mb=16 * 1024,
+    shell:
+        """
+        metawrap bin_refinement \
+            -m $(({resources.mem_mb} / 1024)) \
+            -o {params.folder} \
+            -t {threads} \
+            -A {input.metabat2_bins} \
+            -B {input.maxbin2_bins} \
+            -C {input.concoct_bins} \
+            -c {params.completeness} \
+            -x {params.contamination} \
+            {params.extra} \
+        2> {log} 1>&2
+
+        cp \
+            {METAWRAP_REFINEMENT}/{wildcards.assembly_id}/metawrap_{params.completeness}_{params.contamination}_bins.stats \
+            {output.stats} \
+        2>> {log} 1>&2
+
+        cp \
+            {METAWRAP_REFINEMENT}/{wildcards.assembly_id}/metawrap_{params.completeness}_{params.contamination}_bins.contigs \
+            {output.contigs} \
+        2>> {log} 1>&2
+        """
+
+
+rule assembly_metawrap_bin_refinement_all:
+    input:
+        [
+            METAWRAP_REFINEMENT / f"{assembly_id}.contigs"
+            for assembly_id in samples.assembly_id
+        ],
