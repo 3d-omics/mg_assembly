@@ -60,15 +60,15 @@ rule all:
         ),
 
 
-include: os.path.join(config["codedir"], "rules/create_ASB_folder.smk")
-include: os.path.join(config["codedir"], "rules/download_preprocessed.smk")
-include: os.path.join(config["codedir"], "rules/coassembly.smk")
-include: os.path.join(config["codedir"], "rules/QUAST_coassembly.smk")
-include: os.path.join(config["codedir"], "rules/index_coassembly.smk")
-include: os.path.join(config["codedir"], "rules/coassembly_mapping.smk")
-include: os.path.join(config["codedir"], "rules/upload_coasb_bam.smk")
-include: os.path.join(config["codedir"], "rules/metawrap_binning_coassembly.smk")
-include: os.path.join(config["codedir"], "rules/metawrap_refinement_coassembly.smk")
+# include: os.path.join(config["codedir"], "rules/create_ASB_folder.smk")
+# include: os.path.join(config["codedir"], "rules/download_preprocessed.smk")
+# include: os.path.join(config["codedir"], "rules/coassembly.smk")
+# include: os.path.join(config["codedir"], "rules/QUAST_coassembly.smk")
+# include: os.path.join(config["codedir"], "rules/index_coassembly.smk")
+# include: os.path.join(config["codedir"], "rules/coassembly_mapping.smk")
+# include: os.path.join(config["codedir"], "rules/upload_coasb_bam.smk")
+# include: os.path.join(config["codedir"], "rules/metawrap_binning_coassembly.smk")
+# include: os.path.join(config["codedir"], "rules/metawrap_refinement_coassembly.smk")
 include: os.path.join(config["codedir"], "rules/coverm_coassembly.smk")
 include: os.path.join(config["codedir"], "rules/gtdbtk_coassembly.smk")
 include: os.path.join(config["codedir"], "rules/coassembly_summary.smk")
@@ -78,6 +78,6 @@ include: os.path.join(config["codedir"], "rules/log_coASB_finish.smk")
 onerror:
     shell(
         """
-            echo "/projects/ehi/data/RUN/{config[abb]}" | mailx -s "{config[abb]} ERROR" EMAIL_ADD
-          """
+        echo "/projects/ehi/data/RUN/{config[abb]}" | mailx -s "{config[abb]} ERROR" EMAIL_ADD
+        """
     )

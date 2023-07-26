@@ -39,14 +39,15 @@ rule metaWRAP_binning:
 
         touch {params.outdir}/work_files/assembly.fa.bwt
 
-        for bam in {input.bam}; do echo "@" > {params.outdir}/work_files/$(basename ${{bam/.bam/_1.fastq}}); done
-        for bam in {input.bam}; do echo "@" > {params.outdir}/work_files/$(basename ${{bam/.bam/_2.fastq}}); done
-
-        #Symlink BAMs for metaWRAP
-        for bam in {input.bam}; do ln -sf $bam {params.outdir}/work_files/$(basename $bam); done
+        for bam in {input.bam}; do
+            echo "@" > {params.outdir}/work_files/$(basename ${{bam/.bam/_1.fastq}})
+            echo "@" > {params.outdir}/work_files/$(basename ${{bam/.bam/_2.fastq}})
+            ln -sf $bam {params.outdir}/work_files/$(basename $bam)
+        done
 
         # Run metaWRAP binning
-        metawrap binning -o {params.outdir} \
+        metawrap binning \
+            -o {params.outdir} \
             -t {threads} \
             -m {resources.mem_gb} \
             -a {input.contigs} \
@@ -54,7 +55,8 @@ rule metaWRAP_binning:
             --metabat2 \
             --maxbin2 \
             --concoct \
-        {params.outdir}/work_files/*_1.fastq {params.outdir}/work_files/*_2.fastq
+            {params.outdir}/work_files/*_1.fastq \
+            {params.outdir}/work_files/*_2.fastq
 
         # Create output for the next rule
         touch {output}

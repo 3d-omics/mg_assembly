@@ -84,12 +84,12 @@ rule metaWRAP_refinement:
             ls -l {params.outdir}/metawrap_50_10_bins/*.fa.gz | wc -l > {params.stats_dir}/{wildcards.EHA}_bins.tsv
 
             # Reformat MAG headers for CoverM
-            for mag in {params.outdir}/metawrap_50_10_bins/*.fa.gz;
-                do rename.sh \
+            for mag in {params.outdir}/metawrap_50_10_bins/*.fa.gz ; do
+                rename.sh \
                     in=$mag \
                     out={params.outdir}/$(basename ${{mag/.fa.gz/_renamed.fa.gz}}) \
                     zl=9 \
-                    prefix=$(basename ${{mag/.fa.gz/^}});
+                    prefix=$(basename ${{mag/.fa.gz/^}})
             done
 
             rm {params.outdir}/metawrap_50_10_bins/*.fa.gz
