@@ -284,9 +284,10 @@ rule assembly_metawrap_bin_refinement_one:
         maxbin2_bins=METAWRAP_BINNING / "{assembly_id}/maxbin2_bins",
         concoct_bins=METAWRAP_BINNING / "{assembly_id}/concoct_bins",
     output:
-        stats=METAWRAP_REFINEMENT / "{assembly_id}.stats",
-        contigs=METAWRAP_REFINEMENT / "{assembly_id}.contigs",
-        # folder = directory(METAWRAP_REFINEMENT / "{assembly_id}"),
+        stats=METAWRAP_REFINEMENT / "{assembly_id}_bins.stats",
+        contigs=METAWRAP_REFINEMENT / "{assembly_id}_bins.contigs",
+        working_folder=directory(METAWRAP_REFINEMENT / "{assembly_id}"),
+        bins_folder=directory(METAWRAP_REFINEMENT / "{assembly_id}_bins"),
     log:
         METAWRAP_REFINEMENT / "{assembly_id}.log",
     singularity:
@@ -296,14 +297,14 @@ rule assembly_metawrap_bin_refinement_one:
         completeness=params["assembly"]["metawrap_bin_refinement"]["completeness"],
         contamination=params["assembly"]["metawrap_bin_refinement"]["contamination"],
         extra=params["assembly"]["metawrap_bin_refinement"]["extra"],
-        folder=lambda wildcards: METAWRAP_REFINEMENT / f"{wildcards.assembly_id}",
+        output_prefix=compose_metawrap_working_folder,
     resources:
         mem_mb=16 * 1024,
     shell:
         """
         metawrap bin_refinement \
             -m $(({resources.mem_mb} / 1024)) \
-            -o {params.folder} \
+            -o {output.working_folder} \
             -t {threads} \
             -A {input.metabat2_bins} \
             -B {input.maxbin2_bins} \
@@ -314,13 +315,20 @@ rule assembly_metawrap_bin_refinement_one:
         2> {log} 1>&2
 
         cp \
-            {METAWRAP_REFINEMENT}/{wildcards.assembly_id}/metawrap_{params.completeness}_{params.contamination}_bins.stats \
+            {params.output_prefix}.stats \
+            `# {METAWRAP_REFINEMENT}/{wildcards.assembly_id}/metawrap_{params.completeness}_{params.contamination}_bins.stats` \
             {output.stats} \
         2>> {log} 1>&2
 
         cp \
-            {METAWRAP_REFINEMENT}/{wildcards.assembly_id}/metawrap_{params.completeness}_{params.contamination}_bins.contigs \
+            {params.output_prefix}.contigs \
+            `# {METAWRAP_REFINEMENT}/{wildcards.assembly_id}/metawrap_{params.completeness}_{params.contamination}_bins.contigs` \
             {output.contigs} \
+        2>> {log} 1>&2
+
+        cp --recursive \
+            {params.output_prefix} \
+            {output.bins_folder} \
         2>> {log} 1>&2
         """
 
@@ -331,3 +339,34 @@ rule assembly_metawrap_bin_refinement_all:
             METAWRAP_REFINEMENT / f"{assembly_id}.contigs"
             for assembly_id in samples.assembly_id
         ],
+
+
+rule assembly_metawrap_renaming_one:
+    """
+
+    Note: doing this separatedly from the binning step because we need seqtk and it is outside the metawrap singularity container
+    """
+    input:
+        bin_folder=METAWRAP_REFINEMENT / "{assembly_id}_bins",
+    output:
+        fa=METAWRAP_RENAMING / "{assembly_id}.fa",
+    log:
+        METAWRAP_RENAMING / "{assembly_id}.log",
+    conda:
+        "../envs/assembly.yml"
+    params:
+        assembly_id=lambda wildcards: f"{wildcards.assembly_id}",
+    shell:
+        """
+        (for bin in {input.bin_folder}/*.fa ; do
+            bin_name=$(basename $bin .fa)
+            setqk rename \
+                {params.assembly_id}-${{bin_name}}- \
+                $bin
+        done > {output.fa}) 2> {log}
+        """
+
+
+rule assembly_metawrap_renaming_all:
+    input:
+        [METAWRAP_RENAMING / f"{assembly_id}.fa" for assembly_id in samples.assembly_id],
