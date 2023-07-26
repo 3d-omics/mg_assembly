@@ -35,7 +35,7 @@ def get_number_of_libraries_in_assembly(wildcards):
     return number_of_libraries
 
 
-def get_crams_to_merge(wildcards):
+def get_crams_to_merge_assembly(wildcards):
     assembly_id = wildcards.assembly_id
     samples_in_assembly = samples[samples.assembly_id == assembly_id][
         ["sample_id", "library_id"]
@@ -46,14 +46,3 @@ def get_crams_to_merge(wildcards):
             BOWTIE2_ASSEMBLY / f"{assembly_id}/{sample_id}.{library_id}.cram"
         )
     return cram_files
-
-
-def compose_metawrap_working_folder(wildcards):
-    assembly_id = wildcards.assembly_id
-    completeness = params["assembly"]["metawrap_bin_refinement"]["completeness"]
-    contamination = params["assembly"]["metawrap_bin_refinement"]["contamination"]
-    folder = (
-        METAWRAP_REFINEMENT
-        / f"{assembly_id}/metawrap_{completeness}_{contamination}_bins"
-    )
-    return folder
