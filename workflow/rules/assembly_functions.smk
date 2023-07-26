@@ -50,10 +50,10 @@ def get_crams_to_merge(wildcards):
 
 def compose_metawrap_working_folder(wildcards):
     assembly_id = wildcards.assembly_id
-    completeness = (params["assembly"]["metawrap_bin_refinement"]["completeness"],)
-    contamination = (params["assembly"]["metawrap_bin_refinement"]["contamination"],)
+    completeness = params["assembly"]["metawrap_bin_refinement"]["completeness"]
+    contamination = params["assembly"]["metawrap_bin_refinement"]["contamination"]
     folder = (
         METAWRAP_REFINEMENT
-        / f"{assembly_id}/metawrap_{completeness}_{contamination}_bins",
+        / f"{assembly_id}/metawrap_{completeness}_{contamination}_bins"
     )
     return folder

@@ -40,7 +40,10 @@ rule assembly_megahit_one:
 rule assembly_megahit_all:
     """Run megahit over all groups"""
     input:
-        [MEGAHIT / f"{assembly_id}.contigs.fa" for assembly_id in samples.assembly_id],
+        [
+            MEGAHIT / f"{assembly_id}/final.contigs.fa"
+            for assembly_id in samples.assembly_id
+        ],
 
 
 rule assembly_quast_one:
@@ -316,13 +319,11 @@ rule assembly_metawrap_bin_refinement_one:
 
         cp \
             {params.output_prefix}.stats \
-            `# {METAWRAP_REFINEMENT}/{wildcards.assembly_id}/metawrap_{params.completeness}_{params.contamination}_bins.stats` \
             {output.stats} \
         2>> {log} 1>&2
 
         cp \
             {params.output_prefix}.contigs \
-            `# {METAWRAP_REFINEMENT}/{wildcards.assembly_id}/metawrap_{params.completeness}_{params.contamination}_bins.contigs` \
             {output.contigs} \
         2>> {log} 1>&2
 
@@ -370,3 +371,14 @@ rule assembly_metawrap_renaming_one:
 rule assembly_metawrap_renaming_all:
     input:
         [METAWRAP_RENAMING / f"{assembly_id}.fa" for assembly_id in samples.assembly_id],
+
+
+# rule assembly_coverm_one_assembly:
+#     """
+#     Coverm is run over the assemblies, not the bins
+#     """
+#     input:
+#         fasta = MEGAHIT / "{assembly_id}" / "final.contigs.fa"
+#         bam = BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
+#     output:
+#         COVERM_ASEMBLY

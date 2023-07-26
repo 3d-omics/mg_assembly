@@ -404,9 +404,9 @@ rule pre_cram_to_mapped_bam:
         cram=BOWTIE2_PRE / "{sample}.{library_id}.cram",
         reference=features["host"]["fasta"],
     output:
-        bam=temp(COVERM / "bams/{sample}.{library_id}.bam"),
+        bam=temp(COVERM_PRE / "bams/{sample}.{library_id}.bam"),
     log:
-        COVERM / "bams/{sample}.{library_id}.log",
+        COVERM_PRE / "bams/{sample}.{library_id}.log",
     conda:
         "../envs/pre.yml"
     threads: 24
@@ -429,13 +429,13 @@ rule pre_cram_to_mapped_bam:
 rule pre_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=COVERM / "bams/{sample}.{library_id}.bam",
+        bam=COVERM_PRE / "bams/{sample}.{library_id}.bam",
     output:
-        tsv=touch(COVERM / "genome/{sample}.{library_id}.tsv"),
+        tsv=touch(COVERM_PRE / "genome/{sample}.{library_id}.tsv"),
     conda:
         "../envs/pre.yml"
     log:
-        COVERM / "genome/{sample}.{library_id}.log",
+        COVERM_PRE / "genome/{sample}.{library_id}.log",
     params:
         methods=params["pre"]["coverm"]["genome"]["methods"],
         min_covered_fraction=params["pre"]["coverm"]["genome"]["min_covered_fraction"],
@@ -455,17 +455,17 @@ rule pre_coverm:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [
-            COVERM / f"genome/{sample_id}.{library_id}.tsv"
+            COVERM_PRE / f"genome/{sample_id}.{library_id}.tsv"
             for sample_id, library_id in SAMPLE_LIB
         ],
     output:
-        COVERM / "coverm.tsv",
+        COVERM_PRE / "coverm.tsv",
     log:
-        COVERM / "coverm.log",
+        COVERM_PRE / "coverm.log",
     conda:
         "../envs/pre.yml"
     params:
-        input_dir=COVERM / "genome",
+        input_dir=COVERM_PRE / "genome",
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
