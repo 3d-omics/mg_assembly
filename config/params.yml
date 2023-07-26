@@ -30,6 +30,13 @@ assembly:
     extra: ""
   samtools:
     mem: 1G
+  coverm:
+    genome:
+      methods: "count"
+      min_covered_fraction: 0.0
+      separator: "-"
+    contig:
+      methods: "count"
 
 binning:
   metawrap_binning:
@@ -47,3 +54,10 @@ binning:
     extra: ""
   samtools:
     mem: 1G
+  coverm:
+    genome:
+      methods: "count"
+      min_covered_fraction: 0.0
+      separator: "-"
+    contig:
+      methods: "count"

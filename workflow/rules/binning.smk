@@ -240,42 +240,73 @@ rule binning_bowtie2_all:
         ],
 
 
-rule binning_merge_bams_one:
+rule binning_coverm_one:
+    """Run coverm genome for one library and one mag catalogue"""
     input:
-        crams=get_crams_to_merge_binning,
-        reference=MEGAHIT / "{assembly_id}" / "final.contigs.fa",
+        bam=BOWTIE2_ASSEMBLY / "{assembly_id}/{sample_id}.{library_id}.bam",
+        reference=METAWRAP_RENAMING / "{assembly_id}.fa",
     output:
-        bam=BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
-    log:
-        log=BOWTIE2_ASSEMBLY / "{assembly_id}.log",
+        tsv=COVERM_BINNING / "{assembly_id}/{sample_id}.{library_id}_genome.tsv",
+        euk=COVERM_BINNING / "{assembly_id}/{sample_id}.{library_id}_genome_euk.tsv",
     conda:
-        "../envs/assembly.yml"
-    threads: 24
+        "../envs/binning.yml"
+    log:
+        COVERM_BINNING / "{assembly_id}/{sample_id}.{library_id}.log",
     params:
-        n=get_number_of_libraries_in_binning,
+        methods=params["binning"]["coverm"]["genome"]["methods"],
+        min_covered_fraction=params["binning"]["coverm"]["genome"][
+            "min_covered_fraction"
+        ],
+        separator=params["binning"]["coverm"]["genome"]["separator"],
     shell:
         """
-        if [ {params.n} -eq 1 ] ; then
-            samtools view \
-                --bam \
-                --reference {input.reference} \
-                {input.crams} \
-            > {output.bam} \
-            2> {log}
-        else
-            samtools merge \
-                -@ {threads} \
-                -l 1 \
-                -o {output.bam} \
-                {input.crams} \
-            2> {log} 1>&2
-        fi
+        coverm genome \
+            --bam-files {input.bam} \
+            --methods {params.methods} \
+            --separator {params.separator} \
+            --min-covered-fraction {params.min_covered_fraction} \
+        > {output.tsv} 2> {log}
+
+        coverm genome \
+            --separator {params.separator} \
+            --bam-files {input.bam} \
+            --methods relative_abundance count mean covered_fraction \
+            --min-covered-fraction {params.min_covered_fraction} \
+        > {output.euk} 2>> {log}
         """
 
 
-# rule binning_coverm_one_assembly:
-#     input:
-#         fasta = MEGAHIT / "{assembly_id}" / "final.contigs.fa",
-#         bam = BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
-#     output:
-#         COVERM_ASEMBLY
+rule binning_coverm_aggregate:
+    input:
+        tsvs=[
+            COVERM_BINNING / f"{assembly_id}/{sample_id}.{library_id}_genome.tsv"
+            for assembly_id in ["{assemby_id}"]
+            for sample_id, library_id in (
+                samples[samples.assembly_id == assembly_id][
+                    ["sample_id", "library_id"]
+                ].values.tolist()
+            )
+        ],
+    output:
+        tsv=COVERM_BINNING / "{assembly_id}.coverm_genome.tsv",
+    log:
+        COVERM_BINNING / "{assembly_id}.coverm_genome.log",
+    conda:
+        "../envs/binning.yml"
+    params:
+        input_dir=lambda wildcards: COVERM_BINNING / f"{wildcards.assembly_id}",
+    shell:
+        """
+        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+            --input-folder {params.input_dir} \
+            --output-file {output} \
+        2> {log} 1>&2
+        """
+
+
+rule binning_coverm_aggregate_all:
+    input:
+        tsvs=[
+            COVERM_BINNING / f"{assembly_id}.coverm_genome.tsv"
+            for assembly_id in samples.assembly_id
+        ],
