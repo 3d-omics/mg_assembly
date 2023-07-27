@@ -17,17 +17,20 @@ samples = (
     .explode("assembly_id")
     .sort_values(by=["assembly_id", "sample_id", "library_id"])
 )
-
-
 samples = samples.assign(assembly_id=samples.assembly_id.str.strip())
 
 SAMPLES = samples.sample_id.unique()
-SAMPLE_LIB = samples[["sample_id", "library_id"]].values.tolist()
+SAMPLE_LIBRARY = samples[["sample_id", "library_id"]].values.tolist()
+ASSEMBLY_SAMPLE_LIBRARY = samples[
+    ["assembly_id", "sample_id", "library_id"]
+].values.tolist()
 ASSEMBLIES = samples.assembly_id.unique()
 
 
 # Import subworkflows
 include: "rules/folders.smk"
+include: "rules/auxiliary_functions.smk"
+include: "rules/auxiliary.smk"
 include: "rules/reads_functions.smk"
 include: "rules/reads.smk"
 include: "rules/pre_functions.smk"

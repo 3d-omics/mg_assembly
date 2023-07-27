@@ -49,7 +49,7 @@ rule pre_fastp_trim_all:
     input:
         [
             FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
-            for sample_id, library_id in SAMPLE_LIB
+            for sample_id, library_id in SAMPLE_LIBRARY
             for end in "1 2 u1 u2".split(" ")
         ],
 
@@ -80,7 +80,7 @@ rule pre_fastp_fastqc_all:
     input:
         [
             FASTP / f"{sample_id}.{library_id}_{end}_fastqc.{extension}"
-            for sample_id, library_id in SAMPLE_LIB
+            for sample_id, library_id in SAMPLE_LIBRARY
             for end in "1 2 u1 u2".split(" ")
             for extension in "html zip".split(" ")
         ],
@@ -168,7 +168,7 @@ rule pre_bowtie2_map_host_all:
     input:
         [
             BOWTIE2_PRE / f"{sample_id}.{library_id}.cram"
-            for sample_id, library_id in SAMPLE_LIB
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
 
 
@@ -222,7 +222,7 @@ rule pre_bowtie2_extract_nonhost_all:
     input:
         [
             NONHOST / f"{sample_id}.{library_id}_{end}.fq.gz"
-            for sample_id, library_id in SAMPLE_LIB
+            for sample_id, library_id in SAMPLE_LIBRARY
             for end in "1 2".split(" ")
         ],
 
@@ -271,7 +271,7 @@ rule pre_nonpareil_all:
         [
             NONPAREIL / f"{sample_id}.{library_id}.{extension}"
             for extension in ["npa", "npc", "npl", "npo"]
-            for sample_id, library_id in SAMPLE_LIB
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
 
 
@@ -357,7 +357,7 @@ rule pre_singlem_pipe_all:
     input:
         [
             SINGLEM / f"{sample_id}.{library_id}.otu_table.tsv"
-            for sample_id, library_id in SAMPLE_LIB
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
 
 
@@ -366,7 +366,7 @@ rule pre_singlem_condense:
     input:
         archive_otu_tables=[
             SINGLEM / f"{sample_id}.{library_id}.archive.json"
-            for sample_id, library_id in SAMPLE_LIB
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
         data=rules.pre_singlem_data.output,
     output:
@@ -456,7 +456,7 @@ rule pre_coverm:
     input:
         [
             COVERM_PRE / f"genome/{sample_id}.{library_id}.tsv"
-            for sample_id, library_id in SAMPLE_LIB
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
     output:
         COVERM_PRE / "coverm.tsv",

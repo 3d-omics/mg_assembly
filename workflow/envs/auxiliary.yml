@@ -1,0 +1,8 @@
+# auxiliary: environment for common tasks
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - samtools=1.17

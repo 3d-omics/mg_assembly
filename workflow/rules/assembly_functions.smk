@@ -1,9 +1,7 @@
 def get_forwards_from_assembly_id(wildcards):
     """Get the forward files for megahit"""
     assembly_id = wildcards.assembly_id
-    samples_in_assembly = samples[samples.assembly_id == assembly_id][
-        ["sample_id", "library_id"]
-    ].values.tolist()
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     forward_filenames = []
     for sample_id, library_id in samples_in_assembly:
         forward_filenames.append(NONHOST / f"{sample_id}.{library_id}_1.fq.gz")
@@ -13,9 +11,7 @@ def get_forwards_from_assembly_id(wildcards):
 def get_reverses_from_assembly_id(wildcards):
     """Get the reverse files for megahit"""
     assembly_id = wildcards.assembly_id
-    samples_in_assembly = samples[samples.assembly_id == assembly_id][
-        ["sample_id", "library_id"]
-    ].values.tolist()
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     reverse_filenames = []
     for sample_id, library_id in samples_in_assembly:
         reverse_filenames.append(NONHOST / f"{sample_id}.{library_id}_1.fq.gz")
@@ -43,13 +39,11 @@ def get_number_of_libraries_in_assembly(wildcards):
 
 def get_crams_to_merge_assembly(wildcards):
     assembly_id = wildcards.assembly_id
-    samples_in_assembly = samples[samples.assembly_id == assembly_id][
-        ["sample_id", "library_id"]
-    ].values.tolist()
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     cram_files = []
     for sample_id, library_id in samples_in_assembly:
         cram_files.append(
-            BOWTIE2_ASSEMBLY / f"{assembly_id}/{sample_id}.{library_id}.cram"
+            BOWTIE2_ASSEMBLY / f"{assembly_id}.{sample_id}.{library_id}.cram"
         )
     return cram_files
 
@@ -62,19 +56,17 @@ def get_tsvs_for_assembly_coverm_genome(wildcards):
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
-            COVERM_ASSEMBLY / f"genome/{assembly_id}/{sample_id}.{library_id}.tsv"
+            COVERM_ASSEMBLY / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
         )
     return tsv_files
 
 
 def get_tsvs_for_assembly_coverm_contig(wildcards):
     assembly_id = wildcards.assembly_id
-    samples_in_assembly = samples[samples.assembly_id == assembly_id][
-        ["sample_id", "library_id"]
-    ].values.tolist()
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
-            COVERM_ASSEMBLY / f"contig/{assembly_id}/{sample_id}.{library_id}.tsv"
+            COVERM_ASSEMBLY / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
         )
     return tsv_files
