@@ -21,6 +21,7 @@ BINNING = Path("results/binning/")
 METAWRAP_BINNING = BINNING / "binning/"
 METAWRAP_REFINEMENT = BINNING / "refinement/"
 METAWRAP_RENAMING = BINNING / "renaming/"
+BINNING_QUAST = BINNING / "quast/"
 BOWTIE2_INDEXES_BINNING = BINNING / "indexes/"
 BOWTIE2_BINNING = BINNING / "bowtie2/"
 COVERM_BINNING = BINNING / "coverm/"

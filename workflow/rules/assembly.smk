@@ -161,9 +161,9 @@ rule assembly_cram_to_bam_one:
         crai=BOWTIE2_ASSEMBLY / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
         reference=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
-        bam=temp(COVERM_ASSEMBLY / "bams/{assembly_id}.{sample_id}.{library_id}.bam"),
+        bam=temp(BOWTIE2_ASSEMBLY / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
-        COVERM_ASSEMBLY / "bams/{assembly_id},{sample_id}.{library_id}.log",
+        BOWTIE2_ASSEMBLY / "{assembly_id}.{sample_id}.{library_id}.bam.log",
     conda:
         "../envs/assembly.yml"
     threads: 24
@@ -186,7 +186,7 @@ rule assembly_cram_to_bam_one:
 rule assembly_cram_to_bam_all:
     input:
         [
-            COVERM_ASSEMBLY / f"bams/{assembly_id}.{sample_id}.{library_id}.bam"
+            BOWTIE2_ASSEMBLY / f"{assembly_id}.{sample_id}.{library_id}.bam"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
 
@@ -194,7 +194,7 @@ rule assembly_cram_to_bam_all:
 rule assembly_coverm_contig_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=COVERM_ASSEMBLY / "bams/{assembly_id}.{sample_id}.{library_id}.bam",
+        bam=BOWTIE2_ASSEMBLY / "{assembly_id}.{sample_id}.{library_id}.bam",
         reference=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
         tsv=COVERM_ASSEMBLY / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
@@ -244,7 +244,7 @@ rule assembly_coverm_aggregate_contig:
 rule assembly_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=COVERM_ASSEMBLY / "bams/{assembly_id}.{sample_id}.{library_id}.bam",
+        bam=BOWTIE2_ASSEMBLY / "{assembly_id}.{sample_id}.{library_id}.bam",
         reference=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
         tsv=COVERM_ASSEMBLY / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
@@ -324,6 +324,6 @@ rule assembly_quast_all:
 
 rule assembly:
     input:
-        rules.assembly_coverm_aggregate_genome.input,
-        rules.assembly_coverm_aggregate_contig.input,
+        rules.assembly_coverm_aggregate_genome.output,
+        rules.assembly_coverm_aggregate_contig.output,
         rules.assembly_quast_all.input,

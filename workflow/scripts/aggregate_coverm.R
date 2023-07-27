@@ -28,6 +28,11 @@ dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 
 files <- list.files(args$input_folder, pattern = "*.tsv", full.names = TRUE)
 
+rename_cols <- function(x) {
+  colnames(x)[1] <- "sequence_id"
+  return(x)
+}
+
 nonempty_files <-
   files %>%
   map(function(x) read_tsv(x, col_types = cols()), .progress = TRUE) %>%
@@ -35,8 +40,12 @@ nonempty_files <-
 
 if (length(nonempty_files) > 0) {
   nonempty_files %>%
-  reduce(left_join) %>%
-  write_tsv(output_file)
+    map(rename_cols) %>%
+    map(function(x) pivot_longer(x, -sequence_id, names_to = "library", values_to = "counts")) %>%
+    bind_rows() %>%
+    mutate(library = str_split(library, " ") %>% map_chr(1)) %>%
+    pivot_wider(names_from = "library", values_from = "counts", values_fill = NA) %>%
+    write_tsv(output_file)
 } else {
   write_tsv(x = tibble(Contig = NA), file = output_file)
 }
