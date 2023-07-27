@@ -247,6 +247,26 @@ rule assembly_coverm_contig_one:
         """
 
 
+rule assembly_coverm_aggregate_contig_one:
+    input:
+        tsvs=get_tsvs_for_assembly_coverm_contig,
+    output:
+        tsv=COVERM_ASSEMBLY / "{assembly_id}_contig.tsv",
+    log:
+        COVERM_ASSEMBLY / "{assembly_id}_contig.log",
+    conda:
+        "../envs/assembly.yml"
+    params:
+        input_dir=lambda wildcards: COVERM_ASSEMBLY / f"contig/{wildcards.assembly_id}",
+    shell:
+        """
+        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+            --input-folder {params.input_dir} \
+            --output-file {output} \
+        2> {log} 1>&2
+        """
+
+
 rule assembly_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
@@ -286,26 +306,6 @@ rule assembly_coverm_aggregate_genome_one:
         "../envs/assembly.yml"
     params:
         input_dir=lambda wildcards: COVERM_ASSEMBLY / f"genome/{wildcards.assembly_id}",
-    shell:
-        """
-        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
-            --input-folder {params.input_dir} \
-            --output-file {output} \
-        2> {log} 1>&2
-        """
-
-
-rule assembly_coverm_aggregate_contig_one:
-    input:
-        tsvs=get_tsvs_for_assembly_coverm_contig,
-    output:
-        tsv=COVERM_ASSEMBLY / "{assembly_id}_contig.tsv",
-    log:
-        COVERM_ASSEMBLY / "{assembly_id}_contig.log",
-    conda:
-        "../envs/assembly.yml"
-    params:
-        input_dir=lambda wildcards: COVERM_ASSEMBLY / f"contig/{wildcards.assembly_id}",
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
