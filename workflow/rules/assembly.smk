@@ -46,10 +46,31 @@ rule assembly_megahit_all:
         ],
 
 
+rule assembly_megahit_rename_one:
+    """Rename contigs to avoid future collisiions to `megahit_{assembly_id}.{contig_number}`"""
+    input:
+        MEGAHIT / "{assembly_id}/final.contigs.fa",
+    output:
+        MEGAHIT_RENAMED / "{assembly_id}.fa",
+    log:
+        MEGAHIT_RENAMED / "{assembly_id}.log",
+    conda:
+        "../envs/assembly.yml"
+    params:
+        assembly_id=lambda wildcards: wildcards.assembly_id,
+    shell:
+        """
+        seqtk rename \
+            {input} \
+            megahit_{params.assembly_id}. \
+        > {output} 2> {log}
+        """
+
+
 rule assembly_quast_one:
     """Run quast over one assembly group"""
     input:
-        MEGAHIT / "{assembly_id}/final.contigs.fa",
+        MEGAHIT_RENAMED / "{assembly_id}.fa",
     output:
         directory(QUAST / "{assembly_id}"),
     log:
@@ -76,18 +97,12 @@ rule assembly_quast_all:
         [QUAST / f"{assembly_id}" for assembly_id in samples.assembly_id],
 
 
-rule assembly:
-    """Run all the assemblies"""
-    input:
-        rules.assembly_quast_all.input,
-
-
 rule assembly_bowtie2_build_one:
     """
     Index megahit assembly
     """
     input:
-        contigs=MEGAHIT / "{assembly_id}" / "final.contigs.fa",
+        contigs=MEGAHIT_RENAMED / "{assembly_id}.fa",
     output:
         mock=touch(BOWTIE2_INDEXES_ASSEMBLY / "{assembly_id}"),
     log:
@@ -121,7 +136,7 @@ rule assembly_bowtie2_one:
         mock=BOWTIE2_INDEXES_ASSEMBLY / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
-        reference=MEGAHIT / "{assembly_id}" / "final.contigs.fa",
+        reference=MEGAHIT_RENAMED / "{assembly_id}.fa",
     output:
         cram=BOWTIE2_ASSEMBLY / "{assembly_id}/{sample_id}.{library_id}.cram",
     log:
@@ -167,39 +182,94 @@ rule assembly_bowtie2_all:
         ],
 
 
-rule assembly_merge_bams_one:
+rule assembly_cram_to_mapped_bam:
+    """Convert cram to bam
+
+    Note: this step is needed because coverm probably does not support cram. The
+    log from coverm shows failures to get the reference online, but nonetheless
+    it works.
+    """
     input:
-        crams=get_crams_to_merge_assembly,
-        reference=MEGAHIT / "{assembly_id}" / "final.contigs.fa",
+        cram=BOWTIE2_ASSEMBLY / "{assembly_id}/{sample_id}.{library_id}.cram",
+        reference=MEGAHIT_RENAMED / "{assembly_id}.fa",
     output:
-        bam=BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
+        bam=temp(COVERM_ASSEMBLY / "bams/{assembly_id}/{sample_id}.{library_id}.bam"),
     log:
-        log=BOWTIE2_ASSEMBLY / "{assembly_id}.log",
+        COVERM_ASSEMBLY / "bams/{assembly_id}/{sample_id}.{library_id}.log",
     conda:
         "../envs/assembly.yml"
     threads: 24
-    params:
-        n=get_number_of_libraries_in_assembly,
+    resources:
+        runtime=1 * 60,
+        mem_mb=4 * 1024,
     shell:
         """
-        if [ {params.n} -eq 1 ] ; then
-            samtools view \
-                --bam \
-                --reference {input.reference} \
-                {input.crams} \
-            > {output.bam} \
-            2> {log}
-        else
-            samtools merge \
-                -@ {threads} \
-                -l 1 \
-                -o {output.bam} \
-                {input.crams} \
-            2> {log} 1>&2
-        fi
+        samtools view \
+            -F 4 \
+            --threads {threads} \
+            --reference {input.reference} \
+            --output {output.bam} \
+            --fast \
+            {input.cram} \
+        2> {log}
         """
 
 
-rule assembly_merge_bams_all:
+rule assembly_coverm_one:
+    """Run coverm genome for one library and one mag catalogue"""
     input:
-        [BOWTIE2_ASSEMBLY / f"{assembly_id}.bam" for assembly_id in samples.assembly_id],
+        bam=COVERM_ASSEMBLY / "bams/{assembly_id}/{sample_id}.{library_id}.bam",
+        reference=MEGAHIT_RENAMED / "{assembly_id}.fa",
+    output:
+        tsv=COVERM_ASSEMBLY / "contig/{assembly_id}/{sample_id}.{library_id}.tsv",
+    conda:
+        "../envs/assembly.yml"
+    log:
+        COVERM_ASSEMBLY / "contig/{assembly_id}/{sample_id}.{library_id}.log",
+    params:
+        methods=params["assembly"]["coverm"]["genome"]["methods"],
+        min_covered_fraction=params["assembly"]["coverm"]["genome"][
+            "min_covered_fraction"
+        ],
+        separator=params["assembly"]["coverm"]["genome"]["separator"],
+    shell:
+        """
+        coverm contig \
+            --bam-files {input.bam} \
+            --methods {params.methods} \
+            --proper-pairs-only \
+        > {output.tsv} 2> {log}
+        """
+
+
+rule assembly_coverm_aggregate_one:
+    input:
+        tsvs=get_tsvs_for_assembly_coverm_genome,
+    output:
+        tsv=COVERM_ASSEMBLY / "{assembly_id}_contig.tsv",
+    log:
+        COVERM_ASSEMBLY / "{assembly_id}_contig.log",
+    conda:
+        "../envs/assembly.yml"
+    params:
+        input_dir=lambda wildcards: COVERM_ASSEMBLY / f"contig/{wildcards.assembly_id}",
+    shell:
+        """
+        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+            --input-folder {params.input_dir} \
+            --output-file {output} \
+        2> {log} 1>&2
+        """
+
+
+rule assembly_coverm_aggregate_all:
+    input:
+        tsvs=[
+            COVERM_ASSEMBLY / f"{assembly_id}_contig.tsv"
+            for assembly_id in samples.assembly_id
+        ],
+
+
+rule assembly:
+    input:
+        rules.assembly_coverm_aggregate_all.input,

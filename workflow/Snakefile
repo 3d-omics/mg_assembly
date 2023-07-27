@@ -49,3 +49,4 @@ rule all:
         rules.reads.input,
         rules.pre.input,
         rules.assembly.input,
+        rules.binning.input,
