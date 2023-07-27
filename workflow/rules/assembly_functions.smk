@@ -62,6 +62,19 @@ def get_tsvs_for_assembly_coverm_genome(wildcards):
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
+            COVERM_ASSEMBLY / f"genome/{assembly_id}/{sample_id}.{library_id}.tsv"
+        )
+    return tsv_files
+
+
+def get_tsvs_for_assembly_coverm_contig(wildcards):
+    assembly_id = wildcards.assembly_id
+    samples_in_assembly = samples[samples.assembly_id == assembly_id][
+        ["sample_id", "library_id"]
+    ].values.tolist()
+    tsv_files = []
+    for sample_id, library_id in samples_in_assembly:
+        tsv_files.append(
             COVERM_ASSEMBLY / f"contig/{assembly_id}/{sample_id}.{library_id}.tsv"
         )
     return tsv_files

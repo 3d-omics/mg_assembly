@@ -46,14 +46,18 @@ rule assembly_megahit_all:
         ],
 
 
-rule assembly_megahit_rename_one:
-    """Rename contigs to avoid future collisiions to `megahit_{assembly_id}.{contig_number}`"""
+rule assembly_megahit_renaming_one:
+    """Rename contigs to avoid future collisions
+
+    Contigs are renamed to `megahit_{assembly_id}.{contig_number}`.
+    Also, secondary info in the header is removed.
+    """
     input:
         MEGAHIT / "{assembly_id}/final.contigs.fa",
     output:
-        MEGAHIT_RENAMED / "{assembly_id}.fa",
+        MEGAHIT_RENAMING / "{assembly_id}.fa",
     log:
-        MEGAHIT_RENAMED / "{assembly_id}.log",
+        MEGAHIT_RENAMING / "{assembly_id}.log",
     conda:
         "../envs/assembly.yml"
     params:
@@ -62,7 +66,8 @@ rule assembly_megahit_rename_one:
         """
         seqtk rename \
             {input} \
-            megahit_{params.assembly_id}. \
+            {params.assembly_id}.contig \
+        | cut -f 1 -d " " \
         > {output} 2> {log}
         """
 
@@ -70,7 +75,7 @@ rule assembly_megahit_rename_one:
 rule assembly_quast_one:
     """Run quast over one assembly group"""
     input:
-        MEGAHIT_RENAMED / "{assembly_id}.fa",
+        MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
         directory(QUAST / "{assembly_id}"),
     log:
@@ -102,7 +107,7 @@ rule assembly_bowtie2_build_one:
     Index megahit assembly
     """
     input:
-        contigs=MEGAHIT_RENAMED / "{assembly_id}.fa",
+        contigs=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
         mock=touch(BOWTIE2_INDEXES_ASSEMBLY / "{assembly_id}"),
     log:
@@ -136,7 +141,7 @@ rule assembly_bowtie2_one:
         mock=BOWTIE2_INDEXES_ASSEMBLY / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
-        reference=MEGAHIT_RENAMED / "{assembly_id}.fa",
+        reference=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
         cram=BOWTIE2_ASSEMBLY / "{assembly_id}/{sample_id}.{library_id}.cram",
     log:
@@ -191,7 +196,7 @@ rule assembly_cram_to_mapped_bam:
     """
     input:
         cram=BOWTIE2_ASSEMBLY / "{assembly_id}/{sample_id}.{library_id}.cram",
-        reference=MEGAHIT_RENAMED / "{assembly_id}.fa",
+        reference=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
         bam=temp(COVERM_ASSEMBLY / "bams/{assembly_id}/{sample_id}.{library_id}.bam"),
     log:
@@ -215,11 +220,11 @@ rule assembly_cram_to_mapped_bam:
         """
 
 
-rule assembly_coverm_one:
+rule assembly_coverm_contig_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=COVERM_ASSEMBLY / "bams/{assembly_id}/{sample_id}.{library_id}.bam",
-        reference=MEGAHIT_RENAMED / "{assembly_id}.fa",
+        reference=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
         tsv=COVERM_ASSEMBLY / "contig/{assembly_id}/{sample_id}.{library_id}.tsv",
     conda:
@@ -242,9 +247,57 @@ rule assembly_coverm_one:
         """
 
 
-rule assembly_coverm_aggregate_one:
+rule assembly_coverm_genome_one:
+    """Run coverm genome for one library and one mag catalogue"""
+    input:
+        bam=COVERM_ASSEMBLY / "bams/{assembly_id}/{sample_id}.{library_id}.bam",
+        reference=MEGAHIT_RENAMING / "{assembly_id}.fa",
+    output:
+        tsv=COVERM_ASSEMBLY / "genome/{assembly_id}/{sample_id}.{library_id}.tsv",
+    conda:
+        "../envs/assembly.yml"
+    log:
+        COVERM_ASSEMBLY / "genome/{assembly_id}/{sample_id}.{library_id}.log",
+    params:
+        methods=params["assembly"]["coverm"]["genome"]["methods"],
+        min_covered_fraction=params["assembly"]["coverm"]["genome"][
+            "min_covered_fraction"
+        ],
+        separator=params["assembly"]["coverm"]["genome"]["separator"],
+    shell:
+        """
+        coverm genome \
+            --bam-files {input.bam} \
+            --methods {params.methods} \
+            --separator {params.separator} \
+            --min-covered-fraction {params.min_covered_fraction} \
+        > {output.tsv} 2> {log}
+        """
+
+
+rule assembly_coverm_aggregate_genome_one:
     input:
         tsvs=get_tsvs_for_assembly_coverm_genome,
+    output:
+        tsv=COVERM_ASSEMBLY / "{assembly_id}_genome.tsv",
+    log:
+        COVERM_ASSEMBLY / "{assembly_id}_genome.log",
+    conda:
+        "../envs/assembly.yml"
+    params:
+        input_dir=lambda wildcards: COVERM_ASSEMBLY / f"genome/{wildcards.assembly_id}",
+    shell:
+        """
+        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+            --input-folder {params.input_dir} \
+            --output-file {output} \
+        2> {log} 1>&2
+        """
+
+
+rule assembly_coverm_aggregate_contig_one:
+    input:
+        tsvs=get_tsvs_for_assembly_coverm_contig,
     output:
         tsv=COVERM_ASSEMBLY / "{assembly_id}_contig.tsv",
     log:
@@ -265,8 +318,9 @@ rule assembly_coverm_aggregate_one:
 rule assembly_coverm_aggregate_all:
     input:
         tsvs=[
-            COVERM_ASSEMBLY / f"{assembly_id}_contig.tsv"
+            COVERM_ASSEMBLY / f"{assembly_id}_{method}.tsv"
             for assembly_id in samples.assembly_id
+            for method in ["genome", "contig"]
         ],
 
 
