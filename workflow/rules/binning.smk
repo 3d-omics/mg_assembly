@@ -1,6 +1,6 @@
-rule binning_metawrap_binning_prepare_one:
+rule binning_prepare_one:
     input:
-        bam=BOWTIE2_ASSEMBLY / "{assembly_id}.bam",
+        bams=get_bams_for_metawrap_binning_prepare,
     output:
         forward_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_1.fastq",
         reverse_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_2.fastq",
@@ -10,32 +10,49 @@ rule binning_metawrap_binning_prepare_one:
         METAWRAP_BINNING / "{assembly_id}.prepare.log",
     conda:
         "../envs/binning.yml"
+    params:
+        n=get_number_of_libraries_in_binning,
     shell:
         """
-        echo "@" > {output.forward_}
-        echo "@" > {output.reverse_}
-        touch {output.bwt_index}
-        ln {input.bam} {output.bam}
+        echo "@" > {output.forward_} 2> {log}
+        echo "@" > {output.reverse_} 2>> {log}
+        touch {output.bwt_index} 2>> {log} 1>&2
+        if [[ {params.n} -eq 1 ]] ; then
+            samtools view -F 4 -1 {input.bams} > {output.bam} 2>> {log}
+        else
+            (samtools merge \
+                -u \
+                -o /dev/stdout \
+                {input.bams} \
+            | samtools view \
+                -o {output.bam} \
+                -F 4 \
+                -1 \
+            ) 2>> {log}
+        fi
         """
 
 
-rule binning_metawrap_binning_prepare_all:
+rule binning_prepare:
     input:
-        [METAWRAP_BINNING / f"{assembly_id}" for assembly_id in samples.assembly_id],
+        [
+            METAWRAP_BINNING / f"{assembly_id}/work_files/{assembly_id}.bam"
+            for assembly_id in samples.assembly_id
+        ],
 
 
-rule binning_metawrap_binning_one:
+rule binning_binning_one:
     """Run metawrap over one assembly group
     Note: metawrap works with fastq files, but we can trick it into working by
     creating mock fastq and reference files. h/t: Raphael Eisenhofer
-    Note2: metawrap is rotten. It is written in python2 and has a lot unmetabel dependencies in conda.
+    Note2: metawrap is rotten. It is written in py27 and has a lot unmetabel dependencies in conda.
     Using a singularity container instead.
     """
     input:
         bam=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}.bam",
         forward_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_1.fastq",
         reverse_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_2.fastq",
-        assembly=MEGAHIT / "{assembly_id}/final.contigs.fa",
+        assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
         metabat2_bins=directory(METAWRAP_BINNING / "{assembly_id}/metabat2_bins"),
         maxbin2_bins=directory(METAWRAP_BINNING / "{assembly_id}/maxbin2_bins"),
@@ -44,15 +61,19 @@ rule binning_metawrap_binning_one:
         METAWRAP_BINNING / "{assembly_id}.log",
     singularity:
         "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
-    threads: 24
+    threads: 8
     params:
         min_length=params["binning"]["metawrap_binning"]["min_length"],
         extra=params["binning"]["metawrap_binning"]["extra"],
         out_folder=lambda wildcards: METAWRAP_BINNING / f"{wildcards.assembly_id}",
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         metawrap binning \
             -o {params.out_folder} \
+            -t {threads} \
+            -m $(({resources.mem_mb} / 1024)) \
             -a {input.assembly} \
             -l {params.min_length} \
             --metabat2 \
@@ -65,7 +86,7 @@ rule binning_metawrap_binning_one:
         """
 
 
-rule binning_metawrap_binning_all:
+rule binning_binning:
     input:
         [
             METAWRAP_BINNING / f"{assembly_id}/{binner}"
@@ -74,7 +95,7 @@ rule binning_metawrap_binning_all:
         ],
 
 
-rule binning_metawrap_bin_refinement_one:
+rule binning_refinement_one:
     input:
         metabat2_bins=METAWRAP_BINNING / "{assembly_id}/metabat2_bins",
         maxbin2_bins=METAWRAP_BINNING / "{assembly_id}/maxbin2_bins",
@@ -88,14 +109,14 @@ rule binning_metawrap_bin_refinement_one:
         METAWRAP_REFINEMENT / "{assembly_id}.log",
     singularity:
         "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
-    threads: 24
+    threads: 16
     params:
         completeness=params["binning"]["metawrap_bin_refinement"]["completeness"],
         contamination=params["binning"]["metawrap_bin_refinement"]["contamination"],
         extra=params["binning"]["metawrap_bin_refinement"]["extra"],
         output_prefix=compose_metawrap_working_folder,
     resources:
-        mem_mb=16 * 1024,
+        mem_mb=8 * 1024,
     shell:
         """
         metawrap bin_refinement \
@@ -127,7 +148,7 @@ rule binning_metawrap_bin_refinement_one:
         """
 
 
-rule binning_metawrap_bin_refinement_all:
+rule binning_refinement_all:
     input:
         [
             METAWRAP_REFINEMENT / f"{assembly_id}.contigs"
@@ -135,7 +156,7 @@ rule binning_metawrap_bin_refinement_all:
         ],
 
 
-rule binning_metawrap_renaming_one:
+rule binning_renaming_one:
     """
 
     Note: doing this separatedly from the binning step because we need seqtk and it is outside the metawrap singularity container
@@ -153,24 +174,22 @@ rule binning_metawrap_renaming_one:
     shell:
         """
         (for bin in {input.bin_folder}/*.fa ; do
-            bin_name=$(basename $bin .fa)
-            setqk rename \
-                {params.assembly_id}-${{bin_name}}- \
-                $bin
+            bin_name=$(basename $bin .fa); \
+            seqtk rename $bin {params.assembly_id}.${{bin_name}}. ; \
         done > {output.fa}) 2> {log}
         """
 
 
-rule binning_metawrap_renaming_all:
+rule binning_renaming_all:
     input:
         [METAWRAP_RENAMING / f"{assembly_id}.fa" for assembly_id in samples.assembly_id],
 
 
-rule binning_bowtie2_index_bin_one:
+rule binning_index_one:
     input:
-        METAWRAP_RENAMING / "{assembly_id}.fa",
+        bins=METAWRAP_RENAMING / "{assembly_id}.fa",
     output:
-        touch(BOWTIE2_INDEXES_BINNING / "{assembly_id}"),
+        mock=touch(BOWTIE2_INDEXES_BINNING / "{assembly_id}"),
     log:
         BOWTIE2_INDEXES_BINNING / "{assembly_id}.log",
     conda:
@@ -183,22 +202,22 @@ rule binning_bowtie2_index_bin_one:
         bowtie2-build \
             --threads {threads} \
             {params.extra} \
-            {input.contigs} \
+            {input.bins} \
             {output.mock} \
         2> {log} 1>&2
         """
 
 
-rule binning_bowtie2_map_one_library_to_one_bin:
+rule binning_bowtie2_one:
     input:
         mock=BOWTIE2_INDEXES_BINNING / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
         reference=METAWRAP_RENAMING / "{assembly_id}.fa",
     output:
-        cram=BOWTIE2_BINNING / "{assembly_id}/{sample_id}.{library_id}.cram",
+        cram=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.cram",
     log:
-        BOWTIE2_BINNING / "{assembly_id}/{sample_id}.{library_id}.log",
+        BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
         "../envs/binning.yml"
     threads: 24
@@ -230,34 +249,65 @@ rule binning_bowtie2_map_one_library_to_one_bin:
         """
 
 
-rule binning_bowtie2_all:
+rule binning_bowtie2:
     input:
         [
-            BOWTIE2_BINNING / f"{assembly_id}/{sample_id}.{library_id}.cram"
-            for assembly_id, sample_id, library_id in samples[
-                ["assembly_id", "sample_id", "library_id"]
-            ].values.tolist()
+            BOWTIE2_BINNING / f"{assembly_id}.{sample_id}.{library_id}.cram"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
 
 
-rule binning_coverm_one:
-    """Run coverm genome for one library and one mag catalogue"""
+rule binning_cram_to_bam_one:
+    """Convert cram to bam
+
+    Note: this step is needed because coverm probably does not support cram. The
+    log from coverm shows failures to get the reference online, but nonetheless
+    it works.
+    """
     input:
-        bam=BOWTIE2_ASSEMBLY / "{assembly_id}/{sample_id}.{library_id}.bam",
+        cram=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.cram",
+        crai=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
         reference=METAWRAP_RENAMING / "{assembly_id}.fa",
     output:
-        tsv=COVERM_BINNING / "{assembly_id}/{sample_id}.{library_id}_genome.tsv",
-        euk=COVERM_BINNING / "{assembly_id}/{sample_id}.{library_id}_genome_euk.tsv",
+        bam=temp(BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.bam"),
+    log:
+        BOWTIE2_BINNING / "{assembly_id},{sample_id}.{library_id}.bam.log",
+    conda:
+        "../envs/binning.yml"
+    threads: 24
+    resources:
+        runtime=1 * 60,
+        mem_mb=4 * 1024,
+    shell:
+        """
+        samtools view \
+            -F 4 \
+            --threads {threads} \
+            --reference {input.reference} \
+            --output {output.bam} \
+            --fast \
+            {input.cram} \
+        2> {log}
+        """
+
+
+rule binning_coverm_genome_one:
+    """Run coverm genome for one library and one mag catalogue"""
+    input:
+        bam=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.bam",
+        reference=METAWRAP_RENAMING / "{assembly_id}.fa",
+    output:
+        tsv=COVERM_BINNING / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
         "../envs/binning.yml"
     log:
-        COVERM_BINNING / "{assembly_id}/{sample_id}.{library_id}.log",
+        COVERM_BINNING / "genome/{assembly_id}.{sample_id}.{library_id}.log",
     params:
-        methods=params["binning"]["coverm"]["genome"]["methods"],
-        min_covered_fraction=params["binning"]["coverm"]["genome"][
+        methods=params["assembly"]["coverm"]["genome"]["methods"],
+        min_covered_fraction=params["assembly"]["coverm"]["genome"][
             "min_covered_fraction"
         ],
-        separator=params["binning"]["coverm"]["genome"]["separator"],
+        separator=params["assembly"]["coverm"]["genome"]["separator"],
     shell:
         """
         coverm genome \
@@ -266,35 +316,23 @@ rule binning_coverm_one:
             --separator {params.separator} \
             --min-covered-fraction {params.min_covered_fraction} \
         > {output.tsv} 2> {log}
-
-        coverm genome \
-            --separator {params.separator} \
-            --bam-files {input.bam} \
-            --methods relative_abundance count mean covered_fraction \
-            --min-covered-fraction {params.min_covered_fraction} \
-        > {output.euk} 2>> {log}
         """
 
 
-rule binning_coverm_aggregate:
+rule binning_coverm_genome:
     input:
         tsvs=[
-            COVERM_BINNING / f"{assembly_id}/{sample_id}.{library_id}_genome.tsv"
-            for assembly_id in ["{assemby_id}"]
-            for sample_id, library_id in (
-                samples[samples.assembly_id == assembly_id][
-                    ["sample_id", "library_id"]
-                ].values.tolist()
-            )
+            COVERM_BINNING / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
     output:
-        tsv=COVERM_BINNING / "{assembly_id}.coverm_genome.tsv",
+        tsv=COVERM_BINNING / "genome.tsv",
     log:
-        COVERM_BINNING / "{assembly_id}.coverm_genome.log",
+        COVERM_BINNING / "genome.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/assembly.yml"
     params:
-        input_dir=lambda wildcards: COVERM_BINNING / f"{wildcards.assembly_id}",
+        input_dir=COVERM_BINNING / "genome/",
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -304,9 +342,84 @@ rule binning_coverm_aggregate:
         """
 
 
-rule binning_coverm_aggregate_all:
+rule binning_coverm_contig_one:
+    """Run coverm contig for one library and one mag catalogue"""
+    input:
+        bam=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.bam",
+        reference=METAWRAP_RENAMING / "{assembly_id}.fa",
+    output:
+        tsv=COVERM_BINNING / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
+    conda:
+        "../envs/binning.yml"
+    log:
+        COVERM_BINNING / "contig/{assembly_id}.{sample_id}.{library_id}.log",
+    params:
+        methods=params["binning"]["coverm"]["contig"]["methods"],
+    shell:
+        """
+        coverm contig \
+            --bam-files {input.bam} \
+            --methods {params.methods} \
+            --proper-pairs-only \
+        > {output.tsv} 2> {log}
+        """
+
+
+rule binning_coverm_contig:
     input:
         tsvs=[
-            COVERM_BINNING / f"{assembly_id}.coverm_genome.tsv"
-            for assembly_id in samples.assembly_id
+            COVERM_BINNING / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
+    output:
+        tsv=COVERM_BINNING / "contig.tsv",
+    log:
+        COVERM_BINNING / "contig.log",
+    conda:
+        "../envs/binning.yml"
+    params:
+        input_dir=COVERM_BINNING / f"contig",
+    shell:
+        """
+        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+            --input-folder {params.input_dir} \
+            --output-file {output} \
+        2> {log} 1>&2
+        """
+
+
+rule binning_quast_one:
+    """Run quast over one assembly group"""
+    input:
+        METAWRAP_RENAMING / "{assembly_id}.fa",
+    output:
+        directory(BINNING_QUAST / "{assembly_id}"),
+    log:
+        BINNING_QUAST / "{assembly_id}.log",
+    conda:
+        "../envs/binning.yml"
+    threads: 4
+    params:
+        extra=params["assembly"]["quast"]["extra"],
+    shell:
+        """
+        quast \
+            --output-dir {output} \
+            --threads {threads} \
+            {params.extra} \
+            {input} \
+        2> {log} 1>&2
+        """
+
+
+rule binning_quast_all:
+    """Run quast over all assembly groups"""
+    input:
+        [BINNING_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+
+
+rule binning:
+    input:
+        rules.binning_coverm_contig.output,
+        rules.binning_coverm_genome.output,
+        rules.binning_quast_all.input,

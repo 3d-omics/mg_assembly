@@ -1,3 +1,14 @@
+def get_bams_for_metawrap_binning_prepare(wildcards):
+    assembly_id = wildcards.assembly_id
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+    cram_files = []
+    for sample_id, library_id in samples_in_assembly:
+        cram_files.append(
+            BOWTIE2_ASSEMBLY / f"{assembly_id}.{sample_id}.{library_id}.bam"
+        )
+    return cram_files
+
+
 def compose_metawrap_working_folder(wildcards):
     assembly_id = wildcards.assembly_id
     completeness = params["binning"]["metawrap_bin_refinement"]["completeness"]
@@ -18,12 +29,32 @@ def get_number_of_libraries_in_binning(wildcards):
 
 def get_crams_to_merge_binning(wildcards):
     assembly_id = wildcards.assembly_id
-    samples_in_assembly = samples[samples.assembly_id == assembly_id][
-        ["sample_id", "library_id"]
-    ].values.tolist()
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     cram_files = []
     for sample_id, library_id in samples_in_assembly:
         cram_files.append(
-            BOWTIE2_BINNING / f"{assembly_id}/{sample_id}.{library_id}.cram"
+            BOWTIE2_BINNING / f"{assembly_id}.{sample_id}.{library_id}.cram"
         )
     return cram_files
+
+
+def get_tsvs_for_binning_coverm_genome(wildcards):
+    assembly_id = wildcards.assembly_id
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+    tsv_files = []
+    for sample_id, library_id in samples_in_assembly:
+        tsv_files.append(
+            COVERM_BINNING / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
+        )
+    return tsv_files
+
+
+def get_tsvs_for_binning_coverm_contig(wildcards):
+    assembly_id = wildcards.assembly_id
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+    tsv_files = []
+    for sample_id, library_id in samples_in_assembly:
+        tsv_files.append(
+            COVERM_BINNING / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
+        )
+    return tsv_files
