@@ -1,4 +1,4 @@
-def get_bams_for_metawrap_metawrap2_prepare(wildcards):
+def get_bams_for_metawrap_metawrap_prepare(wildcards):
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     bam_files = []

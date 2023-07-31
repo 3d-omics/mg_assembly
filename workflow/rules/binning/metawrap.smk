@@ -1,9 +1,9 @@
-include: "metawrap2_functions.smk"
+include: "metawrap_functions.smk"
 
 
-rule metawrap2_prepare_one:
+rule metawrap_prepare_one:
     input:
-        bams=get_bams_for_metawrap_metawrap2_prepare,
+        bams=get_bams_for_metawrap_metawrap_prepare,
     output:
         forward_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_1.fastq",
         reverse_=METAWRAP_BINNING / "{assembly_id}/work_files/{assembly_id}_2.fastq",
@@ -36,7 +36,7 @@ rule metawrap2_prepare_one:
         """
 
 
-rule metawrap2_prepare:
+rule metawrap_prepare:
     input:
         [
             METAWRAP_BINNING / f"{assembly_id}/work_files/{assembly_id}.bam"
@@ -44,7 +44,7 @@ rule metawrap2_prepare:
         ],
 
 
-rule metawrap2_metawrap2_one:
+rule metawrap_metawrap_one:
     """Run metawrap over one assembly group
     Note: metawrap works with fastq files, but we can trick it into working by
     creating mock fastq and reference files. h/t: Raphael Eisenhofer
@@ -89,7 +89,7 @@ rule metawrap2_metawrap2_one:
         """
 
 
-rule metawrap2_binning:
+rule metawrap_binning:
     input:
         [
             METAWRAP_BINNING / f"{assembly_id}/{binner}"
@@ -98,7 +98,7 @@ rule metawrap2_binning:
         ],
 
 
-rule metawrap2_refinement_one:
+rule metawrap_refinement_one:
     input:
         metabat2_bins=METAWRAP_BINNING / "{assembly_id}/metabat2_bins",
         maxbin2_bins=METAWRAP_BINNING / "{assembly_id}/maxbin2_bins",
