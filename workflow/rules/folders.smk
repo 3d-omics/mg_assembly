@@ -18,6 +18,8 @@ BOWTIE2_ASSEMBLY = ASSEMBLY / "bowtie2/"
 COVERM_ASSEMBLY = ASSEMBLY / "coverm/"
 
 BINNING = Path("results/binning/")
+VAMB = BINNING / "vamb/"
+MAGSCOT = BINNING / "magscot/"
 METAWRAP_BINNING = BINNING / "binning/"
 METAWRAP_REFINEMENT = BINNING / "refinement/"
 METAWRAP_RENAMING = BINNING / "renaming/"

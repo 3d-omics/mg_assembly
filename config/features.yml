@@ -2,3 +2,7 @@
 ---
 host:
   fasta: resources/reference/chicken_39_sub.fa.gz
+
+magscot:
+  pfam_hmm: resources/magscot/gtdbtk_rel207_Pfam-A.hmm
+  tigr_hmm: resources/magscot/gtdbtk_rel207_tigrfam.hmm
