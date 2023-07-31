@@ -46,6 +46,8 @@ binning:
     completeness: 50
     contamination: 10
     extra: "--quick"
+  vamb:
+    min_length: 2000
   quast:
     extra: ""
   bowtie2-build:

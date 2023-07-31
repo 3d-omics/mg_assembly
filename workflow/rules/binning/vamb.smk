@@ -1,7 +1,25 @@
 include: "vamb_functions.smk"
 
 
-rule binning_vamb_concatenate_one:
+# rule vamb_concatenate_one:
+#     input:
+#         assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
+#     output:
+#         concatenated=VAMB / "concatenated" / "{assembly_id}.fa.gz",
+#     log:
+#         VAMB / "concatenated/{assembly_id}.log",
+#     conda:
+#         "../../envs/binning/vamb.yml"
+#     shell:
+#         """
+#         concatenate.py \
+#             {output.concatenated} \
+#             {input.assembly} \
+#         2> {log} 1>&2
+#         """
+
+
+rule vamb_concatenate_one:
     input:
         assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
@@ -9,17 +27,21 @@ rule binning_vamb_concatenate_one:
     log:
         VAMB / "concatenated/{assembly_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../../envs/binning/vamb.yml"
+    params:
+        min_length=params["binning"]["vamb"]["min_length"],
     shell:
         """
-        concatenate.py \
-            {output.concatenated} \
+        (seqtk seq \
+            -L 2000 \
             {input.assembly} \
-        2> {log} 1>&2
+        | pigz \
+        > {output.concatenated} \
+        ) 2> {log}
         """
 
 
-rule binning_vamb_index_one:
+rule vamb_index_one:
     input:
         concatenated=VAMB / "concatenated" / "{assembly_id}.fa.gz",
     output:
@@ -27,7 +49,7 @@ rule binning_vamb_index_one:
     log:
         VAMB / "indexes/{assembly_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../../envs/binning/vamb.yml"
     threads: 24
     shell:
         """
@@ -39,7 +61,7 @@ rule binning_vamb_index_one:
         """
 
 
-rule binning_vamb_map_one:
+rule vamb_map_one:
     input:
         index=VAMB / "indexes" / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
@@ -49,7 +71,7 @@ rule binning_vamb_map_one:
     log:
         VAMB / "bams/{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../../envs/binning/vamb.yml"
     threads: 24
     shell:
         """
@@ -61,14 +83,16 @@ rule binning_vamb_map_one:
             -2 {input.reverse_} \
         | samtools view \
             -F 3584 \
-            -b \
-            --threads {threads} \
-        > {output.bam} \
+            -u \
+        | samtools sort \
+            -@ {threads} \
+            -l 1 \
+            -o {output.bam} \
         ) 2> {log} 1>&2
         """
 
 
-rule binning_vamb_one:
+rule vamb_one:
     input:
         concatenated=VAMB / "concatenated" / "{assembly_id}.fa.gz",
         bams=get_vamb_bams_from_assembly_id,
@@ -77,7 +101,7 @@ rule binning_vamb_one:
     log:
         VAMB / "bins/{assembly_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../../envs/binning/vamb.yml"
     params:
         extra="",
     threads: 1
@@ -93,6 +117,6 @@ rule binning_vamb_one:
         """
 
 
-rule binning_vamb_all:
+rule vamb:
     input:
         [VAMB / "bins" / f"{assembly_id}" for assembly_id in ASSEMBLIES],
