@@ -21,6 +21,7 @@ BINNING = Path("results/binning/")
 VAMB = BINNING / "vamb/"
 CONCOCT = BINNING / "concoct/"
 METABAT2 = BINNING / "metabat2/"
+MAXBIN2 = BINNING / "maxbin2/"
 MAGSCOT = BINNING / "magscot/"
 METAWRAP_BINNING = BINNING / "binning/"
 METAWRAP_REFINEMENT = BINNING / "refinement/"

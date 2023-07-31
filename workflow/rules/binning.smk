@@ -1,22 +1,7 @@
 include: "binning/vamb.smk"
-# include: "binning/concoct.smk"
+include: "binning/concoct.smk"
 include: "binning/metabat2.smk"
-
-
-# rule binning_metabat2_one:
-#     input:
-#         assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
-#     output:
-
-#     shell:
-
-
-# rule binning_maxbin2_one:
-#     input:
-
-#     output:
-
-#     shell:
+include: "binning/maxbin2.smk"
 
 
 # rule binning_magscot_prodigal_one:

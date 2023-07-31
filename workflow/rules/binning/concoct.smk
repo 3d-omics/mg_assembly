@@ -5,10 +5,10 @@ rule binning_concoct_cut_up_fasta_one:
     input:
         assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
-        assembly_10k=CONCOCT / "cut" / "{assembly_id}.fa",
-        bed_10k=CONCOCT / "cut" / "{assembly_id}.bed",
+        assembly_10k=CONCOCT / "prepare" / "{assembly_id}.cut.fa",
+        bed_10k=CONCOCT / "prepare" / "{assembly_id}.cut.bed",
     log:
-        CONCOCT / "cut" / "{assembly_id}.log",
+        CONCOCT / "prepare" / "{assembly_id}.cut.log",
     conda:
         "../../envs/binning/concoct.yml"
     shell:
@@ -28,11 +28,11 @@ rule binning_concoct_coverage_table_one:
     input:
         bams=get_bams_for_concoct_binning,
         bais=get_bais_for_concoct_binning,
-        bed_10k=CONCOCT / "cut" / "{assembly_id}.bed",
+        bed_10k=CONCOCT / "prepare" / "{assembly_id}.cut.bed",
     output:
-        coverage=CONCOCT / "coverage" / "{assembly_id}/coverage_table.tsv",
+        coverage=CONCOCT / "prepare" / "{assembly_id}.coverage.tsv",
     log:
-        CONCOCT / "coverage" / "{assembly_id}.log",
+        CONCOCT / "prepare" / "{assembly_id}.coverage.log",
     conda:
         "../../envs/binning/concoct.yml"
     shell:
@@ -47,17 +47,16 @@ rule binning_concoct_coverage_table_one:
 
 rule binning_concoct_run_one:
     input:
-        assembly_10k=CONCOCT / "cut" / "{assembly_id}.fa",
-        coverage=CONCOCT / "coverage" / "{assembly_id}/coverage_table.tsv",
+        assembly_10k=CONCOCT / "prepare" / "{assembly_id}.cut.fa",
+        coverage=CONCOCT / "prepare" / "{assembly_id}.coverage.tsv",
     output:
-        out_dir=directory(CONCOCT / "{assembly_id}/concoct_output"),
+        out_dir=directory(CONCOCT / "run/{assembly_id}/"),
     log:
-        CONCOCT / "{assembly_id}/concoct.log",
+        CONCOCT / "run/{assembly_id}.log",
     conda:
         "../../envs/binning/concoct.yml"
     shell:
         """
-        echo $(which concoct) 2>> {log} 1>&2
         concoct \
             --composition_file {input.assembly_10k} \
             --coverage_file {input.coverage} \
@@ -68,9 +67,9 @@ rule binning_concoct_run_one:
 
 rule binning_concoct_merge_cutup_clustering_one:
     input:
-        out_dir=CONCOCT / "{assembly_id}/concoct_output",
+        run_dir=CONCOCT / "run/{assembly_id}",
     output:
-        clustering_merged=CONCOCT / "merge" / "{assembly_id}/clustering_merged.csv",
+        clustering_merged=CONCOCT / "merge" / "{assembly_id}.csv",
     log:
         CONCOCT / "merge" / "{assembly_id}.log",
     conda:
@@ -78,7 +77,7 @@ rule binning_concoct_merge_cutup_clustering_one:
     shell:
         """
         merge_cutup_clustering.py \
-            {output.outdir}/clustering_gt1000.csv \
+            {input.run_dir}/clustering_gt1000.csv \
         > {output.clustering_merged} \
         2>> {log} 1>&2
         """
@@ -87,7 +86,7 @@ rule binning_concoct_merge_cutup_clustering_one:
 rule binning_concoct_extract_fasta_bins_one:
     input:
         assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
-        clustering_merged=CONCOCT / "merge" / "{assembly_id}/clustering_merged.csv",
+        clustering_merged=CONCOCT / "merge" / "{assembly_id}.csv",
     output:
         bins=CONCOCT / "fasta_bins" / "{assembly_id}/",
     log:
