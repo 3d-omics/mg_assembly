@@ -1,3 +1,6 @@
+include: "metawrap2_functions.smk"
+
+
 rule metawrap2_prepare_one:
     input:
         bams=get_bams_for_metawrap_metawrap2_prepare,
@@ -148,7 +151,7 @@ rule metawrap2_refinement_one:
         """
 
 
-rule metawrap2_refinement_all:
+rule metawrap2:
     input:
         [
             METAWRAP_REFINEMENT / f"{assembly_id}.contigs"

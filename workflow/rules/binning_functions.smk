@@ -9,17 +9,6 @@
 #     return bam_files
 
 
-def compose_metawrap_working_folder(wildcards):
-    assembly_id = wildcards.assembly_id
-    completeness = params["binning"]["metawrap_bin_refinement"]["completeness"]
-    contamination = params["binning"]["metawrap_bin_refinement"]["contamination"]
-    folder = (
-        METAWRAP_REFINEMENT
-        / f"{assembly_id}/metawrap_{completeness}_{contamination}_bins"
-    )
-    return folder
-
-
 def get_number_of_libraries_in_binning(wildcards):
     """Get the number of libraries in an assembly"""
     assembly_id = wildcards.assembly_id

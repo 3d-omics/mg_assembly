@@ -2,6 +2,7 @@ include: "binning/vamb.smk"
 include: "binning/concoct.smk"
 include: "binning/metabat2.smk"
 include: "binning/maxbin2.smk"
+include: "binning/metawrap2.smk"
 
 
 # rule binning_magscot_prodigal_one:
