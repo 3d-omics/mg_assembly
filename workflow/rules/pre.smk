@@ -296,26 +296,6 @@ rule pre_nonpareil:
         """
 
 
-rule pre_singlem_data:
-    """Download the singlem data
-
-    For reasons unknown, you have to specify the filename, that may change in
-    the future.
-    """
-    output:
-        directory(SINGLEM / "data/S3.2.0.GTDB_r214.metapackage_20230428.smpkg.zb"),
-    log:
-        SINGLEM / "data.log",
-    conda:
-        "../envs/pre.yml"
-    params:
-        output_prefix=SINGLEM / "data",
-    shell:
-        """
-        singlem data --output-directory {params.output_prefix} 2> {log} 1>&2
-        """
-
-
 rule pre_singlem_pipe_one:
     """Run singlem over one sample
 
@@ -325,7 +305,7 @@ rule pre_singlem_pipe_one:
     input:
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
-        data=rules.pre_singlem_data.output,
+        data=features["singlem"]["data"],
     output:
         archive_otu_table=SINGLEM / "{sample_id}.{library_id}.archive.json",
         otu_table=SINGLEM / "{sample_id}.{library_id}.otu_table.tsv",
@@ -368,7 +348,7 @@ rule pre_singlem_condense:
             SINGLEM / f"{sample_id}.{library_id}.archive.json"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
-        data=rules.pre_singlem_data.output,
+        data=features["singlem"]["data"],
     output:
         condense=SINGLEM / "singlem.tsv",
     log:
