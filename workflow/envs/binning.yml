@@ -16,4 +16,3 @@ dependencies:
   - hmmer  # magscot
   - prodigal  # magscot
   - parallel  # magscot
-  - bowtie2=2.5.1
