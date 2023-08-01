@@ -12,7 +12,7 @@ rule metawrap_prepare_one:
     log:
         METAWRAP_BINNING / "{assembly_id}.prepare.log",
     conda:
-        "../../envs/binning/metawrap2.yml"
+        "../../envs/binning/metawrap.yml"
     params:
         n=get_number_of_libraries_in_binning,
     shell:
@@ -44,7 +44,7 @@ rule metawrap_prepare:
         ],
 
 
-rule metawrap_metawrap_one:
+rule metawrap_binning_one:
     """Run metawrap over one assembly group
     Note: metawrap works with fastq files, but we can trick it into working by
     creating mock fastq and reference files. h/t: Raphael Eisenhofer
@@ -66,8 +66,8 @@ rule metawrap_metawrap_one:
         "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
     threads: 8
     params:
-        min_length=params["binning"]["metawrap_binning"]["min_length"],
-        extra=params["binning"]["metawrap_binning"]["extra"],
+        min_length=params["binning"]["metawrap"]["binning"]["min_length"],
+        extra=params["binning"]["metawrap"]["binning"]["extra"],
         out_folder=lambda wildcards: METAWRAP_BINNING / f"{wildcards.assembly_id}",
     resources:
         mem_mb=8 * 1024,
@@ -114,9 +114,9 @@ rule metawrap_refinement_one:
         "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
     threads: 16
     params:
-        completeness=params["binning"]["metawrap_bin_refinement"]["completeness"],
-        contamination=params["binning"]["metawrap_bin_refinement"]["contamination"],
-        extra=params["binning"]["metawrap_bin_refinement"]["extra"],
+        completeness=params["binning"]["metawrap"]["refinement"]["completeness"],
+        contamination=params["binning"]["metawrap"]["refinement"]["contamination"],
+        extra=params["binning"]["metawrap"]["refinement"]["extra"],
         output_prefix=compose_metawrap_working_folder,
     resources:
         mem_mb=8 * 1024,
@@ -151,9 +151,9 @@ rule metawrap_refinement_one:
         """
 
 
-rule metawrap2:
+rule metawrap:
     input:
         [
-            METAWRAP_REFINEMENT / f"{assembly_id}.contigs"
+            METAWRAP_REFINEMENT / f"{assembly_id}_bins.contigs"
             for assembly_id in samples.assembly_id
         ],

@@ -11,8 +11,8 @@ def get_bams_for_metawrap_metawrap_prepare(wildcards):
 
 def compose_metawrap_working_folder(wildcards):
     assembly_id = wildcards.assembly_id
-    completeness = params["binning"]["metawrap_bin_refinement"]["completeness"]
-    contamination = params["binning"]["metawrap_bin_refinement"]["contamination"]
+    completeness = params["binning"]["metawrap"]["refinement"]["completeness"]
+    contamination = params["binning"]["metawrap"]["refinement"]["contamination"]
     folder = (
         METAWRAP_REFINEMENT
         / f"{assembly_id}/metawrap_{completeness}_{contamination}_bins"
