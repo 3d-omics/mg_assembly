@@ -8,7 +8,7 @@ include: "binning/magscot.smk"
 
 rule binning_index_one:
     input:
-        bins=METAWRAP_RENAMING / "{assembly_id}.fa",
+        bins=MAGSCOT / "{assembly_id}.fa",
     output:
         mock=touch(BOWTIE2_INDEXES_BINNING / "{assembly_id}"),
     log:
@@ -34,7 +34,7 @@ rule binning_bowtie2_one:
         mock=BOWTIE2_INDEXES_BINNING / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
-        reference=METAWRAP_RENAMING / "{assembly_id}.fa",
+        reference=MAGSCOT / "{assembly_id}.fa",
     output:
         cram=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.cram",
     log:
@@ -88,7 +88,7 @@ rule binning_cram_to_bam_one:
     input:
         cram=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.cram",
         crai=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
-        reference=METAWRAP_RENAMING / "{assembly_id}.fa",
+        reference=MAGSCOT / "{assembly_id}.fa",
     output:
         bam=temp(BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
@@ -116,7 +116,7 @@ rule binning_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.bam",
-        reference=METAWRAP_RENAMING / "{assembly_id}.fa",
+        reference=MAGSCOT / "{assembly_id}.fa",
     output:
         tsv=COVERM_BINNING / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
@@ -167,7 +167,7 @@ rule binning_coverm_contig_one:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         bam=BOWTIE2_BINNING / "{assembly_id}.{sample_id}.{library_id}.bam",
-        reference=METAWRAP_RENAMING / "{assembly_id}.fa",
+        reference=MAGSCOT / "{assembly_id}.fa",
     output:
         tsv=COVERM_BINNING / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
@@ -212,7 +212,7 @@ rule binning_coverm_contig:
 rule binning_quast_one:
     """Run quast over one assembly group"""
     input:
-        METAWRAP_RENAMING / "{assembly_id}.fa",
+        MAGSCOT / "{assembly_id}.fa",
     output:
         directory(BINNING_QUAST / "{assembly_id}"),
     log:
