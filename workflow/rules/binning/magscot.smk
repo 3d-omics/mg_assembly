@@ -175,8 +175,8 @@ rule magscot_run_one:
         contigs_to_bin=MAGSCOT / "{assembly_id}/contigs_to_bin.tsv",
         hmm=MAGSCOT / "{assembly_id}/hmm.tblout",
     output:
-        ar53=MAGSCOT / "{assembly_id}/magscot.gtdb_rel_207_ar53.out",
-        bac120=MAGSCOT / "{assembly_id}/magscot.gtdb_rel_207_bac120.out",
+        ar53=MAGSCOT / "{assembly_id}/magscot.gtdb_rel207_ar53.out",
+        bac120=MAGSCOT / "{assembly_id}/magscot.gtdb_rel207_bac120.out",
         refined_contig_to_bin=MAGSCOT
         / "{assembly_id}/magscot.refined.contig_to_bin.out",
         refined_out=MAGSCOT / "{assembly_id}/magscot.refined.out",
@@ -195,6 +195,10 @@ rule magscot_run_one:
             --out {params.out_prefix} \
         2> {log} 1>&2
         """
+
+
+# rule magscot_generate_fasta_one:
+#     input:
 
 
 rule magscot:
