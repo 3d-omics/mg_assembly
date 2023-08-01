@@ -6,35 +6,6 @@ include: "binning/metawrap.smk"
 include: "binning/magscot.smk"
 
 
-rule binning_renaming_one:
-    """
-
-    Note: doing this separatedly from the binning step because we need seqtk and it is outside the metawrap singularity container
-    """
-    input:
-        bin_folder=METAWRAP_REFINEMENT / "{assembly_id}_bins",
-    output:
-        fa=METAWRAP_RENAMING / "{assembly_id}.fa",
-    log:
-        METAWRAP_RENAMING / "{assembly_id}.log",
-    conda:
-        "../envs/binning.yml"
-    params:
-        assembly_id=lambda wildcards: f"{wildcards.assembly_id}",
-    shell:
-        """
-        (for bin in {input.bin_folder}/*.fa ; do
-            bin_name=$(basename $bin .fa); \
-            seqtk rename $bin {params.assembly_id}.${{bin_name}}. ; \
-        done > {output.fa}) 2> {log}
-        """
-
-
-rule binning_renaming_all:
-    input:
-        [METAWRAP_RENAMING / f"{assembly_id}.fa" for assembly_id in samples.assembly_id],
-
-
 rule binning_index_one:
     input:
         bins=METAWRAP_RENAMING / "{assembly_id}.fa",
