@@ -22,3 +22,16 @@ rule bai:
         "{prefix}.bam.bai.log",
     shell:
         "samtools index {input} 2> {log}"
+
+
+rule fa_fai:
+    input:
+        "{prefix}.fa",
+    output:
+        "{prefix}.fa.fai",
+    conda:
+        "../envs/auxiliary.yml"
+    log:
+        "{prefix}.fa.fai.log",
+    shell:
+        "samtools faidx {input} 2> {log} 1>&2"
