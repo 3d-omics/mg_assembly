@@ -1,7 +1,7 @@
 include: "concoct_functions.smk"
 
 
-rule binning_concoct_cut_up_fasta_one:
+rule concoct_cut_up_fasta_one:
     input:
         assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
     output:
@@ -24,7 +24,7 @@ rule binning_concoct_cut_up_fasta_one:
         """
 
 
-rule binning_concoct_coverage_table_one:
+rule concoct_coverage_table_one:
     input:
         bams=get_bams_for_concoct_binning,
         bais=get_bais_for_concoct_binning,
@@ -45,7 +45,7 @@ rule binning_concoct_coverage_table_one:
         """
 
 
-rule binning_concoct_run_one:
+rule concoct_run_one:
     input:
         assembly_10k=CONCOCT / "prepare" / "{assembly_id}.cut.fa",
         coverage=CONCOCT / "prepare" / "{assembly_id}.coverage.tsv",
@@ -65,7 +65,7 @@ rule binning_concoct_run_one:
         """
 
 
-rule binning_concoct_merge_cutup_clustering_one:
+rule concoct_merge_cutup_clustering_one:
     input:
         run_dir=CONCOCT / "run/{assembly_id}",
     output:
@@ -83,7 +83,7 @@ rule binning_concoct_merge_cutup_clustering_one:
         """
 
 
-rule binning_concoct_extract_fasta_bins_one:
+rule concoct_extract_fasta_bins_one:
     input:
         assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
         clustering_merged=CONCOCT / "merge" / "{assembly_id}.csv",
@@ -103,6 +103,6 @@ rule binning_concoct_extract_fasta_bins_one:
         """
 
 
-rule binning_concoct_all:
+rule concoct:
     input:
         [CONCOCT / "fasta_bins" / f"{assembly_id}" for assembly_id in ASSEMBLIES],
