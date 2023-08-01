@@ -197,13 +197,44 @@ rule magscot_run_one:
         """
 
 
-# rule magscot_generate_fasta_one:
-#     input:
+rule magscot_reformat_one:
+    input:
+        refined_contig_to_bin=MAGSCOT
+        / "{assembly_id}/magscot.refined.contig_to_bin.out",
+    output:
+        clean=MAGSCOT / "{assembly_id}/magscot.reformat.tsv",
+    log:
+        MAGSCOT / "{assembly_id}/magscot.reformat.log",
+    conda:
+        "../../envs/binning/magscot.yml"
+    shell:
+        """
+        Rscript --no-init-file --no-site-file workflow/scripts/clean_mascot_bin_to_contig.R \
+            --input-file {input.refined_contig_to_bin} \
+            --output-file {output.clean} \
+        2> {log} 1>&2
+        """
+
+
+rule magscot_rename_one:
+    input:
+        assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
+        clean=MAGSCOT / "{assembly_id}/magscot.reformat.tsv",
+    output:
+        fasta=MAGSCOT / "{assembly_id}.fa",
+    log:
+        MAGSCOT / "{assembly_id}/magscot.refined.log",
+    conda:
+        "../../envs/binning/magscot.yml"
+    shell:
+        """
+        python workflow/scripts/reformat_fasta_magscot.py \
+            {input.assembly} \
+            {input.clean} \
+        > {output.fasta} 2> {log}
+        """
 
 
 rule magscot:
     input:
-        [
-            MAGSCOT / f"{assembly_id}/magscot.refined.contig_to_bin.out"
-            for assembly_id in ASSEMBLIES
-        ],
+        [MAGSCOT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],

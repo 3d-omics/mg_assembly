@@ -8,6 +8,10 @@ dependencies:
   - r-optparse
   - r-tidyverse
   - r-funr
+  - r-argparse
   - hmmer
   - prodigal
   - parallel
+  - samtools
+  - biopython
+  - pandas
