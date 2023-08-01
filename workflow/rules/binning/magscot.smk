@@ -209,7 +209,7 @@ rule magscot_reformat_one:
         "../../envs/binning/magscot.yml"
     shell:
         """
-        Rscript --no-init-file --no-site-file workflow/scripts/clean_mascot_bin_to_contig.R \
+        Rscript --no-init-file --no-site-file workflow/scripts/clean_magscot_bin_to_contig.R \
             --input-file {input.refined_contig_to_bin} \
             --output-file {output.clean} \
         2> {log} 1>&2
