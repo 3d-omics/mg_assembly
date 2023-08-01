@@ -239,6 +239,103 @@ rule binning_quast_all:
         [BINNING_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
+rule binning_gtdbtk_one:
+    input:
+        bin_folder=MAGSCOT / "{assembly_id}/bins",
+        database=params["binning"]["gtdbtk"]["database"],
+    output:
+        outdir=GTDBTK / "{assembly_id}",
+    threads: 16
+    resources:
+        mem_mb=150 * 1024,
+    shell:
+        """
+        GTDBTK_DATA_PATH="{input.database}"
+
+        gtdbtk classify_wf \
+            --genome_dir {params.bins} \
+            --extension gz \
+            --out_dir {output.outdir} \
+            --cpus {threads} \
+            --skip_ani_screen \
+        2> {log} 1>&2
+        """
+
+
+rule binning_gtdbtk:
+    input:
+        [GTDBTK / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+
+
+rule binning_dram_prepare_databases:
+    output:
+        databases=DRAM / "databases/",
+    log:
+        DRAM / "databases.log",
+    conda:
+        "../envs/binning.yml"
+    shell:
+        """
+        DRAM-setup.py prepare_databases \
+            --output_dir {output.databases} \
+        2> {log} 1>&2
+        """
+
+
+rule binning_dram_annotate_one:
+    input:
+        bin_folder=MAGSCOT / "{assembly_id}/bins/",
+        databases=DRAM / "databases/",
+    output:
+        outdir=directory(DRAM_ANNOTATE / "{assembly_id}"),
+        annotations=DRAM_ANNOTATE / "{assembly_id}/annotations.tsv",
+        trnas=touch(DRAM_ANNOTATE / "{assembly_id}/trnas.tsv"),
+        rrnas=touch(DRAM_ANNOTATE / "{assembly_id}/rrnas.tsv"),
+    log:
+        DRAM_ANNOTATE / "{assembly_id}.log",
+    conda:
+        "../envs/binning.yml"
+    params:
+        min_contig_size=1500,
+    shell:
+        """
+        DRAM.py annotate \
+            --input_fasta {input.bin_fa} \
+            --output_dir {params.outdir} \
+            --threads {threads} \
+            --min_contig_size {params.min_contig_size}
+        """
+
+
+rule binning_dram_distill_one:
+    input:
+        outdir=DRAM_ANNOTATE / "{assembly_id}",
+        annotations=DRAM_ANNOTATE / "{assembly_id}/annotations.tsv",
+        trnas=DRAM_ANNOTATE / "{assembly_id}/trnas.tsv",
+        rrnas=DRAM_ANNOTATE / "{assembly_id}/rrnas.tsv",
+    output:
+        outdir=directory(DRAM_DISTILL / "{assembly_id}"),
+    log:
+        DRAM_DISTILL / "{assembly_id}.log",
+    conda:
+        "../envs/binning.yml"
+    shell:
+        """
+        DRAM.py distill \
+            --input_file {input.annotations} \
+            --output_file {output.outdir} \
+            --threads {threads} \
+            --rrna_path {input.rrnas} \
+            --trna_path {input.trnas} \
+        2> {log} 1>&2
+        """
+
+
+rule binning_dram:
+    input:
+        [DRAM_DISTILL / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+
+
 rule binning:
     input:
         rules.binning_coverm_contig.output,

@@ -58,9 +58,9 @@ rule all:
         os.path.join(config["workdir"], "tables_uploaded"),
 
 
-include: os.path.join(config["codedir"], "rules/create_DMB_folder.smk")
-include: os.path.join(config["codedir"], "rules/download_preprocessed.smk")
-include: os.path.join(config["codedir"], "rules/download_mags.smk")
+# include: os.path.join(config["codedir"], "rules/create_DMB_folder.smk")
+# include: os.path.join(config["codedir"], "rules/download_preprocessed.smk")
+# include: os.path.join(config["codedir"], "rules/download_mags.smk")
 include: os.path.join(config["codedir"], "rules/drep.smk")
 include: os.path.join(config["codedir"], "rules/gtdbtk_full_tree.smk")
 include: os.path.join(config["codedir"], "rules/index_mags.smk")

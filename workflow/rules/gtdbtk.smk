@@ -69,11 +69,11 @@ rule gtdbtk:
 
             # Run GTDB-tk:
             gtdbtk classify_wf \
-            --genome_dir {params.bins} \
-            --extension "gz" \
-            --out_dir {params.outdir} \
-            --cpus {threads} \
-            --skip_ani_screen
+                --genome_dir {params.bins} \
+                --extension "gz" \
+                --out_dir {params.outdir} \
+                --cpus {threads} \
+                --skip_ani_screen
 
             # Create a merged summary output for DRAM:
             if [ -s "{params.outdir}/classify/gtdbtk.ar53.summary.tsv" ]
