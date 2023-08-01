@@ -235,6 +235,26 @@ rule magscot_rename_one:
         """
 
 
+rule magscot_split_into_bins:
+    input:
+        fasta=MAGSCOT / "{assembly_id}.fa",
+    output:
+        bins=directory(MAGSCOT / "{assembly_id}/bins"),
+    log:
+        MAGSCOT / "{assembly_id}/bins.log",
+    conda:
+        "../../envs/binning/magscot.yml"
+    shell:
+        """
+        mkdir -p {output.bins} 2> {log}
+        (seqtk seq results/binning/magscot/all.fa \
+        | paste - -  \
+        | tr "." "\\t" \
+        | awk '{{print $1"."$2"."$3"\\n"$4 > "{output.bins}/"$2".fa"}}'
+        ) 2> {log}
+        """
+
+
 rule magscot:
     input:
-        [MAGSCOT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
+        [MAGSCOT / f"{assembly_id}/bins" for assembly_id in ASSEMBLIES],

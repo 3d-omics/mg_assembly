@@ -15,11 +15,11 @@ name_mapping_dict = {
     for seq_id, sequence in name_mapping[["contig", "seqname"]].values.tolist()
 }
 
-new_fasta = [
+new_fasta = (
     f">{name_mapping_dict[old_identifier]}\n{sequence}"
     for old_identifier, sequence in fasta.items()
     if old_identifier in name_mapping_dict.keys()
-]
+)
 
 for record in new_fasta:
     sys.stdout.write(record + "\n")
