@@ -242,7 +242,7 @@ rule binning_quast_all:
 rule binning_gtdbtk_one:
     input:
         bin_folder=MAGSCOT / "{assembly_id}/bins",
-        database=params["binning"]["gtdbtk"]["database"],
+        database=features["gtdbtk_database"],
     output:
         outdir=GTDBTK / "{assembly_id}",
     threads: 16
