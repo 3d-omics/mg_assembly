@@ -31,13 +31,13 @@ rule drep:
 
         # Dereplicate these suckers:
         dRep dereplicate \
-                {config[workdir]}/drep \
-                -p {threads} \
-                -comp 50 \
-                -sa {config[ani]} \
-                -g {config[magdir]}/*.fa.gz \
-                --genomeInfo mags_formatted.csv
-                2> {log}
+            {config[workdir]}/drep \
+            -p {threads} \
+            -comp 50 \
+            -sa {config[ani]} \
+            -g {config[magdir]}/*.fa.gz \
+            --genomeInfo mags_formatted.csv
+        2> {log}
 
         for i in {config[workdir]}/drep/figures/*;
             do mv $i {config[workdir]}/drep/figures/{config[dmb]}_$(basename "$i");
