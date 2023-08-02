@@ -39,6 +39,7 @@ include: "rules/assembly_functions.smk"
 include: "rules/assembly.smk"
 include: "rules/binning_functions.smk"
 include: "rules/binning.smk"
+include: "rules/dereplicate.smk"
 
 
 # include: "workflows/rules/annotation.smk"

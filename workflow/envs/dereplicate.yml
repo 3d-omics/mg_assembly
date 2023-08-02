@@ -1,0 +1,8 @@
+# dereplicate: environment to dereplicate bins
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - drep=3.4.3
