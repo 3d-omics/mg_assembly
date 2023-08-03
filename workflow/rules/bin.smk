@@ -1,3 +1,4 @@
+include: "bin_functions.smk"
 include: "bin/vamb.smk"
 include: "bin/concoct.smk"
 include: "bin/metabat2.smk"
