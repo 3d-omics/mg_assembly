@@ -1,3 +1,6 @@
+include: "helpers_functions.smk"
+
+
 rule crai:
     input:
         "{prefix}.cram",
