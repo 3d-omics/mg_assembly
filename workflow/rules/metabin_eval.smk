@@ -173,7 +173,7 @@ rule metabin_eval_gtdbtk_one:
         GTDBTK_DATA_PATH="{input.database}"
 
         gtdbtk classify_wf \
-            --genome_dir {params.bins} \
+            --genome_dir {input.bin_folder} \
             --extension gz \
             --out_dir {output.outdir} \
             --cpus {threads} \
@@ -205,10 +205,13 @@ rule metabin_eval_dram_annotate_one:
     shell:
         """
         DRAM.py annotate \
-            --input_fasta {input.bin_fa} \
-            --output_dir {params.outdir} \
+            --input_fasta {input.bin_folder} \
+            --output_dir {output.outdir} \
             --threads {threads} \
-            --min_contig_size {params.min_contig_size}
+            --min_contig_size {params.min_contig_size} \
+            --rrna_path {output.rrnas} \
+            --trna_path {output.trnas} \
+        2> {log} 1>&2
         """
 
 
@@ -240,6 +243,15 @@ rule metabin_eval_dram:
         [METABIN_DRAM / f"distill/{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
+rule metabin_eval_samtools:
+    input:
+        [
+            METABIN_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{extension}"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
+        ],
+
+
 rule metabin_eval:
     input:
         rules.metabin_eval_coverm_contig.output,
@@ -247,3 +259,4 @@ rule metabin_eval:
         rules.metabin_eval_quast_all.input,
         rules.metabin_eval_dram.input,
         rules.metabin_eval_gtdbtk.input,
+        rules.metabin_eval_samtools.input,

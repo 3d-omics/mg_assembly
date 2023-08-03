@@ -10,5 +10,5 @@ magscot:
   pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm
   tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm
 
-dram_database: "dram_db"
-gtdbtk_database: "../gtdbtk_data.tar.gz"
+dram_database: "resources/mock_dram_db"
+gtdbtk_database: "resources/mock_gtdbtk_db"

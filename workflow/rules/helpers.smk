@@ -121,7 +121,7 @@ rule samtools_stats_cram_metabin:
     input:
         cram=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
         crai=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
-        reference=METABIN_RENAME / "{assembly_id}.fa",
+        reference=MAGSCOT / "{assembly_id}.fa",
     output:
         txt=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.txt",
     log:
