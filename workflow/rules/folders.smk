@@ -3,7 +3,8 @@ READS = Path("results/reads/")
 # preprocessing
 PRE = Path("results/preprocessing/")
 FASTP = PRE / "fastp/"
-BOWTIE2_PRE = PRE / "bowtie2/"
+PRE_INDEX = PRE / "index/"
+PRE_BOWTIE2 = PRE / "bowtie2"
 NONHOST = PRE / "nonhost/"
 
 # preprocessing evaluation
@@ -16,7 +17,7 @@ PRE_COVERM = PRE / "coverm/"
 ASSEMBLY = Path("results/assembly/")
 MEGAHIT = ASSEMBLY / "megahit/"
 ASSEMBLY_RENAME = ASSEMBLY / "renaming/"
-ASSEMBLY_INDEX = ASSEMBLY / "indexes/"
+ASSEMBLY_INDEX = ASSEMBLY / "index/"
 ASSEMBLY_BOWTIE2 = ASSEMBLY / "bowtie2/"
 
 # Assembly evaluation
@@ -41,7 +42,7 @@ MAGSCOT = METABIN / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
 METABIN_METAWRAP = METABIN / "metawrap/"
 METABIN_RENAME = METABIN / "renaming/"
-METABIN_INDEX = BIN / "indexes/"
+METABIN_INDEX = BIN / "index/"
 METABIN_BOWTIE2 = METABIN / "bowtie2/"
 
 # metabinning evaluation
@@ -54,7 +55,7 @@ METABIN_DRAM = METABIN / "dram/"
 # dereplicate
 DEREPLICATE = Path("results/dereplicate/")
 DREP = DEREPLICATE / "drep/"
-DREP_INDEX = DEREPLICATE / "indexes/"
+DREP_INDEX = DEREPLICATE / "index/"
 DREP_BOWTIE2 = DEREPLICATE / "bowtie2/"
 
 

@@ -87,7 +87,7 @@ rule pre_fastp_fastqc_all:
 
 
 rule pre_bowtie2_index_host:
-    """Build BOWTIE2_PRE index for the human reference
+    """Build PRE_BOWTIE2 index for the human reference
 
     Let the script decide to use a small or a large index based on the size of
     the reference genome.
@@ -95,9 +95,9 @@ rule pre_bowtie2_index_host:
     input:
         reference=features["host"]["fasta"],
     output:
-        mock=touch(BOWTIE2_PRE / "host"),
+        mock=touch(PRE_INDEX / "host"),
     log:
-        BOWTIE2_PRE / "host_index.log",
+        PRE_INDEX / "host_index.log",
     conda:
         "../envs/pre.yml"
     params:
@@ -125,12 +125,12 @@ rule pre_bowtie2_map_host_one:
     input:
         forward_=FASTP / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=FASTP / "{sample_id}.{library_id}_2.fq.gz",
-        mock=BOWTIE2_PRE / "host",
+        mock=PRE_INDEX / "host",
         reference=features["host"]["fasta"],
     output:
-        cram=BOWTIE2_PRE / "{sample_id}.{library_id}.cram",
+        cram=PRE_BOWTIE2 / "{sample_id}.{library_id}.cram",
     log:
-        BOWTIE2_PRE / "{sample_id}.{library_id}.log",
+        PRE_BOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
         "../envs/pre.yml"
     params:
@@ -167,7 +167,7 @@ rule pre_bowtie2_map_host_all:
     """Map all libraries to reference genome using bowtie2"""
     input:
         [
-            BOWTIE2_PRE / f"{sample_id}.{library_id}.cram"
+            PRE_BOWTIE2 / f"{sample_id}.{library_id}.cram"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
 
@@ -178,7 +178,7 @@ rule pre_bowtie2_extract_nonhost_one:
     than by coordinate, and convert to FASTQ.
     """
     input:
-        cram=BOWTIE2_PRE / "{sample_id}.{library_id}.cram",
+        cram=PRE_BOWTIE2 / "{sample_id}.{library_id}.cram",
         reference=features["host"]["fasta"],
     output:
         forward_=temp(NONHOST / "{sample_id}.{library_id}_1.fq.gz"),

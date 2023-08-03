@@ -130,7 +130,7 @@ rule pre_eval_cram_to_mapped_bam:
     it works.
     """
     input:
-        cram=BOWTIE2_PRE / "{sample}.{library_id}.cram",
+        cram=PRE_BOWTIE2 / "{sample}.{library_id}.cram",
         reference=features["host"]["fasta"],
     output:
         bam=temp(PRE_COVERM / "bams/{sample}.{library_id}.bam"),
@@ -204,8 +204,38 @@ rule pre_eval_coverm:
         """
 
 
+rule pre_eval_samtools:
+    input:
+        [
+            PRE_BOWTIE2 / f"{sample_id}.{library_id}.{extension}"
+            for sample_id, library_id in SAMPLE_LIBRARY
+            for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
+        ],
+
+
+rule pre_eval_fastqc_fastp:
+    input:
+        [
+            FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
+            for sample_id, library_id in SAMPLE_LIBRARY
+            for end in ["1", "2"]
+        ],
+
+
+rule pre_eval_fastqc_nonhost:
+    input:
+        [
+            NONHOST / f"{sample_id}.{library_id}_{end}.fq.gz"
+            for sample_id, library_id in SAMPLE_LIBRARY
+            for end in ["1", "2"]
+        ],
+
+
 rule pre_eval:
     input:
         rules.pre_eval_nonpareil.output,
         rules.pre_eval_singlem.output,
         rules.pre_eval_coverm.output,
+        rules.pre_eval_samtools.input,
+        rules.pre_eval_fastqc_fastp.input,
+        rules.pre_eval_fastqc_nonhost.input,
