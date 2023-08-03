@@ -1,14 +1,14 @@
 rule assemble_eval_coverm_contig_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.bam",
-        reference=ASSEMBLY_RENAME / "{assemble_id}.fa",
+        bam=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
+        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
     output:
-        tsv=ASSEMBLY_COVERM / "contig/{assemble_id}.{sample_id}.{library_id}.tsv",
+        tsv=ASSEMBLY_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
         "../envs/assembly.yml"
     log:
-        ASSEMBLY_COVERM / "contig/{assemble_id}.{sample_id}.{library_id}.log",
+        ASSEMBLY_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.log",
     params:
         methods=params["assemble"]["coverm"]["genome"]["methods"],
         min_covered_fraction=params["assemble"]["coverm"]["genome"][
@@ -28,8 +28,8 @@ rule assemble_eval_coverm_contig_one:
 rule assemble_eval_coverm_aggregate_contig:
     input:
         tsvs=[
-            ASSEMBLY_COVERM / f"contig/{assemble_id}.{sample_id}.{library_id}.tsv"
-            for assemble_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            ASSEMBLY_COVERM / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
     output:
         tsv=ASSEMBLY_COVERM / "contig.tsv",
@@ -51,14 +51,14 @@ rule assemble_eval_coverm_aggregate_contig:
 rule assemble_eval_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.bam",
-        reference=ASSEMBLY_RENAME / "{assemble_id}.fa",
+        bam=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
+        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
     output:
-        tsv=ASSEMBLY_COVERM / "genome/{assemble_id}.{sample_id}.{library_id}.tsv",
+        tsv=ASSEMBLY_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
         "../envs/assembly.yml"
     log:
-        ASSEMBLY_COVERM / "genome/{assemble_id}.{sample_id}.{library_id}.log",
+        ASSEMBLY_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
     params:
         methods=params["assemble"]["coverm"]["genome"]["methods"],
         min_covered_fraction=params["assemble"]["coverm"]["genome"][
@@ -79,8 +79,8 @@ rule assemble_eval_coverm_genome_one:
 rule assemble_eval_coverm_aggregate_genome:
     input:
         tsvs=[
-            ASSEMBLY_COVERM / f"genome/{assemble_id}.{sample_id}.{library_id}.tsv"
-            for assemble_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            ASSEMBLY_COVERM / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
     output:
         tsv=ASSEMBLY_COVERM / "genome.tsv",
@@ -102,11 +102,11 @@ rule assemble_eval_coverm_aggregate_genome:
 rule assemble_eval_quast_one:
     """Run quast over one assembly group"""
     input:
-        ASSEMBLY_RENAME / "{assemble_id}.fa",
+        ASSEMBLY_RENAME / "{assembly_id}.fa",
     output:
-        directory(ASSEMBLY_QUAST / "{assemble_id}"),
+        directory(ASSEMBLY_QUAST / "{assembly_id}"),
     log:
-        ASSEMBLY_QUAST / "{assemble_id}.log",
+        ASSEMBLY_QUAST / "{assembly_id}.log",
     conda:
         "../envs/assembly.yml"
     threads: 4
@@ -126,7 +126,16 @@ rule assemble_eval_quast_one:
 rule assemble_eval_quast_all:
     """Run quast over all assembly groups"""
     input:
-        [ASSEMBLY_QUAST / f"{assemble_id}" for assemble_id in ASSEMBLIES],
+        [ASSEMBLY_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+
+
+rule assemble_eval_samtools:
+    input:
+        [
+            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{extension}"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
+        ],
 
 
 rule assemble_eval:
@@ -134,3 +143,4 @@ rule assemble_eval:
         rules.assemble_eval_quast_all.input,
         rules.assemble_eval_coverm_aggregate_genome.output,
         rules.assemble_eval_coverm_aggregate_contig.output,
+        rules.assemble_eval_samtools.input,

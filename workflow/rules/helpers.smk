@@ -101,13 +101,13 @@ rule samtools_stats_cram_pre:
 
 rule samtools_stats_cram_assembly:
     input:
-        cram=ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.cram",
-        crai=ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.cram.crai",
-        reference=ASSEMBLY_RENAME / "{assemble_id}.fa",
+        cram=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        crai=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
+        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
     output:
-        txt=ASSEMBLY_BOWTIE2 / "{sample_id}.{library_id}.stats.txt",
+        txt=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.txt",
     log:
-        ASSEMBLY_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
+        ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.log",
     conda:
         "../envs/helpers.yml"
     shell:
@@ -119,13 +119,13 @@ rule samtools_stats_cram_assembly:
 
 rule samtools_stats_cram_metabin:
     input:
-        cram=METABIN_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.cram",
-        crai=METABIN_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.cram.crai",
-        reference=METABIN_RENAME / "{assemble_id}.fa",
+        cram=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        crai=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
+        reference=METABIN_RENAME / "{assembly_id}.fa",
     output:
-        txt=METABIN_BOWTIE2 / "{sample_id}.{library_id}.stats.txt",
+        txt=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.txt",
     log:
-        METABIN_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
+        METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.log",
     conda:
         "../envs/helpers.yml"
     shell:
@@ -138,9 +138,9 @@ rule samtools_stats_cram_dereplicate:
         crai=DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.cram.crai",
         reference=DREP / "dereplicated_genomes.fa",
     output:
-        txt=DREP_BOWTIE2 / "{sample_id}.{library_id}.stats.txt",
+        txt=DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.stats.txt",
     log:
-        DREP_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
+        DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.stats.log",
     conda:
         "../envs/helpers.yml"
     shell:

@@ -8,10 +8,10 @@ rule assemble_megahit_one:
         forwards=get_forwards_from_assembly_id,
         reverses=get_reverses_from_assembly_id,
     output:
-        assemble_folder=directory(MEGAHIT / "{assemble_id}"),
-        assemble_fasta=MEGAHIT / "{assemble_id}/final.contigs.fa",
+        assemble_folder=directory(MEGAHIT / "{assembly_id}"),
+        assemble_fasta=MEGAHIT / "{assembly_id}/final.contigs.fa",
     log:
-        log=MEGAHIT / "{assemble_id}.log",
+        log=MEGAHIT / "{assembly_id}.log",
     conda:
         "../envs/assembly.yml"
     threads: 16
@@ -40,30 +40,30 @@ rule assemble_megahit_one:
 rule assemble_megahit_all:
     """Run megahit over all groups"""
     input:
-        [MEGAHIT / f"{assemble_id}/final.contigs.fa" for assemble_id in ASSEMBLIES],
+        [MEGAHIT / f"{assembly_id}/final.contigs.fa" for assembly_id in ASSEMBLIES],
 
 
 rule assemble_megahit_renaming_one:
     """Rename contigs to avoid future collisions
 
-    Contigs are renamed to `megahit_{assemble_id}.{contig_number}`.
+    Contigs are renamed to `megahit_{assembly_id}.{contig_number}`.
     Also, secondary info in the header is removed.
     """
     input:
-        MEGAHIT / "{assemble_id}/final.contigs.fa",
+        MEGAHIT / "{assembly_id}/final.contigs.fa",
     output:
-        ASSEMBLY_RENAME / "{assemble_id}.fa",
+        ASSEMBLY_RENAME / "{assembly_id}.fa",
     log:
-        ASSEMBLY_RENAME / "{assemble_id}.log",
+        ASSEMBLY_RENAME / "{assembly_id}.log",
     conda:
         "../envs/assembly.yml"
     params:
-        assemble_id=lambda wildcards: wildcards.assemble_id,
+        assembly_id=lambda wildcards: wildcards.assembly_id,
     shell:
         """
         seqtk rename \
             {input} \
-            {params.assemble_id}.contig \
+            {params.assembly_id}.contig \
         | cut -f 1 -d " " \
         > {output} 2> {log}
         """
@@ -74,11 +74,11 @@ rule assemble_bowtie2_build_one:
     Index megahit assembly
     """
     input:
-        contigs=ASSEMBLY_RENAME / "{assemble_id}.fa",
+        contigs=ASSEMBLY_RENAME / "{assembly_id}.fa",
     output:
-        mock=touch(ASSEMBLY_INDEX / "{assemble_id}"),
+        mock=touch(ASSEMBLY_INDEX / "{assembly_id}"),
     log:
-        ASSEMBLY_INDEX / "{assemble_id}.log",
+        ASSEMBLY_INDEX / "{assembly_id}.log",
     conda:
         "../envs/assembly.yml"
     threads: 24
@@ -97,19 +97,19 @@ rule assemble_bowtie2_build_one:
 
 rule assemble_bowtie2_build_all:
     input:
-        [ASSEMBLY_INDEX / f"{assemble_id}" for assemble_id in ASSEMBLIES],
+        [ASSEMBLY_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
 rule assemble_bowtie2_one:
     input:
-        mock=ASSEMBLY_INDEX / "{assemble_id}",
+        mock=ASSEMBLY_INDEX / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
-        reference=ASSEMBLY_RENAME / "{assemble_id}.fa",
+        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
     output:
-        cram=ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.cram",
+        cram=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
     log:
-        log=ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.log",
+        log=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
         "../envs/assembly.yml"
     threads: 24
@@ -144,8 +144,8 @@ rule assemble_bowtie2_one:
 rule assemble_bowtie2_all:
     input:
         [
-            ASSEMBLY_BOWTIE2 / f"{assemble_id}.{sample_id}.{library_id}.cram"
-            for assemble_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
 
 
@@ -157,13 +157,13 @@ rule assemble_cram_to_bam_one:
     it works.
     """
     input:
-        cram=ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.cram",
-        crai=ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.cram.crai",
-        reference=ASSEMBLY_RENAME / "{assemble_id}.fa",
+        cram=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        crai=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
+        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
     output:
-        bam=temp(ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.bam"),
+        bam=temp(ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
-        ASSEMBLY_BOWTIE2 / "{assemble_id}.{sample_id}.{library_id}.bam.log",
+        ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
     conda:
         "../envs/assembly.yml"
     threads: 24
@@ -186,8 +186,8 @@ rule assemble_cram_to_bam_one:
 rule assemble_cram_to_bam_all:
     input:
         [
-            ASSEMBLY_BOWTIE2 / f"{assemble_id}.{sample_id}.{library_id}.bam"
-            for assemble_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
 
 
