@@ -19,7 +19,6 @@ rule dereplicate_drep:
             --S_ani 0.9 \
             --genomes {input.genomes} \
         2> {log}
-
         """
 
 
