@@ -9,7 +9,7 @@ NONHOST = PRE / "nonhost/"
 # preprocessing evaluation
 NONPAREIL = PRE / "nonpareil/"
 SINGLEM = PRE / "singlem/"
-COVERM_PRE = PRE / "coverm/"
+PRE_COVERM = PRE / "coverm/"
 
 
 # assembly
