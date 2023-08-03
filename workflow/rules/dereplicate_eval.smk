@@ -21,7 +21,7 @@ rule dereplicate_eval_gtdbtk:
         GTDBTK_DATA_PATH="{input.database}"
 
         gtdbtk classify_wf \
-            --genome_dir {params.bins} \
+            --genome_dir {input.bin_folder} \
             --extension gz \
             --out_dir {output.outdir} \
             --cpus {threads} \
@@ -137,8 +137,8 @@ rule dereplicate_eval_dram_annotate:
             --input_fasta {input.drep_folder} \
             --output_dir {output.outdir} \
             --threads {threads} \
-            --rrna_path {input.rrnas} \
-            --trna_path {input.trnas} \
+            --rrna_path {output.rrnas} \
+            --trna_path {output.trnas} \
             --min_contig_size {params.min_contig_size} \
         2> {log} 1>&2
         """
@@ -159,7 +159,7 @@ rule dereplicate_eval_dram_distill:
     shell:
         """
         DRAM.py distill \
-            --input_dir {input.outdir} \
+            --input_dir {input.indir} \
             --output_dir {output.outdir} \
             --annotations {input.annotations} \
             --rrna_path {input.rrnas} \
@@ -190,6 +190,15 @@ rule dereplicate_eval_quast:
             {input} \
         2> {log} 1>&2
         """
+
+
+rule dereplicate_eval_samtools:
+    input:
+        [
+            DREP_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{extension}"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
+        ],
 
 
 rule dereplicate_eval:
