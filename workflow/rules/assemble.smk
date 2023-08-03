@@ -1,3 +1,4 @@
+include: "assemble_functions.smk"
 include: "assemble_run.smk"
 include: "assemble_eval.smk"
 
