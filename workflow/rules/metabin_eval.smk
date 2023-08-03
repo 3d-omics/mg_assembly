@@ -228,8 +228,7 @@ rule metabin_eval_dram_distill_one:
         """
         DRAM.py distill \
             --input_file {input.annotations} \
-            --output_file {output.outdir} \
-            --threads {threads} \
+            --output_dir {output.outdir} \
             --rrna_path {input.rrnas} \
             --trna_path {input.trnas} \
         2> {log} 1>&2
