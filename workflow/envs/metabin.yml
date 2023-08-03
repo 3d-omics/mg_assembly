@@ -15,3 +15,10 @@ dependencies:
   - r-optargs
   - r-argparse
   - r-tidyverse
+  - prodigal
+  - hmmer
+  - parallel
+  - r-optparse
+  - r-funr
+  - biopython
+  - pandas
