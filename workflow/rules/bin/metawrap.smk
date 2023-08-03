@@ -92,7 +92,7 @@ rule bin_metawrap_binning_one:
 rule bin_metawrap:
     input:
         [
-            METABIN_METAWRAP / f"{assembly_id}/{binner}"
+            BIN_METAWRAP / f"{assembly_id}/{binner}"
             for assembly_id in samples.assembly_id
             for binner in ["concoct_bins", "maxbin2_bins", "metabat2_bins"]
         ],

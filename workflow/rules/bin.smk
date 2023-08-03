@@ -8,4 +8,4 @@ include: "bin/metawrap.smk"
 
 rule bin:
     input:
-        rules.bin_metawrap.output,
+        rules.bin_metawrap.input,
