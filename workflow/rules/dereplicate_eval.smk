@@ -113,3 +113,9 @@ rule dereplicate_eval_coverm_genome:
             --output-file {output} \
         2> {log} 1>&2
         """
+
+
+rule dereplicate_eval:
+    input:
+        rules.dereplicate_eval_coverm_genome.output,
+        rules.dereplicate_eval_gtdbtk.output,

@@ -132,6 +132,11 @@ rule dereplicate_bowtie2_one:
 rule dereplicate_bowtie2:
     input:
         [
-            DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.cram"
+            DREP_BOWTIE2 / f"dereplicated_genomes.{sample_id}.{library_id}.cram"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
+
+
+rule dereplicate_run:
+    input:
+        rules.dereplicate_bowtie2.input,

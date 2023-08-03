@@ -4,5 +4,5 @@ include: "dereplicate_eval.smk"
 
 rule dereplicate:
     input:
-        DREP,
-        rules.dereplicate_eval_coverm_genome.output,
+        rules.dereplicate_run.input,
+        rules.dereplicate_eval.input,
