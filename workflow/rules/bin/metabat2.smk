@@ -10,7 +10,7 @@ rule metabat2_prepare_one:
     log:
         METABAT2 / "prepare" / "{assembly_id}.log",
     conda:
-        "../../envs/binning/metabat2.yml"
+        "../../envs/bin/metabat2.yml"
     shell:
         """
         jgi_summarize_bam_contig_depths \
@@ -28,7 +28,7 @@ rule metabat2_run_one:
     output:
         bins=directory(METABAT2 / "bins/{assembly_id}/"),
     log:
-        METABAT2 / "bins" / "{assembly_id}.log",
+        METABAT2 / "bibinns" / "{assembly_id}.log",
     conda:
         "../../envs/binning/metabat2.yml"
     params:

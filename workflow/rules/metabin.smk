@@ -1,12 +1,4 @@
-include: "binning/vamb.smk"
-include: "binning/concoct.smk"
-include: "binning/metabat2.smk"
-include: "binning/maxbin2.smk"
-include: "binning/metawrap.smk"
-include: "binning/magscot.smk"
-
-
-rule binning_index_one:
+rule metabin_index_one:
     input:
         bins=MAGSCOT / "{assembly_id}.fa",
     output:
@@ -14,10 +6,10 @@ rule binning_index_one:
     log:
         METABIN_INDEX / "{assembly_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     threads: 24
     params:
-        extra=params["assembly"]["bowtie2-build"]["extra"],
+        extra=params["metabin"]["bowtie2-build"]["extra"],
     shell:
         """
         bowtie2-build \
@@ -29,7 +21,7 @@ rule binning_index_one:
         """
 
 
-rule binning_bowtie2_one:
+rule metabin_bowtie2_one:
     input:
         mock=METABIN_INDEX / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
@@ -40,11 +32,11 @@ rule binning_bowtie2_one:
     log:
         METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     threads: 24
     params:
-        extra=params["binning"]["bowtie2"]["extra"],
-        samtools_mem=params["binning"]["samtools"]["mem"],
+        extra=params["metabin"]["bowtie2"]["extra"],
+        samtools_mem=params["metabin"]["samtools"]["mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     resources:
@@ -70,7 +62,7 @@ rule binning_bowtie2_one:
         """
 
 
-rule binning_bowtie2:
+rule metabin_bowtie2:
     input:
         [
             METABIN_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
@@ -78,7 +70,7 @@ rule binning_bowtie2:
         ],
 
 
-rule binning_cram_to_bam_one:
+rule metabin_cram_to_bam_one:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
@@ -94,7 +86,7 @@ rule binning_cram_to_bam_one:
     log:
         METABIN_BOWTIE2 / "{assembly_id},{sample_id}.{library_id}.bam.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     threads: 24
     resources:
         runtime=1 * 60,
@@ -112,7 +104,7 @@ rule binning_cram_to_bam_one:
         """
 
 
-rule binning_coverm_genome_one:
+rule metabin_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
@@ -120,15 +112,15 @@ rule binning_coverm_genome_one:
     output:
         tsv=METABIN_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     log:
         METABIN_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
     params:
-        methods=params["assembly"]["coverm"]["genome"]["methods"],
-        min_covered_fraction=params["assembly"]["coverm"]["genome"][
+        methods=params["metabin"]["coverm"]["genome"]["methods"],
+        min_covered_fraction=params["metabin"]["coverm"]["genome"][
             "min_covered_fraction"
         ],
-        separator=params["assembly"]["coverm"]["genome"]["separator"],
+        separator=params["metabin"]["coverm"]["genome"]["separator"],
     shell:
         """
         coverm genome \
@@ -140,7 +132,7 @@ rule binning_coverm_genome_one:
         """
 
 
-rule binning_coverm_genome:
+rule metabin_coverm_genome:
     input:
         tsvs=[
             METABIN_COVERM / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
@@ -163,7 +155,7 @@ rule binning_coverm_genome:
         """
 
 
-rule binning_coverm_contig_one:
+rule metabin_coverm_contig_one:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         bam=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
@@ -171,11 +163,11 @@ rule binning_coverm_contig_one:
     output:
         tsv=METABIN_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     log:
         METABIN_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.log",
     params:
-        methods=params["binning"]["coverm"]["contig"]["methods"],
+        methods=params["metabin"]["coverm"]["contig"]["methods"],
     shell:
         """
         coverm contig \
@@ -186,7 +178,7 @@ rule binning_coverm_contig_one:
         """
 
 
-rule binning_coverm_contig:
+rule metabin_coverm_contig:
     input:
         tsvs=[
             METABIN_COVERM / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
@@ -197,7 +189,7 @@ rule binning_coverm_contig:
     log:
         METABIN_COVERM / "contig.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     params:
         input_dir=METABIN_COVERM / f"contig",
     shell:
@@ -209,7 +201,7 @@ rule binning_coverm_contig:
         """
 
 
-rule binning_quast_one:
+rule metabin_quast_one:
     """Run quast over one assembly group"""
     input:
         MAGSCOT / "{assembly_id}.fa",
@@ -218,10 +210,10 @@ rule binning_quast_one:
     log:
         METABIN_QUAST / "{assembly_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     threads: 4
     params:
-        extra=params["assembly"]["quast"]["extra"],
+        extra=params["metabin"]["quast"]["extra"],
     shell:
         """
         quast \
@@ -233,13 +225,13 @@ rule binning_quast_one:
         """
 
 
-rule binning_quast_all:
+rule metabin_quast_all:
     """Run quast over all assembly groups"""
     input:
         [METABIN_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
-rule binning_gtdbtk_one:
+rule metabin_gtdbtk_one:
     input:
         bin_folder=MAGSCOT / "{assembly_id}/bins",
         database=features["gtdbtk_database"],
@@ -262,12 +254,12 @@ rule binning_gtdbtk_one:
         """
 
 
-rule binning_gtdbtk:
+rule metabin_gtdbtk:
     input:
         [METABIN_GTDBTK / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
-rule binning_dram_annotate_one:
+rule metabin_dram_annotate_one:
     input:
         bin_folder=MAGSCOT / "{assembly_id}/bins/",
         dram_database=features["dram_database"],
@@ -279,7 +271,7 @@ rule binning_dram_annotate_one:
     log:
         METABIN_DRAM / "annotate/{assembly_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     params:
         min_contig_size=1500,
     shell:
@@ -292,7 +284,7 @@ rule binning_dram_annotate_one:
         """
 
 
-rule binning_dram_distill_one:
+rule metabin_dram_distill_one:
     input:
         outdir=METABIN_DRAM / "annotate/{assembly_id}",
         annotations=METABIN_DRAM / "annotate/{assembly_id}/annotations.tsv",
@@ -303,7 +295,7 @@ rule binning_dram_distill_one:
     log:
         METABIN_DRAM / "distill/{assembly_id}.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/metabin.yml"
     shell:
         """
         DRAM.py distill \
@@ -316,13 +308,13 @@ rule binning_dram_distill_one:
         """
 
 
-rule binning_dram:
+rule metabin_dram:
     input:
         [METABIN_DRAM / f"distill/{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
-rule binning:
+rule metabin:
     input:
-        rules.binning_coverm_contig.output,
-        rules.binning_coverm_genome.output,
-        rules.binning_quast_all.input,
+        rules.metabin_coverm_contig.output,
+        rules.metabin_coverm_genome.output,
+        rules.metabin_quast_all.input,

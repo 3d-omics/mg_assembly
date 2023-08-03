@@ -121,7 +121,7 @@ rule magscot_compose_contig_to_bin_maxbin2_one:
     log:
         MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.log",
     conda:
-        "../../envs/binning/magscot.yml"
+        "../../metabin/binning/magscot.yml"
     shell:
         """
         (grep -H ^">" {input}/*.fa \
@@ -141,7 +141,7 @@ rule magscot_compose_contig_to_bin_metabat2_one:
     log:
         MAGSCOT / "{assembly_id}/metabat2.contigs_to_bin.log",
     conda:
-        "../../envs/binning/magscot.yml"
+        "../../envs/metabin.yml"
     shell:
         """
         (grep -H ^">" {input}/*.fa \
@@ -163,7 +163,7 @@ rule magscot_merge_contig_to_bin_one:
     log:
         MAGSCOT / "{assembly_id}/contigs_to_bin.log",
     conda:
-        "../../envs/binning/magscot.yml"
+        "../../envs/metabin.yml"
     shell:
         """
         cat {input} > {output} 2> {log}
@@ -206,7 +206,7 @@ rule magscot_reformat_one:
     log:
         MAGSCOT / "{assembly_id}/magscot.reformat.log",
     conda:
-        "../../envs/binning/magscot.yml"
+        "../../envs/metabin.yml"
     shell:
         """
         Rscript --no-init-file --no-site-file workflow/scripts/clean_magscot_bin_to_contig.R \
@@ -225,7 +225,7 @@ rule magscot_rename_one:
     log:
         MAGSCOT / "{assembly_id}/magscot.refined.log",
     conda:
-        "../../envs/binning/magscot.yml"
+        "../../envs/metabin/magscot.yml"
     shell:
         """
         python workflow/scripts/reformat_fasta_magscot.py \
@@ -243,7 +243,7 @@ rule magscot_split_into_bins:
     log:
         MAGSCOT / "{assembly_id}/bins.log",
     conda:
-        "../../envs/binning/magscot.yml"
+        "../../envs/metabin/magscot.yml"
     shell:
         """
         mkdir -p {output.bins} 2> {log}

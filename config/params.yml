@@ -18,7 +18,7 @@ pre:
     contig:
       methods: "count"
 
-assembly:
+assemble:
   megahit:
     extra: ""
     min_contig_len: 1500
@@ -38,7 +38,7 @@ assembly:
     contig:
       methods: "count"
 
-binning:
+bin:
   metawrap:
     binning:
       min_length: 1500
@@ -66,6 +66,24 @@ binning:
       methods: "count"
 
 
+metabin:
+  bowtie2-build:
+    extra: ""
+  bowtie2:
+    extra: ""
+  samtools:
+    mem: 1G
+  coverm:
+    genome:
+      methods: "count"
+      min_covered_fraction: 0.0
+      separator: "-"
+    contig:
+      methods: "count"
+  quast:
+    extra: ""
+
+
 dereplicate:
   bowtie2-build:
     extra: ""
@@ -73,3 +91,12 @@ dereplicate:
     extra: ""
   samtools:
     mem: 1G
+  coverm:
+    genome:
+      methods: "count"
+      min_covered_fraction: 0.0
+      separator: "-"
+    contig:
+      methods: "count"
+  quast:
+    extra: ""

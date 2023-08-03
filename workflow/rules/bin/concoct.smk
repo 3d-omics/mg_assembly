@@ -10,7 +10,7 @@ rule concoct_cut_up_fasta_one:
     log:
         CONCOCT / "prepare" / "{assembly_id}.cut.log",
     conda:
-        "../../envs/binning/concoct.yml"
+        "../../envs/bin/concoct.yml"
     shell:
         """
         cut_up_fasta.py \
@@ -34,7 +34,7 @@ rule concoct_coverage_table_one:
     log:
         CONCOCT / "prepare" / "{assembly_id}.coverage.log",
     conda:
-        "../../envs/binning/concoct.yml"
+        "../../envs/bin/concoct.yml"
     shell:
         """
         concoct_coverage_table.py \
@@ -54,7 +54,7 @@ rule concoct_run_one:
     log:
         CONCOCT / "run/{assembly_id}.log",
     conda:
-        "../../envs/binning/concoct.yml"
+        "../../envs/bin/concoct.yml"
     shell:
         """
         concoct \
@@ -73,7 +73,7 @@ rule concoct_merge_cutup_clustering_one:
     log:
         CONCOCT / "merge" / "{assembly_id}.log",
     conda:
-        "../../envs/binning/concoct.yml"
+        "../../envs/bin/concoct.yml"
     shell:
         """
         merge_cutup_clustering.py \
@@ -92,7 +92,7 @@ rule concoct_extract_fasta_bins_one:
     log:
         CONCOCT / "fasta_bins/{assembly_id}.log",
     conda:
-        "../../envs/binning/concoct.yml"
+        "../../envs/bin/concoct.yml"
     shell:
         """
         extract_fasta_bins.py \

@@ -21,9 +21,7 @@ def get_crams_to_merge_binning(wildcards):
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     cram_files = []
     for sample_id, library_id in samples_in_assembly:
-        cram_files.append(
-            BOWTIE2_BINNING / f"{assembly_id}.{sample_id}.{library_id}.cram"
-        )
+        cram_files.append(BIN_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram")
     return cram_files
 
 
@@ -33,7 +31,7 @@ def get_tsvs_for_binning_coverm_genome(wildcards):
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
-            COVERM_BINNING / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
+            BIN_COVERM / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
         )
     return tsv_files
 
@@ -44,6 +42,6 @@ def get_tsvs_for_binning_coverm_contig(wildcards):
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
-            COVERM_BINNING / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
+            BIN_COVERM / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
         )
     return tsv_files

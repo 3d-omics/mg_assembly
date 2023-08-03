@@ -12,7 +12,7 @@ rule maxbin2_prepare_one:
     log:
         MAXBIN2 / "prepare" / "{assembly_id}.log",
     conda:
-        "../../envs/binning/maxbin2.yml"
+        "../../envs/bin/maxbin2.yml"
     shell:
         """
         (samtools coverage {input.bams} \
@@ -32,7 +32,7 @@ rule maxbin2_run_one:
     log:
         MAXBIN2 / "bins" / "{assembly_id}.log",
     conda:
-        "../../envs/binning/maxbin2.yml"
+        "../../envs/bin/maxbin2.yml"
     threads: 24
     params:
         seed=1,

@@ -35,22 +35,19 @@ include: "rules/reads_functions.smk"
 include: "rules/reads.smk"
 include: "rules/pre_functions.smk"
 include: "rules/pre.smk"
-include: "rules/assembly_functions.smk"
-include: "rules/assembly.smk"
-include: "rules/binning_functions.smk"
-include: "rules/binning.smk"
+include: "rules/assemble_functions.smk"
+include: "rules/assemble.smk"
+include: "rules/bin_functions.smk"
+include: "rules/bin.smk"
+include: "rules/metabin.smk"
 include: "rules/dereplicate.smk"
-
-
-# include: "workflows/rules/annotation.smk"
-# include: "workflows/rules/dereplication.smk"
-# include: "workflows/rules/phylogeny.smk"
-# include: "workflows/rules/quantification.smk"
 
 
 rule all:
     input:
         rules.reads.input,
         rules.pre.input,
-        rules.assembly.input,
-        rules.binning.input,
+        rules.assemble.input,
+        rules.bin.input,
+        rules.metabin.input,
+        rules.dereplicate.input,

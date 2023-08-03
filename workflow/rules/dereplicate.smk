@@ -82,7 +82,7 @@ rule dereplicate_index_one:
         "../envs/dereplicate.yml"
     threads: 24
     params:
-        extra=params["assembly"]["bowtie2-build"]["extra"],
+        extra=params["dereplicate"]["bowtie2-build"]["extra"],
     shell:
         """
         bowtie2-build \
@@ -185,7 +185,7 @@ rule dereplicate_cram_to_bam_one:
     log:
         DREP_BOWTIE2 / "{assembly_id},{sample_id}.{library_id}.bam.log",
     conda:
-        "../envs/binning.yml"
+        "../envs/dereplicate.yml"
     threads: 24
     resources:
         runtime=1 * 60,
@@ -210,15 +210,15 @@ rule dereplicate_coverm_genome_one:
     output:
         tsv=DREP_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "../envs/binning.yml"
+        "../envs/dereplicate.yml"
     log:
         DREP_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
     params:
-        methods=params["assembly"]["coverm"]["genome"]["methods"],
-        min_covered_fraction=params["assembly"]["coverm"]["genome"][
+        methods=params["dereplicate"]["coverm"]["genome"]["methods"],
+        min_covered_fraction=params["dereplicate"]["coverm"]["genome"][
             "min_covered_fraction"
         ],
-        separator=params["assembly"]["coverm"]["genome"]["separator"],
+        separator=params["dereplicate"]["coverm"]["genome"]["separator"],
     shell:
         """
         coverm genome \
