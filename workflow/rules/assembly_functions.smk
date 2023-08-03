@@ -43,7 +43,7 @@ def get_crams_to_merge_assembly(wildcards):
     cram_files = []
     for sample_id, library_id in samples_in_assembly:
         cram_files.append(
-            BOWTIE2_ASSEMBLY / f"{assembly_id}.{sample_id}.{library_id}.cram"
+            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
         )
     return cram_files
 
@@ -56,7 +56,7 @@ def get_tsvs_for_assembly_coverm_genome(wildcards):
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
-            COVERM_ASSEMBLY / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
+            ASSEMBLY_COVERM / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
         )
     return tsv_files
 
@@ -67,6 +67,6 @@ def get_tsvs_for_assembly_coverm_contig(wildcards):
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
-            COVERM_ASSEMBLY / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
+            ASSEMBLY_COVERM / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
         )
     return tsv_files

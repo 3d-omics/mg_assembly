@@ -64,3 +64,12 @@ binning:
       separator: "-"
     contig:
       methods: "count"
+
+
+dereplicate:
+  bowtie2-build:
+    extra: ""
+  bowtie2:
+    extra: ""
+  samtools:
+    mem: 1G

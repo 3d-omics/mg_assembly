@@ -1,47 +1,64 @@
 READS = Path("results/reads/")
 
+# preprocessing
 PRE = Path("results/preprocessing/")
 FASTP = PRE / "fastp/"
 BOWTIE2_PRE = PRE / "bowtie2/"
 NONHOST = PRE / "nonhost/"
+
+# preprocessing evaluation
 NONPAREIL = PRE / "nonpareil/"
 SINGLEM = PRE / "singlem/"
 COVERM_PRE = PRE / "coverm/"
 
 
+# assembly
 ASSEMBLY = Path("results/assembly/")
 MEGAHIT = ASSEMBLY / "megahit/"
-MEGAHIT_RENAMING = ASSEMBLY / "renaming/"
-QUAST = ASSEMBLY / "quast/"
-BOWTIE2_INDEXES_ASSEMBLY = ASSEMBLY / "indexes/"
-BOWTIE2_ASSEMBLY = ASSEMBLY / "bowtie2/"
-COVERM_ASSEMBLY = ASSEMBLY / "coverm/"
+ASSEMBLY_RENAME = ASSEMBLY / "renaming/"
+ASSEMBLY_INDEX = ASSEMBLY / "indexes/"
+ASSEMBLY_BOWTIE2 = ASSEMBLY / "bowtie2/"
 
-BINNING = Path("results/binning/")
+# Assembly evaluation
+ASSEMBLY_QUAST = ASSEMBLY / "quast/"
+ASSEMBLY_COVERM = ASSEMBLY / "coverm/"
+
+
 # binners
-VAMB = BINNING / "vamb/"
-CONCOCT = BINNING / "concoct/"
-METABAT2 = BINNING / "metabat2/"
-MAXBIN2 = BINNING / "maxbin2/"
-METAWRAP_BINNING = BINNING / "binning/"
+BIN = Path("results/binning/")
+VAMB = BIN / "vamb/"  # This could be a metabinner
+CONCOCT = BIN / "concoct/"
+METABAT2 = BIN / "metabat2/"
+MAXBIN2 = BIN / "maxbin2/"
+BIN_METAWRAP = BIN / "metawrap/"
+
+# bin evaluation?
 
 
 # metabinners
-MAGSCOT = BINNING / "magscot/"
-MAGSCOT_PRODIGAL = MAGSCOT / "prodigal/"
-METAWRAP_REFINEMENT = BINNING / "refinement/"
-METAWRAP_RENAMING = BINNING / "renaming/"
+METABIN = Path("results/metabinning/")
+MAGSCOT = METABIN / "magscot/"
+PRODIGAL = MAGSCOT / "prodigal/"
+METABIN_METAWRAP = METABIN / "metawrap/"
+METABIN_RENAME = METABIN / "renaming/"
+METABIN_INDEX = BIN / "indexes/"
+METABIN_BOWTIE2 = METABIN / "bowtie2/"
 
-# binning evaluation
-BINNING_QUAST = BINNING / "quast/"
-BOWTIE2_INDEXES_BINNING = BINNING / "indexes/"
-BOWTIE2_BINNING = BINNING / "bowtie2/"
-COVERM_BINNING = BINNING / "coverm/"
-GTDBTK = BINNING / "gtdbtk/"
-DRAM = BINNING / "dram/"
-DRAM_ANNOTATE = DRAM / "annotate/"
-DRAM_DISTILL = DRAM / "distill/"
+# metabinning evaluation
+METABIN_QUAST = BIN / "quast/"
+METABIN_COVERM = METABIN / "coverm/"
+METABIN_GTDBTK = METABIN / "gtdbtk/"
+METABIN_DRAM = METABIN / "dram/"
+
 
 # dereplicate
 DEREPLICATE = Path("results/dereplicate/")
 DREP = DEREPLICATE / "drep/"
+DREP_INDEX = DEREPLICATE / "indexes/"
+DREP_BOWTIE2 = DEREPLICATE / "bowtie2/"
+
+
+# dereplicate evaluation
+DREP_GTDBTK = DEREPLICATE / "gtdbtk/"
+DREP_QUAST = DEREPLICATE / "quast/"
+DREP_COVERM = DEREPLICATE / "coverm/"

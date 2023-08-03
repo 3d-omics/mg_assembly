@@ -11,3 +11,4 @@ dependencies:
   - samtools=1.17
   - quast=5.2.0
   - dram=1.4.6
+  - gtdbtk=2.3.2

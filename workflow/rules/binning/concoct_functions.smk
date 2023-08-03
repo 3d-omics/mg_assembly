@@ -4,7 +4,7 @@ def get_bams_for_concoct_binning(wildcards):
     bam_files = []
     for sample_id, library_id in samples_in_assembly:
         bam_files.append(
-            BOWTIE2_ASSEMBLY / f"{assembly_id}.{sample_id}.{library_id}.bam",
+            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam",
         )
     return bam_files
 
@@ -15,6 +15,6 @@ def get_bais_for_concoct_binning(wildcards):
     bam_files = []
     for sample_id, library_id in samples_in_assembly:
         bam_files.append(
-            BOWTIE2_ASSEMBLY / f"{assembly_id}.{sample_id}.{library_id}.bam.bai",
+            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam.bai",
         )
     return bam_files

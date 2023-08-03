@@ -1,6 +1,6 @@
 rule magscot_prodigal_one:
     input:
-        assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
+        assembly=ASSEMBLY_RENAME / "{assembly_id}.fa",
     output:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         genes=MAGSCOT / "{assembly_id}/prodigal.ffn",
@@ -95,7 +95,7 @@ rule magscot_join_hmm_one:
 
 rule magscot_compose_contig_to_bin_concoct_one:
     input:
-        METAWRAP_BINNING / "{assembly_id}/concoct_bins",
+        BIN_METAWRAP / "{assembly_id}/concoct_bins",
     output:
         MAGSCOT / "{assembly_id}/concoct.contigs_to_bin.tsv",
     log:
@@ -115,7 +115,7 @@ rule magscot_compose_contig_to_bin_concoct_one:
 
 rule magscot_compose_contig_to_bin_maxbin2_one:
     input:
-        METAWRAP_BINNING / "{assembly_id}/maxbin2_bins",
+        BIN_METAWRAP / "{assembly_id}/maxbin2_bins",
     output:
         MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.tsv",
     log:
@@ -135,7 +135,7 @@ rule magscot_compose_contig_to_bin_maxbin2_one:
 
 rule magscot_compose_contig_to_bin_metabat2_one:
     input:
-        METAWRAP_BINNING / "{assembly_id}/metabat2_bins",
+        BIN_METAWRAP / "{assembly_id}/metabat2_bins",
     output:
         MAGSCOT / "{assembly_id}/metabat2.contigs_to_bin.tsv",
     log:
@@ -218,7 +218,7 @@ rule magscot_reformat_one:
 
 rule magscot_rename_one:
     input:
-        assembly=MEGAHIT_RENAMING / "{assembly_id}.fa",
+        assembly=ASSEMBLY_RENAME / "{assembly_id}.fa",
         clean=MAGSCOT / "{assembly_id}/magscot.reformat.tsv",
     output:
         fasta=MAGSCOT / "{assembly_id}.fa",

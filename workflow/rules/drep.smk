@@ -39,7 +39,7 @@ rule drep:
             --genomeInfo mags_formatted.csv
         2> {log}
 
-        for i in {config[workdir]}/drep/figures/*;
-            do mv $i {config[workdir]}/drep/figures/{config[dmb]}_$(basename "$i");
+        for i in {config[workdir]}/drep/figures/*; do
+            mv $i {config[workdir]}/drep/figures/{config[dmb]}_$(basename "$i");
         done
         """
