@@ -1,19 +1,3 @@
-rule reads_eval_fastqc_one:
-    input:
-        fq=READS / "{sample}.{library}_{end}.fq.gz",
-    output:
-        html=READS / "{sample}.{library}_{end}_fastqc.html",
-        zip_=READS / "{sample}.{library}_{end}_fastqc.zip",
-    log:
-        READS / "{sample}.{library}_{end}_fastqc.log",
-    conda:
-        "../envs/reads.yml"
-    shell:
-        """
-        fastqc --outdir {READS} {input.fq} &> {log}
-        """
-
-
 rule reads_eval:
     input:
         [

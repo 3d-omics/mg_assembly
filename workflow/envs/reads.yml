@@ -6,4 +6,3 @@ channels:
   - defaults
 dependencies:
   - coreutils=9.3
-  - fastqc=0.12.1
