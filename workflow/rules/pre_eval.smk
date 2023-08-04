@@ -103,7 +103,7 @@ rule pre_eval_singlem:
             SINGLEM / f"{sample_id}.{library_id}.archive.json"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
-        data=features["singlem"]["data"],
+        database=features["singlem_database"],
     output:
         condense=SINGLEM / "singlem.tsv",
     log:
@@ -117,7 +117,7 @@ rule pre_eval_singlem:
         singlem condense \
             --input-archive-otu-tables {input.archive_otu_tables} \
             --taxonomic-profile {output.condense} \
-            --metapackage {input.data} \
+            --metapackage {input.database} \
         2> {log} 1>&2
         """
 
