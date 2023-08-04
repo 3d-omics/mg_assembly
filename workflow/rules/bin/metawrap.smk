@@ -62,7 +62,7 @@ rule bin_metawrap_binning_one:
         concoct_bins=directory(BIN_METAWRAP / "{assembly_id}/concoct_bins"),
     log:
         BIN_METAWRAP / "{assembly_id}.log",
-    singularity:
+    container:
         "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
     threads: 8
     params:
