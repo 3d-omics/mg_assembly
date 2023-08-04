@@ -228,7 +228,7 @@ rule magscot_rename_one:
     output:
         fasta=MAGSCOT / "{assembly_id}.fa",
     log:
-        MAGSCOT / "{assembly_id}/magscot.refined.log",
+        MAGSCOT / "{assembly_id}/magscot.rename.log",
     conda:
         "../../envs/metabin.yml"
     shell:
