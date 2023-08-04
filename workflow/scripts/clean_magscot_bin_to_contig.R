@@ -21,21 +21,29 @@ args <- parser$parse_args()
 input_file <- args$input_file
 output_file <- args$output_file
 output_folder <- dirname(output_file)
+print(args)
 
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 
+input_file <- "results/metabin/magscot/sample1/magscot.refined.contig_to_bin.out"
+# output_file <- "test.tsv"
 raw_magscot <- read_tsv(input_file)
+
+# can't use map_chr(-1) so we have to find the position
+bin_location <-
+  raw_magscot$binnew[1] %>% str_split("/") %>% .[[1]] %>% length()
 
 raw_magscot %>%
   mutate(
     binnew = binnew %>%
       str_split("/") %>%
-      map_chr(-1) %>%
-      str_remove("magscot_cleanbin_"),
+      map_chr(bin_location) %>%
+      str_remove("magscot_cleanbin_")
   ) %>%
   separate(
     col = contig,
     into = c("assembly_id", "contig_id"),
+    sep = "\\.",
     remove = FALSE
   ) %>%
   mutate(
