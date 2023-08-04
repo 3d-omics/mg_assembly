@@ -103,7 +103,7 @@ rule dereplicate_eval_coverm_genome:
     log:
         DREP_COVERM / "genome.log",
     conda:
-        "../envs/assembly.yml"
+        "../envs/dereplicate.yml"
     params:
         input_dir=DREP_COVERM / "genome/",
     shell:
