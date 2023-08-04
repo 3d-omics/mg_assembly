@@ -149,48 +149,6 @@ rule assemble_bowtie2_all:
         ],
 
 
-rule assemble_cram_to_bam_one:
-    """Convert cram to bam
-
-    Note: this step is needed because coverm probably does not support cram. The
-    log from coverm shows failures to get the reference online, but nonetheless
-    it works.
-    """
-    input:
-        cram=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
-        crai=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
-        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
-    output:
-        bam=temp(ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
-    log:
-        ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
-    conda:
-        "../envs/assemble.yml"
-    threads: 24
-    resources:
-        runtime=1 * 60,
-        mem_mb=4 * 1024,
-    shell:
-        """
-        samtools view \
-            -F 4 \
-            --threads {threads} \
-            --reference {input.reference} \
-            --output {output.bam} \
-            --fast \
-            {input.cram} \
-        2> {log}
-        """
-
-
-rule assemble_cram_to_bam_all:
-    input:
-        [
-            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
-            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
-        ],
-
-
 rule assemble_run:
     input:
-        rules.assemble_cram_to_bam_all.input,
+        rules.assemble_bowtie2_all.input,
