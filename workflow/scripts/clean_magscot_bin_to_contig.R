@@ -25,8 +25,6 @@ print(args)
 
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 
-input_file <- "results/metabin/magscot/sample1/magscot.refined.contig_to_bin.out"
-# output_file <- "test.tsv"
 raw_magscot <- read_tsv(input_file)
 
 # can't use map_chr(-1) so we have to find the position
