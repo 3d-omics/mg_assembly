@@ -13,7 +13,7 @@ rule assemble_megahit_one:
     log:
         log=MEGAHIT / "{assembly_id}.log",
     conda:
-        "../envs/assembly.yml"
+        "../envs/assemble.yml"
     threads: 16
     resources:
         mem_mb=64 * 1024,
@@ -56,7 +56,7 @@ rule assemble_megahit_renaming_one:
     log:
         ASSEMBLY_RENAME / "{assembly_id}.log",
     conda:
-        "../envs/assembly.yml"
+        "../envs/assemble.yml"
     params:
         assembly_id=lambda wildcards: wildcards.assembly_id,
     shell:
@@ -80,7 +80,7 @@ rule assemble_bowtie2_build_one:
     log:
         ASSEMBLY_INDEX / "{assembly_id}.log",
     conda:
-        "../envs/assembly.yml"
+        "../envs/assemble.yml"
     threads: 24
     params:
         extra=params["assemble"]["bowtie2-build"]["extra"],
@@ -111,7 +111,7 @@ rule assemble_bowtie2_one:
     log:
         log=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "../envs/assembly.yml"
+        "../envs/assemble.yml"
     threads: 24
     params:
         extra=params["assemble"]["bowtie2"]["extra"],
@@ -165,7 +165,7 @@ rule assemble_cram_to_bam_one:
     log:
         ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
     conda:
-        "../envs/assembly.yml"
+        "../envs/assemble.yml"
     threads: 24
     resources:
         runtime=1 * 60,
