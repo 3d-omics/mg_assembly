@@ -14,7 +14,7 @@ PRE_COVERM = PRE / "coverm/"
 
 
 # assemble
-ASSEMBLE = Path("results/assembly/")
+ASSEMBLE = Path("results/assemble/")
 MEGAHIT = ASSEMBLE / "megahit/"
 ASSEMBLE_RENAME = ASSEMBLE / "renaming/"
 ASSEMBLE_INDEX = ASSEMBLE / "index/"
