@@ -4,21 +4,28 @@ rule magscot_prodigal_one:
     output:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         genes=MAGSCOT / "{assembly_id}/prodigal.ffn",
-        txt=MAGSCOT / "{assembly_id}/prodigal.txt",
     log:
         MAGSCOT / "{assembly_id}/prodigal.log",
     conda:
         "../../envs/metabin.yml"
-    threads: 1
+    threads: 24
     shell:
         """
-        prodigal \
-            -i {input.assembly} \
-            -o {output.txt} \
-            -d {output.genes} \
-            -a {output.proteins} \
-            -p meta \
-        2> {log} 1>&2
+        (cat {input.assembly} \
+        | parallel \
+            --jobs {threads} \
+            --block 1M \
+            --recstart '>' \
+            --pipe \
+            prodigal \
+                -p meta \
+                -a {output.proteins}.{{#}}.faa \
+                -d {output.genes}.{{#}}.ffn \
+                -o /dev/null \
+        ) 2> {log} 1>&2
+        cat {output.proteins}.*.faa > {output.proteins} 2>> {log}
+        cat {output.genes}.*.ffn > {output.genes} 2>> {log}
+        rm -f {output.proteins}.*.faa {output.genes}.*.ffn 2>> {log} 2>&1
         """
 
 
@@ -27,17 +34,16 @@ rule magscot_hmmsearch_pfam_one:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         hmm=features["magscot"]["pfam_hmm"],
     output:
-        out=MAGSCOT / "{assembly_id}/pfam.out",
         tblout=MAGSCOT / "{assembly_id}/pfam.tblout",
     log:
         MAGSCOT / "{assembly_id}/pfam.log",
     conda:
         "../../envs/metabin.yml"
-    threads: 16
+    threads: 2
     shell:
         """
         hmmsearch \
-            -o {output.out} \
+            -o /dev/null \
             --tblout {output.tblout} \
             --noali \
             --notextw \
@@ -54,17 +60,16 @@ rule magscot_hmmsearch_tigr_one:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         hmm=features["magscot"]["tigr_hmm"],
     output:
-        out=MAGSCOT / "{assembly_id}/tigr.out",
         tblout=MAGSCOT / "{assembly_id}/tigr.tblout",
     log:
         MAGSCOT / "{assembly_id}/tigr.log",
     conda:
         "../../envs/metabin.yml"
-    threads: 16
+    threads: 2
     shell:
         """
         hmmsearch \
-            -o {output.out} \
+            -o /dev/null \
             --tblout {output.tblout} \
             --noali \
             --notextw \
