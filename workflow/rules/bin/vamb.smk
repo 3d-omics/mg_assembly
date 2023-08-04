@@ -21,7 +21,7 @@ include: "vamb_functions.smk"
 
 rule vamb_concatenate_one:
     input:
-        assembly=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
         concatenated=VAMB / "concatenated" / "{assembly_id}.fa.gz",
     log:

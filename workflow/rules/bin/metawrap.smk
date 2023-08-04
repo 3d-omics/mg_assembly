@@ -55,7 +55,7 @@ rule bin_metawrap_binning_one:
         bam=BIN_METAWRAP / "{assembly_id}/work_files/{assembly_id}.bam",
         forward_=BIN_METAWRAP / "{assembly_id}/work_files/{assembly_id}_1.fastq",
         reverse_=BIN_METAWRAP / "{assembly_id}/work_files/{assembly_id}_2.fastq",
-        assembly=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
         metabat2_bins=directory(BIN_METAWRAP / "{assembly_id}/metabat2_bins"),
         maxbin2_bins=directory(BIN_METAWRAP / "{assembly_id}/maxbin2_bins"),

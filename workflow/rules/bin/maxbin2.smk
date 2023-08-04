@@ -25,7 +25,7 @@ rule maxbin2_prepare_one:
 
 rule maxbin2_run_one:
     input:
-        assembly=ASSEMBLY_BOWTIE2 / "{assembly_id}.fa",
+        assembly=ASSEMBLE_BOWTIE2 / "{assembly_id}.fa",
         coverage=MAXBIN2 / "prepare" / "{assembly_id}.coverage",
     output:
         outdir=directory(MAXBIN2 / "bins" / "{assembly_id}/"),

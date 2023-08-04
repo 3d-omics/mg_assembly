@@ -23,7 +23,7 @@ rule metabat2_prepare_one:
 
 rule metabat2_run_one:
     input:
-        assembly=ASSEMBLY_BOWTIE2 / "{assembly_id}.fa",
+        assembly=ASSEMBLE_BOWTIE2 / "{assembly_id}.fa",
         depth=METABAT2 / "prepare/{assembly_id}.depth",
     output:
         bins=directory(METABAT2 / "bins/{assembly_id}/"),

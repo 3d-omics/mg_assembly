@@ -4,7 +4,7 @@ def get_bams_for_metawrap_metawrap_prepare(wildcards):
     bam_files = []
     for sample_id, library_id in samples_in_assembly:
         bam_files.append(
-            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam",
+            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam",
         )
     return bam_files
 

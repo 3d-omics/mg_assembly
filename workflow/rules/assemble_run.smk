@@ -52,9 +52,9 @@ rule assemble_megahit_renaming_one:
     input:
         MEGAHIT / "{assembly_id}/final.contigs.fa",
     output:
-        ASSEMBLY_RENAME / "{assembly_id}.fa",
+        ASSEMBLE_RENAME / "{assembly_id}.fa",
     log:
-        ASSEMBLY_RENAME / "{assembly_id}.log",
+        ASSEMBLE_RENAME / "{assembly_id}.log",
     conda:
         "../envs/assemble.yml"
     params:
@@ -74,11 +74,11 @@ rule assemble_bowtie2_build_one:
     Index megahit assembly
     """
     input:
-        contigs=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        contigs=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
-        mock=touch(ASSEMBLY_INDEX / "{assembly_id}"),
+        mock=touch(ASSEMBLE_INDEX / "{assembly_id}"),
     log:
-        ASSEMBLY_INDEX / "{assembly_id}.log",
+        ASSEMBLE_INDEX / "{assembly_id}.log",
     conda:
         "../envs/assemble.yml"
     threads: 24
@@ -97,19 +97,19 @@ rule assemble_bowtie2_build_one:
 
 rule assemble_bowtie2_build_all:
     input:
-        [ASSEMBLY_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+        [ASSEMBLE_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
 rule assemble_bowtie2_one:
     input:
-        mock=ASSEMBLY_INDEX / "{assembly_id}",
+        mock=ASSEMBLE_INDEX / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
-        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
-        cram=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
     log:
-        log=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
+        log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
         "../envs/assemble.yml"
     threads: 24
@@ -144,7 +144,7 @@ rule assemble_bowtie2_one:
 rule assemble_bowtie2_all:
     input:
         [
-            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
 

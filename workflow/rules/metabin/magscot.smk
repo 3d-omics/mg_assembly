@@ -1,6 +1,6 @@
 rule magscot_prodigal_one:
     input:
-        assembly=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         genes=MAGSCOT / "{assembly_id}/prodigal.ffn",
@@ -223,7 +223,7 @@ rule magscot_reformat_one:
 
 rule magscot_rename_one:
     input:
-        assembly=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         clean=MAGSCOT / "{assembly_id}/magscot.reformat.tsv",
     output:
         fasta=MAGSCOT / "{assembly_id}.fa",

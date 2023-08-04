@@ -101,13 +101,13 @@ rule samtools_stats_cram_pre:
 
 rule samtools_stats_cram_assembly:
     input:
-        cram=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
-        crai=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
-        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        crai=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
+        reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
-        txt=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.txt",
+        txt=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.txt",
     log:
-        ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.log",
+        ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.log",
     conda:
         "../envs/helpers.yml"
     shell:

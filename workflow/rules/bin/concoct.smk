@@ -3,7 +3,7 @@ include: "concoct_functions.smk"
 
 rule concoct_cut_up_fasta_one:
     input:
-        assembly=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
         assembly_10k=CONCOCT / "prepare" / "{assembly_id}.cut.fa",
         bed_10k=CONCOCT / "prepare" / "{assembly_id}.cut.bed",
@@ -85,7 +85,7 @@ rule concoct_merge_cutup_clustering_one:
 
 rule concoct_extract_fasta_bins_one:
     input:
-        assembly=ASSEMBLY_BOWTIE2 / "{assembly_id}.fa",
+        assembly=ASSEMBLE_BOWTIE2 / "{assembly_id}.fa",
         clustering_merged=CONCOCT / "merge" / "{assembly_id}.csv",
     output:
         bins=CONCOCT / "fasta_bins" / "{assembly_id}/",

@@ -6,13 +6,13 @@ rule assemble_eval_cram_to_bam_one:
     it works.
     """
     input:
-        cram=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
-        crai=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
-        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        crai=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
+        reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
-        bam=temp(ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
+        bam=temp(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
-        ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
+        ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
     conda:
         "../envs/assemble.yml"
     threads: 24
@@ -35,7 +35,7 @@ rule assemble_eval_cram_to_bam_one:
 rule assemble_eval_cram_to_bam_all:
     input:
         [
-            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
+            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
 
@@ -43,14 +43,14 @@ rule assemble_eval_cram_to_bam_all:
 rule assemble_eval_coverm_contig_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
-        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
+        reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
-        tsv=ASSEMBLY_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
+        tsv=ASSEMBLE_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
         "../envs/assemble.yml"
     log:
-        ASSEMBLY_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.log",
+        ASSEMBLE_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.log",
     params:
         methods=params["assemble"]["coverm"]["genome"]["methods"],
         min_covered_fraction=params["assemble"]["coverm"]["genome"][
@@ -70,17 +70,17 @@ rule assemble_eval_coverm_contig_one:
 rule assemble_eval_coverm_aggregate_contig:
     input:
         tsvs=[
-            ASSEMBLY_COVERM / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
+            ASSEMBLE_COVERM / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
     output:
-        tsv=ASSEMBLY_COVERM / "contig.tsv",
+        tsv=ASSEMBLE_COVERM / "contig.tsv",
     log:
-        ASSEMBLY_COVERM / "contig.log",
+        ASSEMBLE_COVERM / "contig.log",
     conda:
         "../envs/assemble.yml"
     params:
-        input_dir=ASSEMBLY_COVERM / "contig",
+        input_dir=ASSEMBLE_COVERM / "contig",
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -93,14 +93,14 @@ rule assemble_eval_coverm_aggregate_contig:
 rule assemble_eval_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=ASSEMBLY_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
-        reference=ASSEMBLY_RENAME / "{assembly_id}.fa",
+        bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
+        reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
-        tsv=ASSEMBLY_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
+        tsv=ASSEMBLE_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
         "../envs/assemble.yml"
     log:
-        ASSEMBLY_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
+        ASSEMBLE_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
     params:
         methods=params["assemble"]["coverm"]["genome"]["methods"],
         min_covered_fraction=params["assemble"]["coverm"]["genome"][
@@ -121,17 +121,17 @@ rule assemble_eval_coverm_genome_one:
 rule assemble_eval_coverm_aggregate_genome:
     input:
         tsvs=[
-            ASSEMBLY_COVERM / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
+            ASSEMBLE_COVERM / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
     output:
-        tsv=ASSEMBLY_COVERM / "genome.tsv",
+        tsv=ASSEMBLE_COVERM / "genome.tsv",
     log:
-        ASSEMBLY_COVERM / "genome.log",
+        ASSEMBLE_COVERM / "genome.log",
     conda:
         "../envs/assemble.yml"
     params:
-        input_dir=ASSEMBLY_COVERM / "genome",
+        input_dir=ASSEMBLE_COVERM / "genome",
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -144,11 +144,11 @@ rule assemble_eval_coverm_aggregate_genome:
 rule assemble_eval_quast_one:
     """Run quast over one assembly group"""
     input:
-        ASSEMBLY_RENAME / "{assembly_id}.fa",
+        ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
-        directory(ASSEMBLY_QUAST / "{assembly_id}"),
+        directory(ASSEMBLE_QUAST / "{assembly_id}"),
     log:
-        ASSEMBLY_QUAST / "{assembly_id}.log",
+        ASSEMBLE_QUAST / "{assembly_id}.log",
     conda:
         "../envs/assemble.yml"
     threads: 4
@@ -168,13 +168,13 @@ rule assemble_eval_quast_one:
 rule assemble_eval_quast_all:
     """Run quast over all assembly groups"""
     input:
-        [ASSEMBLY_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+        [ASSEMBLE_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
 rule assemble_eval_samtools:
     input:
         [
-            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{extension}"
+            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{extension}"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
             for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
         ],

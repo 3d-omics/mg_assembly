@@ -1,32 +1,32 @@
 READS = Path("results/reads/")
 
-# preprocessing
-PRE = Path("results/preprocessing/")
+# preprocess
+PRE = Path("results/preprocess/")
 FASTP = PRE / "fastp/"
 PRE_INDEX = PRE / "index/"
 PRE_BOWTIE2 = PRE / "bowtie2"
 NONHOST = PRE / "nonhost/"
 
-# preprocessing evaluation
+# preprocess evaluation
 NONPAREIL = PRE / "nonpareil/"
 SINGLEM = PRE / "singlem/"
 PRE_COVERM = PRE / "coverm/"
 
 
-# assembly
-ASSEMBLY = Path("results/assembly/")
-MEGAHIT = ASSEMBLY / "megahit/"
-ASSEMBLY_RENAME = ASSEMBLY / "renaming/"
-ASSEMBLY_INDEX = ASSEMBLY / "index/"
-ASSEMBLY_BOWTIE2 = ASSEMBLY / "bowtie2/"
+# assemble
+ASSEMBLE = Path("results/assembly/")
+MEGAHIT = ASSEMBLE / "megahit/"
+ASSEMBLE_RENAME = ASSEMBLE / "renaming/"
+ASSEMBLE_INDEX = ASSEMBLE / "index/"
+ASSEMBLE_BOWTIE2 = ASSEMBLE / "bowtie2/"
 
 # Assembly evaluation
-ASSEMBLY_QUAST = ASSEMBLY / "quast/"
-ASSEMBLY_COVERM = ASSEMBLY / "coverm/"
+ASSEMBLE_QUAST = ASSEMBLE / "quast/"
+ASSEMBLE_COVERM = ASSEMBLE / "coverm/"
 
 
 # binners
-BIN = Path("results/binning/")
+BIN = Path("results/bin/")
 VAMB = BIN / "vamb/"  # This could be a metabinner
 CONCOCT = BIN / "concoct/"
 METABAT2 = BIN / "metabat2/"
@@ -37,7 +37,7 @@ BIN_METAWRAP = BIN / "metawrap/"
 
 
 # metabinners
-METABIN = Path("results/metabinning/")
+METABIN = Path("results/metabin/")
 MAGSCOT = METABIN / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
 METABIN_METAWRAP = METABIN / "metawrap/"
