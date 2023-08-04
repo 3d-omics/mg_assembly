@@ -71,7 +71,7 @@ rule metabin_eval_coverm_genome:
     log:
         METABIN_COVERM / "genome.log",
     conda:
-        "../envs/assembly.yml"
+        "../envs/metabin.yml"
     params:
         input_dir=METABIN_COVERM / "genome/",
     shell:
