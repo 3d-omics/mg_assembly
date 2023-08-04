@@ -10,8 +10,8 @@ rule metawrap_refinement_one:
         bins_folder=directory(METABIN_METAWRAP / "{assembly_id}_bins"),
     log:
         METABIN_METAWRAP / "{assembly_id}.log",
-    singularity:
-        "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
+    container:
+        "docker://quay.io/biocontainers/metawrap-mg:1.3.0--hdfd78af_1"
     threads: 16
     params:
         completeness=params["metabin"]["metawrap"]["refinement"]["completeness"],

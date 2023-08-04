@@ -48,8 +48,8 @@ rule bin_metawrap_binning_one:
     """Run metawrap over one assembly group
     Note: metawrap works with fastq files, but we can trick it into working by
     creating mock fastq and reference files. h/t: Raphael Eisenhofer
-    Note2: metawrap is rotten. It is written in py27 and has a lot unmetabel dependencies in conda.
-    Using a singularity container instead.
+    Note2: metawrap is rotten. It is written in py27 and has a lot unmetable dependencies in conda.
+    Using a docker container instead.
     """
     input:
         bam=BIN_METAWRAP / "{assembly_id}/work_files/{assembly_id}.bam",
@@ -63,7 +63,7 @@ rule bin_metawrap_binning_one:
     log:
         BIN_METAWRAP / "{assembly_id}.log",
     container:
-        "https://depot.galaxyproject.org/singularity/metawrap-mg:1.3.0--hdfd78af_1"
+        "docker://quay.io/biocontainers/metawrap-mg:1.3.0--hdfd78af_1"
     threads: 8
     params:
         min_length=params["bin"]["metawrap"]["binning"]["min_length"],
