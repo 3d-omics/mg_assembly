@@ -189,7 +189,7 @@ rule magscot_run_one:
         out_prefix=lambda wildcards: MAGSCOT / f"{wildcards.assembly_id}/magscot",
     shell:
         """
-        Rscript --no-init-file --no-site-file workflow/scripts/MAGScoT/MAGScoT.R \
+        Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \
             --input {input.contigs_to_bin} \
             --hmm {input.hmm} \
             --out {params.out_prefix} \
@@ -209,7 +209,7 @@ rule magscot_reformat_one:
         "../../envs/metabin.yml"
     shell:
         """
-        Rscript --no-init-file --no-site-file workflow/scripts/clean_magscot_bin_to_contig.R \
+        Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
             --input-file {input.refined_contig_to_bin} \
             --output-file {output.clean} \
         2> {log} 1>&2
