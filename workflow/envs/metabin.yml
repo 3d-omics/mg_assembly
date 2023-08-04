@@ -5,20 +5,19 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - seqtk=1.3
+  - biopython
+  - bowtie2
   - coverm=0.6.1
-  - bowtie2=2.5.1
-  - samtools=1.17
-  - quast=5.2.0
   - dram=1.4.6
   - gtdbtk=2.3.2
-  - r-optargs
-  - r-argparse
-  - r-tidyverse
-  - prodigal
   - hmmer
-  - parallel
-  - r-optparse
-  - r-funr
-  - biopython
   - pandas
+  - parallel
+  - prodigal
+  - quast=5.2.0
+  - r-argparse
+  - r-funr
+  - r-optparse
+  - r-tidyverse
+  - samtools
+  - seqtk
