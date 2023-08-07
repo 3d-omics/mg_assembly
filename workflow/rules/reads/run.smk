@@ -9,7 +9,7 @@ rule reads_link:
     log:
         READS / "{sample}.{library}.log",
     conda:
-        "../envs/reads.yml"
+        "reads.yml"
     shell:
         """
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_}
