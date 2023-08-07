@@ -7,3 +7,4 @@ renv.lock
 .cache/
 .ipynb_checkpoints/
 .Rprofile
+report
