@@ -70,3 +70,4 @@ DREP_DRAM = DEREPLICATE / "dram/"
 # reports
 REPORT = Path("report/")
 REPORT_STEP = REPORT / "by_step/"
+REPORT_ASSEMBLY = REPORT / "by_assembly/"
