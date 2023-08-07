@@ -1,3 +1,4 @@
+# FastQC fastp ----
 rule pre_eval_fastp_fastqc:
     """Run fastqc over all libraries after fastp"""
     input:
@@ -9,6 +10,7 @@ rule pre_eval_fastp_fastqc:
         ],
 
 
+# Nonpareil ----
 rule pre_eval_nonpareil_one:
     """Run nonpareil over one sample
 
@@ -71,6 +73,7 @@ rule pre_eval_nonpareil:
         """
 
 
+# SingleM ----
 rule pre_eval_singlem_pipe_one:
     """Run singlem over one sample
 
@@ -133,6 +136,7 @@ rule pre_eval_singlem:
         """
 
 
+# Coverm ----
 rule pre_eval_cram_to_mapped_bam:
     """Convert cram to bam
 
@@ -224,30 +228,24 @@ rule pre_eval_samtools:
         ],
 
 
-rule pre_eval_fastqc_fastp:
+# FastQC nonhost ----
+rule pre_eval_nonhost_fastqc:
+    """Run fastqc over all libraries after fastp"""
     input:
         [
-            FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
+            NONHOST / f"{sample_id}.{library_id}_{end}_fastqc.{extension}"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for end in ["1", "2"]
-        ],
-
-
-rule pre_eval_fastqc_nonhost:
-    input:
-        [
-            NONHOST / f"{sample_id}.{library_id}_{end}.fq.gz"
-            for sample_id, library_id in SAMPLE_LIBRARY
-            for end in ["1", "2"]
+            for end in "1 2".split(" ")
+            for extension in "html zip".split(" ")
         ],
 
 
 rule pre_eval:
     input:
+        rules.pre_eval_fastp_fastqc.input,
         rules.pre_eval_coverm.output,
         rules.pre_eval_samtools.input,
-        rules.pre_eval_fastqc_fastp.input,
-        rules.pre_eval_fastqc_nonhost.input,
+        rules.pre_eval_nonhost_fastqc.input,
 
 
 rule pre_eval_with_singlem:
