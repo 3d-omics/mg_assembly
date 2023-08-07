@@ -153,7 +153,7 @@ rule metabin_eval_quast_one:
         """
 
 
-rule metabin_eval_quast_all:
+rule metabin_eval_quast:
     """Run quast over all assembly groups"""
     input:
         [METABIN_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],
@@ -258,7 +258,7 @@ rule metabin_eval:
     input:
         rules.metabin_eval_coverm_contig.output,
         rules.metabin_eval_coverm_genome.output,
-        rules.metabin_eval_quast_all.input,
+        rules.metabin_eval_quast.input,
         rules.metabin_eval_samtools.input,
 
 
