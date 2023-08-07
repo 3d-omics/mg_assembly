@@ -36,7 +36,7 @@ assemble:
     genome:
       methods: "count"
       min_covered_fraction: 0.0
-      separator: "."
+      separator: "@"
     contig:
       methods: "count"
 
@@ -63,7 +63,7 @@ bin:
     genome:
       methods: "count"
       min_covered_fraction: 0.0
-      separator: "-"
+      separator: "@"
     contig:
       methods: "count"
 
@@ -79,7 +79,7 @@ metabin:
     genome:
       methods: "count"
       min_covered_fraction: 0.0
-      separator: "-"
+      separator: "@"
     contig:
       methods: "count"
   quast:
@@ -97,7 +97,7 @@ dereplicate:
     genome:
       methods: "count"
       min_covered_fraction: 0.0
-      separator: "-"
+      separator: "@"
     contig:
       methods: "count"
   quast:

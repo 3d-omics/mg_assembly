@@ -25,7 +25,10 @@ print(args)
 
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 
+# input_file <- "results/metabin/magscot/all/magscot.refined.contig_to_bin.out"
+
 raw_magscot <- read_tsv(input_file)
+
 
 # can't use map_chr(-1) so we have to find the position
 bin_location <-
@@ -40,11 +43,17 @@ raw_magscot %>%
   ) %>%
   separate(
     col = contig,
-    into = c("assembly_id", "contig_id"),
-    sep = "\\.",
+    into = c("tmp", "contig_id"),
+    sep = "@",
     remove = FALSE
   ) %>%
+  separate(
+    col = tmp,
+    into = c("assembly_id", "bin_id"),
+    sep = ":",
+    remove = TRUE
+  ) %>%
   mutate(
-    seqname = str_glue("{assembly_id}.bin_{binnew}.{contig_id}")
+    seqname = str_glue("{assembly_id}:bin_{binnew}@{contig_id}")
   ) %>%
   write_tsv(output_file)

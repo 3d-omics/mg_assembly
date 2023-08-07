@@ -61,11 +61,12 @@ rule assemble_megahit_renaming_one:
         assembly_id=lambda wildcards: wildcards.assembly_id,
     shell:
         """
-        seqtk rename \
-            {input} \
-            {params.assembly_id}.contig \
+        ( seqtk seq {input} \
         | cut -f 1 -d " " \
-        > {output} 2> {log}
+        | paste - - \
+        | awk '{{printf(">{params.assembly_id}:bin_NA@contig_%08d\\n%s\\n", NR, $2)}}' \
+        > {output} \
+        ) 2> {log}
         """
 
 

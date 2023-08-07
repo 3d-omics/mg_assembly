@@ -6,6 +6,16 @@ include: "bin/functions.smk"
 include: "bin/metawrap/run.smk"
 
 
-rule bin:
+rule bin_run:
     input:
         rules.bin_metawrap.input,
+
+
+# rule bin_eval:
+#     input:
+#         None
+
+
+rule bin:
+    input:
+        rules.bin_run.input,
