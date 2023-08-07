@@ -17,7 +17,7 @@ rule pre_eval_nonpareil_one:
     log:
         NONPAREIL / "{sample_id}.{library_id}.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     params:
         prefix=compose_prefix_for_nonpareil,
     resources:
@@ -48,7 +48,7 @@ rule pre_eval_nonpareil:
     log:
         NONPAREIL / "nonpareil.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     params:
         input_dir=NONPAREIL,
     shell:
@@ -77,7 +77,7 @@ rule pre_eval_singlem_pipe_one:
     log:
         SINGLEM / "{sample_id}.{library_id}.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     threads: 4
     resources:
         runtime=4 * 60,
@@ -109,7 +109,7 @@ rule pre_eval_singlem:
     log:
         SINGLEM / "singlem.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     params:
         input_dir=SINGLEM,
     shell:
@@ -137,7 +137,7 @@ rule pre_eval_cram_to_mapped_bam:
     log:
         PRE_COVERM / "bams/{sample}.{library_id}.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     threads: 24
     resources:
         runtime=1 * 60,
@@ -162,7 +162,7 @@ rule pre_eval_coverm_genome_one:
     output:
         tsv=touch(PRE_COVERM / "genome/{sample}.{library_id}.tsv"),
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     log:
         PRE_COVERM / "genome/{sample}.{library_id}.log",
     params:
@@ -192,7 +192,7 @@ rule pre_eval_coverm:
     log:
         PRE_COVERM / "coverm.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     params:
         input_dir=PRE_COVERM / "genome",
     shell:

@@ -13,7 +13,7 @@ rule pre_fastp_trim_one:
     log:
         FASTP / "{sample_id}.{library_id}.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     params:
         adapter_forward=get_forward_adapter,
         adapter_reverse=get_reverse_adapter,
@@ -64,7 +64,7 @@ rule pre_fastp_fastqc_one:
     log:
         FASTP / "{sample_id}.{library_id}_{end}_fastqc.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     shell:
         """
         fastqc \
@@ -99,7 +99,7 @@ rule pre_bowtie2_index_host:
     log:
         PRE_INDEX / "host_index.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     params:
         extra=params["pre"]["bowtie2-build"]["extra"],
     threads: 8
@@ -132,7 +132,7 @@ rule pre_bowtie2_map_host_one:
     log:
         PRE_BOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     params:
         extra=params["pre"]["bowtie2"]["extra"],
         samtools_mem=params["pre"]["bowtie2"]["samtools"]["mem_per_thread"],
@@ -186,7 +186,7 @@ rule pre_bowtie2_extract_nonhost_one:
     log:
         NONHOST / "{sample_id}.{library_id}.log",
     conda:
-        "../envs/pre.yml"
+        "pre.yml"
     threads: 24
     resources:
         runtime=1 * 60,

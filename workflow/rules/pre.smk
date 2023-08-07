@@ -1,6 +1,6 @@
-include: "pre_functions.smk"
-include: "pre_run.smk"
-include: "pre_eval.smk"
+include: "pre/functions.smk"
+include: "pre/run.smk"
+include: "pre/eval.smk"
 
 
 rule pre:
