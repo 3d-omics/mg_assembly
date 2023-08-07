@@ -110,9 +110,43 @@ rule report_step_metabin:
         """
 
 
+rule report_step_dereplicate:
+    """Collect all reports for the dereplicate step"""
+    input:
+        rules.dereplicate_eval_quast.input,
+        rules.dereplicate_eval_samtools.input,
+    output:
+        html=REPORT_STEP / "dereplicate.html",
+    log:
+        REPORT_STEP / "dereplicate.log",
+    conda:
+        "report.yml"
+    params:
+        dir=REPORT_STEP,
+    shell:
+        """
+        multiqc \
+            --title dereplicate \
+            --force \
+            --filename dereplicate \
+            --outdir {params.dir} \
+            --dirs \
+            --dirs-depth 1 \
+            {input} \
+        2> {log} 1>&2
+        """
+
+
 rule report_step:
     input:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocessing.html",
         REPORT_STEP / "assemble.html",
+        # REPORT_STEP / "bin.html",
         REPORT_STEP / "metabin.html",
+
+
+rule report_step_with_dereplicate:
+    input:
+        rules.report_step.input,
+        REPORT_STEP / "dereplicate.html",

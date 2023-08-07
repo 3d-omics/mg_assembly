@@ -195,8 +195,8 @@ rule dereplicate_eval_quast:
 rule dereplicate_eval_samtools:
     input:
         [
-            DREP_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{extension}"
-            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            DREP_BOWTIE2 / f"dereplicated_genomes.{sample_id}.{library_id}.{extension}"
+            for sample_id, library_id in SAMPLE_LIBRARY
             for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
         ],
 
