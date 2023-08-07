@@ -156,7 +156,7 @@ localrules:
     report_step_reads,
     report_step_pre,
     report_step_assemble,
-    report_step_bin,
+    # report_step_bin,
     report_step_metabin,
     report_step,
     report_step_with_dereplicate,
