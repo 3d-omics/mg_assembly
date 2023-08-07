@@ -165,6 +165,8 @@ rule metabin_eval_gtdbtk_one:
         database=features["gtdbtk_database"],
     output:
         outdir=METABIN_GTDBTK / "{assembly_id}",
+    log:
+        METABIN_GTDBTK / "{assembly_id}.log",
     threads: 16
     resources:
         mem_mb=150 * 1024,
@@ -209,8 +211,6 @@ rule metabin_eval_dram_annotate_one:
             --output_dir {output.outdir} \
             --threads {threads} \
             --min_contig_size {params.min_contig_size} \
-            --rrna_path {output.rrnas} \
-            --trna_path {output.trnas} \
         2> {log} 1>&2
         """
 
