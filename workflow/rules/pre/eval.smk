@@ -253,7 +253,7 @@ rule pre_eval_kraken2_assign_one:
     log:
         log=KRAKEN2 / "{sample}.{library}.log",
     conda:
-        ""
+        "pre.yml"
     threads: 24
     resources:
         mem_mb=params["pre"]["kraken2"]["mem_mb"],
@@ -287,6 +287,7 @@ rule pre_eval:
         rules.pre_eval_coverm.output,
         rules.pre_eval_samtools.input,
         rules.pre_eval_nonhost_fastqc.input,
+        rules.pre_eval_kraken2.output,
 
 
 rule pre_eval_with_singlem:
@@ -299,9 +300,3 @@ rule pre_eval_with_nonpareil:
     input:
         rules.pre_eval.input,
         rules.pre_eval_nonpareil.output,
-
-
-rule pre_eval_with_kraken2:
-    input:
-        rules.pre_eval.input,
-        rules.pre_eval_kraken2.output,

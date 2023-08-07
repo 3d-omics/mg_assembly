@@ -22,7 +22,7 @@ dependencies:
   - smafa=0.7.1  # singlem
   - krona=2.8.1  # singlem
   - pyranges=0.0.129  # singlem
-  - kraken2=2.1.6
+  - kraken2=2.1.3
   - pip:
     - zenodo_backpack==0.2.0
     - "--editable=git+https://github.com/wwood/singlem.git@bf259fba764a8da59ee43dbd47b39da6cd2d9563#egg=singlem"
