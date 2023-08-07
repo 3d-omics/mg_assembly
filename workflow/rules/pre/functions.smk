@@ -26,7 +26,7 @@ def compose_rg_extra(wildcards):
     lb_field = f"LB:{sample_id}_{library_id}"
     pl_field = "PL:Illumina"
     sm_field = f"SM:{sample_id}"
-    return f"LB:{lb_field}\t" + f"PL:Illumina\t" + f"SM:{sm_field}"
+    return f"{lb_field}\t" + f"PL:Illumina\t" + f"{sm_field}"
 
 
 def compose_prefix_for_nonpareil(wildcards):
