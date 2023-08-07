@@ -14,7 +14,7 @@ rule assemble_eval_cram_to_bam_one:
     log:
         ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
     conda:
-        "../envs/assemble.yml"
+        "assemble.yml"
     threads: 24
     resources:
         runtime=1 * 60,
@@ -48,7 +48,7 @@ rule assemble_eval_coverm_contig_one:
     output:
         tsv=ASSEMBLE_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "../envs/assemble.yml"
+        "assemble.yml"
     log:
         ASSEMBLE_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.log",
     params:
@@ -78,7 +78,7 @@ rule assemble_eval_coverm_aggregate_contig:
     log:
         ASSEMBLE_COVERM / "contig.log",
     conda:
-        "../envs/assemble.yml"
+        "assemble.yml"
     params:
         input_dir=ASSEMBLE_COVERM / "contig",
     shell:
@@ -98,7 +98,7 @@ rule assemble_eval_coverm_genome_one:
     output:
         tsv=ASSEMBLE_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "../envs/assemble.yml"
+        "assemble.yml"
     log:
         ASSEMBLE_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
     params:
@@ -129,7 +129,7 @@ rule assemble_eval_coverm_aggregate_genome:
     log:
         ASSEMBLE_COVERM / "genome.log",
     conda:
-        "../envs/assemble.yml"
+        "assemble.yml"
     params:
         input_dir=ASSEMBLE_COVERM / "genome",
     shell:
@@ -150,7 +150,7 @@ rule assemble_eval_quast_one:
     log:
         ASSEMBLE_QUAST / "{assembly_id}.log",
     conda:
-        "../envs/assemble.yml"
+        "assemble.yml"
     threads: 4
     params:
         extra=params["assemble"]["quast"]["extra"],
