@@ -49,7 +49,7 @@ rule magscot_hmmsearch_pfam_one:
             --notextw \
             --cut_nc \
             --cpu {threads} \
-            resources/magscot/gtdbtk_rel207_tigrfam.hmm \
+            {input.hmm} \
             {input.proteins} \
         2> {log} 1>&2
         """
@@ -75,7 +75,7 @@ rule magscot_hmmsearch_tigr_one:
             --notextw \
             --cut_nc \
             --cpu {threads} \
-            resources/magscot/gtdbtk_rel207_tigrfam.hmm \
+            {input.hmm} \
             {input.proteins} \
         2> {log} 1>&2
         """
