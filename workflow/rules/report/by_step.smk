@@ -61,6 +61,8 @@ rule report_step_assemble:
         html=REPORT_STEP / "assemble.html",
     log:
         REPORT_STEP / "assemble.log",
+    conda:
+        "report.yml"
     params:
         dir=REPORT_STEP,
     shell:
@@ -77,8 +79,40 @@ rule report_step_assemble:
         """
 
 
+# rule report_step_bin:
+#     """Collect all reports for the bin step"""
+
+
+rule report_step_metabin:
+    """Collect all reports for the metabin step"""
+    input:
+        rules.metabin_eval_quast.input,
+        rules.metabin_eval_samtools.input,
+    output:
+        html=REPORT_STEP / "metabin.html",
+    log:
+        REPORT_STEP / "metabin.log",
+    conda:
+        "report.yml"
+    params:
+        dir=REPORT_STEP,
+    shell:
+        """
+        multiqc \
+            --title metabin \
+            --force \
+            --filename metabin \
+            --outdir {params.dir} \
+            --dirs \
+            --dirs-depth 1 \
+            {input} \
+        2> {log} 1>&2
+        """
+
+
 rule report_step:
     input:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocessing.html",
         REPORT_STEP / "assemble.html",
+        REPORT_STEP / "metabin.html",
