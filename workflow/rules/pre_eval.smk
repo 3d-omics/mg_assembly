@@ -69,7 +69,7 @@ rule pre_eval_singlem_pipe_one:
     input:
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
-        data=features["singlem"]["data"],
+        data=features["singlem_database"],
     output:
         archive_otu_table=SINGLEM / "{sample_id}.{library_id}.archive.json",
         otu_table=SINGLEM / "{sample_id}.{library_id}.otu_table.tsv",
