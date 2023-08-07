@@ -1,11 +1,7 @@
 rule report_step_reads:
     """Collect all reports for the reads step"""
     input:
-        [
-            READS / f"{sample}.{library}_{end}_fastqc.zip"
-            for sample, library in SAMPLE_LIBRARY
-            for end in ["1", "2"]
-        ],
+        rules.reads_eval_fastqc.input,
     output:
         html=REPORT_STEP / "reads.html",
     log:
@@ -49,6 +45,8 @@ rule report_step_pre:
             --force \
             --filename preprocessing \
             --outdir {params.dir} \
+            --dirs \
+            --dirs-depth 1 \
             {input} \
         2> {log} 1>&2
         """
