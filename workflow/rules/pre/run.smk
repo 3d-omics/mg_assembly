@@ -54,38 +54,6 @@ rule pre_fastp_trim_all:
         ],
 
 
-rule pre_fastp_fastqc_one:
-    """Run fastqc on one library from fastp output"""
-    input:
-        fq=FASTP / "{sample_id}.{library_id}_{end}.fq.gz",
-    output:
-        html=FASTP / "{sample_id}.{library_id}_{end}_fastqc.html",
-        zip_=FASTP / "{sample_id}.{library_id}_{end}_fastqc.zip",
-    log:
-        FASTP / "{sample_id}.{library_id}_{end}_fastqc.log",
-    conda:
-        "pre.yml"
-    shell:
-        """
-        fastqc \
-            --outdir {FASTP} \
-            --threads 1 \
-            {input.fq} \
-        2> {log} 1>&2
-        """
-
-
-rule pre_fastp_fastqc_all:
-    """Run fastqc over all libraries after fastp"""
-    input:
-        [
-            FASTP / f"{sample_id}.{library_id}_{end}_fastqc.{extension}"
-            for sample_id, library_id in SAMPLE_LIBRARY
-            for end in "1 2 u1 u2".split(" ")
-            for extension in "html zip".split(" ")
-        ],
-
-
 rule pre_bowtie2_index_host:
     """Build PRE_BOWTIE2 index for the human reference
 
