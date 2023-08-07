@@ -11,6 +11,7 @@ NONHOST = PRE / "nonhost/"
 NONPAREIL = PRE / "nonpareil/"
 SINGLEM = PRE / "singlem/"
 PRE_COVERM = PRE / "coverm/"
+KRAKEN2 = PRE / "kraken2/"
 
 
 # assemble

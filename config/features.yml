@@ -9,4 +9,5 @@ magscot:
 
 dram_database: "resources/mock_dram_db"
 gtdbtk_database: "resources/mock_gtdbtk_db"
-singlem_database: "resources/S3.2.0.GTDB_r214.metapackage_20230428.smpkg.zb_mock"
+singlem_database: "resources/mock_singlem_db"
+kraken2_database: "resources/mock_kraken2_db"

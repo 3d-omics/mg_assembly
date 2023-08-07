@@ -17,6 +17,8 @@ pre:
       separator: "^"
     contig:
       methods: "count"
+  kraken2:
+    mem_mb: 8000
 
 assemble:
   megahit:
