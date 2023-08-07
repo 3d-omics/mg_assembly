@@ -167,6 +167,8 @@ rule metabin_eval_gtdbtk_one:
         outdir=METABIN_GTDBTK / "{assembly_id}",
     log:
         METABIN_GTDBTK / "{assembly_id}.log",
+    conda:
+        "metabin.yml"
     threads: 16
     resources:
         mem_mb=150 * 1024,
