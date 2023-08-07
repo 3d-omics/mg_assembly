@@ -39,7 +39,7 @@ rule magscot_hmmsearch_pfam_one:
         MAGSCOT / "{assembly_id}/pfam.log",
     conda:
         "magscot.yml"
-    threads: 2
+    threads: 4
     shell:
         """
         hmmsearch \
@@ -65,7 +65,7 @@ rule magscot_hmmsearch_tigr_one:
         MAGSCOT / "{assembly_id}/tigr.log",
     conda:
         "magscot.yml"
-    threads: 2
+    threads: 4
     shell:
         """
         hmmsearch \
