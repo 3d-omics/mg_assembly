@@ -29,10 +29,7 @@ rule report_step_reads:
 rule report_step_pre:
     """Collect all reports for the fastp step"""
     input:
-        [
-            FASTP / f"{sample_id}.{library_id}_fastp.html"
-            for sample_id, library_id in SAMPLE_LIBRARY
-        ],
+        rules.pre_eval_fastp.input,
         rules.pre_eval_fastp_fastqc.input,
         rules.pre_eval_samtools.input,
         rules.pre_eval_nonhost_fastqc.input,

@@ -1,3 +1,12 @@
+# FASTP report files ----
+rule pre_eval_fastp:
+    input:
+        [
+            FASTP / f"{sample_id}.{library_id}_fastp.html"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],
+
+
 # FastQC fastp ----
 rule pre_eval_fastp_fastqc:
     """Run fastqc over all libraries after fastp"""
