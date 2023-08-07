@@ -65,3 +65,8 @@ DREP_GTDBTK = DEREPLICATE / "gtdbtk/"
 DREP_QUAST = DEREPLICATE / "quast/"
 DREP_COVERM = DEREPLICATE / "coverm/"
 DREP_DRAM = DEREPLICATE / "dram/"
+
+
+# reports
+REPORT = Path("report/")
+REPORT_STEP = REPORT / "by_step/"

@@ -36,6 +36,7 @@ include: "rules/assemble.smk"
 include: "rules/bin.smk"
 include: "rules/metabin.smk"
 include: "rules/dereplicate.smk"
+include: "rules/report.smk"
 
 
 rule all:
