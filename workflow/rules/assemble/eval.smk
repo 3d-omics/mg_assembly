@@ -165,7 +165,7 @@ rule assemble_eval_quast_one:
         """
 
 
-rule assemble_eval_quast_all:
+rule assemble_eval_quast:
     """Run quast over all assembly groups"""
     input:
         [ASSEMBLE_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],
@@ -182,7 +182,7 @@ rule assemble_eval_samtools:
 
 rule assemble_eval:
     input:
-        rules.assemble_eval_quast_all.input,
+        rules.assemble_eval_quast.input,
         rules.assemble_eval_coverm_aggregate_genome.output,
         rules.assemble_eval_coverm_aggregate_contig.output,
         rules.assemble_eval_samtools.input,

@@ -23,7 +23,7 @@ rule report_step_reads:
 
 
 rule report_step_pre:
-    """Collect all reports for the fastp step"""
+    """Collect all reports for the preprocessing step"""
     input:
         rules.pre_eval_fastp.input,
         rules.pre_eval_fastp_fastqc.input,
@@ -52,7 +52,33 @@ rule report_step_pre:
         """
 
 
+rule report_step_assemble:
+    """Collect all reports for the assemble step"""
+    input:
+        rules.assemble_eval_quast.input,
+        rules.assemble_eval_samtools.input,
+    output:
+        html=REPORT_STEP / "assemble.html",
+    log:
+        REPORT_STEP / "assemble.log",
+    params:
+        dir=REPORT_STEP,
+    shell:
+        """
+        multiqc \
+            --title assemble \
+            --force \
+            --filename assemble \
+            --outdir {params.dir} \
+            --dirs \
+            --dirs-depth 1 \
+            {input} \
+        2> {log} 1>&2
+        """
+
+
 rule report_step:
     input:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocessing.html",
+        REPORT_STEP / "assemble.html",
