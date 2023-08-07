@@ -259,6 +259,16 @@ rule metabin_eval:
         rules.metabin_eval_coverm_contig.output,
         rules.metabin_eval_coverm_genome.output,
         rules.metabin_eval_quast_all.input,
-        rules.metabin_eval_dram.input,
-        rules.metabin_eval_gtdbtk.input,
         rules.metabin_eval_samtools.input,
+
+
+rule metabin_eval_with_dram:
+    input:
+        rules.metabin_eval.input,
+        rules.metabin_eval_dram.input,
+
+
+rule metabin_eval_with_gtdbtk:
+    input:
+        rules.metabin_eval.input,
+        rules.metabin_eval_gtdbtk.input,
