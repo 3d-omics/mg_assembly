@@ -6,7 +6,7 @@ rule dereplicate_drep:
     log:
         DEREPLICATE / "drep.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     threads: 1
     params:
         out_dir=DREP,
@@ -30,7 +30,7 @@ rule dereplicate_join_genomes:
     log:
         DREP / "dereplicated_genomes.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     threads: 1
     shell:
         """
@@ -46,7 +46,7 @@ rule dereplicate_index_one:
     log:
         DREP_INDEX / "dereplicated_genomes.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     threads: 24
     params:
         extra=params["dereplicate"]["bowtie2-build"]["extra"],
@@ -72,7 +72,7 @@ rule dereplicate_bowtie2_build_one:
     log:
         DREP_INDEX / "dereplicated_genomes.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     threads: 24
     params:
         extra=params["dereplicate"]["bowtie2-build"]["extra"],
@@ -98,7 +98,7 @@ rule dereplicate_bowtie2_one:
     log:
         DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     threads: 24
     params:
         extra=params["dereplicate"]["bowtie2"]["extra"],

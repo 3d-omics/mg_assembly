@@ -12,7 +12,7 @@ rule dereplicate_eval_gtdbtk:
     log:
         DREP_GTDBTK / "gtdbtk.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     threads: 24
     resources:
         mem_mb=150 * 1024,
@@ -47,7 +47,7 @@ rule dereplicate_eval_cram_to_bam_one:
     log:
         DREP_BOWTIE2 / "{assembly_id},{sample_id}.{library_id}.bam.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     threads: 24
     resources:
         runtime=1 * 60,
@@ -72,7 +72,7 @@ rule dereplicate_eval_coverm_genome_one:
     output:
         tsv=DREP_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     log:
         DREP_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
     params:
@@ -103,7 +103,7 @@ rule dereplicate_eval_coverm_genome:
     log:
         DREP_COVERM / "genome.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     params:
         input_dir=DREP_COVERM / "genome/",
     shell:
@@ -127,7 +127,7 @@ rule dereplicate_eval_dram_annotate:
     log:
         DREP_DRAM / "annotate/dereplicated_genomes.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     params:
         min_contig_size=1500,
     threads: 24
@@ -155,7 +155,7 @@ rule dereplicate_eval_dram_distill:
     log:
         DREP_DRAM / "distill/dereplicated_genomes.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     shell:
         """
         DRAM.py distill \
@@ -177,7 +177,7 @@ rule dereplicate_eval_quast:
     log:
         DREP_QUAST / "dereplicated_genomes.log",
     conda:
-        "../envs/dereplicate.yml"
+        "dereplicate.yml"
     threads: 4
     params:
         extra=params["metabin"]["quast"]["extra"],
