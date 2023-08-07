@@ -276,7 +276,7 @@ rule pre_eval_kraken2_assign_one:
 rule pre_eval_kraken2:
     input:
         [
-            KRAKEN2 / f"{sample_id}.{library_id}.out.gz"
+            KRAKEN2 / f"{sample_id}.{library_id}.report"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
 
