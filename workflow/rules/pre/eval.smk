@@ -244,9 +244,19 @@ rule pre_eval_fastqc_nonhost:
 
 rule pre_eval:
     input:
-        rules.pre_eval_nonpareil.output,
-        rules.pre_eval_singlem.output,
         rules.pre_eval_coverm.output,
         rules.pre_eval_samtools.input,
         rules.pre_eval_fastqc_fastp.input,
         rules.pre_eval_fastqc_nonhost.input,
+
+
+rule pre_eval_with_singlem:
+    input:
+        rules.pre_eval.input,
+        rules.pre_eval_singlem.output,
+
+
+rule pre_eval_with_nonpareil:
+    input:
+        rules.pre_eval.input,
+        rules.pre_eval_nonpareil.output,
