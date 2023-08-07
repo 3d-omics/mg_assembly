@@ -30,3 +30,7 @@ rule reads_link_all:
 rule reads_run:
     input:
         rules.reads_link_all.input,
+
+
+localrules:
+    reads_link,
