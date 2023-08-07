@@ -14,7 +14,7 @@ rule metabin_eval_cram_to_bam_one:
     log:
         METABIN_BOWTIE2 / "{assembly_id},{sample_id}.{library_id}.bam.log",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     threads: 24
     resources:
         runtime=1 * 60,
@@ -40,7 +40,7 @@ rule metabin_eval_coverm_genome_one:
     output:
         tsv=METABIN_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     log:
         METABIN_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
     params:
@@ -71,7 +71,7 @@ rule metabin_eval_coverm_genome:
     log:
         METABIN_COVERM / "genome.log",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     params:
         input_dir=METABIN_COVERM / "genome/",
     shell:
@@ -91,7 +91,7 @@ rule metabin_eval_coverm_contig_one:
     output:
         tsv=METABIN_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     log:
         METABIN_COVERM / "contig/{assembly_id}.{sample_id}.{library_id}.log",
     params:
@@ -117,7 +117,7 @@ rule metabin_eval_coverm_contig:
     log:
         METABIN_COVERM / "contig.log",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     params:
         input_dir=METABIN_COVERM / f"contig",
     shell:
@@ -138,7 +138,7 @@ rule metabin_eval_quast_one:
     log:
         METABIN_QUAST / "{assembly_id}.log",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     threads: 4
     params:
         extra=params["metabin"]["quast"]["extra"],
@@ -199,7 +199,7 @@ rule metabin_eval_dram_annotate_one:
     log:
         METABIN_DRAM / "annotate/{assembly_id}.log",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     params:
         min_contig_size=1500,
     shell:
@@ -226,7 +226,7 @@ rule metabin_eval_dram_distill_one:
     log:
         METABIN_DRAM / "distill/{assembly_id}.log",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     shell:
         """
         DRAM.py distill \

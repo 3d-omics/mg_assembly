@@ -1,4 +1,4 @@
-include: "metawrap_functions.smk"
+include: "functions.smk"
 
 
 rule bin_metawrap_prepare_one:
@@ -12,7 +12,7 @@ rule bin_metawrap_prepare_one:
     log:
         BIN_METAWRAP / "{assembly_id}.prepare.log",
     conda:
-        "../../envs/bin/metawrap.yml"
+        "metawrap.yml"
     params:
         n=get_number_of_libraries_in_binning,
     shell:

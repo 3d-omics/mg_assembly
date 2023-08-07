@@ -7,7 +7,7 @@ rule magscot_prodigal_one:
     log:
         MAGSCOT / "{assembly_id}/prodigal.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     threads: 24
     shell:
         """
@@ -38,7 +38,7 @@ rule magscot_hmmsearch_pfam_one:
     log:
         MAGSCOT / "{assembly_id}/pfam.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     threads: 2
     shell:
         """
@@ -64,7 +64,7 @@ rule magscot_hmmsearch_tigr_one:
     log:
         MAGSCOT / "{assembly_id}/tigr.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     threads: 2
     shell:
         """
@@ -90,7 +90,7 @@ rule magscot_join_hmm_one:
     log:
         MAGSCOT / "{assembly_id}/hmm.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     shell:
         """
         grep -v "^#" {input.tigr_out} | awk '{{print $1"\\t"$3"\\t"$5}}' >  {output.merged} 2>  {log}
@@ -106,7 +106,7 @@ rule magscot_compose_contig_to_bin_concoct_one:
     log:
         MAGSCOT / "{assembly_id}/concoct.contigs_to_bin.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     shell:
         """
         (grep -H ^">" {input}/*.fa \
@@ -126,7 +126,7 @@ rule magscot_compose_contig_to_bin_maxbin2_one:
     log:
         MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     shell:
         """
         (grep -H ^">" {input}/*.fa \
@@ -146,7 +146,7 @@ rule magscot_compose_contig_to_bin_metabat2_one:
     log:
         MAGSCOT / "{assembly_id}/metabat2.contigs_to_bin.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     shell:
         """
         (grep -H ^">" {input}/*.fa \
@@ -168,7 +168,7 @@ rule magscot_merge_contig_to_bin_one:
     log:
         MAGSCOT / "{assembly_id}/contigs_to_bin.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     shell:
         """
         cat {input} > {output} 2> {log}
@@ -189,7 +189,7 @@ rule magscot_run_one:
     log:
         MAGSCOT / "{assembly_id}/magscot.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     params:
         out_prefix=lambda wildcards: MAGSCOT / f"{wildcards.assembly_id}/magscot",
     shell:
@@ -211,7 +211,7 @@ rule magscot_reformat_one:
     log:
         MAGSCOT / "{assembly_id}/magscot.reformat.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     shell:
         """
         Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
@@ -230,7 +230,7 @@ rule magscot_rename_one:
     log:
         MAGSCOT / "{assembly_id}/magscot.rename.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     shell:
         """
         python workflow/scripts/reformat_fasta_magscot.py \
@@ -248,11 +248,11 @@ rule magscot_split_into_bins:
     log:
         MAGSCOT / "{assembly_id}/bins.log",
     conda:
-        "../../envs/metabin.yml"
+        "magscot.yml"
     shell:
         """
         mkdir -p {output.bins} 2> {log}
-        (seqtk seq results/binning/magscot/all.fa \
+        (seqtk seq {input.fasta} \
         | paste - -  \
         | tr "." "\\t" \
         | awk '{{print $1"."$2"."$3"\\n"$4 > "{output.bins}/"$2".fa"}}'

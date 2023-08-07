@@ -1,0 +1,18 @@
+# magscot: environment to aggregate bins wit magscot
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-argparse
+  - r-funr
+  - r-optparse
+  - r-tidyverse
+  - hmmer
+  - parallel
+  - prodigal
+  - coreutils
+  - biopython
+  - pandas
+  - seqtk

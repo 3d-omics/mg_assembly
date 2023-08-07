@@ -1,6 +1,6 @@
 # include: "metabin_functions.smk"
-include: "metabin_run.smk"
-include: "metabin_eval.smk"
+include: "metabin/run.smk"
+include: "metabin/eval.smk"
 
 
 rule metabin:

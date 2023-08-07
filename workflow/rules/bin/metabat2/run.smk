@@ -1,4 +1,4 @@
-include: "metabat2_functions.smk"
+include: "functions.smk"
 
 
 rule metabat2_prepare_one:
@@ -10,7 +10,7 @@ rule metabat2_prepare_one:
     log:
         METABAT2 / "prepare" / "{assembly_id}.log",
     conda:
-        "../../envs/bin/metabat2.yml"
+        "metabat2.yml"
     shell:
         """
         jgi_summarize_bam_contig_depths \
@@ -23,14 +23,14 @@ rule metabat2_prepare_one:
 
 rule metabat2_run_one:
     input:
-        assembly=ASSEMBLE_BOWTIE2 / "{assembly_id}.fa",
+        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         depth=METABAT2 / "prepare/{assembly_id}.depth",
     output:
         bins=directory(METABAT2 / "bins/{assembly_id}/"),
     log:
         METABAT2 / "bibinns" / "{assembly_id}.log",
     conda:
-        "../../envs/binning/metabat2.yml"
+        "metabat2.yml"
     params:
         bins_prefix=lambda wildcards: METABAT2
         / f"bins/{wildcards.assembly_id}/{wildcards.assembly_id}",
@@ -46,6 +46,6 @@ rule metabat2_run_one:
         """
 
 
-rule metabat2_run_all:
+rule metabat2:
     input:
         [METABAT2 / f"bins/{assembly_id}" for assembly_id in ASSEMBLIES],

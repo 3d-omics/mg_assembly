@@ -1,4 +1,4 @@
-include: "metabin/magscot.smk"
+include: "magscot/run.smk"
 
 
 rule metabin_index_one:
@@ -9,7 +9,7 @@ rule metabin_index_one:
     log:
         METABIN_INDEX / "{assembly_id}.log",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     threads: 24
     params:
         extra=params["metabin"]["bowtie2-build"]["extra"],
@@ -35,7 +35,7 @@ rule metabin_bowtie2_one:
     log:
         METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "../envs/metabin.yml"
+        "metabin.yml"
     threads: 24
     params:
         extra=params["metabin"]["bowtie2"]["extra"],

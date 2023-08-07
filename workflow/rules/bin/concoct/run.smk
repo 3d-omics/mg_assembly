@@ -1,4 +1,4 @@
-include: "concoct_functions.smk"
+include: "functions.smk"
 
 
 rule concoct_cut_up_fasta_one:
@@ -10,7 +10,7 @@ rule concoct_cut_up_fasta_one:
     log:
         CONCOCT / "prepare" / "{assembly_id}.cut.log",
     conda:
-        "../../envs/bin/concoct.yml"
+        "concoct.yml"
     shell:
         """
         cut_up_fasta.py \
@@ -34,7 +34,7 @@ rule concoct_coverage_table_one:
     log:
         CONCOCT / "prepare" / "{assembly_id}.coverage.log",
     conda:
-        "../../envs/bin/concoct.yml"
+        "concoct.yml"
     shell:
         """
         concoct_coverage_table.py \
@@ -54,7 +54,7 @@ rule concoct_run_one:
     log:
         CONCOCT / "run/{assembly_id}.log",
     conda:
-        "../../envs/bin/concoct.yml"
+        "concoct.yml"
     shell:
         """
         concoct \
@@ -73,7 +73,7 @@ rule concoct_merge_cutup_clustering_one:
     log:
         CONCOCT / "merge" / "{assembly_id}.log",
     conda:
-        "../../envs/bin/concoct.yml"
+        "concoct.yml"
     shell:
         """
         merge_cutup_clustering.py \
@@ -85,19 +85,19 @@ rule concoct_merge_cutup_clustering_one:
 
 rule concoct_extract_fasta_bins_one:
     input:
-        assembly=ASSEMBLE_BOWTIE2 / "{assembly_id}.fa",
+        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         clustering_merged=CONCOCT / "merge" / "{assembly_id}.csv",
     output:
         bins=CONCOCT / "fasta_bins" / "{assembly_id}/",
     log:
         CONCOCT / "fasta_bins/{assembly_id}.log",
     conda:
-        "../../envs/bin/concoct.yml"
+        "concoct.yml"
     shell:
         """
         extract_fasta_bins.py \
             {input.assembly} \
-            {output.clustering_merged} \
+            {input.clustering_merged} \
             --output_path {output.bins} \
         2> {log} 1>&2
         """

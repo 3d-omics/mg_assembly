@@ -1,4 +1,4 @@
-include: "vamb_functions.smk"
+include: "functions.smk"
 
 
 # rule vamb_concatenate_one:
@@ -9,7 +9,7 @@ include: "vamb_functions.smk"
 #     log:
 #         VAMB / "concatenated/{assembly_id}.log",
 #     conda:
-#         "../../envs/binning/vamb.yml"
+#         "vamb.yml"
 #     shell:
 #         """
 #         concatenate.py \
@@ -27,7 +27,7 @@ rule vamb_concatenate_one:
     log:
         VAMB / "concatenated/{assembly_id}.log",
     conda:
-        "../../envs/bin/vamb.yml"
+        "vamb.yml"
     params:
         min_length=params["bin"]["vamb"]["min_length"],
     shell:
@@ -49,7 +49,7 @@ rule vamb_index_one:
     log:
         VAMB / "indexes/{assembly_id}.log",
     conda:
-        "../../envs/bin/vamb.yml"
+        "vamb.yml"
     threads: 24
     shell:
         """
@@ -71,7 +71,7 @@ rule vamb_map_one:
     log:
         VAMB / "bams/{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "../../envs/bin/vamb.yml"
+        "vamb.yml"
     threads: 24
     shell:
         """
@@ -101,7 +101,7 @@ rule vamb_one:
     log:
         VAMB / "bins/{assembly_id}.log",
     conda:
-        "../../envs/bin/vamb.yml"
+        "vamb.yml"
     params:
         extra="",
     threads: 1
