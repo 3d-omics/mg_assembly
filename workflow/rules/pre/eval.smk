@@ -1,25 +1,4 @@
-rule pre_fastp_fastqc_one:
-    """Run fastqc on one library from fastp output"""
-    input:
-        fq=FASTP / "{sample_id}.{library_id}_{end}.fq.gz",
-    output:
-        html=FASTP / "{sample_id}.{library_id}_{end}_fastqc.html",
-        zip_=FASTP / "{sample_id}.{library_id}_{end}_fastqc.zip",
-    log:
-        FASTP / "{sample_id}.{library_id}_{end}_fastqc.log",
-    conda:
-        "pre.yml"
-    shell:
-        """
-        fastqc \
-            --outdir {FASTP} \
-            --threads 1 \
-            {input.fq} \
-        2> {log} 1>&2
-        """
-
-
-rule pre_fastp_fastqc_all:
+rule pre_eval_fastp_fastqc:
     """Run fastqc over all libraries after fastp"""
     input:
         [
