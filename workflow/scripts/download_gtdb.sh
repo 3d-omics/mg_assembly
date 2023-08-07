@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-output_folder="resources"
+output_folder="resources"  # Modify this
 
 wget \
     --continue \
@@ -12,4 +12,10 @@ wget \
 tar \
     -xvzf \
     gtdbtk_r214_data.tar.gz \
-    -C $output_folder
+    -C $output_folder \
+    --strip 1
+
+rm -i gtdbtk_r214_data.tar.gz
+
+
+echo "Remember to set $output_folder in config/features.yml"
