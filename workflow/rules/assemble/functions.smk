@@ -14,7 +14,7 @@ def get_reverses_from_assembly_id(wildcards):
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     reverse_filenames = []
     for sample_id, library_id in samples_in_assembly:
-        reverse_filenames.append(NONHOST / f"{sample_id}.{library_id}_1.fq.gz")
+        reverse_filenames.append(NONHOST / f"{sample_id}.{library_id}_2.fq.gz")
     return reverse_filenames
 
 
