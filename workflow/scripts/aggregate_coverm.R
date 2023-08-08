@@ -37,7 +37,7 @@ rename_cols <- function(x) {
 
 nonempty_files <-
   files %>%
-  map(function(x) read_tsv(x, col_types = cols()), .progress = TRUE) %>%
+  map(function(x) read_tsv(x, col_types = cols())) %>%
   keep(function(x) nrow(x) > 0)
 
 if (length(nonempty_files) > 0) {
@@ -48,6 +48,7 @@ if (length(nonempty_files) > 0) {
     mutate(library = str_split(library, " ") %>% map_chr(1)) %>%
     group_by(sequence_id, library) %>%
     summarise(counts = sum(counts)) %>%
+    ungroup() %>%
     pivot_wider(names_from = "library", values_from = "counts", values_fill = NA) %>%
     write_tsv(output_file)
 } else {
