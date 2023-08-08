@@ -254,8 +254,8 @@ rule magscot_split_into_bins:
         mkdir -p {output.bins} 2> {log}
         (seqtk seq {input.fasta} \
         | paste - -  \
-        | tr "." "\\t" \
-        | awk '{{print $1"."$2"."$3"\\n"$4 > "{output.bins}/"$2".fa"}}'
+        | tr "@:" "\\t" \
+        | awk '{{print $1":"$2"@"$3"\\n"$4 > "{output.bins}/"$2".fa"}}'
         ) 2> {log}
         """
 
