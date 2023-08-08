@@ -49,7 +49,6 @@ rule dereplicate_eval_cram_to_bam_one:
         DREP_BOWTIE2 / "{sample_id}.{library_id}.bam.log",
     conda:
         "dereplicate.yml"
-    threads: 24
     resources:
         runtime=1 * 60,
         mem_mb=4 * 1024,
@@ -57,10 +56,9 @@ rule dereplicate_eval_cram_to_bam_one:
         """
         samtools view \
             -F 4 \
-            --threads {threads} \
             --reference {input.reference} \
-            --output {output.bam} \
-            --fast \
+            -o {output.bam} \
+            -1 \
             {input.cram} \
         2> {log}
         """
