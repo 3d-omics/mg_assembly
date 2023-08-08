@@ -108,7 +108,7 @@ rule dereplicate_eval_coverm_genome:
         input_dir=DREP_COVERM / "genome/",
     shell:
         """
-        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+        Rscript --vanilla workflow/scripts/aggregate_coverm.R \
             --input-folder {params.input_dir} \
             --output-file {output} \
         2> {log} 1>&2
@@ -154,7 +154,7 @@ rule dereplicate_eval_coverm_contig:
         input_dir=DREP_COVERM / "contig/",
     shell:
         """
-        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+        Rscript --vanilla workflow/scripts/aggregate_coverm.R \
             --input-folder {params.input_dir} \
             --output-file {output} \
         2> {log} 1>&2
