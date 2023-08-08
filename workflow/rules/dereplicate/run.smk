@@ -96,9 +96,9 @@ rule dereplicate_bowtie2_one:
         reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
         reference=DREP / "dereplicated_genomes.fa",
     output:
-        cram=DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.cram",
+        cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
     log:
-        DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.log",
+        DREP_BOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
         "dereplicate.yml"
     threads: 24
@@ -133,7 +133,7 @@ rule dereplicate_bowtie2_one:
 rule dereplicate_bowtie2:
     input:
         [
-            DREP_BOWTIE2 / f"dereplicated_genomes.{sample_id}.{library_id}.cram"
+            DREP_BOWTIE2 / f"{sample_id}.{library_id}.cram"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
 

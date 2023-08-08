@@ -1,4 +1,4 @@
-
+# gtdbtk ----
 rule dereplicate_eval_gtdbtk:
     input:
         bin_folder=DREP / "dereplicated_genomes",
@@ -31,6 +31,7 @@ rule dereplicate_eval_gtdbtk:
         """
 
 
+# coverm ----
 rule dereplicate_eval_cram_to_bam_one:
     """Convert cram to bam
 
@@ -39,13 +40,13 @@ rule dereplicate_eval_cram_to_bam_one:
     it works.
     """
     input:
-        cram=DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.cram",
-        crai=DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.cram.crai",
+        cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
+        crai=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
         reference=DREP / "dereplicated_genomes.fa",
     output:
-        bam=temp(DREP_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
+        bam=temp(DREP_BOWTIE2 / "{sample_id}.{library_id}.bam"),
     log:
-        DREP_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
+        DREP_BOWTIE2 / "{sample_id}.{library_id}.bam.log",
     conda:
         "dereplicate.yml"
     threads: 24
@@ -65,16 +66,17 @@ rule dereplicate_eval_cram_to_bam_one:
         """
 
 
+## coverm genome ----
 rule dereplicate_eval_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=DREP_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
+        bam=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam",
     output:
-        tsv=DREP_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.tsv",
+        tsv=DREP_COVERM / "genome/{sample_id}.{library_id}.tsv",
     conda:
         "dereplicate.yml"
     log:
-        DREP_COVERM / "genome/{assembly_id}.{sample_id}.{library_id}.log",
+        DREP_COVERM / "genome/{sample_id}.{library_id}.log",
     params:
         methods=params["dereplicate"]["coverm"]["genome"]["methods"],
         min_covered_fraction=params["dereplicate"]["coverm"]["genome"][
@@ -95,8 +97,8 @@ rule dereplicate_eval_coverm_genome_one:
 rule dereplicate_eval_coverm_genome:
     input:
         tsvs=[
-            DREP_COVERM / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
-            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+            DREP_COVERM / f"genome/{sample_id}.{library_id}.tsv"
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
     output:
         tsv=DREP_COVERM / "genome.tsv",
@@ -115,6 +117,10 @@ rule dereplicate_eval_coverm_genome:
         """
 
 
+# coverm contig ----
+
+
+# dram ----
 rule dereplicate_eval_dram_annotate:
     input:
         drep_folder=DREP / "dereplicated_genomes",
@@ -168,6 +174,7 @@ rule dereplicate_eval_dram_distill:
         """
 
 
+# quast ----
 rule dereplicate_eval_quast:
     """Run quast over one the dereplicated mags"""
     input:
@@ -192,15 +199,17 @@ rule dereplicate_eval_quast:
         """
 
 
+# samtools ----
 rule dereplicate_eval_samtools:
     input:
         [
-            DREP_BOWTIE2 / f"dereplicated_genomes.{sample_id}.{library_id}.{extension}"
+            DREP_BOWTIE2 / f"{sample_id}.{library_id}.{extension}"
             for sample_id, library_id in SAMPLE_LIBRARY
             for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
         ],
 
 
+# eval ----
 rule dereplicate_eval:
     input:
         rules.dereplicate_eval_coverm_genome.output,
