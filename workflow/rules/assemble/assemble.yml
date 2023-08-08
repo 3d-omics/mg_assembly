@@ -10,3 +10,4 @@ dependencies:
   - bowtie2=2.5.1
   - samtools=1.17
   - coverm=0.6.1
+  - seqtk=1.4
