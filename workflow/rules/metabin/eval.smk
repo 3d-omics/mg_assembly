@@ -164,14 +164,14 @@ rule metabin_eval_gtdbtk_one:
         bin_folder=MAGSCOT / "{assembly_id}/bins",
         database=features["gtdbtk_database"],
     output:
-        outdir=METABIN_GTDBTK / "{assembly_id}",
+        outdir=directory(METABIN_GTDBTK / "{assembly_id}"),
     log:
         METABIN_GTDBTK / "{assembly_id}.log",
     conda:
         "gtdbtk.yml"
-    threads: 16
+    threads: 24
     resources:
-        mem_mb=150 * 1024,
+        mem_mb=32 * 1024,
     shell:
         """
         export GTDBTK_DATA_PATH="{input.database}"

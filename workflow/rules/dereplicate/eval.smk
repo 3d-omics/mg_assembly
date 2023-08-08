@@ -4,11 +4,7 @@ rule dereplicate_eval_gtdbtk:
         bin_folder=DREP / "dereplicated_genomes",
         database=features["gtdbtk_database"],
     output:
-        outdir=DREP_GTDBTK,
-        bac120=DREP_GTDBTK / "classify/gtdbtk.bac120.summary.tsv",
-        combined_summary=DREP_GTDBTK / "_gtdbtk_combined_summary.tsv",
-        tree=DREP_GTDBTK / "_gtdbtk.bac120.classify.tree",
-        taxonomy="_taxon_table.tsv",
+        outdir=directory(DREP_GTDBTK),
     log:
         DREP_GTDBTK / "gtdbtk.log",
     conda:
