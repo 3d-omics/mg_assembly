@@ -46,4 +46,4 @@ rule all:
         rules.assemble.input,
         rules.bin.input,
         rules.metabin.input,
-        rules.dereplicate.input,
+        rules.report.input,
