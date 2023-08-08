@@ -118,6 +118,49 @@ rule dereplicate_eval_coverm_genome:
 
 
 # coverm contig ----
+rule dereplicate_eval_coverm_contig_one:
+    """Run coverm contig for one library and one mag catalogue"""
+    input:
+        bam=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam",
+    output:
+        tsv=DREP_COVERM / "contig/{sample_id}.{library_id}.tsv",
+    conda:
+        "dereplicate.yml"
+    log:
+        DREP_COVERM / "contig/{sample_id}.{library_id}.log",
+    params:
+        methods=params["dereplicate"]["coverm"]["contig"]["methods"],
+    shell:
+        """
+        coverm contig \
+            --bam-files {input.bam} \
+            --methods {params.methods} \
+            --proper-pairs-only \
+        > {output.tsv} 2> {log}
+        """
+
+
+rule dereplicate_eval_coverm_contig:
+    input:
+        tsvs=[
+            DREP_COVERM / f"contig/{sample_id}.{library_id}.tsv"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],
+    output:
+        tsv=DREP_COVERM / "contig.tsv",
+    log:
+        DREP_COVERM / "contig.log",
+    conda:
+        "dereplicate.yml"
+    params:
+        input_dir=DREP_COVERM / "contig/",
+    shell:
+        """
+        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+            --input-folder {params.input_dir} \
+            --output-file {output} \
+        2> {log} 1>&2
+        """
 
 
 # dram ----
@@ -213,6 +256,7 @@ rule dereplicate_eval_samtools:
 rule dereplicate_eval:
     input:
         rules.dereplicate_eval_coverm_genome.output,
+        rules.dereplicate_eval_coverm_contig.output,
         rules.dereplicate_eval_quast.output,
 
 
