@@ -8,10 +8,8 @@ channels:
 dependencies:
   - drep=3.4.3
   - checkm-genome=1.2.2
-  - gtdbtk=2.3.2
-  - dram=1.4.6
-  - bowtie2
-  - samtools
+  - bowtie2=2.5.1
+  - samtools=1.17
   - quast=5.2.0
   - coverm=0.6.1
   - r-tidyverse

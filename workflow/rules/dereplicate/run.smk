@@ -40,32 +40,9 @@ rule dereplicate_join_genomes:
         """
 
 
-rule dereplicate_index_one:
-    input:
-        bins=DREP / "dereplicated_genomes.fa",
-    output:
-        mock=touch(DREP_INDEX / "dereplicated_genomesd"),
-    log:
-        DREP_INDEX / "dereplicated_genomes.log",
-    conda:
-        "dereplicate.yml"
-    threads: 24
-    params:
-        extra=params["dereplicate"]["bowtie2-build"]["extra"],
-    shell:
-        """
-        bowtie2-build \
-            --threads {threads} \
-            {params.extra} \
-            {input.bins} \
-            {output.mock} \
-        2> {log} 1>&2
-        """
-
-
 rule dereplicate_bowtie2_build_one:
     """
-    Index megahit assembly
+    Index dereplicader
     """
     input:
         contigs=DREP / "dereplicated_genomes.fa",

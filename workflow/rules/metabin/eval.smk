@@ -168,7 +168,7 @@ rule metabin_eval_gtdbtk_one:
     log:
         METABIN_GTDBTK / "{assembly_id}.log",
     conda:
-        "metabin.yml"
+        "gtdbtk.yml"
     threads: 16
     resources:
         mem_mb=150 * 1024,
@@ -203,7 +203,7 @@ rule metabin_eval_dram_annotate_one:
     log:
         METABIN_DRAM / "annotate/{assembly_id}.log",
     conda:
-        "metabin.yml"
+        "dram.yml"
     params:
         min_contig_size=1500,
     shell:
@@ -228,7 +228,7 @@ rule metabin_eval_dram_distill_one:
     log:
         METABIN_DRAM / "distill/{assembly_id}.log",
     conda:
-        "metabin.yml"
+        "dram.yml"
     shell:
         """
         DRAM.py distill \

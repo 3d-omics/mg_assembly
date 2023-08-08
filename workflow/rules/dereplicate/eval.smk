@@ -12,7 +12,7 @@ rule dereplicate_eval_gtdbtk:
     log:
         DREP_GTDBTK / "gtdbtk.log",
     conda:
-        "dereplicate.yml"
+        "gtdbtk.yml"
     threads: 24
     resources:
         mem_mb=320 * 1024,
@@ -174,7 +174,7 @@ rule dereplicate_eval_dram_annotate:
     log:
         DREP_DRAM / "annotate/dereplicated_genomes.log",
     conda:
-        "dereplicate.yml"
+        "dram.yml"
     params:
         min_contig_size=1500,
     threads: 24
@@ -202,7 +202,7 @@ rule dereplicate_eval_dram_distill:
     log:
         DREP_DRAM / "distill/dereplicated_genomes.log",
     conda:
-        "dereplicate.yml"
+        "dram.yml"
     shell:
         """
         DRAM.py distill \

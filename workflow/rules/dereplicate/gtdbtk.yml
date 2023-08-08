@@ -5,9 +5,4 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - bowtie2=2.5.1
-  - coverm=0.6.1
-  - samtools=1.17
-  - r-tidyverse
-  - r-argparse
-  - quast=5.2.0
+  - gtdbtk=2.3.2

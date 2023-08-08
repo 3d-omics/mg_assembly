@@ -1,0 +1,9 @@
+# dram: environment to run dram
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - dram=1.4.6
+  - gtdbtk=2.3.2
