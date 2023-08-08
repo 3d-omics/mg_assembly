@@ -15,7 +15,7 @@ rule dereplicate_eval_gtdbtk:
         "dereplicate.yml"
     threads: 24
     resources:
-        mem_mb=150 * 1024,
+        mem_mb=320 * 1024,
     shell:
         """
         export GTDBTK_DATA_PATH="{input.database}"
