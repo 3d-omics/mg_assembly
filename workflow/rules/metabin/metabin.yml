@@ -11,3 +11,5 @@ dependencies:
   - gtdbtk=2.3.2
   - quast=5.2.0
   - samtools
+  - r-tidyverse
+  - r-argparse
