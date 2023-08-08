@@ -174,11 +174,11 @@ rule metabin_eval_gtdbtk_one:
         mem_mb=150 * 1024,
     shell:
         """
-        GTDBTK_DATA_PATH="{input.database}"
+        export GTDBTK_DATA_PATH="{input.database}"
 
         gtdbtk classify_wf \
             --genome_dir {input.bin_folder} \
-            --extension gz \
+            --extension fa \
             --out_dir {output.outdir} \
             --cpus {threads} \
             --skip_ani_screen \
