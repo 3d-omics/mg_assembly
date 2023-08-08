@@ -22,7 +22,7 @@ rule dereplicate_eval_gtdbtk:
 
         gtdbtk classify_wf \
             --genome_dir {input.bin_folder} \
-            --extension gz \
+            --extension fa \
             --out_dir {output.outdir} \
             --cpus {threads} \
             --skip_ani_screen \
