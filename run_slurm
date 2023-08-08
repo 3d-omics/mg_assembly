@@ -13,4 +13,5 @@ snakemake \
     --slurm \
     --profile config/profile \
     --latency-wait 30 \
+    --use-singularity \
     "$@"
