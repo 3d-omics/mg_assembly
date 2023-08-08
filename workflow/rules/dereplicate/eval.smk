@@ -18,7 +18,7 @@ rule dereplicate_eval_gtdbtk:
         mem_mb=150 * 1024,
     shell:
         """
-        GTDBTK_DATA_PATH="{input.database}"
+        export GTDBTK_DATA_PATH="{input.database}"
 
         gtdbtk classify_wf \
             --genome_dir {input.bin_folder} \
