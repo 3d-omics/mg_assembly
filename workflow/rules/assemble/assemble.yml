@@ -11,3 +11,5 @@ dependencies:
   - samtools=1.17
   - coverm=0.6.1
   - seqtk=1.4
+  - r-tidyverse
+  - r-argparse
