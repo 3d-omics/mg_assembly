@@ -45,7 +45,7 @@ rule dereplicate_eval_cram_to_bam_one:
     output:
         bam=temp(DREP_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:
-        DREP_BOWTIE2 / "{assembly_id},{sample_id}.{library_id}.bam.log",
+        DREP_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
     conda:
         "dereplicate.yml"
     threads: 24
