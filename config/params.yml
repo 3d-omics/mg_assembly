@@ -18,7 +18,7 @@ pre:
     contig:
       methods: "count"
   kraken2:
-    mem_mb: 8000
+    mem_mb: 32000
 
 assemble:
   megahit:
@@ -87,6 +87,9 @@ metabin:
 
 
 dereplicate:
+  drep:
+    threads: 1  # Careful with pplacer!
+    mem_mb: 22000  # 22GB * pplacer cores
   bowtie2-build:
     extra: ""
   bowtie2:

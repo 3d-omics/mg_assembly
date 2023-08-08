@@ -7,9 +7,11 @@ rule dereplicate_drep:
         DEREPLICATE / "drep.log",
     conda:
         "dereplicate.yml"
-    threads: 1
+    threads: params["dereplicate"]["drep"]["threads"]
     params:
         out_dir=DREP,
+    resources:
+        mem_mb=params["dereplicate"]["drep"]["mem_mb"],
     shell:
         """
         dRep dereplicate \
