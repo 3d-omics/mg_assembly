@@ -5,5 +5,4 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - dram=1.4.6
-  - gtdbtk=2.3.2
+  - dram=1.3
