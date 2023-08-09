@@ -28,10 +28,10 @@ rule pre_fastp_trim_one:
         fastp \
             --in1 {input.forward_} \
             --in2 {input.reverse_} \
-            --out1 >(gzip --fast > {output.forward_}) \
-            --out2 >(gzip --fast > {output.reverse_}) \
-            --unpaired1 >(gzip --fast > {output.unpaired1}) \
-            --unpaired2 >(gzip --fast > {output.unpaired2}) \
+            --out1 >(pigz --fast > {output.forward_}) \
+            --out2 >(pigz --fast > {output.reverse_}) \
+            --unpaired1 >(pigz --fast > {output.unpaired1}) \
+            --unpaired2 >(pigz --fast > {output.unpaired2}) \
             --html {output.html} \
             --json {output.json} \
             --verbose \
