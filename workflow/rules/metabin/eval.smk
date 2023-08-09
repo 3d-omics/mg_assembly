@@ -194,7 +194,7 @@ rule metabin_eval_gtdbtk:
 rule metabin_eval_dram_annotate_one:
     input:
         bin_folder=MAGSCOT / "{assembly_id}/bins/",
-        dram_database=features["dram_database"],
+        mock_db="results/dram_db_setup.done",
     output:
         outdir=directory(METABIN_DRAM / "annotate/{assembly_id}"),
         annotations=METABIN_DRAM / "annotate/{assembly_id}/annotations.tsv",
@@ -204,12 +204,15 @@ rule metabin_eval_dram_annotate_one:
         METABIN_DRAM / "annotate/{assembly_id}.log",
     conda:
         "dram.yml"
+    threads: 24
     params:
         min_contig_size=1500,
     shell:
         """
+        rm -rf {output.outdir}
+
         DRAM.py annotate \
-            --input_fasta {input.bin_folder} \
+            --input_fasta {input.bin_folder}/*.fa \
             --output_dir {output.outdir} \
             --threads {threads} \
             --min_contig_size {params.min_contig_size} \
@@ -223,6 +226,7 @@ rule metabin_eval_dram_distill_one:
         annotations=METABIN_DRAM / "annotate/{assembly_id}/annotations.tsv",
         trnas=METABIN_DRAM / "annotate/{assembly_id}/trnas.tsv",
         rrnas=METABIN_DRAM / "annotate/{assembly_id}/rrnas.tsv",
+        mock_db="results/dram_db_setup.done",
     output:
         outdir=directory(METABIN_DRAM / "distill/{assembly_id}"),
     log:
