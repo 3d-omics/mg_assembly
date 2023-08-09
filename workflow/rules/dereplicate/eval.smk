@@ -161,7 +161,7 @@ rule dereplicate_eval_coverm_contig:
 rule dereplicate_eval_dram_annotate:
     input:
         drep_folder=DREP / "dereplicated_genomes",
-        dram_database=features["dram_database"],
+        mock_db="results/dram_db_setup.done",
     output:
         outdir=DREP_DRAM / "annotate/dereplicated_genomes",
         annotations=DREP_DRAM / "annotate/dereplicated_genomes/annotations.tsv",
@@ -176,6 +176,8 @@ rule dereplicate_eval_dram_annotate:
     threads: 24
     shell:
         """
+        rm -rf {output.outdir}
+
         DRAM.py annotate \
             --input_fasta {input.drep_folder} \
             --output_dir {output.outdir} \
@@ -193,6 +195,7 @@ rule dereplicate_eval_dram_distill:
         annotations=DREP_DRAM / "annotate/dereplicated_genomes/annotations.tsv",
         trnas=DREP_DRAM / "annotate/dereplicated_genomes/trnas.tsv",
         rrnas=DREP_DRAM / "annotate/dereplicated_genomes/rrnas.tsv",
+        mock_db="results/dram_db_setup.done",
     output:
         outdir=DREP_DRAM / "distill/dereplicated_genomes",
     log:
