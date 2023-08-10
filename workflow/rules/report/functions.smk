@@ -1,3 +1,4 @@
+# pre -----
 def get_bowtie2_host_for_library_reports(wildcards):
     """Compose the paths for the bowtie2_hosts reports"""
     sample = wildcards.sample
@@ -89,14 +90,6 @@ def get_stats_files_from_assembly_id(wildcards):
         for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
     ]
 
-    metabin_quast = METABIN_QUAST / f"{wildcards.assembly_id}"
-    metabin_samtools = [
-        METABIN_BOWTIE2
-        / f"{wildcards.assembly_id}.{sample_id}.{library_id}.{extension}"
-        for sample_id, library_id in sample_library
-        for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
-    ]
-
     all_files = (
         _path_to_string(reads_fastqc)
         + _path_to_string(pre_fastp_fastqc)
@@ -106,8 +99,6 @@ def get_stats_files_from_assembly_id(wildcards):
         + _path_to_string(pre_kraken2)
         + _path_to_string(assemble_samtools)
         + [str(assemble_quast)]
-        + _path_to_string(metabin_samtools)
-        + [str(metabin_quast)]
     )
 
     return all_files

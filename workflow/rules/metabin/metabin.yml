@@ -6,8 +6,15 @@ channels:
   - defaults
 dependencies:
   - bowtie2=2.5.1
-  - coverm=0.6.1
   - samtools=1.17
   - r-tidyverse
   - r-argparse
-  - quast=5.2.0
+  - r-funr
+  - r-optparse
+  - hmmer
+  - parallel
+  - prodigal
+  - coreutils
+  - biopython
+  - pandas
+  - seqtk
