@@ -155,6 +155,8 @@ rule pre_bowtie2_extract_nonhost_one:
         NONHOST / "{sample_id}.{library_id}.log",
     conda:
         "pre.yml"
+    params:
+        samtools_mem=params["pre"]["bowtie2"]["samtools"]["mem_per_thread"],
     threads: 24
     resources:
         runtime=1 * 60,
@@ -171,6 +173,7 @@ rule pre_bowtie2_extract_nonhost_one:
         | samtools sort \
             -n \
             -u \
+            -m {params.samtools_mem} \
             --threads {threads} \
         | samtools fastq \
             -1 {output.forward_} \
