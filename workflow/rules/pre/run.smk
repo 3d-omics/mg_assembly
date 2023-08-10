@@ -19,7 +19,7 @@ rule pre_fastp_trim_one:
         adapter_reverse=get_reverse_adapter,
         extra=params["pre"]["fastp"]["extra"],
         length_required=params["pre"]["fastp"]["length_required"],
-    threads: 16
+    threads: 24
     resources:
         mem_mb=4 * 1024,
         runtime=240,
@@ -70,7 +70,7 @@ rule pre_bowtie2_index_host:
         "pre.yml"
     params:
         extra=params["pre"]["bowtie2-build"]["extra"],
-    threads: 8
+    threads: 24
     resources:
         mem_mb=32 * 1024,
         runtime=24 * 60,
