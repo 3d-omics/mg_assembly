@@ -14,7 +14,7 @@ rule assemble_megahit_one:
         log=MEGAHIT / "{assembly_id}.log",
     conda:
         "assemble.yml"
-    threads: 16
+    threads: 24
     resources:
         mem_mb=64 * 1024,
     params:
