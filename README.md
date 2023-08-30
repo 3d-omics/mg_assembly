@@ -28,10 +28,17 @@ A Snakemake workflow for Genome Resolved Metagenomics
      ```
 
 ## Features
+- FASTQ processing with `fastp`
+- mapping of preprocessed reads against the host with `bowtie2`
+- assembly of non-host reads with `megahit`
+- binning with `metabin`
+- coverage evaluation with `coverm`
 
 ## DAG
 
-![host_transcriptomics_pipeline](./rulegraph.svg?raw=true)
+![image](https://github.com/3d-omics/Bioinfo_Macro_Genome_Resolved_Metagenomics/assets/103645443/08147c8a-8939-437f-aa12-2edede627ed6)
+
 
 ## References
+
 
