@@ -1,0 +1,10 @@
+results
+.snakemake
+.Rproj.user
+3domics_mg.Rproj
+renv/
+renv.lock
+.cache/
+.ipynb_checkpoints/
+.Rprofile
+./report/

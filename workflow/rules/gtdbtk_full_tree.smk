@@ -6,40 +6,31 @@ rule gtdbtk_full_tree:
             config["workdir"],
             "drep/",
             "figures/",
-            config["dmb"] + "_Primary_clustering_dendrogram.pdf"
-        )
-    output:
-        bac=os.path.join(
-            config["workdir"], 
-            "gtdbtk/classify/gtdbtk.bac120.summary.tsv"
+            config["dmb"] + "_Primary_clustering_dendrogram.pdf",
         ),
+    output:
+        bac=os.path.join(config["workdir"], "gtdbtk/classify/gtdbtk.bac120.summary.tsv"),
         combined=os.path.join(
-            config["workdir"], 
-            config["dmb"] + "_gtdbtk_combined_summary.tsv"
+            config["workdir"], config["dmb"] + "_gtdbtk_combined_summary.tsv"
         ),
         tree=os.path.join(
-            config["workdir"],
-            config["dmb"] + "_gtdbtk.bac120.classify.tree"
+            config["workdir"], config["dmb"] + "_gtdbtk.bac120.classify.tree"
         ),
-        taxonomy=os.path.join(
-            config["workdir"],
-            config["dmb"] + "_taxon_table.tsv"
-        )
+        taxonomy=os.path.join(config["workdir"], config["dmb"] + "_taxon_table.tsv"),
     params:
-        GTDB_data=expand("{GTDB_data}", GTDB_data=config['GTDB_data']),
+        GTDB_data=expand("{GTDB_data}", GTDB_data=config["GTDB_data"]),
         outdir=os.path.join(config["workdir"] + "/gtdbtk"),
         dereplicated_mags=os.path.join(config["workdir"] + "/drep/dereplicated_genomes"),
     conda:
         f"{config['codedir']}/conda_envs/GTDB-tk.yaml"
-    threads:
-        16
+    threads: 16
     resources:
         mem_gb=348,
-        time='08:00:00'
+        time="08:00:00",
     benchmark:
         os.path.join(config["logdir"] + "/gtdb-tk_benchmark.tsv")
     log:
-        os.path.join(config["logdir"] + "/gtdb-tk_log.log")
+        os.path.join(config["logdir"] + "/gtdb-tk_log.log"),
     message:
         "Creating phylogenetic tree from derepliated mags using GTDB-tk"
     shell:
@@ -66,7 +57,7 @@ rule gtdbtk_full_tree:
         # Otherwise, just use the bacterial summary (if no archaeal bins)
         else
         cat {output.bac} > {output.combined}
-        fi 
+        fi
 
         # Split taxonomy into taxon group columns:
         cut -f1 {output.combined} > {params.outdir}/mag_names.tsv

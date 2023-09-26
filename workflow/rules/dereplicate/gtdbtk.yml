@@ -1,0 +1,8 @@
+# metabin: environment to aggregate bins
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - gtdbtk=2.3.2

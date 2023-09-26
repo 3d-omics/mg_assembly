@@ -1,0 +1,13 @@
+# Paths and parameters relative to references
+---
+host:
+  fasta: resources/reference/chicken_39_sub.fa.gz
+
+magscot:
+  pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
+  tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
+
+dram_database: "resources/mock_dram_db"
+gtdbtk_database: "resources/mock_gtdbtk_db"
+singlem_database: "resources/mock_singlem_db"
+kraken2_database: "resources/kraken2_mock"

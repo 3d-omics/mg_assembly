@@ -1,8 +1,10 @@
+#!/usr/bin/env bash
+
 # Determine the number of columns in the input file
 num_columns=$(head -n1 unmapped.tsv | awk -F'\t' '{print NF}')
 
 # Loop through each column and extract the corresponding elements
-for ((col=1; col<=$num_columns; col++)); do
+for ((col=1; col <= num_columns; col++)); do
 # Extract the elements from the current column, split by '_' and join with tab delimiter
 awk -F'\t' -v col="$col" '
     NR==1 {

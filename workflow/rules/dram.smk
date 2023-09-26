@@ -4,30 +4,26 @@
 ### Functionally annotate MAGs with DRAM
 rule DRAM:
     input:
-        os.path.join(
-            config["magdir"],
-            "{MAG}.fa.gz"
-        )
+        os.path.join(config["magdir"], "{MAG}.fa.gz"),
     output:
-        annotations = os.path.join(config["magdir"], "{MAG}_anno.tsv.gz"),
-        distillate = temp(directory(os.path.join(config["magdir"], "{MAG}_distillate"))),
-        product = os.path.join(config["magdir"], "{MAG}_dist.tsv.gz"),
-        gbk = os.path.join(config["magdir"], "{MAG}.gbk.gz")
+        annotations=os.path.join(config["magdir"], "{MAG}_anno.tsv.gz"),
+        distillate=temp(directory(os.path.join(config["magdir"], "{MAG}_distillate"))),
+        product=os.path.join(config["magdir"], "{MAG}_dist.tsv.gz"),
+        gbk=os.path.join(config["magdir"], "{MAG}.gbk.gz"),
     params:
         outdir=os.path.join(config["magdir"], "{MAG}_annotate"),
         trnas=os.path.join(config["magdir"], "{MAG}_trnas.tsv"),
-        rrnas=os.path.join(config["magdir"], "{MAG}_rrnas.tsv"), 
+        rrnas=os.path.join(config["magdir"], "{MAG}_rrnas.tsv"),
     # conda:
     #     f"{config['codedir']}/conda_envs/DRAM.yaml"
-    threads:
-        2
+    threads: 2
     resources:
         mem_gb=24,
-        time='03:00:00'
+        time="03:00:00",
     benchmark:
         os.path.join(config["logdir"] + "/DRAM_benchmark_{MAG}.tsv")
     log:
-        os.path.join(config["logdir"] + "/DRAM_log_{MAG}.log")
+        os.path.join(config["logdir"] + "/DRAM_log_{MAG}.log"),
     message:
         "Using DRAM to functionally annotate {wildcards.MAG}"
     shell:
@@ -40,7 +36,7 @@ rule DRAM:
                 -o {params.outdir} \
                 --threads {threads} \
     #            --use_uniref \
-                --min_contig_size 1500 
+                --min_contig_size 1500
 
             #If statements for rrnas/trnas -- sometimes these won't be created
             if test -f {params.outdir}/trnas.tsv && test -f {params.outdir}/rrnas.tsv
@@ -81,7 +77,7 @@ rule DRAM:
                 -o {output.distillate}
             else
             echo "neither trnas nor rrnas found"
-            fi        
+            fi
 
             #compress, clean
             pigz -p {threads} {params.outdir}/annotations.tsv

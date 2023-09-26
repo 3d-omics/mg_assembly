@@ -1,0 +1,8 @@
+# dram: environment to run dram
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - dram=1.3
