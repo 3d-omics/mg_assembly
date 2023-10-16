@@ -8,7 +8,7 @@ rule assemble_megahit_one:
         forwards=get_forwards_from_assembly_id,
         reverses=get_reverses_from_assembly_id,
     output:
-        assemble_folder=directory(MEGAHIT / "{assembly_id}"),
+        # assemble_folder=directory(MEGAHIT / "{assembly_id}"),
         assemble_fasta=MEGAHIT / "{assembly_id}/final.contigs.fa",
     log:
         log=MEGAHIT / "{assembly_id}.log",
@@ -18,6 +18,7 @@ rule assemble_megahit_one:
     resources:
         mem_mb=params["assemble"]["megahit"]["memory_gb"] * 1024,
     params:
+        out_dir=lambda wildcards: MEGAHIT / f"{wildcards.assembly_id}",
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         extra=params["assemble"]["megahit"]["extra"],
         forwards=aggregate_forwards_for_megahit,
@@ -31,10 +32,10 @@ rule assemble_megahit_one:
             --memory {params.memory_bytes} \
             --verbose \
             --force \
+            --out-dir {params.out_dir} \
             -1 {params.forwards} \
             -2 {params.reverses} \
             {params.extra} \
-            --out-dir {output.assemble_folder} \
         2> {log} 1>&2
         """
 
