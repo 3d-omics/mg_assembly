@@ -1,0 +1,80 @@
+digraph snakemake_dag {
+	rankdir=LR;
+    graph[bgcolor=white, margin=0, compound=true];
+    node[shape=box, style=rounded, fontname=sans, fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+
+    subgraph cluster_0 {
+        label = "Input";
+		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+        reference [label = "Reference\nGenome", color = "0.36 0.6 0.85"];
+    	fastq[label = "FASTQ\nreads", color = "0.37 0.6 0.85"];
+    }
+
+	subgraph cluster_1 {
+		label = "Preprocessing";
+		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+		extract[label = "Extract\nNon-Host", color = "0.46 0.6 0.85"];
+	    bowtie2[label = "bowtie2\nmap to host", color = "0.64 0.6 0.85"];
+	    fastp [label = "fastp", color = "0.41 0.6 0.85"];
+	    nonpareil [label = "Nonpareil",  color = "0.23 0.6 0.85"];
+	    singlem[label = "SingleM", color = "0.11 0.6 0.85"];
+	    kraken2 [label = "kraken2", color = "0.32 0.6 0.85"];
+	}
+
+    reference -> bowtie2
+    fastq     -> fastp
+
+	fastp   -> bowtie2
+	fastp   -> nonpareil
+	fastp   -> singlem
+	fastp   -> kraken2
+	bowtie2 -> extract
+	extract -> megahit
+
+	subgraph cluster_2 {
+		label = "Assembly";
+		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+		megahit[label = "MEGAHIT", color = "0.11 0.6 0.85"];
+	}
+
+	megahit -> concoct
+	megahit -> maxbin2
+	megahit -> metabat2
+
+	subgraph cluster_3 {
+		label = "Binning";
+		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+		concoct[label = "CONCOCT", color = "0.36 0.6 0.85"];
+    	maxbin2[label = "MaxBin2", color = "0.52 0.6 0.85"];
+	    metabat2[label = "MetaBAT2", color = "0.02 0.6 0.85"];
+	}
+
+	metabat2 -> magscot
+	concoct  -> magscot
+	maxbin2  -> magscot
+
+	subgraph cluster_4 {
+		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+		label = "Metabinning";
+		magscot [label = "MAGScoT", color = "0.23 0.6 0.85"];
+	}
+
+	magscot -> drep
+
+	subgraph cluster_5 {
+		label = "Dereplication";
+		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+    	coverm [label = "CoverM", color = "0.44 0.6 0.85"];
+	    dram   [label = "DRAM", color = "0.01 0.6 0.85"];
+	    gtdbtk [label = "GTDB-TK", color = "0.34 0.6 0.85"];
+	    drep   [label = "dRep", color = "0.32 0.6 0.85"];
+    	quast  [label = "QUAST", color = "0.38 0.6 0.85"];
+	}
+
+	drep -> coverm
+	drep -> dram
+	drep -> gtdbtk
+	drep -> quast
+
+}
