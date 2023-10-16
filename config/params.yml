@@ -24,6 +24,7 @@ assemble:
   megahit:
     extra: ""
     min_contig_len: 1500
+    memory_gb: 4
   quast:
     extra: ""
   bowtie2-build:

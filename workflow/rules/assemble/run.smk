@@ -16,17 +16,19 @@ rule assemble_megahit_one:
         "assemble.yml"
     threads: 24
     resources:
-        mem_mb=64 * 1024,
+        mem_mb=params["assemble"]["megahit"]["memory_gb"] * 1024,
     params:
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         extra=params["assemble"]["megahit"]["extra"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
+        memory_bytes=params["assemble"]["megahit"]["memory_gb"] * 1024 * 1024 * 1024,
     shell:
         """
         megahit \
             --num-cpu-threads {threads} \
             --min-contig-len {params.min_contig_len} \
+            --memory {params.memory_bytes} \
             --verbose \
             --force \
             -1 {params.forwards} \
