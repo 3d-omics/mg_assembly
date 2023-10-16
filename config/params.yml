@@ -34,11 +34,11 @@ assemble:
     mem: 1G
   coverm:
     genome:
-      methods: "count"
+      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
       min_covered_fraction: 0.0
       separator: "@"
     contig:
-      methods: "count"
+      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
 
 bin:
   metawrap:
@@ -59,13 +59,6 @@ bin:
     extra: ""
   samtools:
     mem: 1G
-  coverm:
-    genome:
-      methods: "count"
-      min_covered_fraction: 0.0
-      separator: "@"
-    contig:
-      methods: "count"
 
 
 metabin:
@@ -75,13 +68,6 @@ metabin:
     extra: ""
   samtools:
     mem: 1G
-  coverm:
-    genome:
-      methods: "count"
-      min_covered_fraction: 0.0
-      separator: "@"
-    contig:
-      methods: "count"
   quast:
     extra: ""
 
@@ -98,10 +84,10 @@ dereplicate:
     mem: 1G
   coverm:
     genome:
-      methods: "count"
+      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
       min_covered_fraction: 0.0
       separator: "@"
     contig:
-      methods: "count"
+      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
   quast:
     extra: ""

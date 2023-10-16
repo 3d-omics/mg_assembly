@@ -1,3 +1,4 @@
+include: "dereplicate/functions.smk"
 include: "dereplicate/run.smk"
 include: "dereplicate/eval.smk"
 

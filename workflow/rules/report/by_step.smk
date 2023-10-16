@@ -112,7 +112,8 @@ rule report_step:
         REPORT_STEP / "preprocessing.html",
         REPORT_STEP / "assemble.html",
         # REPORT_STEP / "bin.html",
-        REPORT_STEP / "metabin.html",
+        # REPORT_STEP / "metabin.html",
+        # REPORT_STEP / "dereplicate.html",
 
 
 rule report_step_with_dereplicate:
