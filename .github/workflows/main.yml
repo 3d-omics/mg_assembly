@@ -52,6 +52,9 @@ jobs:
             --conda-frontend mamba
             --cores 1
 
+      - name: Clean conda cache
+        run: conda clean --all --yes
+
       - name: Test workflow
         uses: snakemake/snakemake-github-action@v1.24.0
         with:
@@ -72,3 +75,8 @@ jobs:
           path: |
             results/
             reports/
+          paths-ignore: |
+            '**/*.cram'
+            '**/*.fq.gz'
+            '**/*.bam'
+            '**/*.bt2'
