@@ -67,7 +67,6 @@ jobs:
             --conda-cleanup-pkgs cache
             --all-temp
             --latency-wait 5
-            --use-singularity
 
       - uses: actions/upload-artifact@v3
         if: failure()
