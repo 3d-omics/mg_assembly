@@ -76,8 +76,7 @@ jobs:
           path: |
             results/
             reports/
-          paths-ignore: |
-            '**/*.cram'
-            '**/*.fq.gz'
-            '**/*.bam'
-            '**/*.bt2'
+            !**/*.cram
+            !**/*.fq.gz
+            !**/*.bam
+            !**/*.bt2
