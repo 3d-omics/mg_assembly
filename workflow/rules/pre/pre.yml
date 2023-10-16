@@ -8,6 +8,7 @@ dependencies:
   - fastp=0.23.4
   - fastqc=0.12.1
   - gzip=1.10
+  - pigz=2.8
   - bowtie2=2.5.1
   - samtools=1.18
   - nonpareil=3.4.1
