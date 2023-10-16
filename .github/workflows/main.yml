@@ -63,3 +63,9 @@ jobs:
             --cores 3
             --conda-cleanup-pkgs cache
             --all-temp
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: results
+          path: results/
