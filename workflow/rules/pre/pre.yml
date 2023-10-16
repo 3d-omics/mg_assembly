@@ -9,7 +9,7 @@ dependencies:
   - fastqc=0.12.1
   - gzip=1.10
   - bowtie2=2.5.1
-  - samtools=1.17
+  - samtools=1.18
   - nonpareil=3.4.1
   - r-nonpareil=3.4.0
   - r-argparse=2.2.2

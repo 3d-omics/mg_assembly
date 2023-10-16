@@ -6,7 +6,7 @@ channels:
   - defaults
 dependencies:
   - bowtie2=2.5.1
-  - samtools=1.17
+  - samtools=1.18
   - r-tidyverse
   - r-argparse
   - r-funr
