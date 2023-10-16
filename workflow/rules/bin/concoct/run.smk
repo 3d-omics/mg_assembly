@@ -50,7 +50,12 @@ rule concoct_run_one:
         assembly_10k=CONCOCT / "prepare" / "{assembly_id}.cut.fa",
         coverage=CONCOCT / "prepare" / "{assembly_id}.coverage.tsv",
     output:
-        out_dir=directory(CONCOCT / "run/{assembly_id}/"),
+        args=CONCOCT / "run/{assembly_id}_args.txt",
+        clustering=CONCOCT / "run/{assembly_id}_clustering_gt1000.csv",
+        log=CONCOCT / "run/{assembly_id}_log.txt",
+        original_data=CONCOCT / "run/{assembly_id}_original_data_gt1000.csv",
+        components=CONCOCT / "run/{assembly_id}_components_data_gt1000.csv",
+        transformed_data=CONCOCT / "run/{assembly_id}_transformed_data_gt1000.csv",
     log:
         CONCOCT / "run/{assembly_id}.log",
     conda:
@@ -67,7 +72,7 @@ rule concoct_run_one:
 
 rule concoct_merge_cutup_clustering_one:
     input:
-        run_dir=CONCOCT / "run/{assembly_id}",
+        clustering=CONCOCT / "run/{assembly_id}_clustering_gt1000.csv",
     output:
         clustering_merged=CONCOCT / "merge" / "{assembly_id}.csv",
     log:
@@ -77,9 +82,9 @@ rule concoct_merge_cutup_clustering_one:
     shell:
         """
         merge_cutup_clustering.py \
-            {input.run_dir}/clustering_gt1000.csv \
+            {input.clustering} \
         > {output.clustering_merged} \
-        2>> {log} 1>&2
+        2>> {log}
         """
 
 
@@ -88,13 +93,14 @@ rule concoct_extract_fasta_bins_one:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         clustering_merged=CONCOCT / "merge" / "{assembly_id}.csv",
     output:
-        bins=CONCOCT / "fasta_bins" / "{assembly_id}/",
+        bins=directory(CONCOCT / "fasta_bins" / "{assembly_id}/"),
     log:
         CONCOCT / "fasta_bins/{assembly_id}.log",
     conda:
         "concoct.yml"
     shell:
         """
+        mkdir --parents {output.bins}
         extract_fasta_bins.py \
             {input.assembly} \
             {input.clustering_merged} \

@@ -100,7 +100,7 @@ rule metabin_magscot_join_hmm_one:
 
 rule metabin_magscot_compose_contig_to_bin_concoct_one:
     input:
-        BIN_METAWRAP / "{assembly_id}/concoct_bins",
+        CONCOCT / "fasta_bins" / "{assembly_id}/",
     output:
         MAGSCOT / "{assembly_id}/concoct.contigs_to_bin.tsv",
     log:
@@ -120,7 +120,7 @@ rule metabin_magscot_compose_contig_to_bin_concoct_one:
 
 rule metabin_magscot_compose_contig_to_bin_maxbin2_one:
     input:
-        BIN_METAWRAP / "{assembly_id}/maxbin2_bins",
+        MAXBIN2 / "bins" / "{assembly_id}/",
     output:
         MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.tsv",
     log:
@@ -129,7 +129,7 @@ rule metabin_magscot_compose_contig_to_bin_maxbin2_one:
         "metabin.yml"
     shell:
         """
-        (grep -H ^">" {input}/*.fa \
+        (grep -H ^">" {input}/*.fasta \
         | parallel -j 1 echo {{/}} \
         | sed 's/\.fa:>/\\t/' \
         | awk '{{print $0"\\tmaxbin2"}}' \
@@ -140,7 +140,7 @@ rule metabin_magscot_compose_contig_to_bin_maxbin2_one:
 
 rule metabin_magscot_compose_contig_to_bin_metabat2_one:
     input:
-        BIN_METAWRAP / "{assembly_id}/metabat2_bins",
+        METABAT2 / "bins/{assembly_id}/",
     output:
         MAGSCOT / "{assembly_id}/metabat2.contigs_to_bin.tsv",
     log:
