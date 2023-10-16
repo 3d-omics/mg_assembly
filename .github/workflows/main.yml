@@ -68,14 +68,14 @@ jobs:
             --all-temp
             --latency-wait 5
 
-      - uses: actions/upload-artifact@v3
-        if: failure()
-        with:
-          name: results
-          path: |
-            results/
-            reports/
-            !**/*.cram
-            !**/*.fq.gz
-            !**/*.bam
-            !**/*.bt2
+      # - uses: actions/upload-artifact@v3
+      #   if: failure()
+      #   with:
+      #     name: results
+      #     path: |
+      #       results/
+      #       reports/
+      #       !**/*.cram
+      #       !**/*.fq.gz
+      #       !**/*.bam
+      #       !**/*.bt2
