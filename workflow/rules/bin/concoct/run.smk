@@ -60,12 +60,14 @@ rule concoct_run_one:
         CONCOCT / "run/{assembly_id}.log",
     conda:
         "concoct.yml"
+    params:
+        basename=CONCOCT / "run/{assembly_id}",
     shell:
         """
         concoct \
             --composition_file {input.assembly_10k} \
             --coverage_file {input.coverage} \
-            --basename {output.out_dir} \
+            --basename {params.basename} \
         2>> {log} 1>&2
         """
 
