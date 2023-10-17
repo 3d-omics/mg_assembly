@@ -41,21 +41,21 @@ jobs:
             ~/.cache/pre-commit/
           key: snakemake-conda-${{ env.CACHE_NUMBER }}
 
-      - name: Download environments
-        uses: snakemake/snakemake-github-action@v1.24.0
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            --use-conda
-            --conda-create-envs-only
-            --conda-frontend mamba
-            --cores 1
+      # - name: Download environments
+      #   uses: snakemake/snakemake-github-action@v1.24.0
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       --use-conda
+      #       --conda-create-envs-only
+      #       --conda-frontend mamba
+      #       --cores 1
 
       - name: Clean conda cache
         run: conda clean --all --yes
 
-      - name: Test workflow
+      - name: Test workflow - Preprocessing
         uses: snakemake/snakemake-github-action@v1.24.0
         with:
           directory: .
@@ -65,8 +65,47 @@ jobs:
             --show-failed-logs
             --cores 3
             --conda-cleanup-pkgs cache
-            --all-temp
             --latency-wait 5
+            pre
+
+      - name: Test workflow - Assemble
+        uses: snakemake/snakemake-github-action@v1.24.0
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            assemble
+
+      - name: Test workflow - Bin
+        uses: snakemake/snakemake-github-action@v1.24.0
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            bin
+
+      - name: Test workflow - Metabin
+        uses: snakemake/snakemake-github-action@v1.24.0
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            metabin
 
       # - uses: actions/upload-artifact@v3
       #   if: failure()
