@@ -101,7 +101,7 @@ rule pre_eval_singlem_pipe_one:
         SINGLEM / "{sample_id}.{library_id}.log",
     conda:
         "pre.yml"
-    threads: 4
+    threads: 24
     resources:
         runtime=4 * 60,
     shell:
