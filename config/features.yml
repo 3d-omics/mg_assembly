@@ -10,4 +10,5 @@ magscot:
 dram_database: "resources/mock_dram_db"
 gtdbtk_database: "resources/mock_gtdbtk_db"
 singlem_database: "resources/mock_singlem_db"
-kraken2_database: "resources/kraken2_mock"
+kraken2_dbs:
+  mock: "resources/kraken2_mock"

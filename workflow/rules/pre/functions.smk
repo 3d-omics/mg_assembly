@@ -32,3 +32,8 @@ def compose_rg_extra(wildcards):
 def compose_prefix_for_nonpareil(wildcards):
     """Compose prefix for nonpareil output files"""
     return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"
+
+
+def get_kraken2_database(wildcards):
+    """Get kraken2 database path from the name"""
+    return features["kraken2_dbs"][wildcards.kraken_db]

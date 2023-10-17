@@ -250,43 +250,109 @@ rule pre_eval_nonhost_fastqc:
 
 
 # Kraken2 over fastp reads, not nonhost
-rule pre_eval_kraken2_assign_one:
-    """Run kraken2 over one library and using one database."""
+# rule pre_eval_kraken2_assign_one:
+#     """Run kraken2 over one library and using one database."""
+#     input:
+#         forward_=FASTP / "{sample}.{library}_1.fq.gz",
+#         reverse_=FASTP / "{sample}.{library}_2.fq.gz",
+#         database=features["kraken2_database"],
+#     output:
+#         out_gz=KRAKEN2 / "{sample}.{library}.out.gz",
+#         report=KRAKEN2 / "{sample}.{library}.report",
+#     log:
+#         log=KRAKEN2 / "{sample}.{library}.log",
+#     conda:
+#         "pre.yml"
+#     threads: 24
+#     resources:
+#         mem_mb=params["pre"]["kraken2"]["mem_mb"],
+#         runtime=60,
+#     shell:
+#         """
+#         kraken2 \
+#             --db {input.database} \
+#             --threads {threads} \
+#             --paired \
+#             --gzip-compressed \
+#             --output >(pigz > {output.out_gz}) \
+#             --report {output.report} \
+#             {input.forward_} \
+#             {input.reverse_} \
+#         > {log} 2>&1
+#         """
+
+
+rule pre_eval_kraken2_assign_all:
     input:
-        forward_=FASTP / "{sample}.{library}_1.fq.gz",
-        reverse_=FASTP / "{sample}.{library}_2.fq.gz",
-        database=features["kraken2_database"],
+        files=[
+            FASTP / f"{sample}.{library}_{ending}.fq.gz"
+            for sample, library in SAMPLE_LIBRARY
+            for ending in ["1", "2"]
+        ],
+        database=get_kraken2_database,
     output:
-        out_gz=KRAKEN2 / "{sample}.{library}.out.gz",
-        report=KRAKEN2 / "{sample}.{library}.report",
+        out_gzs=[
+            KRAKEN2 / "{kraken_db}" / f"{sample}.{library}.out.gz"
+            for sample, library in SAMPLE_LIBRARY
+        ],
+        reports=[
+            KRAKEN2 / "{kraken_db}" / f"{sample}.{library}.report"
+            for sample, library in SAMPLE_LIBRARY
+        ],
     log:
-        log=KRAKEN2 / "{sample}.{library}.log",
-    conda:
-        "pre.yml"
+        KRAKEN2 / "{kraken_db}.log",
     threads: 24
     resources:
         mem_mb=params["pre"]["kraken2"]["mem_mb"],
         runtime=60,
+    params:
+        in_folder=FASTP,
+        out_folder=lambda wildcards: KRAKEN2 / f"{wildcards.kraken_db}",
+        kraken_db_shm="/dev/shm/{kraken_db}",
+    conda:
+        "pre.yml"
     shell:
         """
-        kraken2 \
-            --db {input.database} \
-            --threads {threads} \
-            --paired \
-            --gzip-compressed \
-            --output >(pigz > {output.out_gz}) \
-            --report {output.report} \
-            {input.forward_} \
-            {input.reverse_} \
-        > {log} 2>&1
+        mapfile -t sample_ids < <(find "{params.in_folder}" -name "*_1.fq.gz" -exec basename {{}} _1.fq.gz \;)
+
+        {{
+            mkdir --parents {params.kraken_db_shm}
+            mkdir --parents {params.out_folder}
+
+            rsync \
+                -Pravt \
+                {input.database}/*.k2d \
+                {params.kraken_db_shm} \
+            2> {log} 1>&2
+
+            parallel \
+                -j 1 \
+                --tag \
+                kraken2 \
+                    --db {params.kraken_db_shm} \
+                    --threads {threads} \
+                    --gzip-compressed \
+                    --output ">(pigz > {params.out_folder}/{{}}.out.gz)" \
+                    --report {params.out_folder}/{{}}.report \
+                    --memory-mapping \
+                    {params.in_folder}/{{}}_1.fq.gz \
+                    {params.in_folder}/{{}}_2.fq.gz \
+                "2>" {params.out_folder}/{{}}.log  "1>&2" \
+            ::: ${{sample_ids[@]}}
+        }} || {{
+            echo "Failed job" 2>> {log} 1>&2
+        }}
+
+        rm -rfv {params.kraken_db_shm} 2>>{log} 1>&2
         """
 
 
 rule pre_eval_kraken2:
     input:
         [
-            KRAKEN2 / f"{sample_id}.{library_id}.report"
+            KRAKEN2 / f"{kraken_db}/{sample_id}.{library_id}.report"
             for sample_id, library_id in SAMPLE_LIBRARY
+            for kraken_db in features["kraken2_dbs"]
         ],
 
 
