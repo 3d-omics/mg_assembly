@@ -16,14 +16,15 @@ rule assemble_megahit_one:
         "assemble.yml"
     threads: 24
     resources:
-        mem_mb=params["assemble"]["megahit"]["memory_gb"] * 1024,
+        mem_mb=double_ram_for_assemble_megahit,
     params:
         out_dir=lambda wildcards: MEGAHIT / f"{wildcards.assembly_id}",
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         extra=params["assemble"]["megahit"]["extra"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
-        memory_bytes=params["assemble"]["megahit"]["memory_gb"] * 1024 * 1024 * 1024,
+        memory_bytes=lambda wildcards, resources: resources.mem_mb * 1024**2,  # https://github.com/snakemake/snakemake/issues/499
+    retries: 5
     shell:
         """
         megahit \
@@ -89,8 +90,9 @@ rule assemble_bowtie2_build_one:
     params:
         extra=params["assemble"]["bowtie2-build"]["extra"],
     resources:
-        mem_mb=params["assemble"]["bowtie2-build"]["memory_gb"] * 1024,
+        mem_mb=double_ram_for_assemble_bowtie2_build,
         runtime=6 * 60,
+    retries: 5
     shell:
         """
         bowtie2-build \
@@ -126,8 +128,9 @@ rule assemble_bowtie2_one:
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     resources:
-        mem_mb=params["assemble"]["bowtie2"]["memory_gb"] * 1024,
+        mem_mb=double_ram_for_assemble_bowtie2_map,
         runtime=6 * 60,
+    retries: 5
     shell:
         """
         (bowtie2 \
