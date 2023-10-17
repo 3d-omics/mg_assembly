@@ -325,20 +325,20 @@ rule pre_eval_kraken2_assign_all:
                 {params.kraken_db_shm} \
             2> {log} 1>&2
 
-            parallel \
-                -j 1 \
-                --tag \
+            for sample_id in ${{sample_ids[@]}} ; do \
+
                 kraken2 \
                     --db {params.kraken_db_shm} \
                     --threads {threads} \
                     --gzip-compressed \
-                    --output ">(pigz > {params.out_folder}/{{}}.out.gz)" \
-                    --report {params.out_folder}/{{}}.report \
+                    --output >(pigz > {params.out_folder}/${{sample_id}}.out.gz) \
+                    --report {params.out_folder}/${{sample_id}}.report \
                     --memory-mapping \
-                    {params.in_folder}/{{}}_1.fq.gz \
-                    {params.in_folder}/{{}}_2.fq.gz \
-                "2>" {params.out_folder}/{{}}.log  "1>&2" \
-            ::: ${{sample_ids[@]}}
+                    {params.in_folder}/${{sample_id}}_1.fq.gz \
+                    {params.in_folder}/${{sample_id}}_2.fq.gz \
+                2> {params.out_folder}/${{sample_id}}.log  1>&2
+
+            done
         }} || {{
             echo "Failed job" 2>> {log} 1>&2
         }}
