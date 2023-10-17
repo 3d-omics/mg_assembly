@@ -37,3 +37,13 @@ def compose_prefix_for_nonpareil(wildcards):
 def get_kraken2_database(wildcards):
     """Get kraken2 database path from the name"""
     return features["kraken2_dbs"][wildcards.kraken_db]
+
+
+def double_ram_for_pre_bowtie2_index_host(wildcards, attempt):
+    initial_ram = params["pre"]["bowtie2-build"]["memory_gb"]
+    return initial_ram * 2**attempt * 1024
+
+
+def double_ram_for_pre_bowtie2_map_host(wildcards, attempt):
+    initial_ram = params["pre"]["bowtie2"]["memory_gb"]
+    return initial_ram * 2**attempt * 1024

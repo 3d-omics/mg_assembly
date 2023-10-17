@@ -72,8 +72,9 @@ rule pre_bowtie2_index_host:
         extra=params["pre"]["bowtie2-build"]["extra"],
     threads: 24
     resources:
-        mem_mb=params["pre"]["bowtie2-build"]["memory_gb"] * 1024,
+        mem_mb=double_ram_for_pre_bowtie2_index_host,
         runtime=24 * 60,
+    retries: 5
     shell:
         """
         bowtie2-build \
@@ -108,8 +109,9 @@ rule pre_bowtie2_map_host_one:
         rg_extra=compose_rg_extra,
     threads: 24
     resources:
-        mem_mb=params["pre"]["bowtie2"]["memory_gb"] * 1024,
+        mem_mb=double_ram_for_pre_bowtie2_map_host,
         runtime=24 * 60,
+    retries: 5
     shell:
         """
         (bowtie2 \
@@ -160,7 +162,7 @@ rule pre_bowtie2_extract_nonhost_one:
     threads: 24
     resources:
         runtime=1 * 60,
-        mem_mb=8 * 1024,
+        mem_mb=32 * 1024,
     shell:
         """
         (samtools view \
