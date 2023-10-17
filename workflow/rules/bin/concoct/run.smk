@@ -54,17 +54,19 @@ rule concoct_run_one:
         clustering=CONCOCT / "run/{assembly_id}_clustering_gt1000.csv",
         log=CONCOCT / "run/{assembly_id}_log.txt",
         original_data=CONCOCT / "run/{assembly_id}_original_data_gt1000.csv",
-        components=CONCOCT / "run/{assembly_id}_components_data_gt1000.csv",
-        transformed_data=CONCOCT / "run/{assembly_id}_transformed_data_gt1000.csv",
+        components=CONCOCT / "run/{assembly_id}_PCA_components_data_gt1000.csv",
+        transformed_data=CONCOCT / "run/{assembly_id}_PCA_transformed_data_gt1000.csv",
     log:
         CONCOCT / "run/{assembly_id}.log",
     conda:
         "concoct.yml"
     params:
-        basename=CONCOCT / "run/{assembly_id}",
+        basename=lambda wildcards: CONCOCT / f"run/{wildcards.assembly_id}",
+    threads: 24
     shell:
         """
         concoct \
+            --threads {threads} \
             --composition_file {input.assembly_10k} \
             --coverage_file {input.coverage} \
             --basename {params.basename} \
