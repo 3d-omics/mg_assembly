@@ -108,7 +108,7 @@ rule pre_bowtie2_map_host_one:
         rg_extra=compose_rg_extra,
     threads: 24
     resources:
-        mem_mb=32 * 1024,
+        mem_mb=params["pre"]["bowtie2"]["mem_gb"] * 1024,
         runtime=24 * 60,
     shell:
         """

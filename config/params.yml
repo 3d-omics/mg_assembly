@@ -7,6 +7,7 @@ pre:
   bowtie2-build:
     extra: ""
   bowtie2:
+    mem_gb: 64
     extra: ""
     samtools:
       mem_per_thread: 1G
