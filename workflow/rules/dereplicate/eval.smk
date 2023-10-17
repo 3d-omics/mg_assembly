@@ -11,7 +11,7 @@ rule dereplicate_eval_gtdbtk:
         "gtdbtk.yml"
     threads: 24
     resources:
-        mem_mb=params["dereplicate"]["gtdbtk"]["memory_gb"] * 1024,
+        mem_mb=double_ram_for_dereplicate_eval_gtdbtk,
         runtime=24 * 60,
     shell:
         """
@@ -200,7 +200,7 @@ rule dereplicate_eval_dram_annotate:
     params:
         min_contig_size=1500,
     resources:
-        mem_mb=params["dereplicate"]["dram"]["memory_gb"] * 1024,
+        mem_mb=double_ram_for_dereplicate_eval_dram,
         runtime=24 * 60,
     threads: 24
     shell:
@@ -232,7 +232,7 @@ rule dereplicate_eval_dram_distill:
     conda:
         "dram.yml"
     resources:
-        mem_mb=params["dereplicate"]["dram"]["memory_gb"] * 1024,
+        mem_mb=double_ram_for_dereplicate_eval_dram,
         runtime=24 * 60,
     shell:
         """
