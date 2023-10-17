@@ -155,7 +155,7 @@ rule pre_eval_cram_to_mapped_bam:
     """
     input:
         cram=PRE_BOWTIE2 / "{sample}.{library_id}.cram",
-        reference=features["host"]["fasta"],
+        reference=REFERENCE / "host.fa.gz",
     output:
         bam=temp(PRE_COVERM / "bams/{sample}.{library_id}.bam"),
     log:
@@ -179,18 +179,18 @@ rule pre_eval_cram_to_mapped_bam:
         """
 
 
-rule pre_eval_coverm_genome_one:
+rule pre_eval_coverm_genome_method_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=PRE_COVERM / "bams/{sample}.{library_id}.bam",
     output:
-        tsv=touch(PRE_COVERM / "genome/{sample}.{library_id}.tsv"),
+        tsv=touch(PRE_COVERM / "genome/{method}/{sample}.{library_id}.tsv"),
     conda:
         "pre.yml"
     log:
-        PRE_COVERM / "genome/{sample}.{library_id}.log",
+        PRE_COVERM / "genome/{method}/{sample}.{library_id}.log",
     params:
-        methods=params["pre"]["coverm"]["genome"]["methods"],
+        methods="{method}",
         min_covered_fraction=params["pre"]["coverm"]["genome"]["min_covered_fraction"],
         separator=params["pre"]["coverm"]["genome"]["separator"],
     shell:
@@ -204,21 +204,21 @@ rule pre_eval_coverm_genome_one:
         """
 
 
-rule pre_eval_coverm:
+rule pre_eval_coverm_genome_aggregate_method:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [
-            PRE_COVERM / f"genome/{sample_id}.{library_id}.tsv"
+            PRE_COVERM / "genome" / "{method}" / f"{sample_id}.{library_id}.tsv"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
     output:
-        PRE_COVERM / "coverm.tsv",
+        PRE_COVERM / "genome.{method}.tsv",
     log:
-        PRE_COVERM / "coverm.log",
+        PRE_COVERM / "genome.{method}.log",
     conda:
         "pre.yml"
     params:
-        input_dir=PRE_COVERM / "genome",
+        input_dir=PRE_COVERM / "genome" / "{method}",
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -226,6 +226,14 @@ rule pre_eval_coverm:
             --output-file {output} \
         2> {log} 1>&2
         """
+
+
+rule pre_eval_coverm:
+    input:
+        [
+            PRE_COVERM / f"genome.{method}.tsv"
+            for method in params["pre"]["coverm"]["genome"]["methods"]
+        ],
 
 
 rule pre_eval_samtools:

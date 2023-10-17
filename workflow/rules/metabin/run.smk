@@ -93,8 +93,8 @@ rule metabin_magscot_join_hmm_one:
         "metabin.yml"
     shell:
         """
-        grep -v "^#" {input.tigr_out} | awk '{{print $1"\\t"$3"\\t"$5}}' >  {output.merged} 2>  {log}
-        grep -v "^#" {input.pfam_out} | awk '{{print $1"\\t"$4"\\t"$5}}' >> {output.merged} 2>> {log}
+        (grep -v "^#" {input.tigr_out} | awk '{{print $1"\\t"$3"\\t"$5}}' >  {output.merged}) 2>  {log}
+        (grep -v "^#" {input.pfam_out} | awk '{{print $1"\\t"$4"\\t"$5}}' >> {output.merged}) 2>> {log}
         """
 
 

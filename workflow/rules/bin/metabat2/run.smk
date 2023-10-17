@@ -28,7 +28,7 @@ rule metabat2_run_one:
     output:
         bins=directory(METABAT2 / "bins/{assembly_id}/"),
     log:
-        METABAT2 / "bibinns" / "{assembly_id}.log",
+        METABAT2 / "bins" / "{assembly_id}.log",
     conda:
         "metabat2.yml"
     params:

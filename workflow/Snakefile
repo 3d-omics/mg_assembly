@@ -32,6 +32,7 @@ KRAKEN2_DBS = features["kraken2_dbs"]
 include: "rules/folders.smk"
 include: "rules/helpers.smk"
 include: "rules/reads.smk"
+include: "rules/reference.smk"
 include: "rules/pre.smk"
 include: "rules/assemble.smk"
 include: "rules/bin.smk"

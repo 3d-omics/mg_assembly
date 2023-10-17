@@ -1,4 +1,5 @@
 READS = Path("results/reads/")
+REFERENCE = Path("results/reference/")
 
 # preprocess
 PRE = Path("results/preprocess/")

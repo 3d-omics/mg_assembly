@@ -61,7 +61,7 @@ rule pre_bowtie2_index_host:
     the reference genome.
     """
     input:
-        reference=features["host"]["fasta"],
+        reference=REFERENCE / "host.fa.gz",
     output:
         mock=touch(PRE_INDEX / "host"),
     log:
@@ -94,7 +94,7 @@ rule pre_bowtie2_map_host_one:
         forward_=FASTP / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=FASTP / "{sample_id}.{library_id}_2.fq.gz",
         mock=PRE_INDEX / "host",
-        reference=features["host"]["fasta"],
+        reference=REFERENCE / "host.fa.gz",
     output:
         cram=PRE_BOWTIE2 / "{sample_id}.{library_id}.cram",
     log:
@@ -147,7 +147,7 @@ rule pre_bowtie2_extract_nonhost_one:
     """
     input:
         cram=PRE_BOWTIE2 / "{sample_id}.{library_id}.cram",
-        reference=features["host"]["fasta"],
+        reference=REFERENCE / "host.fa.gz",
     output:
         forward_=temp(NONHOST / "{sample_id}.{library_id}_1.fq.gz"),
         reverse_=temp(NONHOST / "{sample_id}.{library_id}_2.fq.gz"),
@@ -170,9 +170,14 @@ rule pre_bowtie2_extract_nonhost_one:
             -o /dev/stdout \
             -f 12 \
             {input.cram} \
+        | samtools sort \
+            -n \
+            -u \
+            -m {params.samtools_mem} \
+            --threads {threads} \
         | samtools fastq \
-            -1 >(pigz -1 > {output.forward_}) \
-            -2 >(pigz -1 > {output.reverse_}) \
+            -1 {output.forward_} \
+            -2 {output.reverse_} \
             -0 /dev/null \
             -c 1 \
             --threads {threads} \

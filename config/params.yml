@@ -14,11 +14,11 @@ pre:
       mem_per_thread: 1G
   coverm:
     genome:
-      methods: "count"
+      methods: ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
       min_covered_fraction: 0.0
       separator: "^"
     contig:
-      methods: "count"
+      methods: ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
   kraken2:
     memory_gb: 32
 
