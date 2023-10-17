@@ -78,8 +78,9 @@ def get_stats_files_from_assembly_id(wildcards):
         for end in ["1", "2"]
     ]
     pre_kraken2 = [
-        KRAKEN2 / f"{sample_id}.{library_id}.report"
+        KRAKEN2 / f"{kraken_db}" / f"{sample_id}.{library_id}.report"
         for sample_id, library_id in sample_library
+        for kraken_db in KRAKEN2_DBS
     ]
 
     assemble_quast = ASSEMBLE_QUAST / f"{wildcards.assembly_id}"

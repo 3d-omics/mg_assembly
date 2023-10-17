@@ -11,7 +11,8 @@ rule dereplicate_eval_gtdbtk:
         "gtdbtk.yml"
     threads: 24
     resources:
-        mem_mb=320 * 1024,
+        mem_mb=params["dereplicate"]["gtdbtk"]["memory_gb"] * 1024,
+        runtime=24 * 60,
     shell:
         """
         export GTDBTK_DATA_PATH="{input.database}"
@@ -168,6 +169,21 @@ rule dereplicate_eval_coverm_contig:
 
 
 # dram ----
+
+
+rule dereplicate_eval_dram_setup_db:
+    input:
+        features["dram_database"],
+    output:
+        touch("results/dram_db_setup.done"),
+    log:
+        "results/dram_db_setup.log",
+    conda:
+        "dram.yml"
+    shell:
+        "python workflow/scripts/dram_setup.py {input} 2> {log}"
+
+
 rule dereplicate_eval_dram_annotate:
     input:
         drep_folder=DREP / "dereplicated_genomes",
@@ -183,10 +199,13 @@ rule dereplicate_eval_dram_annotate:
         "dram.yml"
     params:
         min_contig_size=1500,
+    resources:
+        mem_mb=params["dereplicate"]["dram"]["memory_gb"] * 1024,
+        runtime=24 * 60,
     threads: 24
     shell:
         """
-        rm -rf {output.outdir}
+        rm -rfv {output.outdir} 2> {log} 1>&2
 
         DRAM.py annotate \
             --input_fasta {input.drep_folder} \
@@ -195,7 +214,7 @@ rule dereplicate_eval_dram_annotate:
             --rrna_path {output.rrnas} \
             --trna_path {output.trnas} \
             --min_contig_size {params.min_contig_size} \
-        2> {log} 1>&2
+        2>> {log} 1>&2
         """
 
 
@@ -212,6 +231,9 @@ rule dereplicate_eval_dram_distill:
         DREP_DRAM / "distill/dereplicated_genomes.log",
     conda:
         "dram.yml"
+    resources:
+        mem_mb=params["dereplicate"]["dram"]["memory_gb"] * 1024,
+        runtime=24 * 60,
     shell:
         """
         DRAM.py distill \

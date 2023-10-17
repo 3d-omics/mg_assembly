@@ -6,8 +6,9 @@ pre:
     extra: "--trim_poly_g --trim_poly_x"
   bowtie2-build:
     extra: ""
+    memory_gb: 32
   bowtie2:
-    mem_gb: 64
+    memory_gb: 64
     extra: ""
     samtools:
       mem_per_thread: 1G
@@ -19,7 +20,7 @@ pre:
     contig:
       methods: "count"
   kraken2:
-    mem_mb: 32000
+    memory_gb: 32
 
 assemble:
   megahit:
@@ -30,8 +31,10 @@ assemble:
     extra: ""
   bowtie2-build:
     extra: ""
+    memory_gb: 8
   bowtie2:
     extra: ""
+    memory_gb: 8
   samtools:
     mem: 1G
   coverm:
@@ -69,11 +72,13 @@ metabin:
 dereplicate:
   drep:
     threads: 1  # Careful with pplacer!
-    mem_mb: 22000  # 22GB * pplacer cores
+    memory_gb: 22  # 22GB * pplacer cores
   bowtie2-build:
     extra: ""
+    memory_gb: 8
   bowtie2:
     extra: ""
+    memory_gb: 8
   samtools:
     mem: 1G
   coverm:
@@ -85,3 +90,7 @@ dereplicate:
       methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
   quast:
     extra: ""
+  gtdbtk:
+    memory_gb: 32
+  dram:
+    memory_gb: 32

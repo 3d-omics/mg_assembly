@@ -303,7 +303,7 @@ rule pre_eval_kraken2_assign_all:
         KRAKEN2 / "{kraken_db}.log",
     threads: 24
     resources:
-        mem_mb=params["pre"]["kraken2"]["mem_mb"],
+        mem_mb=params["pre"]["kraken2"]["memory_gb"] * 1024,
         runtime=60,
     params:
         in_folder=FASTP,

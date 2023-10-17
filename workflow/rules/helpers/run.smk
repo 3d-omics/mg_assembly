@@ -142,16 +142,3 @@ rule samtools_stats_cram_dereplicate:
         "helpers.yml"
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
-
-
-rule dram_setup_db:
-    input:
-        features["dram_database"],
-    output:
-        touch("results/dram_db_setup.done"),
-    log:
-        "results/dram_db_setup.log",
-    conda:
-        "../metabin/dram.yml"
-    shell:
-        "python workflow/scripts/dram_setup.py {input} 2> {log}"

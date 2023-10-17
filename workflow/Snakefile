@@ -25,6 +25,7 @@ ASSEMBLY_SAMPLE_LIBRARY = samples[
     ["assembly_id", "sample_id", "library_id"]
 ].values.tolist()
 ASSEMBLIES = samples.assembly_id.unique()
+KRAKEN2_DBS = features["kraken2_dbs"]
 
 
 # Import subworkflows

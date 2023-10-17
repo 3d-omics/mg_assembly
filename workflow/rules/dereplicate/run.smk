@@ -11,7 +11,7 @@ rule dereplicate_drep:
     params:
         out_dir=DREP,
     resources:
-        mem_mb=params["dereplicate"]["drep"]["mem_mb"],
+        mem_mb=params["dereplicate"]["drep"]["memory_gb"] * 1024,
     shell:
         """
         dRep dereplicate \
@@ -55,6 +55,9 @@ rule dereplicate_bowtie2_build_one:
     threads: 24
     params:
         extra=params["dereplicate"]["bowtie2-build"]["extra"],
+    resources:
+        mem_mb=params["dereplicate"]["bowtie2-build"]["memory_gb"] * 1024,
+        runtime=24 * 60,
     shell:
         """
         bowtie2-build \
@@ -85,7 +88,7 @@ rule dereplicate_bowtie2_one:
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     resources:
-        mem_mb=32 * 1024,
+        mem_mb=params["dereplicate"]["bowtie2"]["memory_gb"] * 1024,
     shell:
         """
         (bowtie2 \

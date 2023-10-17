@@ -72,7 +72,7 @@ rule pre_bowtie2_index_host:
         extra=params["pre"]["bowtie2-build"]["extra"],
     threads: 24
     resources:
-        mem_mb=32 * 1024,
+        mem_mb=params["pre"]["bowtie2-build"]["memory_gb"] * 1024,
         runtime=24 * 60,
     shell:
         """
@@ -108,7 +108,7 @@ rule pre_bowtie2_map_host_one:
         rg_extra=compose_rg_extra,
     threads: 24
     resources:
-        mem_mb=params["pre"]["bowtie2"]["mem_gb"] * 1024,
+        mem_mb=params["pre"]["bowtie2"]["memory_gb"] * 1024,
         runtime=24 * 60,
     shell:
         """
@@ -160,7 +160,7 @@ rule pre_bowtie2_extract_nonhost_one:
     threads: 24
     resources:
         runtime=1 * 60,
-        mem_mb=32 * 1024,
+        mem_mb=8 * 1024,
     shell:
         """
         (samtools view \
@@ -170,14 +170,9 @@ rule pre_bowtie2_extract_nonhost_one:
             -o /dev/stdout \
             -f 12 \
             {input.cram} \
-        | samtools sort \
-            -n \
-            -u \
-            -m {params.samtools_mem} \
-            --threads {threads} \
         | samtools fastq \
-            -1 {output.forward_} \
-            -2 {output.reverse_} \
+            -1 >(pigz -1 > {output.forward_}) \
+            -2 >(pigz -1 > {output.reverse_}) \
             -0 /dev/null \
             -c 1 \
             --threads {threads} \

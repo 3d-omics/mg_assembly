@@ -88,6 +88,9 @@ rule assemble_bowtie2_build_one:
     threads: 24
     params:
         extra=params["assemble"]["bowtie2-build"]["extra"],
+    resources:
+        mem_mb=params["assemble"]["bowtie2-build"]["memory_gb"] * 1024,
+        runtime=6 * 60,
     shell:
         """
         bowtie2-build \
@@ -123,7 +126,8 @@ rule assemble_bowtie2_one:
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     resources:
-        mem_mb=32 * 1024,
+        mem_mb=params["assemble"]["bowtie2"]["memory_gb"] * 1024,
+        runtime=6 * 60,
     shell:
         """
         (bowtie2 \
