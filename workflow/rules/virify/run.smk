@@ -61,9 +61,11 @@ rule virify_all:
         [VIRIFY / f"{assembly_id}" for assembly_id in ASSEMBLIES],
     conda:
         "virify.yml"
+    log:
+        VIRIFY / "all.log",
     shell:
         """
-        nextflow clean -f 2> /dev/null 1>&2
+        nextflow clean -f 2> {log} 1>&2
         """
 
 
