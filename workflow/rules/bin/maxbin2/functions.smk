@@ -7,3 +7,7 @@ def get_bams_for_maxbin2(wildcards):
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam",
         )
     return bam_files
+
+
+def compose_out_prefix_for_maxbin2_run_one(wildcards):
+    return MAXBIN2 / "bins" / f"{wildcards.assembly_id}"

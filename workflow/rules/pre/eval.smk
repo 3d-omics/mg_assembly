@@ -315,7 +315,7 @@ rule pre_eval_kraken2_assign_all:
         runtime=60,
     params:
         in_folder=FASTP,
-        out_folder=lambda wildcards: KRAKEN2 / f"{wildcards.kraken_db}",
+        out_folder=compose_out_folder_for_eval_kraken2_assign_all,
         kraken_db_shm="/dev/shm/{kraken_db}",
     conda:
         "pre.yml"

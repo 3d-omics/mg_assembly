@@ -13,7 +13,7 @@ rule report_assembly_one:
         "report.yml"
     params:
         dir=REPORT_ASSEMBLY,
-        title=lambda wildcards: wildcards.assembly_id,
+        title="{assembly_id}",
     shell:
         """
         multiqc \

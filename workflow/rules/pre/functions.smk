@@ -47,3 +47,7 @@ def double_ram_for_pre_bowtie2_index_host(wildcards, attempt):
 def double_ram_for_pre_bowtie2_map_host(wildcards, attempt):
     initial_ram = params["pre"]["bowtie2"]["memory_gb"]
     return initial_ram * 2**attempt * 1024
+
+
+def compose_out_folder_for_eval_kraken2_assign_all(wildcards):
+    return KRAKEN2 / f"{wildcards.kraken_db}"

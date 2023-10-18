@@ -32,8 +32,7 @@ rule metabat2_run_one:
     conda:
         "metabat2.yml"
     params:
-        bins_prefix=lambda wildcards: METABAT2
-        / f"bins/{wildcards.assembly_id}/{wildcards.assembly_id}",
+        bins_prefix=compose_bins_prefix_for_metaba2_run_one,
     threads: 24
     shell:
         """

@@ -191,7 +191,7 @@ rule metabin_magscot_run_one:
     conda:
         "metabin.yml"
     params:
-        out_prefix=lambda wildcards: MAGSCOT / f"{wildcards.assembly_id}/magscot",
+        out_prefix=compose_out_prefix_for_metabin_magscot_run_one,
     shell:
         """
         Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \

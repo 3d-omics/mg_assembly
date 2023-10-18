@@ -61,7 +61,7 @@ rule concoct_run_one:
     conda:
         "concoct.yml"
     params:
-        basename=lambda wildcards: CONCOCT / f"run/{wildcards.assembly_id}",
+        basename=get_basename_for_concoct_run_one,
     threads: 24
     shell:
         """

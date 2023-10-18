@@ -36,7 +36,7 @@ rule maxbin2_run_one:
     threads: 24
     params:
         seed=1,
-        out_prefix=lambda wildcards: MAXBIN2 / "bins" / f"{wildcards.assembly_id}",
+        out_prefix=compose_out_prefix_for_maxbin2_run_one,
     shell:
         """
         mkdir --parents {output.outdir}

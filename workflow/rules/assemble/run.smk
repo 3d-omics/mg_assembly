@@ -18,12 +18,12 @@ rule assemble_megahit_one:
     resources:
         mem_mb=double_ram_for_assemble_megahit,
     params:
-        out_dir=lambda wildcards: MEGAHIT / f"{wildcards.assembly_id}",
+        out_dir=compose_out_dir_for_assemble_megahit_one,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         extra=params["assemble"]["megahit"]["extra"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
-        memory_bytes=lambda wildcards, resources: resources.mem_mb * 1024**2,  # https://github.com/snakemake/snakemake/issues/499
+        memory_bytes=get_memory_bytes_for_assemble_megahit_one,
     retries: 5
     shell:
         """
@@ -62,7 +62,7 @@ rule assemble_megahit_renaming_one:
     conda:
         "assemble.yml"
     params:
-        assembly_id=lambda wildcards: wildcards.assembly_id,
+        assembly_id="{assembly_id}",
     shell:
         """
         ( seqtk seq {input} \

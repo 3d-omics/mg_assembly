@@ -18,3 +18,7 @@ def get_bais_for_concoct_binning(wildcards):
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam.bai",
         )
     return bam_files
+
+
+def get_basename_for_concoct_run_one(wildcards):
+    return CONCOCT / f"run/{wildcards.assembly_id}"

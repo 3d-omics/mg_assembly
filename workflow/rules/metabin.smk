@@ -1,4 +1,4 @@
-# include: "metabin_functions.smk"
+include: "metabin/functions.smk"
 include: "metabin/run.smk"
 
 

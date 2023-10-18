@@ -84,3 +84,12 @@ def double_ram_for_assemble_bowtie2_build(wildcards, attempt):
 def double_ram_for_assemble_bowtie2_map(wildcards, attempt):
     initial_memory = params["assemble"]["bowtie2"]["memory_gb"]
     return initial_memory * 2**attempt * 1024
+
+
+def compose_out_dir_for_assemble_megahit_one(wildcards):
+    return MEGAHIT / f"{wildcards.assembly_id}"
+
+
+def get_memory_bytes_for_assemble_megahit_one(wildcards, resources):
+    # https://github.com/snakemake/snakemake/issues/499
+    return resources.mem_mb * 1024**2
