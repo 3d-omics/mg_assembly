@@ -1,6 +1,6 @@
 rule virify_download_db:
     output:
-        db_folder=directory(VIRIFY / "databases"),
+        db_folder=features["virify_database"],
     log:
         VIRIFY / "databases.log",
     conda:
@@ -9,23 +9,23 @@ rule virify_download_db:
     shell:
         """
         nextflow run EBI-Metagenomics/emg-viral-pipeline \
-            -r v2.0.0 \
+            -revision v2.0.0 \
             --databases {output.db_folder} \
             --fasta /dev/null \
             --cores {threads} \
             --max_cores {threads} \
             --workdir {output.db_folder}/work \
-            -profile local,docker \
+            -profile local,singularity \
         2> {log} 1>&2
 
-        # rm -rf {output.db_folder}/work
+        rm -rf results/null
         """
 
 
 rule virify_one:
     input:
         fasta=ASSEMBLE_RENAME / "{assembly_id}.fa",
-        db_folder=VIRIFY / "databases",
+        db_folder=features["virify_database"],
     output:
         out_folder=directory(VIRIFY / "{assembly_id}"),
     log:
@@ -35,15 +35,16 @@ rule virify_one:
     threads: 4
     params:
         mem_gb=12,
+        output=VIRIFY,
     resources:
         runtime=6 * 60,
         mem_mb=12 * 1024,
     shell:
         """
         nextflow run EBI-Metagenomics/emg-viral-pipeline \
-            -r v2.0.0 \
+            -revision v2.0.0 \
             --fasta {input.fasta} \
-            --output {output.out_folder} \
+            --output {params.output} \
             --cores {threads} \
             --max_cores {threads} \
             --memory {params.mem_gb} \
@@ -52,14 +53,18 @@ rule virify_one:
             --singularity_cachedir {output.out_folder}/singularity \
             -profile local,docker \
         2> {log} 1>&2
-
-        # rm -rf {output.out_folder}/work
         """
 
 
 rule virify_all:
     input:
         [VIRIFY / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+    conda:
+        "virify.yml"
+    shell:
+        """
+        nextflow clean -f 2> /dev/null 1>&2
+        """
 
 
 localrules:
