@@ -93,3 +93,11 @@ def compose_out_dir_for_assemble_megahit_one(wildcards):
 def get_memory_bytes_for_assemble_megahit_one(wildcards, resources):
     # https://github.com/snakemake/snakemake/issues/499
     return resources.mem_mb * 1024**2
+
+
+def compose_input_dir_for_assemble_eval_coverm_aggregate_contig(wildcards):
+    return ASSEMBLE_COVERM / f"contig/{wildcards.method}"
+
+
+def compose_input_dir_for_assemble_eval_coverm_aggregate_genome(wildcards):
+    return ASSEMBLE_COVERM / f"genome/{wildcards.method}"

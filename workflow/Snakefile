@@ -43,6 +43,7 @@ include: "rules/report.smk"
 
 
 rule all:
+    """Run the entire pipeline"""
     input:
         rules.reads.input,
         rules.pre.input,

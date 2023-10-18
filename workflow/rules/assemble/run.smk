@@ -75,9 +75,7 @@ rule assemble_megahit_renaming_one:
 
 
 rule assemble_bowtie2_build_one:
-    """
-    Index megahit assembly
-    """
+    """Index a megahit assembly"""
     input:
         contigs=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
@@ -105,11 +103,13 @@ rule assemble_bowtie2_build_one:
 
 
 rule assemble_bowtie2_build_all:
+    """Index all megahit assemblies"""
     input:
         [ASSEMBLE_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
 rule assemble_bowtie2_one:
+    """Map one sample to one megahit assembly"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
         forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
@@ -153,6 +153,7 @@ rule assemble_bowtie2_one:
 
 
 rule assemble_bowtie2_all:
+    """Map all samples to all the assemblies that they belong to"""
     input:
         [
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
@@ -161,5 +162,6 @@ rule assemble_bowtie2_all:
 
 
 rule assemble_run:
+    """Run all assembly rules (no evaluation)"""
     input:
         rules.assemble_bowtie2_all.input,

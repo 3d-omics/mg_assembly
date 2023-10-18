@@ -33,6 +33,7 @@ rule assemble_eval_cram_to_bam_one:
 
 
 rule assemble_eval_cram_to_bam_all:
+    """Convert cram to bam for all cram files"""
     input:
         [
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
@@ -40,6 +41,7 @@ rule assemble_eval_cram_to_bam_all:
         ],
 
 
+# Coverm contig ----
 rule assemble_eval_coverm_contig_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
@@ -69,8 +71,9 @@ rule assemble_eval_coverm_contig_one:
 
 
 rule assemble_eval_coverm_aggregate_contig:
+    """Aggregate coverm contig results"""
     input:
-        get_tsvs_for_assembly_coverm_genome,
+        get_tsvs_for_assembly_coverm_contig,
     output:
         tsv=ASSEMBLE_COVERM / "contig.{method}.tsv",
     log:
@@ -78,7 +81,7 @@ rule assemble_eval_coverm_aggregate_contig:
     conda:
         "assemble.yml"
     params:
-        input_dir=ASSEMBLE_COVERM / "contig/{method}",
+        input_dir=compose_input_dir_for_assemble_eval_coverm_aggregate_contig,
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -96,6 +99,7 @@ rule assemble_eval_coverm_contig:
         ],
 
 
+# Coverm genome ----
 rule assemble_eval_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
@@ -135,7 +139,7 @@ rule assemble_eval_coverm_aggregate_genome:
     conda:
         "assemble.yml"
     params:
-        input_dir=ASSEMBLE_COVERM / "genome",
+        input_dir=compose_input_dir_for_assemble_eval_coverm_aggregate_genome,
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
