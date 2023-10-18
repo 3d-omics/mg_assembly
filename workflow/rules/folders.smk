@@ -27,6 +27,9 @@ ASSEMBLE_QUAST = ASSEMBLE / "quast/"
 ASSEMBLE_COVERM = ASSEMBLE / "coverm/"
 
 
+# Viral prediction
+VIRIFY = Path("results/virify/")
+
 # binners
 BIN = Path("results/bin/")
 VAMB = BIN / "vamb/"  # This could be a metabinner
