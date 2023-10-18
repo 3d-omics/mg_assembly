@@ -257,39 +257,6 @@ rule pre_eval_nonhost_fastqc:
         ],
 
 
-# Kraken2 over fastp reads, not nonhost
-# rule pre_eval_kraken2_assign_one:
-#     """Run kraken2 over one library and using one database."""
-#     input:
-#         forward_=FASTP / "{sample}.{library}_1.fq.gz",
-#         reverse_=FASTP / "{sample}.{library}_2.fq.gz",
-#         database=features["kraken2_database"],
-#     output:
-#         out_gz=KRAKEN2 / "{sample}.{library}.out.gz",
-#         report=KRAKEN2 / "{sample}.{library}.report",
-#     log:
-#         log=KRAKEN2 / "{sample}.{library}.log",
-#     conda:
-#         "pre.yml"
-#     threads: 24
-#     resources:
-#         mem_mb=params["pre"]["kraken2"]["mem_mb"],
-#         runtime=60,
-#     shell:
-#         """
-#         kraken2 \
-#             --db {input.database} \
-#             --threads {threads} \
-#             --paired \
-#             --gzip-compressed \
-#             --output >(pigz > {output.out_gz}) \
-#             --report {output.report} \
-#             {input.forward_} \
-#             {input.reverse_} \
-#         > {log} 2>&1
-#         """
-
-
 rule pre_eval_kraken2_assign_all:
     input:
         files=[
