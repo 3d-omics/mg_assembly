@@ -70,7 +70,7 @@
 <text text-anchor="middle" x="51" y="-136" font-family="sans" font-size="10.00">reads</text>
 </g>
 <!-- fastp -->
-<g id="node5" class="node">
+<g id="node4" class="node">
 <title>fastp</title>
 <path fill="none" stroke="#56d892" stroke-width="2" d="M162,-162C162,-162 132,-162 132,-162 126,-162 120,-156 120,-150 120,-150 120,-138 120,-138 120,-132 126,-126 132,-126 132,-126 162,-126 162,-126 168,-126 174,-132 174,-138 174,-138 174,-150 174,-150 174,-156 168,-162 162,-162"/>
 <text text-anchor="middle" x="147" y="-141.5" font-family="sans" font-size="10.00">fastp</text>
@@ -82,7 +82,7 @@
 <polygon fill="grey" stroke="grey" stroke-width="2" points="109.96,-147.5 119.96,-144 109.96,-140.5 109.96,-147.5"/>
 </g>
 <!-- extract -->
-<g id="node4" class="node">
+<g id="node5" class="node">
 <title>extract</title>
 <path fill="none" stroke="#56d8b9" stroke-width="2" d="M360,-216C360,-216 322,-216 322,-216 316,-216 310,-210 310,-204 310,-204 310,-192 310,-192 310,-186 316,-180 322,-180 322,-180 360,-180 360,-180 366,-180 372,-186 372,-192 372,-192 372,-204 372,-204 372,-210 366,-216 360,-216"/>
 <text text-anchor="middle" x="341" y="-201" font-family="sans" font-size="10.00">Extract</text>
@@ -93,18 +93,6 @@
 <title>bowtie2&#45;&gt;extract</title>
 <path fill="none" stroke="grey" stroke-width="2" d="M270.02,-198C279.17,-198 289.61,-198 299.57,-198"/>
 <polygon fill="grey" stroke="grey" stroke-width="2" points="299.71,-201.5 309.71,-198 299.71,-194.5 299.71,-201.5"/>
-</g>
-<!-- megahit -->
-<g id="node9" class="node">
-<title>megahit</title>
-<path fill="none" stroke="#d8ac56" stroke-width="2" d="M458,-216C458,-216 420,-216 420,-216 414,-216 408,-210 408,-204 408,-204 408,-192 408,-192 408,-186 414,-180 420,-180 420,-180 458,-180 458,-180 464,-180 470,-186 470,-192 470,-192 470,-204 470,-204 470,-210 464,-216 458,-216"/>
-<text text-anchor="middle" x="439" y="-195.5" font-family="sans" font-size="10.00">MEGAHIT</text>
-</g>
-<!-- extract&#45;&gt;megahit -->
-<g id="edge8" class="edge">
-<title>extract&#45;&gt;megahit</title>
-<path fill="none" stroke="grey" stroke-width="2" d="M372.11,-198C380.24,-198 389.17,-198 397.76,-198"/>
-<polygon fill="grey" stroke="grey" stroke-width="2" points="398,-201.5 408,-198 398,-194.5 398,-201.5"/>
 </g>
 <!-- fastp&#45;&gt;bowtie2 -->
 <g id="edge3" class="edge">
@@ -147,6 +135,18 @@
 <title>fastp&#45;&gt;kraken2</title>
 <path fill="none" stroke="grey" stroke-width="2" d="M174.4,-144C183.47,-144 193.81,-144 203.58,-144"/>
 <polygon fill="grey" stroke="grey" stroke-width="2" points="203.89,-147.5 213.89,-144 203.89,-140.5 203.89,-147.5"/>
+</g>
+<!-- megahit -->
+<g id="node9" class="node">
+<title>megahit</title>
+<path fill="none" stroke="#d8ac56" stroke-width="2" d="M458,-216C458,-216 420,-216 420,-216 414,-216 408,-210 408,-204 408,-204 408,-192 408,-192 408,-186 414,-180 420,-180 420,-180 458,-180 458,-180 464,-180 470,-186 470,-192 470,-192 470,-204 470,-204 470,-210 464,-216 458,-216"/>
+<text text-anchor="middle" x="439" y="-195.5" font-family="sans" font-size="10.00">MEGAHIT</text>
+</g>
+<!-- extract&#45;&gt;megahit -->
+<g id="edge8" class="edge">
+<title>extract&#45;&gt;megahit</title>
+<path fill="none" stroke="grey" stroke-width="2" d="M372.11,-198C380.24,-198 389.17,-198 397.76,-198"/>
+<polygon fill="grey" stroke="grey" stroke-width="2" points="398,-201.5 408,-198 398,-194.5 398,-201.5"/>
 </g>
 <!-- concoct -->
 <g id="node10" class="node">

@@ -11,6 +11,9 @@ digraph snakemake_dag {
     	fastq     [label = "FASTQ\nreads",      color = "0.37 0.6 0.85"];
     }
 
+    reference -> bowtie2
+    fastq     -> fastp
+
 	subgraph cluster_1 {
 		label = "Preprocessing";
 		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
@@ -22,8 +25,6 @@ digraph snakemake_dag {
 	    kraken2   [label = "kraken2",              color = "0.32 0.6 0.85"];
 	}
 
-    reference -> bowtie2
-    fastq     -> fastp
 
 	fastp   -> bowtie2
 	fastp   -> nonpareil
@@ -71,6 +72,7 @@ digraph snakemake_dag {
 	drep -> dram
 	drep -> gtdbtk
 	drep -> quast
+
 	subgraph cluster_5_space {
 		margin = 10;
 		style = invis;
