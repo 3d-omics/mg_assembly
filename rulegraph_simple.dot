@@ -14,8 +14,8 @@ digraph snakemake_dag {
 	subgraph cluster_1 {
 		label = "Preprocessing";
 		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+	    bowtie2   [label = "bowtie2\nHost", color = "0.64 0.6 0.85"];
 		extract   [label = "Extract\nNon-Host",    color = "0.46 0.6 0.85"];
-	    bowtie2   [label = "bowtie2\nmap to host", color = "0.64 0.6 0.85"];
 	    fastp     [label = "fastp",                color = "0.41 0.6 0.85"];
 	    nonpareil [label = "Nonpareil",            color = "0.23 0.6 0.85", style = "dashed,rounded"];
 	    singlem   [label = "SingleM",              color = "0.11 0.6 0.85", style = "dashed,rounded"];
