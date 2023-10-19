@@ -29,9 +29,32 @@ def compose_rg_extra(wildcards):
     return f"{lb_field}\t" + f"PL:Illumina\t" + f"{sm_field}"
 
 
+def get_forward_for_nonpareil(wildcards):
+    if len(HOST_NAMES) > 1:
+        return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
+    return FASTP / "{sample_id}.{library_id}_1.fq.gz"
+
+
 def compose_prefix_for_nonpareil(wildcards):
     """Compose prefix for nonpareil output files"""
     return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"
+
+
+def get_forward_for_pre_eval_singlem_pipe_one(wildcards):
+    if len(HOST_NAMES) > 1:
+        return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
+    return FASTP / "{sample_id}.{library_id}_1.fq.gz"
+
+
+def get_reverse_for_pre_eval_singlem_pipe_one(wildcards):
+    if len(HOST_NAMES) > 1:
+        return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
+    return FASTP / "{sample_id}.{library_id}_2.fq.gz"
+
+
+def get_cram_for_pre_eval_cram_to_mapped_bam(wildcards):
+    genome = LAST_HOST
+    return PRE_BOWTIE2 / f"{genome}/{wildcards.sample_id}.{wildcards.library_id}.cram"
 
 
 def get_kraken2_database(wildcards):
@@ -51,3 +74,27 @@ def double_ram_for_pre_bowtie2_map_host(wildcards, attempt):
 
 def compose_out_folder_for_eval_kraken2_assign_all(wildcards):
     return KRAKEN2 / f"{wildcards.kraken_db}"
+
+
+def get_input_forward_for_host_mapping(wildcards):
+    """Compose the forward input file"""
+    if wildcards.genome == HOST_NAMES[0]:
+        return FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_1.fq.gz"
+    genome_index = HOST_NAMES.index(wildcards.genome)
+    prev_genome = HOST_NAMES[genome_index - 1]
+    return (
+        PRE_BOWTIE2
+        / f"non{prev_genome}/{wildcards.sample_id}.{wildcards.library_id}_1.fq.gz"
+    )
+
+
+def get_input_reverse_for_host_mapping(wildcards):
+    """Get the reverse input file"""
+    if wildcards.genome == HOST_NAMES[0]:
+        return FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_2.fq.gz"
+    genome_index = HOST_NAMES.index(wildcards.genome)
+    prev_genome = HOST_NAMES[genome_index - 1]
+    return (
+        PRE_BOWTIE2
+        / f"non{prev_genome}/{wildcards.sample_id}.{wildcards.library_id}_2.fq.gz"
+    )

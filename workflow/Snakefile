@@ -26,6 +26,8 @@ ASSEMBLY_SAMPLE_LIBRARY = samples[
 ].values.tolist()
 ASSEMBLIES = samples.assembly_id.unique()
 KRAKEN2_DBS = features["kraken2_dbs"]
+HOST_NAMES = [] if features["hosts"] is None else list(features["hosts"].keys())
+LAST_HOST = HOST_NAMES[-1] if len(HOST_NAMES) > 0 else None
 
 
 # Import subworkflows

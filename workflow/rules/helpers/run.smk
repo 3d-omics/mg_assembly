@@ -83,13 +83,13 @@ rule samtools_flagstats_cram:
 
 rule samtools_stats_cram_pre:
     input:
-        cram=PRE_BOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=PRE_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=features["host"]["fasta"],
+        cram=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram",
+        crai=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram.crai",
+        reference=REFERENCE / "{genome}.fa.gz",
     output:
-        txt=PRE_BOWTIE2 / "{sample_id}.{library_id}.stats.txt",
+        txt=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.stats.txt",
     log:
-        PRE_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
+        PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.stats.log",
     conda:
         "helpers.yml"
     shell:

@@ -1,10 +1,10 @@
 rule reference_recompress:
     input:
-        fa_gz=features["host"]["fasta"],
+        fa_gz=lambda wildcards: features["hosts"][wildcards.genome],
     output:
-        REFERENCE / "host.fa.gz",
+        REFERENCE / "{genome}.fa.gz",
     log:
-        REFERENCE / "host.log",
+        REFERENCE / "{genome}.log",
     threads: 24
     conda:
         "reference.yml"
@@ -12,3 +12,8 @@ rule reference_recompress:
         """
         (gzip -dc {input.fa_gz} | bgzip -@ {threads} > {output}) 2> {log}
         """
+
+
+rule reference:
+    input:
+        [REFERENCE / f"{genome}.fa.gz" for genome in HOST_NAMES],

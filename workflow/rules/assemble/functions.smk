@@ -4,8 +4,23 @@ def get_forwards_from_assembly_id(wildcards):
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     forward_filenames = []
     for sample_id, library_id in samples_in_assembly:
-        forward_filenames.append(NONHOST / f"{sample_id}.{library_id}_1.fq.gz")
+        if len(HOST_NAMES) == 0:
+            forward_filenames.append(FASTP / f"{sample_id}.{library_id}_1.fq.gz")
+        else:
+            forward_filenames.append(
+                PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_1.fq.gz"
+            )
     return forward_filenames
+
+
+# def get_reverses_from_assembly_id(wildcards):
+#     """Get the reverse files for megahit"""
+#     assembly_id = wildcards.assembly_id
+#     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+#     reverse_filenames = []
+#     for sample_id, library_id in samples_in_assembly:
+#         reverse_filenames.append(NONHOST / f"{sample_id}.{library_id}_2.fq.gz")
+#     return reverse_filenames
 
 
 def get_reverses_from_assembly_id(wildcards):
@@ -14,7 +29,12 @@ def get_reverses_from_assembly_id(wildcards):
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     reverse_filenames = []
     for sample_id, library_id in samples_in_assembly:
-        reverse_filenames.append(NONHOST / f"{sample_id}.{library_id}_2.fq.gz")
+        if len(HOST_NAMES) == 0:
+            reverse_filenames.append(FASTP / f"{sample_id}.{library_id}_2.fq.gz")
+        else:
+            reverse_filenames.append(
+                PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_2.fq.gz"
+            )
     return reverse_filenames
 
 

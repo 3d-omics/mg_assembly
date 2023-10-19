@@ -112,8 +112,8 @@ rule assemble_bowtie2_one:
     """Map one sample to one megahit assembly"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
-        forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
+        forward_=get_forwards_from_assembly_id,
+        reverse_=get_reverses_from_assembly_id,
         reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",

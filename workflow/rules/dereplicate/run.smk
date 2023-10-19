@@ -74,8 +74,8 @@ rule dereplicate_bowtie2_build_one:
 rule dereplicate_bowtie2_one:
     input:
         mock=DREP_INDEX / "dereplicated_genomes",
-        forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
+        forward_=get_forward_for_dereplicate_bowtie2_one,
+        reverse_=get_reverse_for_dereplicate_bowtie2_one,
         reference=DREP / "dereplicated_genomes.fa",
     output:
         cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",

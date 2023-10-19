@@ -29,7 +29,7 @@ rule pre_eval_nonpareil_one:
     empty files
     """
     input:
-        forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
+        forward_=get_forward_for_nonpareil,
     output:
         forward_fq=temp(NONPAREIL / "{sample_id}.{library_id}_1.fq"),
         npa=touch(NONPAREIL / "{sample_id}.{library_id}.npa"),
@@ -90,8 +90,8 @@ rule pre_eval_singlem_pipe_one:
     passing it the non-host and trimmed ones.
     """
     input:
-        forward_=NONHOST / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=NONHOST / "{sample_id}.{library_id}_2.fq.gz",
+        forward_=get_forward_for_pre_eval_singlem_pipe_one,
+        reverse_=get_reverse_for_pre_eval_singlem_pipe_one,
         data=features["singlem_database"],
     output:
         archive_otu_table=SINGLEM / "{sample_id}.{library_id}.archive.json",
@@ -154,12 +154,12 @@ rule pre_eval_cram_to_mapped_bam:
     it works.
     """
     input:
-        cram=PRE_BOWTIE2 / "{sample}.{library_id}.cram",
-        reference=REFERENCE / "host.fa.gz",
+        cram=get_cram_for_pre_eval_cram_to_mapped_bam,
+        reference=REFERENCE / f"{LAST_HOST}.fa.gz",
     output:
-        bam=temp(PRE_COVERM / "bams/{sample}.{library_id}.bam"),
+        bam=temp(PRE_COVERM / "bams/{sample_id}.{library_id}.bam"),
     log:
-        PRE_COVERM / "bams/{sample}.{library_id}.log",
+        PRE_COVERM / "bams/{sample_id}.{library_id}.log",
     conda:
         "pre.yml"
     threads: 24
@@ -239,9 +239,10 @@ rule pre_eval_coverm:
 rule pre_eval_samtools:
     input:
         [
-            PRE_BOWTIE2 / f"{sample_id}.{library_id}.{extension}"
+            PRE_BOWTIE2 / f"{genome}/{sample_id}.{library_id}.{extension}"
             for sample_id, library_id in SAMPLE_LIBRARY
             for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
+            for genome in HOST_NAMES
         ],
 
 
@@ -250,10 +251,12 @@ rule pre_eval_nonhost_fastqc:
     """Run fastqc over all libraries after fastp"""
     input:
         [
-            NONHOST / f"{sample_id}.{library_id}_{end}_fastqc.{extension}"
+            PRE_BOWTIE2
+            / f"non{genome}/{sample_id}.{library_id}_{end}_fastqc.{extension}"
             for sample_id, library_id in SAMPLE_LIBRARY
             for end in "1 2".split(" ")
             for extension in "html zip".split(" ")
+            for genome in HOST_NAMES
         ],
 
 
