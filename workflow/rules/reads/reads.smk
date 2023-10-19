@@ -1,6 +1,6 @@
-include: "reads/functions.smk"
-include: "reads/run.smk"
-include: "reads/eval.smk"
+include: "functions.smk"
+include: "run.smk"
+include: "eval.smk"
 
 
 rule reads:

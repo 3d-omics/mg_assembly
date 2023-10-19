@@ -1,5 +1,5 @@
-include: "metabin/functions.smk"
-include: "metabin/run.smk"
+include: "functions.smk"
+include: "run.smk"
 
 
 rule metabin:

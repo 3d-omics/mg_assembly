@@ -1,6 +1,6 @@
-include: "assemble/functions.smk"
-include: "assemble/run.smk"
-include: "assemble/eval.smk"
+include: "functions.smk"
+include: "run.smk"
+include: "eval.smk"
 
 
 rule assemble:

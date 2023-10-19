@@ -1,6 +1,6 @@
-include: "dereplicate/functions.smk"
-include: "dereplicate/run.smk"
-include: "dereplicate/eval.smk"
+include: "functions.smk"
+include: "run.smk"
+include: "eval.smk"
 
 
 rule dereplicate:
