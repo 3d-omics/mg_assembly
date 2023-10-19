@@ -1,6 +1,3 @@
-include: "functions.smk"
-
-
 rule concoct_cut_up_fasta_one:
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
@@ -111,8 +108,3 @@ rule concoct_extract_fasta_bins_one:
             --output_path {output.bins} \
         2> {log} 1>&2
         """
-
-
-rule concoct:
-    input:
-        [CONCOCT / "fasta_bins" / f"{assembly_id}" for assembly_id in ASSEMBLIES],

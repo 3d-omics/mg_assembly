@@ -1,6 +1,3 @@
-include: "functions.smk"
-
-
 rule maxbin2_prepare_one:
     """
     Compute coverages
@@ -47,8 +44,3 @@ rule maxbin2_run_one:
             -abund {input.coverage} \
         2> {log} 1>&2
         """
-
-
-rule maxbin2:
-    input:
-        [MAXBIN2 / "bins" / f"{assembly_id}" for assembly_id in ASSEMBLIES],

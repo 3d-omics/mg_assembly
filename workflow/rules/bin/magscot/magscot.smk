@@ -2,6 +2,6 @@ include: "functions.smk"
 include: "run.smk"
 
 
-rule metabin:
+rule magscot:
     input:
         rules.metabin_run.input,

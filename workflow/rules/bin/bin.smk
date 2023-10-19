@@ -1,18 +1,13 @@
 include: "functions.smk"
-# include: "vamb/run.smk"
-include: "concoct/run.smk"
-include: "metabat2/run.smk"
-include: "maxbin2/run.smk"
-
-
-# include: "metawrap/run.smk"
+include: "concoct/concoct.smk"
+include: "metabat2/metabat2.smk"
+include: "maxbin2/maxbin2.smk"
+include: "magscot/magscot.smk"
 
 
 rule bin_run:
     input:
-        rules.concoct.input,
-        rules.metabat2.input,
-        rules.maxbin2.input,
+        rules.magscot.input,
 
 
 # rule bin_eval:
@@ -22,4 +17,4 @@ rule bin_run:
 
 rule bin:
     input:
-        rules.bin_run.input,
+        rules.magscot.input,

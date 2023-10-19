@@ -37,7 +37,6 @@ include: "rules/pre/pre.smk"
 include: "rules/assemble/assemble.smk"
 include: "rules/virify/virify.smk"
 include: "rules/bin/bin.smk"
-include: "rules/metabin/metabin.smk"
 include: "rules/dereplicate/dereplicate.smk"
 include: "rules/report/report.smk"
 
@@ -49,5 +48,4 @@ rule all:
         rules.pre.input,
         rules.assemble.input,
         rules.bin.input,
-        rules.metabin.input,
         rules.report.input,

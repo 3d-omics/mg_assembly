@@ -1,6 +1,3 @@
-include: "functions.smk"
-
-
 rule metabat2_prepare_one:
     input:
         bams=get_bams_for_metabat2,
@@ -43,8 +40,3 @@ rule metabat2_run_one:
             --numThreads {threads} \
         2> {log} 1>&2
         """
-
-
-rule metabat2:
-    input:
-        [METABAT2 / f"bins/{assembly_id}" for assembly_id in ASSEMBLIES],
