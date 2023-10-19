@@ -68,22 +68,22 @@ def get_tsvs_for_assembly_coverm_contig(wildcards):
 
 def double_ram_for_assemble_megahit(wildcards, attempt):
     initial_memory = params["assemble"]["megahit"]["memory_gb"]
-    return initial_memory * 2**attempt * 1024
+    return initial_memory * 2 ** (attempt - 1) * 1024
 
 
 # def double_ram_for_assemble_megahit_bytes(wildcards, attempt):  # useless in params
 #     initial_memory = params["assemble"]["megahit"]["memory_gb"]
-#     return initial_memory * 2 ** attempt * 1024 ** 3
+#     return initial_memory * 2 ** (attempt - 1) * 1024 ** 3
 
 
 def double_ram_for_assemble_bowtie2_build(wildcards, attempt):
     initial_memory = params["assemble"]["bowtie2-build"]["memory_gb"]
-    return initial_memory * 2**attempt * 1024
+    return initial_memory * 2 ** (attempt - 1) * 1024
 
 
 def double_ram_for_assemble_bowtie2_map(wildcards, attempt):
     initial_memory = params["assemble"]["bowtie2"]["memory_gb"]
-    return initial_memory * 2**attempt * 1024
+    return initial_memory * 2 ** (attempt - 1) * 1024
 
 
 def compose_out_dir_for_assemble_megahit_one(wildcards):
