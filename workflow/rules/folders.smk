@@ -36,25 +36,8 @@ VAMB = BIN / "vamb/"  # This could be a metabinner
 CONCOCT = BIN / "concoct/"
 METABAT2 = BIN / "metabat2/"
 MAXBIN2 = BIN / "maxbin2/"
-BIN_METAWRAP = BIN / "metawrap/"
-
-# bin evaluation?
-
-
-# metabinners
-METABIN = Path("results/metabin/")
-MAGSCOT = METABIN / "magscot/"
+MAGSCOT = BIN / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
-METABIN_METAWRAP = METABIN / "metawrap/"
-METABIN_RENAME = METABIN / "renaming/"
-METABIN_INDEX = BIN / "index/"
-METABIN_BOWTIE2 = METABIN / "bowtie2/"
-
-# metabinning evaluation
-METABIN_QUAST = BIN / "quast/"
-METABIN_COVERM = METABIN / "coverm/"
-METABIN_GTDBTK = METABIN / "gtdbtk/"
-METABIN_DRAM = METABIN / "dram/"
 
 
 # dereplicate

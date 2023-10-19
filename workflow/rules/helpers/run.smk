@@ -111,24 +111,6 @@ rule samtools_stats_cram_assembly:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
 
-# rule samtools_stat_cram_bin
-
-
-rule samtools_stats_cram_metabin:
-    input:
-        cram=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
-        crai=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
-        reference=MAGSCOT / "{assembly_id}.fa",
-    output:
-        txt=METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.txt",
-    log:
-        METABIN_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.log",
-    conda:
-        "helpers.yml"
-    shell:
-        "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
-
-
 rule samtools_stats_cram_dereplicate:
     input:
         cram=DREP_BOWTIE2 / "dereplicated_genomes.{sample_id}.{library_id}.cram",
