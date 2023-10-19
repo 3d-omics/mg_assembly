@@ -41,10 +41,11 @@ digraph snakemake_dag {
 	megahit -> concoct
 	megahit -> maxbin2
 	megahit -> metabat2
+	megahit -> virify
 
 	subgraph cluster_3 {
 		label = "Binning";
-		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
+		shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin="10,10";
 		concoct  [label = "CONCOCT",  color = "0.36 0.6 0.85"];
     	maxbin2  [label = "MaxBin2",  color = "0.52 0.6 0.85"];
 	    metabat2 [label = "MetaBAT2", color = "0.02 0.6 0.85"];
@@ -70,5 +71,14 @@ digraph snakemake_dag {
 	drep -> dram
 	drep -> gtdbtk
 	drep -> quast
+	subgraph cluster_5_space {
+		margin = 10;
+		style = invis;
+		subgraph cluster_5 {
+			label = "Virify";
+			shape=box; style="rounded,dashed"; fontname=sans; fontsize=10; penwidth=2; margin="10,10";
+			virify [label = "virify", color = "0.35 0.22 0.86", style = "dashed,rounded"];
+		}
+	}
 
 }
