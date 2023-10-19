@@ -30,7 +30,7 @@ KRAKEN2_DBS = features["kraken2_dbs"]
 
 # Import subworkflows
 include: "rules/folders.smk"
-include: "rules/helpers.smk"
+include: "rules/helpers/helpers.smk"
 include: "rules/reads/reads.smk"
 include: "rules/reference/reference.smk"
 include: "rules/pre/pre.smk"
