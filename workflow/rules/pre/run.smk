@@ -73,7 +73,7 @@ rule pre_bowtie2_index_host:
     threads: 24
     resources:
         mem_mb=double_ram_for_pre_bowtie2_index_host,
-        runtime=24 * 60,
+        runtime=6 * 60,
     retries: 5
     shell:
         """
