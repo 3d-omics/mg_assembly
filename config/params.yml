@@ -6,7 +6,7 @@ pre:
     extra: "--trim_poly_g --trim_poly_x"
   bowtie2-build:
     extra: ""
-    memory_gb: 32
+    memory_gb: 8
   bowtie2:
     memory_gb: 64
     extra: ""
