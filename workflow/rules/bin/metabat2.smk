@@ -40,3 +40,8 @@ rule metabat2_run_one:
             --numThreads {threads} \
         2> {log} 1>&2
         """
+
+
+rule metabat2:
+    input:
+        [METABAT2 / f"bins/{assembly_id}" for assembly_id in ASSEMBLIES],

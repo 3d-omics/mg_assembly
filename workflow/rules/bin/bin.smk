@@ -1,8 +1,8 @@
 include: "functions.smk"
-include: "concoct/concoct.smk"
-include: "metabat2/metabat2.smk"
-include: "maxbin2/maxbin2.smk"
-include: "magscot/magscot.smk"
+include: "concoct.smk"
+include: "metabat2.smk"
+include: "maxbin2.smk"
+include: "magscot.smk"
 
 
 rule bin_run:

@@ -1,4 +1,4 @@
-rule metabin_magscot_prodigal_one:
+rule bin_magscot_prodigal_one:
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
@@ -260,6 +260,6 @@ rule metabin_magscot_split_into_bins:
         """
 
 
-rule metabin_run:
+rule magscot:
     input:
         [MAGSCOT / f"{assembly_id}/bins" for assembly_id in ASSEMBLIES],
