@@ -70,14 +70,17 @@ def get_tsvs_for_assembly_coverm_genome(wildcards):
 def get_tsvs_for_assembly_coverm_contig(wildcards):
     method = wildcards.method
     tsv_files = [
-        ASSEMBLE_COVERM / f"contig/{method}/{assembly_id}.{sample_id}.{library_id}.tsv"
+        ASSEMBLE_COVERM
+        / "contig"
+        / method
+        / f"assembly_id.{sample_id}.{library_id}.tsv"
         for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
     ]
     return tsv_files
 
 
 def compose_out_dir_for_assemble_megahit_one(wildcards):
-    return MEGAHIT / f"{wildcards.assembly_id}"
+    return MEGAHIT / wildcards.assembly_id
 
 
 def get_memory_bytes_for_assemble_megahit_one(wildcards, resources):
@@ -86,8 +89,8 @@ def get_memory_bytes_for_assemble_megahit_one(wildcards, resources):
 
 
 def compose_input_dir_for_assemble_eval_coverm_aggregate_contig(wildcards):
-    return ASSEMBLE_COVERM / f"contig/{wildcards.method}"
+    return ASSEMBLE_COVERM / "contig" / wildcards.method
 
 
 def compose_input_dir_for_assemble_eval_coverm_aggregate_genome(wildcards):
-    return ASSEMBLE_COVERM / f"genome/{wildcards.method}"
+    return ASSEMBLE_COVERM / "genome" / wildcards.method

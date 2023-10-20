@@ -67,16 +67,26 @@ def get_stats_files_from_assembly_id(wildcards):
         FASTP / f"{sample_id}.{library_id}_fastp.html"
         for sample_id, library_id in sample_library
     ]
-    pre_samtools = [
-        PRE_BOWTIE2 / f"{sample_id}.{library_id}.{extension}"
-        for sample_id, library_id in sample_library
-        for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
-    ]
-    pre_nonhost_fastqc = [
-        NONHOST / f"{sample_id}.{library_id}_{end}_fastqc.zip"
-        for sample_id, library_id in sample_library
-        for end in ["1", "2"]
-    ]
+    pre_samtools = (
+        [
+            PRE_BOWTIE2 / f"{genome}/{sample_id}.{library_id}.{extension}"
+            for sample_id, library_id in sample_library
+            for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
+            for genome in HOST_NAMES
+        ]
+        if len(HOST_NAMES) > 0
+        else []
+    )
+    pre_nonhost_fastqc = (
+        [
+            PRE / f"non{genome}/{sample_id}.{library_id}_{end}_fastqc.zip"
+            for sample_id, library_id in sample_library
+            for end in ["1", "2"]
+            for genome in HOST_NAMES
+        ]
+        if len(HOST_NAMES) > 0
+        else []
+    )
     pre_kraken2 = [
         KRAKEN2 / f"{kraken_db}" / f"{sample_id}.{library_id}.report"
         for sample_id, library_id in sample_library
