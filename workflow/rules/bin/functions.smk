@@ -36,13 +36,7 @@ def get_tsvs_for_binning_coverm_contig(wildcards):
     return tsv_files
 
 
-# Magscot ----
-def compose_out_prefix_for_metabin_magscot_run_one(wildcards):
-    return MAGSCOT / wildcards.assembly_id / "magscot"
-
-
-# Concoct ----
-def get_bams_for_concoct_binning(wildcards):
+def get_bams_from_assembly_id(wildcards):
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     bam_files = []
@@ -53,48 +47,26 @@ def get_bams_for_concoct_binning(wildcards):
     return bam_files
 
 
-def get_bais_for_concoct_binning(wildcards):
-    assembly_id = wildcards.assembly_id
-    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
-    bam_files = []
-    for sample_id, library_id in samples_in_assembly:
-        bam_files.append(
-            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam.bai",
-        )
-    return bam_files
+def get_bais_from_assembly_id(wildcards):
+    bams = get_mabs_from_assembly_id(wildcards)
+    return [f"{bam}.bai" for bam in bams]
 
 
+# Magscot ----
+def compose_out_prefix_for_bin_magscot_run_one(wildcards):
+    return MAGSCOT / wildcards.assembly_id / "magscot"
+
+
+# Concoct ----
 def get_basename_for_concoct_run_one(wildcards):
     return CONCOCT / "run" / wildcards.assembly_id
 
 
 # MaxBin2 ----
-def get_bams_for_maxbin2(wildcards):
-    assembly_id = wildcards.assembly_id
-    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
-    bam_files = []
-    for sample_id, library_id in samples_in_assembly:
-        bam_files.append(
-            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam",
-        )
-    return bam_files
-
-
 def compose_out_prefix_for_maxbin2_run_one(wildcards):
     return MAXBIN2 / "bins" / wildcards.assembly_id
 
 
 # MetaBat2 ---
-def get_bams_for_metabat2(wildcards):
-    assembly_id = wildcards.assembly_id
-    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
-    bam_files = []
-    for sample_id, library_id in samples_in_assembly:
-        bam_files.append(
-            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam",
-        )
-    return bam_files
-
-
 def compose_bins_prefix_for_metaba2_run_one(wildcards):
     return METABAT2 / "bins" / wildcards.assembly_id / wildcards.assembly_id

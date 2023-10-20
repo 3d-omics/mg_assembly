@@ -49,11 +49,16 @@ rule assemble_eval_coverm_contig_one:
         reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
         tsv=ASSEMBLE_COVERM
-        / "contig/{method}/{assembly_id}.{sample_id}.{library_id}.tsv",
+        / "contig"
+        / "{method}"
+        / "{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
         "assemble.yml"
     log:
-        ASSEMBLE_COVERM / "contig/{method}/{assembly_id}.{sample_id}.{library_id}.log",
+        ASSEMBLE_COVERM
+        / "contig"
+        / "{method}"
+        / "{assembly_id}.{sample_id}.{library_id}.log",
     params:
         method="{method}",
         min_covered_fraction=params["assemble"]["coverm"]["genome"][

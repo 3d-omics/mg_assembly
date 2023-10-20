@@ -23,8 +23,8 @@ rule concoct_cut_up_fasta_one:
 
 rule concoct_coverage_table_one:
     input:
-        bams=get_bams_for_concoct_binning,
-        bais=get_bais_for_concoct_binning,
+        bams=get_bams_from_assembly_id,
+        bais=get_bais_from_assembly_id,
         bed_10k=CONCOCT / "prepare" / "{assembly_id}.cut.bed",
     output:
         coverage=CONCOCT / "prepare" / "{assembly_id}.coverage.tsv",

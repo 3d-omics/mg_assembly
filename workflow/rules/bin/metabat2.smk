@@ -1,6 +1,6 @@
 rule metabat2_prepare_one:
     input:
-        bams=get_bams_for_metabat2,
+        bams=get_bams_from_assembly_id,
     output:
         depth=METABAT2 / "prepare" / "{assembly_id}.depth",
         paired_contigs=METABAT2 / "prepare" / "{assembly_id}.paired",

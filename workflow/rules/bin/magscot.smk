@@ -29,7 +29,7 @@ rule bin_magscot_prodigal_one:
         """
 
 
-rule metabin_magscot_hmmsearch_pfam_one:
+rule bin_magscot_hmmsearch_pfam_one:
     input:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         hmm=features["magscot"]["pfam_hmm"],
@@ -55,7 +55,7 @@ rule metabin_magscot_hmmsearch_pfam_one:
         """
 
 
-rule metabin_magscot_hmmsearch_tigr_one:
+rule bin_magscot_hmmsearch_tigr_one:
     input:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         hmm=features["magscot"]["tigr_hmm"],
@@ -81,7 +81,7 @@ rule metabin_magscot_hmmsearch_tigr_one:
         """
 
 
-rule metabin_magscot_join_hmm_one:
+rule bin_magscot_join_hmm_one:
     input:
         tigr_out=MAGSCOT / "{assembly_id}/tigr.tblout",
         pfam_out=MAGSCOT / "{assembly_id}/pfam.tblout",
@@ -98,7 +98,7 @@ rule metabin_magscot_join_hmm_one:
         """
 
 
-rule metabin_magscot_compose_contig_to_bin_concoct_one:
+rule bin_magscot_compose_contig_to_bin_concoct_one:
     input:
         CONCOCT / "fasta_bins" / "{assembly_id}/",
     output:
@@ -118,7 +118,7 @@ rule metabin_magscot_compose_contig_to_bin_concoct_one:
         """
 
 
-rule metabin_magscot_compose_contig_to_bin_maxbin2_one:
+rule bin_magscot_compose_contig_to_bin_maxbin2_one:
     input:
         MAXBIN2 / "bins" / "{assembly_id}/",
     output:
@@ -138,7 +138,7 @@ rule metabin_magscot_compose_contig_to_bin_maxbin2_one:
         """
 
 
-rule metabin_magscot_compose_contig_to_bin_metabat2_one:
+rule bin_magscot_compose_contig_to_bin_metabat2_one:
     input:
         METABAT2 / "bins/{assembly_id}/",
     output:
@@ -158,7 +158,7 @@ rule metabin_magscot_compose_contig_to_bin_metabat2_one:
         """
 
 
-rule metabin_magscot_merge_contig_to_bin_one:
+rule bin_magscot_merge_contig_to_bin_one:
     input:
         MAGSCOT / "{assembly_id}/concoct.contigs_to_bin.tsv",
         MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.tsv",
@@ -175,7 +175,7 @@ rule metabin_magscot_merge_contig_to_bin_one:
         """
 
 
-rule metabin_magscot_run_one:
+rule bin_magscot_run_one:
     input:
         contigs_to_bin=MAGSCOT / "{assembly_id}/contigs_to_bin.tsv",
         hmm=MAGSCOT / "{assembly_id}/hmm.tblout",
@@ -191,7 +191,7 @@ rule metabin_magscot_run_one:
     conda:
         "magscot.yml"
     params:
-        out_prefix=compose_out_prefix_for_metabin_magscot_run_one,
+        out_prefix=compose_out_prefix_for_bin_magscot_run_one,
     shell:
         """
         Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \
@@ -202,7 +202,7 @@ rule metabin_magscot_run_one:
         """
 
 
-rule metabin_magscot_reformat_one:
+rule bin_magscot_reformat_one:
     input:
         refined_contig_to_bin=MAGSCOT
         / "{assembly_id}/magscot.refined.contig_to_bin.out",
@@ -221,7 +221,7 @@ rule metabin_magscot_reformat_one:
         """
 
 
-rule metabin_magscot_rename_one:
+rule bin_magscot_rename_one:
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         clean=MAGSCOT / "{assembly_id}/magscot.reformat.tsv",
@@ -240,7 +240,7 @@ rule metabin_magscot_rename_one:
         """
 
 
-rule metabin_magscot_split_into_bins:
+rule bin_magscot_split_into_bins:
     input:
         fasta=MAGSCOT / "{assembly_id}.fa",
     output:

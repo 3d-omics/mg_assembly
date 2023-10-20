@@ -8,7 +8,7 @@ def get_forwards_from_assembly_id(wildcards):
             forward_filenames.append(FASTP / f"{sample_id}.{library_id}_1.fq.gz")
         else:
             forward_filenames.append(
-                PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_1.fq.gz"
+                PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_1.fq.gz"
             )
     return forward_filenames
 
@@ -23,7 +23,7 @@ def get_reverses_from_assembly_id(wildcards):
             reverse_filenames.append(FASTP / f"{sample_id}.{library_id}_2.fq.gz")
         else:
             reverse_filenames.append(
-                PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_2.fq.gz"
+                PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_2.fq.gz"
             )
     return reverse_filenames
 
@@ -59,11 +59,10 @@ def get_crams_to_merge_assembly(wildcards):
 
 
 def get_tsvs_for_assembly_coverm_genome(wildcards):
-    method = wildcards.method
     tsv_files = [
         ASSEMBLE_COVERM
         / "genome"
-        / method
+        / wildcards.method
         / f"{assembly_id}.{sample_id}.{library_id}.tsv"
         for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
     ]
@@ -71,12 +70,11 @@ def get_tsvs_for_assembly_coverm_genome(wildcards):
 
 
 def get_tsvs_for_assembly_coverm_contig(wildcards):
-    method = wildcards.method
     tsv_files = [
         ASSEMBLE_COVERM
         / "contig"
-        / method
-        / f"assembly_id.{sample_id}.{library_id}.tsv"
+        / wildcards.method
+        / f"{assembly_id}.{sample_id}.{library_id}.tsv"
         for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
     ]
     return tsv_files

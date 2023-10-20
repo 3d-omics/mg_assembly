@@ -79,7 +79,7 @@ def get_stats_files_from_assembly_id(wildcards):
     )
     pre_nonhost_fastqc = (
         [
-            PRE / f"non{genome}/{sample_id}.{library_id}_{end}_fastqc.zip"
+            PRE_BOWTIE2 / f"non{genome}/{sample_id}.{library_id}_{end}_fastqc.zip"
             for sample_id, library_id in sample_library
             for end in ["1", "2"]
             for genome in HOST_NAMES

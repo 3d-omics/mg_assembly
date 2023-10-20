@@ -3,7 +3,7 @@ rule maxbin2_prepare_one:
     Compute coverages
     """
     input:
-        bams=get_bams_for_maxbin2,
+        bams=get_bams_from_assembly_id,
     output:
         coverage=MAXBIN2 / "prepare" / "{assembly_id}.coverage",
     log:
