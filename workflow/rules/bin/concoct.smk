@@ -47,14 +47,16 @@ rule concoct_run_one:
         assembly_10k=CONCOCT / "prepare" / "{assembly_id}.cut.fa",
         coverage=CONCOCT / "prepare" / "{assembly_id}.coverage.tsv",
     output:
-        args=CONCOCT / "run/{assembly_id}_args.txt",
-        clustering=CONCOCT / "run/{assembly_id}_clustering_gt1000.csv",
-        log=CONCOCT / "run/{assembly_id}_log.txt",
-        original_data=CONCOCT / "run/{assembly_id}_original_data_gt1000.csv",
-        components=CONCOCT / "run/{assembly_id}_PCA_components_data_gt1000.csv",
-        transformed_data=CONCOCT / "run/{assembly_id}_PCA_transformed_data_gt1000.csv",
+        args=CONCOCT / "run" / "{assembly_id}_args.txt",
+        clustering=CONCOCT / "run" / "{assembly_id}_clustering_gt1000.csv",
+        log=CONCOCT / "run" / "{assembly_id}_log.txt",
+        original_data=CONCOCT / "run" / "{assembly_id}_original_data_gt1000.csv",
+        components=CONCOCT / "run" / "{assembly_id}_PCA_components_data_gt1000.csv",
+        transformed_data=CONCOCT
+        / "run"
+        / "{assembly_id}_PCA_transformed_data_gt1000.csv",
     log:
-        CONCOCT / "run/{assembly_id}.log",
+        CONCOCT / "run" / "{assembly_id}.log",
     conda:
         "concoct.yml"
     params:
@@ -73,7 +75,7 @@ rule concoct_run_one:
 
 rule concoct_merge_cutup_clustering_one:
     input:
-        clustering=CONCOCT / "run/{assembly_id}_clustering_gt1000.csv",
+        clustering=CONCOCT / "run" / "{assembly_id}_clustering_gt1000.csv",
     output:
         clustering_merged=CONCOCT / "merge" / "{assembly_id}.csv",
     log:

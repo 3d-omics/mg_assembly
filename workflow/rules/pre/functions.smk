@@ -36,7 +36,9 @@ def compose_prefix_for_nonpareil(wildcards):
 
 def get_cram_for_pre_eval_cram_to_mapped_bam(wildcards):
     genome = LAST_HOST
-    return PRE_BOWTIE2 / f"{genome}/{wildcards.sample_id}.{wildcards.library_id}.cram"
+    sample_id = wildcards.sample_id
+    library_id = wildcards.library_id
+    return PRE_BOWTIE2 / genome / f"{sample_id}.{library_id}.cram"
 
 
 def get_kraken2_database(wildcards):
@@ -45,7 +47,7 @@ def get_kraken2_database(wildcards):
 
 
 def compose_out_folder_for_eval_kraken2_assign_all(wildcards):
-    return KRAKEN2 / f"{wildcards.kraken_db}"
+    return KRAKEN2 / wildcards.kraken_db
 
 
 def get_input_forward_for_host_mapping(wildcards):
@@ -56,7 +58,8 @@ def get_input_forward_for_host_mapping(wildcards):
     prev_genome = HOST_NAMES[genome_index - 1]
     return (
         PRE_BOWTIE2
-        / f"non{prev_genome}/{wildcards.sample_id}.{wildcards.library_id}_1.fq.gz"
+        / f"non{prev_genome}"
+        / f"{wildcards.sample_id}.{wildcards.library_id}_1.fq.gz"
     )
 
 
@@ -68,7 +71,8 @@ def get_input_reverse_for_host_mapping(wildcards):
     prev_genome = HOST_NAMES[genome_index - 1]
     return (
         PRE_BOWTIE2
-        / f"non{prev_genome}/{wildcards.sample_id}.{wildcards.library_id}_2.fq.gz"
+        / f"non{prev_genome}"
+        / f"{wildcards.sample_id}.{wildcards.library_id}_2.fq.gz"
     )
 
 

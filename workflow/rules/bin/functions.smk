@@ -20,7 +20,7 @@ def get_tsvs_for_binning_coverm_genome(wildcards):
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
-            BIN_COVERM / f"genome/{assembly_id}.{sample_id}.{library_id}.tsv"
+            BIN_COVERM / "genome" / f"{assembly_id}.{sample_id}.{library_id}.tsv"
         )
     return tsv_files
 
@@ -31,14 +31,14 @@ def get_tsvs_for_binning_coverm_contig(wildcards):
     tsv_files = []
     for sample_id, library_id in samples_in_assembly:
         tsv_files.append(
-            BIN_COVERM / f"contig/{assembly_id}.{sample_id}.{library_id}.tsv"
+            BIN_COVERM / "contig" / f"{assembly_id}.{sample_id}.{library_id}.tsv"
         )
     return tsv_files
 
 
 # Magscot ----
 def compose_out_prefix_for_metabin_magscot_run_one(wildcards):
-    return MAGSCOT / f"{wildcards.assembly_id}/magscot"
+    return MAGSCOT / wildcards.assembly_id / "magscot"
 
 
 # Concoct ----
@@ -65,7 +65,7 @@ def get_bais_for_concoct_binning(wildcards):
 
 
 def get_basename_for_concoct_run_one(wildcards):
-    return CONCOCT / f"run/{wildcards.assembly_id}"
+    return CONCOCT / "run" / wildcards.assembly_id
 
 
 # MaxBin2 ----
@@ -81,7 +81,7 @@ def get_bams_for_maxbin2(wildcards):
 
 
 def compose_out_prefix_for_maxbin2_run_one(wildcards):
-    return MAXBIN2 / "bins" / f"{wildcards.assembly_id}"
+    return MAXBIN2 / "bins" / wildcards.assembly_id
 
 
 # MetaBat2 ---
@@ -97,4 +97,4 @@ def get_bams_for_metabat2(wildcards):
 
 
 def compose_bins_prefix_for_metaba2_run_one(wildcards):
-    return METABAT2 / f"bins/{wildcards.assembly_id}/{wildcards.assembly_id}"
+    return METABAT2 / "bins" / wildcards.assembly_id / wildcards.assembly_id

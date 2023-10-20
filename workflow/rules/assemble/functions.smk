@@ -61,7 +61,10 @@ def get_crams_to_merge_assembly(wildcards):
 def get_tsvs_for_assembly_coverm_genome(wildcards):
     method = wildcards.method
     tsv_files = [
-        ASSEMBLE_COVERM / f"genome/{method}/{assembly_id}.{sample_id}.{library_id}.tsv"
+        ASSEMBLE_COVERM
+        / "genome"
+        / method
+        / f"{assembly_id}.{sample_id}.{library_id}.tsv"
         for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
     ]
     return tsv_files

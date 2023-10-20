@@ -69,7 +69,7 @@ def get_stats_files_from_assembly_id(wildcards):
     ]
     pre_samtools = (
         [
-            PRE_BOWTIE2 / f"{genome}/{sample_id}.{library_id}.{extension}"
+            PRE_BOWTIE2 / genome / f"{sample_id}.{library_id}.{extension}"
             for sample_id, library_id in sample_library
             for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
             for genome in HOST_NAMES
@@ -88,7 +88,7 @@ def get_stats_files_from_assembly_id(wildcards):
         else []
     )
     pre_kraken2 = [
-        KRAKEN2 / f"{kraken_db}" / f"{sample_id}.{library_id}.report"
+        KRAKEN2 / kraken_db / f"{sample_id}.{library_id}.report"
         for sample_id, library_id in sample_library
         for kraken_db in KRAKEN2_DBS
     ]
