@@ -60,7 +60,7 @@ rule concoct_run_one:
     conda:
         "concoct.yml"
     params:
-        basename=get_basename_for_concoct_run_one,
+        basename=compose_basename_for_concoct_run_one,
     threads: 24
     shell:
         """

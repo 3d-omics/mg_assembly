@@ -58,7 +58,7 @@ def compose_out_prefix_for_bin_magscot_run_one(wildcards):
 
 
 # Concoct ----
-def get_basename_for_concoct_run_one(wildcards):
+def compose_basename_for_concoct_run_one(wildcards):
     return CONCOCT / "run" / wildcards.assembly_id
 
 
