@@ -29,27 +29,9 @@ def compose_rg_extra(wildcards):
     return f"{lb_field}\t" + f"PL:Illumina\t" + f"{sm_field}"
 
 
-def get_forward_for_nonpareil(wildcards):
-    if len(HOST_NAMES) > 1:
-        return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
-    return FASTP / "{sample_id}.{library_id}_1.fq.gz"
-
-
 def compose_prefix_for_nonpareil(wildcards):
     """Compose prefix for nonpareil output files"""
     return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"
-
-
-def get_forward_for_pre_eval_singlem_pipe_one(wildcards):
-    if len(HOST_NAMES) > 1:
-        return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
-    return FASTP / "{sample_id}.{library_id}_1.fq.gz"
-
-
-def get_reverse_for_pre_eval_singlem_pipe_one(wildcards):
-    if len(HOST_NAMES) > 1:
-        return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
-    return FASTP / "{sample_id}.{library_id}_2.fq.gz"
 
 
 def get_cram_for_pre_eval_cram_to_mapped_bam(wildcards):
@@ -88,3 +70,15 @@ def get_input_reverse_for_host_mapping(wildcards):
         PRE_BOWTIE2
         / f"non{prev_genome}/{wildcards.sample_id}.{wildcards.library_id}_2.fq.gz"
     )
+
+
+def get_final_forward_from_pre(wildcards):
+    if len(HOST_NAMES) > 1:
+        return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
+    return FASTP / "{sample_id}.{library_id}_1.fq.gz"
+
+
+def get_final_reverse_from_pre(wildcards):
+    if len(HOST_NAMES) > 1:
+        return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
+    return FASTP / "{sample_id}.{library_id}_2.fq.gz"

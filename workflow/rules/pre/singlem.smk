@@ -5,8 +5,8 @@ rule pre_eval_singlem_pipe_one:
     passing it the non-host and trimmed ones.
     """
     input:
-        forward_=get_forward_for_pre_eval_singlem_pipe_one,
-        reverse_=get_reverse_for_pre_eval_singlem_pipe_one,
+        forward_=get_final_forward_from_pre,
+        reverse_=get_final_reverse_from_pre,
         data=features["singlem_database"],
     output:
         archive_otu_table=SINGLEM / "{sample_id}.{library_id}.archive.json",

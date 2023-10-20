@@ -7,7 +7,7 @@ rule pre_eval_nonpareil_one:
     empty files
     """
     input:
-        forward_=get_forward_for_nonpareil,
+        forward_=get_final_forward_from_pre,
     output:
         forward_fq=temp(NONPAREIL / "{sample_id}.{library_id}_1.fq"),
         npa=touch(NONPAREIL / "{sample_id}.{library_id}.npa"),
