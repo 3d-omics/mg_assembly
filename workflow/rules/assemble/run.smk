@@ -16,7 +16,7 @@ rule assemble_megahit_one:
         "assemble.yml"
     threads: 24
     resources:
-        mem_mb=double_ram_for_assemble_megahit,
+        mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
     params:
         out_dir=compose_out_dir_for_assemble_megahit_one,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
@@ -88,7 +88,7 @@ rule assemble_bowtie2_build_one:
     params:
         extra=params["assemble"]["bowtie2-build"]["extra"],
     resources:
-        mem_mb=double_ram_for_assemble_bowtie2_build,
+        mem_mb=double_ram(params["assemble"]["bowtie2-build"]["memory_gb"]),
         runtime=6 * 60,
     retries: 5
     shell:
@@ -128,7 +128,7 @@ rule assemble_bowtie2_one:
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     resources:
-        mem_mb=double_ram_for_assemble_bowtie2_map,
+        mem_mb=double_ram(params["assemble"]["bowtie2"]["memory_gb"]),
         runtime=6 * 60,
     retries: 5
     shell:
