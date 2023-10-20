@@ -3,6 +3,7 @@ include: "nonpareil.smk"
 include: "singlem.smk"
 include: "coverm.smk"
 include: "kraken2.smk"
+include: "samtools.smk"
 
 
 # FASTP report files ----

@@ -86,13 +86,3 @@ rule pre_eval_coverm:
             PRE_COVERM / f"genome.{method}.tsv"
             for method in params["pre"]["coverm"]["genome"]["methods"]
         ],
-
-
-rule pre_eval_samtools:
-    input:
-        [
-            PRE_BOWTIE2 / f"{genome}/{sample_id}.{library_id}.{extension}"
-            for sample_id, library_id in SAMPLE_LIBRARY
-            for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
-            for genome in HOST_NAMES
-        ],
