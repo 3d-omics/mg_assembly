@@ -29,7 +29,7 @@ rule metabat2_run_one:
     conda:
         "metabat2.yml"
     params:
-        bins_prefix=compose_bins_prefix_for_metaba2_run_one,
+        bins_prefix=compose_bins_prefix_for_metabat2_run_one,
     threads: 24
     shell:
         """
