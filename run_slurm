@@ -6,8 +6,8 @@ snakemake \
     --use-conda \
     --conda-frontend mamba \
     --rerun-incomplete \
-    --jobs 100 \
-    --cores 96 \
+    --jobs 50 \
+    --cores 24 \
     --keep-going \
     --notemp \
     --slurm \
