@@ -3,3 +3,7 @@ def get_sample_and_library_from_assembly_id(assembly_id):
         ["sample_id", "library_id"]
     ].values.tolist()
     return samples_in_assembly
+
+
+def double_ram(initial_memory):
+    return lambda wildcards, attempt: initial_memory * 2 ** (attempt - 1) * 1024
