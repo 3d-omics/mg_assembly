@@ -11,7 +11,7 @@ rule dereplicate_drep:
     params:
         out_dir=DREP,
     resources:
-        mem_mb=double_ram_for_dereplicate_drep,
+        mem_mb=double_ram(params["dereplicate"]["drep"]["memory_gb"]),
         runtime=24 * 60,
     retries: 5
     shell:
@@ -58,7 +58,7 @@ rule dereplicate_bowtie2_build_one:
     params:
         extra=params["dereplicate"]["bowtie2-build"]["extra"],
     resources:
-        mem_mb=double_ram_for_dereplicate_bowtie2_build,
+        mem_mb=double_ram(params["dereplicate"]["bowtie2-build"]["memory_gb"]),
         runtime=24 * 60,
     shell:
         """
@@ -90,7 +90,7 @@ rule dereplicate_bowtie2_one:
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     resources:
-        mem_mb=double_ram_for_dereplicate_bowtie2_map,
+        mem_mb=double_ram(params["dereplicate"]["bowtie2"]["memory_gb"]),
     shell:
         """
         (bowtie2 \

@@ -26,28 +26,3 @@ def get_tsvs_for_dereplicate_coverm_contig(wildcards):
         for sample_id, library_id in SAMPLE_LIBRARY
     ]
     return tsv_files
-
-
-def double_ram_for_dereplicate_drep(wildcards, attempt):
-    initial_memory = params["dereplicate"]["drep"]["memory_gb"]
-    return initial_memory * 2 ** (attempt - 1) * 1024
-
-
-def double_ram_for_dereplicate_bowtie2_build(wildcards, attempt):
-    initial_memory = params["dereplicate"]["bowtie2-build"]["memory_gb"]
-    return initial_memory * 2 ** (attempt - 1) * 1024
-
-
-def double_ram_for_dereplicate_bowtie2_map(wildcards, attempt):
-    initial_memory = params["dereplicate"]["bowtie2"]["memory_gb"]
-    return initial_memory * 2 ** (attempt - 1) * 1024
-
-
-def double_ram_for_dereplicate_eval_gtdbtk(wildcards, attempt):
-    initial_memory = params["dereplicate"]["gtdbtk"]["memory_gb"]
-    return initial_memory * 2 ** (attempt - 1) * 1024
-
-
-def double_ram_for_dereplicate_eval_dram(wildcards, attempt):
-    initial_memory = params["dereplicate"]["dram"]["memory_gb"]
-    return initial_memory * 2 ** (attempt - 1) * 1024
