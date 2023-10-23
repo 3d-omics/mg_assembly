@@ -10,7 +10,7 @@ rule dereplicate_quast:
         "dereplicate.yml"
     threads: 4
     params:
-        extra=params["metabin"]["quast"]["extra"],
+        extra=params["dereplicate"]["quast"]["extra"],
     shell:
         """
         quast \
