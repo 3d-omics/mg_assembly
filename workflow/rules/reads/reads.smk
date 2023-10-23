@@ -31,6 +31,7 @@ rule reads_link_all:
 
 
 rule reads_fastqc:
+    """Get all fastqc reports of the raw reads"""
     input:
         [
             READS / f"{sample}.{library}_{end}_fastqc.zip"
@@ -40,11 +41,13 @@ rule reads_fastqc:
 
 
 rule reads_eval:
+    """Perform the evaluation steps of the reads"""
     input:
         rules.reads_fastqc.input,
 
 
 rule reads_run:
+    """Only perform the "run" in reads without the evaluation steps"""
     input:
         rules.reads_link_all.input,
 
