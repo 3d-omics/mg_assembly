@@ -7,7 +7,7 @@ include: "magscot.smk"
 
 rule bin_run:
     input:
-        rules.magscot.input,
+        rules.bin_magscot.input,
 
 
 # rule bin_eval:
@@ -17,4 +17,4 @@ rule bin_run:
 
 rule bin:
     input:
-        rules.magscot.input,
+        rules.bin_magscot.input,

@@ -260,6 +260,6 @@ rule bin_magscot_split_into_bins:
         """
 
 
-rule magscot:
+rule bin_magscot:
     input:
         [MAGSCOT / f"{assembly_id}/bins" for assembly_id in ASSEMBLIES],

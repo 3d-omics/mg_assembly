@@ -1,4 +1,4 @@
-rule metabat2_prepare_one:
+rule bin_metabat2_prepare_one:
     input:
         bams=get_bams_from_assembly_id,
     output:
@@ -18,7 +18,7 @@ rule metabat2_prepare_one:
         """
 
 
-rule metabat2_run_one:
+rule bin_metabat2_run_one:
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         depth=METABAT2 / "prepare/{assembly_id}.depth",
@@ -42,6 +42,6 @@ rule metabat2_run_one:
         """
 
 
-rule metabat2:
+rule bin_metabat2:
     input:
         [METABAT2 / f"bins/{assembly_id}" for assembly_id in ASSEMBLIES],

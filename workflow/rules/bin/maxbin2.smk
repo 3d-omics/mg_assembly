@@ -1,4 +1,4 @@
-rule maxbin2_prepare_one:
+rule bin_maxbin2_prepare_one:
     """
     Compute coverages
     """
@@ -20,7 +20,7 @@ rule maxbin2_prepare_one:
         """
 
 
-rule maxbin2_run_one:
+rule bin_maxbin2_run_one:
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         coverage=MAXBIN2 / "prepare" / "{assembly_id}.coverage",
@@ -46,6 +46,6 @@ rule maxbin2_run_one:
         """
 
 
-rule maxbin2:
+rule bin_maxbin2:
     input:
         [MAXBIN2 / "bins" / f"{assembly_id}" for assembly_id in ASSEMBLIES],
