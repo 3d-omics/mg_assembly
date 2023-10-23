@@ -1,7 +1,5 @@
 rule bin_maxbin2_prepare_one:
-    """
-    Compute coverages
-    """
+    """Compute coverages"""
     input:
         bams=get_bams_from_assembly_id,
     output:
@@ -21,6 +19,7 @@ rule bin_maxbin2_prepare_one:
 
 
 rule bin_maxbin2_run_one:
+    """Run MaxBin2 over a single assembly"""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         coverage=MAXBIN2 / "prepare" / "{assembly_id}.coverage",
@@ -47,5 +46,6 @@ rule bin_maxbin2_run_one:
 
 
 rule bin_maxbin2:
+    """Run MaxBin2 over all assemblies"""
     input:
         [MAXBIN2 / "bins" / f"{assembly_id}" for assembly_id in ASSEMBLIES],

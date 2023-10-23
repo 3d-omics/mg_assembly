@@ -1,4 +1,5 @@
 rule bin_magscot_prodigal_one:
+    """Run prodigal over a single assembly"""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
@@ -30,6 +31,7 @@ rule bin_magscot_prodigal_one:
 
 
 rule bin_magscot_hmmsearch_pfam_one:
+    """Run hmmsearch over the predicted proteins of an assembly using Pfam as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         hmm=features["magscot"]["pfam_hmm"],
@@ -56,6 +58,7 @@ rule bin_magscot_hmmsearch_pfam_one:
 
 
 rule bin_magscot_hmmsearch_tigr_one:
+    """Run hmmsearch over the predicted proteins of an assembly using TIGR as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
         hmm=features["magscot"]["tigr_hmm"],
@@ -82,6 +85,7 @@ rule bin_magscot_hmmsearch_tigr_one:
 
 
 rule bin_magscot_join_hmm_one:
+    """Join the results of hmmsearch over TIGR and Pfam"""
     input:
         tigr_out=MAGSCOT / "{assembly_id}/tigr.tblout",
         pfam_out=MAGSCOT / "{assembly_id}/pfam.tblout",
@@ -99,6 +103,7 @@ rule bin_magscot_join_hmm_one:
 
 
 rule bin_magscot_compose_contig_to_bin_concoct_one:
+    """Compose the contig to bin file from CONCOCT"""
     input:
         CONCOCT / "fasta_bins" / "{assembly_id}/",
     output:
@@ -119,6 +124,7 @@ rule bin_magscot_compose_contig_to_bin_concoct_one:
 
 
 rule bin_magscot_compose_contig_to_bin_maxbin2_one:
+    """Compose the contig to bin file from MaxBin2"""
     input:
         MAXBIN2 / "bins" / "{assembly_id}/",
     output:
@@ -139,6 +145,7 @@ rule bin_magscot_compose_contig_to_bin_maxbin2_one:
 
 
 rule bin_magscot_compose_contig_to_bin_metabat2_one:
+    """Compose the contig to bin file from MetaBAT2"""
     input:
         METABAT2 / "bins/{assembly_id}/",
     output:
@@ -159,6 +166,7 @@ rule bin_magscot_compose_contig_to_bin_metabat2_one:
 
 
 rule bin_magscot_merge_contig_to_bin_one:
+    """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2"""
     input:
         MAGSCOT / "{assembly_id}/concoct.contigs_to_bin.tsv",
         MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.tsv",
@@ -176,6 +184,7 @@ rule bin_magscot_merge_contig_to_bin_one:
 
 
 rule bin_magscot_run_one:
+    """Run MAGSCOT over one assembly"""
     input:
         contigs_to_bin=MAGSCOT / "{assembly_id}/contigs_to_bin.tsv",
         hmm=MAGSCOT / "{assembly_id}/hmm.tblout",
@@ -203,6 +212,7 @@ rule bin_magscot_run_one:
 
 
 rule bin_magscot_reformat_one:
+    """Reformat the results from MAGSCOT"""
     input:
         refined_contig_to_bin=MAGSCOT
         / "{assembly_id}/magscot.refined.contig_to_bin.out",
@@ -222,6 +232,7 @@ rule bin_magscot_reformat_one:
 
 
 rule bin_magscot_rename_one:
+    """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         clean=MAGSCOT / "{assembly_id}/magscot.reformat.tsv",
@@ -241,6 +252,7 @@ rule bin_magscot_rename_one:
 
 
 rule bin_magscot_split_into_bins:
+    """Split the magscot fasta into bins"""
     input:
         fasta=MAGSCOT / "{assembly_id}.fa",
     output:
@@ -261,5 +273,6 @@ rule bin_magscot_split_into_bins:
 
 
 rule bin_magscot:
+    """Run MAGSCOT over all assemblies"""
     input:
         [MAGSCOT / f"{assembly_id}/bins" for assembly_id in ASSEMBLIES],
