@@ -29,5 +29,6 @@ rule report_assembly_one:
 
 
 rule report_assembly:
+    """Report all the assemblies"""
     input:
         [REPORT_ASSEMBLY / f"{assembly_id}.html" for assembly_id in ASSEMBLIES],

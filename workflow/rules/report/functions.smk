@@ -32,6 +32,7 @@ def get_kraken2_for_library_reports(wildcards):
 
 
 def get_sample_library_from_assembly(my_assembly_id):
+    """Get all the samples involved in a given assembly"""
     SAMPLE_LIBRARY = [
         [sample_id, library_id]
         for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
@@ -41,6 +42,7 @@ def get_sample_library_from_assembly(my_assembly_id):
 
 
 def _path_to_string(path_list):
+    """Convert a list of paths to a list of strings"""
     return [str(x) for x in path_list]
 
 

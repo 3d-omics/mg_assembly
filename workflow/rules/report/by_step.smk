@@ -133,6 +133,7 @@ rule report_step_dereplicate:
 
 
 rule report_step:
+    """Report for all steps"""
     input:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocessing.html",
@@ -141,6 +142,7 @@ rule report_step:
 
 
 rule report_step_with_dereplicate:
+    """Report all steps + dereplicate"""
     input:
         rules.report_step.input,
         REPORT_STEP / "dereplicate.html",
