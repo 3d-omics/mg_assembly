@@ -46,8 +46,6 @@ assemble:
       methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
 
 bin:
-  vamb:
-    min_length: 2000
   quast:
     extra: ""
   bowtie2-build:
@@ -56,18 +54,6 @@ bin:
     extra: ""
   samtools:
     mem: 1G
-
-
-metabin:
-  bowtie2-build:
-    extra: ""
-  bowtie2:
-    extra: ""
-  samtools:
-    mem: 1G
-  quast:
-    extra: ""
-
 
 dereplicate:
   drep:
