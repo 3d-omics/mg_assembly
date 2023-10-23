@@ -15,9 +15,6 @@ rule assemble_megahit_one:
     conda:
         "assemble.yml"
     threads: 24
-    resources:
-        mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
-        runtime=24 * 60,
     params:
         out_dir=compose_out_dir_for_assemble_megahit_one,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
@@ -25,6 +22,9 @@ rule assemble_megahit_one:
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
         memory_bytes=get_memory_bytes_for_assemble_megahit_one,
+    resources:
+        mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
+        runtime=24 * 60,
     retries: 5
     shell:
         """
