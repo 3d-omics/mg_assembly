@@ -1,4 +1,4 @@
-rule pre_eval_fastp_fastqc:
+rule pre_fastp_fastqc:
     """Run fastqc over all libraries after fastp"""
     input:
         [
@@ -9,7 +9,7 @@ rule pre_eval_fastp_fastqc:
         ],
 
 
-rule pre_eval_nonhost_fastqc:
+rule pre_nonhost_fastqc:
     """Run fastqc over all libraries after fastp"""
     input:
         [

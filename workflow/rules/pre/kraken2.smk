@@ -1,4 +1,4 @@
-rule pre_eval_kraken2_assign_all:
+rule pre_kraken2_assign_all:
     input:
         files=[
             FASTP / f"{sample}.{library}_{ending}.fq.gz"
@@ -63,7 +63,7 @@ rule pre_eval_kraken2_assign_all:
         """
 
 
-rule pre_eval_kraken2:
+rule pre_kraken2:
     input:
         [
             KRAKEN2 / f"{kraken_db}/{sample_id}.{library_id}.report"

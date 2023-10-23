@@ -1,4 +1,4 @@
-rule pre_eval_nonpareil_one:
+rule pre_nonpareil_one:
     """Run nonpareil over one sample
 
     Note: Nonpareil only ask for one of the pair-end reads
@@ -36,7 +36,7 @@ rule pre_eval_nonpareil_one:
         """
 
 
-rule pre_eval_nonpareil:
+rule pre_nonpareil:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [

@@ -1,4 +1,4 @@
-rule samtools_stats_cram_pre:
+rule pre_samtools_stats_cram:
     input:
         cram=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram",
         crai=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram.crai",
@@ -13,7 +13,7 @@ rule samtools_stats_cram_pre:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
 
-rule pre_eval_samtools:
+rule pre_samtools:
     input:
         [
             PRE_BOWTIE2 / f"{genome}/{sample_id}.{library_id}.{extension}"

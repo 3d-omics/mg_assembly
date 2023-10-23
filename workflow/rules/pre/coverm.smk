@@ -1,4 +1,4 @@
-rule pre_eval_cram_to_mapped_bam:
+rule pre_cram_to_mapped_bam:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
@@ -32,7 +32,7 @@ rule pre_eval_cram_to_mapped_bam:
         """
 
 
-rule pre_eval_coverm_genome_method_one:
+rule pre_coverm_genome_method_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=PRE_COVERM / "bams/{sample}.{library_id}.bam",
@@ -58,7 +58,7 @@ rule pre_eval_coverm_genome_method_one:
         """
 
 
-rule pre_eval_coverm_genome_aggregate_method:
+rule pre_coverm_genome_aggregate_method:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [
@@ -82,7 +82,7 @@ rule pre_eval_coverm_genome_aggregate_method:
         """
 
 
-rule pre_eval_coverm:
+rule pre_coverm:
     input:
         [
             PRE_COVERM / f"genome.{method}.tsv"
