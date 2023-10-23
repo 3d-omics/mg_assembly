@@ -89,9 +89,9 @@ def get_memory_bytes_for_assemble_megahit_one(wildcards, resources):
     return resources.mem_mb * 1024**2
 
 
-def compose_input_dir_for_assemble_eval_coverm_aggregate_contig(wildcards):
+def compose_input_dir_for_assemble_coverm_aggregate_contig(wildcards):
     return ASSEMBLE_COVERM / "contig" / wildcards.method
 
 
-def compose_input_dir_for_assemble_eval_coverm_aggregate_genome(wildcards):
+def compose_input_dir_for_assemble_coverm_aggregate_genome(wildcards):
     return ASSEMBLE_COVERM / "genome" / wildcards.method

@@ -1,4 +1,4 @@
-rule assemble_eval_samtools_stats_cram_assembly:
+rule assemble_samtools_stats_cram_assembly:
     input:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
         crai=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
@@ -13,7 +13,7 @@ rule assemble_eval_samtools_stats_cram_assembly:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
 
-rule assemble_eval_samtools:
+rule assemble_samtools:
     input:
         [
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{extension}"

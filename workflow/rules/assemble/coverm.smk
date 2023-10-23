@@ -1,4 +1,4 @@
-rule assemble_eval_cram_to_bam_one:
+rule assemble_cram_to_bam_one:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
@@ -32,7 +32,7 @@ rule assemble_eval_cram_to_bam_one:
         """
 
 
-rule assemble_eval_cram_to_bam_all:
+rule assemble_cram_to_bam_all:
     """Convert cram to bam for all cram files"""
     input:
         [
@@ -42,7 +42,7 @@ rule assemble_eval_cram_to_bam_all:
 
 
 # Coverm contig ----
-rule assemble_eval_coverm_contig_one:
+rule assemble_coverm_contig_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
@@ -77,7 +77,7 @@ rule assemble_eval_coverm_contig_one:
         """
 
 
-rule assemble_eval_coverm_aggregate_contig:
+rule assemble_coverm_aggregate_contig:
     """Aggregate coverm contig results"""
     input:
         get_tsvs_for_assembly_coverm_contig,
@@ -88,7 +88,7 @@ rule assemble_eval_coverm_aggregate_contig:
     conda:
         "assemble.yml"
     params:
-        input_dir=compose_input_dir_for_assemble_eval_coverm_aggregate_contig,
+        input_dir=compose_input_dir_for_assemble_coverm_aggregate_contig,
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -98,7 +98,7 @@ rule assemble_eval_coverm_aggregate_contig:
         """
 
 
-rule assemble_eval_coverm_contig:
+rule assemble_coverm_contig:
     input:
         [
             ASSEMBLE_COVERM / f"contig.{method}.tsv"
@@ -107,7 +107,7 @@ rule assemble_eval_coverm_contig:
 
 
 # Coverm genome ----
-rule assemble_eval_coverm_genome_one:
+rule assemble_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
@@ -138,7 +138,7 @@ rule assemble_eval_coverm_genome_one:
         """
 
 
-rule assemble_eval_coverm_aggregate_genome:
+rule assemble_coverm_aggregate_genome:
     input:
         get_tsvs_for_assembly_coverm_genome,
     output:
@@ -148,7 +148,7 @@ rule assemble_eval_coverm_aggregate_genome:
     conda:
         "assemble.yml"
     params:
-        input_dir=compose_input_dir_for_assemble_eval_coverm_aggregate_genome,
+        input_dir=compose_input_dir_for_assemble_coverm_aggregate_genome,
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -158,7 +158,7 @@ rule assemble_eval_coverm_aggregate_genome:
         """
 
 
-rule assemble_eval_coverm_genome:
+rule assemble_coverm_genome:
     input:
         [
             ASSEMBLE_COVERM / f"genome.{method}.tsv"
