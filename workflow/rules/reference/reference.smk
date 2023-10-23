@@ -1,4 +1,5 @@
 rule reference_recompress:
+    """Recompress the reference with bgzip"""
     input:
         fa_gz=lambda wildcards: features["hosts"][wildcards.genome],
     output:
@@ -15,5 +16,6 @@ rule reference_recompress:
 
 
 rule reference:
+    """Run all the steps for reference(s) preparations"""
     input:
         [REFERENCE / f"{genome}.fa.gz" for genome in HOST_NAMES],
