@@ -1,7 +1,5 @@
 rule dereplicate_bowtie2_build_one:
-    """
-    Index dereplicader
-    """
+    """Index dereplicader"""
     input:
         contigs=DREP / "dereplicated_genomes.fa",
     output:
@@ -28,6 +26,7 @@ rule dereplicate_bowtie2_build_one:
 
 
 rule dereplicate_bowtie2_one:
+    """Align one sample to the dereplicated genomes"""
     input:
         mock=DREP_INDEX / "dereplicated_genomes",
         forward_=get_final_forward_from_pre,
@@ -70,6 +69,7 @@ rule dereplicate_bowtie2_one:
 
 
 rule dereplicate_bowtie2:
+    """Align all samples to the dereplicated genomes"""
     input:
         [
             DREP_BOWTIE2 / f"{sample_id}.{library_id}.cram"

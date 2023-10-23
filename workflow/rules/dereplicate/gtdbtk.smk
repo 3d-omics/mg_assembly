@@ -1,4 +1,5 @@
 rule dereplicate_gtdbtk:
+    """Run GTDB-Tk over the dereplicated genomes.""" ""
     input:
         bin_folder=DREP / "dereplicated_genomes",
         database=features["gtdbtk_database"],

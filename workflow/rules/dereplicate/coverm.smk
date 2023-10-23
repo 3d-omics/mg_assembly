@@ -60,6 +60,7 @@ rule dereplicate_coverm_genome_one:
 
 
 rule dereplicate_coverm_genome_method:
+    """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_genome,
     output:
@@ -80,6 +81,7 @@ rule dereplicate_coverm_genome_method:
 
 
 rule dereplicate_coverm_genome:
+    """Run coverm genome and all methods"""
     input:
         [
             DREP_COVERM / f"genome.{method}.tsv"
@@ -112,6 +114,7 @@ rule dereplicate_coverm_contig_method_one:
 
 
 rule dereplicate_coverm_contig_method:
+    """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_contig,
     output:
@@ -132,6 +135,7 @@ rule dereplicate_coverm_contig_method:
 
 
 rule dereplicate_coverm_contig:
+    """Run coverm contig and all methods"""
     input:
         [
             DREP_COVERM / f"contig.{method}.tsv"

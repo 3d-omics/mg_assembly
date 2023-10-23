@@ -1,5 +1,5 @@
-
 rule dereplicate_dram_setup_db:
+    """Set up the DRAM database."""
     input:
         features["dram_database"],
     output:
@@ -13,6 +13,7 @@ rule dereplicate_dram_setup_db:
 
 
 rule dereplicate_dram_annotate:
+    """Annotate dereplicated genomes with DRAM."""
     input:
         drep_folder=DREP / "dereplicated_genomes",
         mock_db="results/dram_db_setup.done",
@@ -48,6 +49,7 @@ rule dereplicate_dram_annotate:
 
 
 rule dereplicate_dram_distill:
+    """Distill DRAM annotations."""
     input:
         indir=DREP_DRAM / "annotate/dereplicated_genomes",
         annotations=DREP_DRAM / "annotate/dereplicated_genomes/annotations.tsv",
@@ -74,6 +76,12 @@ rule dereplicate_dram_distill:
             --trna_path {input.trnas} \
         2> {log} 1>&2
         """
+
+
+rule dereplicate_dram:
+    """Run DRAM on dereplicated genomes."""
+    input:
+        rules.dereplicate_dram_distill.output,
 
 
 localrules:

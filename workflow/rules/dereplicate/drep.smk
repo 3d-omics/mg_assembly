@@ -1,4 +1,5 @@
 rule dereplicate_drep:
+    """Dereplicate all the bins using dRep."""
     input:
         genomes=[MAGSCOT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
     output:
@@ -27,6 +28,7 @@ rule dereplicate_drep:
 
 
 rule dereplicate_join_genomes:
+    """Join all the dereplicated genomes into a single file."""
     input:
         DREP / "dereplicated_genomes",
     output:
