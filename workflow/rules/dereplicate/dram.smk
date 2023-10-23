@@ -27,10 +27,11 @@ rule dereplicate_eval_dram_annotate:
         "dram.yml"
     params:
         min_contig_size=1500,
+    threads: 24
     resources:
         mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
         runtime=24 * 60,
-    threads: 24
+    retries: 5
     shell:
         """
         rm -rfv {output.outdir} 2> {log} 1>&2
@@ -62,6 +63,7 @@ rule dereplicate_eval_dram_distill:
     resources:
         mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
         runtime=24 * 60,
+    retries: 5
     shell:
         """
         DRAM.py distill \
@@ -72,3 +74,7 @@ rule dereplicate_eval_dram_distill:
             --trna_path {input.trnas} \
         2> {log} 1>&2
         """
+
+
+localrules:
+    dereplicate_eval_dram_setup_db,
