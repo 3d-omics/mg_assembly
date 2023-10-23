@@ -1,4 +1,5 @@
 rule pre_samtools_stats_cram:
+    """Compute the stats of a cram file using samtools stats"""
     input:
         cram=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram",
         crai=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram.crai",
@@ -14,6 +15,7 @@ rule pre_samtools_stats_cram:
 
 
 rule pre_samtools:
+    """Get all the stats of a bam file using samtools"""
     input:
         [
             PRE_BOWTIE2 / f"{genome}/{sample_id}.{library_id}.{extension}"

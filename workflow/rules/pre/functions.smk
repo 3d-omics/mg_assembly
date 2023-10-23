@@ -35,6 +35,7 @@ def compose_prefix_for_nonpareil(wildcards):
 
 
 def get_cram_for_pre_eval_cram_to_mapped_bam(wildcards):
+    """Get the cram file of the last host"""
     genome = LAST_HOST
     sample_id = wildcards.sample_id
     library_id = wildcards.library_id
@@ -42,6 +43,7 @@ def get_cram_for_pre_eval_cram_to_mapped_bam(wildcards):
 
 
 def get_crai_for_pre_eval_cram_to_mapped_bam(wildcards):
+    """Get the crai file of the last host"""
     bam = get_cram_for_pre_eval_cram_to_mapped_bam(wildcards)
     return f"{bam}.bai"
 
@@ -52,6 +54,7 @@ def get_kraken2_database(wildcards):
 
 
 def compose_out_folder_for_eval_kraken2_assign_all(wildcards):
+    """Just compose the output folder"""
     return KRAKEN2 / wildcards.kraken_db
 
 
@@ -82,12 +85,14 @@ def get_input_reverse_for_host_mapping(wildcards):
 
 
 def get_final_forward_from_pre(wildcards):
+    """Get the last host forward file or the result from FASTP"""
     if len(HOST_NAMES) > 1:
         return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
     return FASTP / "{sample_id}.{library_id}_1.fq.gz"
 
 
 def get_final_reverse_from_pre(wildcards):
+    """Get the last host reverse file or the result from FASTP"""
     if len(HOST_NAMES) > 1:
         return PRE_BOWTIE2 / f"non{LAST_HOST}/{sample_id}.{library_id}_{end}.fq.gz"
     return FASTP / "{sample_id}.{library_id}_2.fq.gz"

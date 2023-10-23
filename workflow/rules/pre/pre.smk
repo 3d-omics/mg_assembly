@@ -9,16 +9,8 @@ include: "kraken2.smk"
 include: "samtools.smk"
 
 
-# FASTP report files ----
-rule pre_eval_fastp:
-    input:
-        [
-            FASTP / f"{sample_id}.{library_id}_fastp.html"
-            for sample_id, library_id in SAMPLE_LIBRARY
-        ],
-
-
 rule pre_eval:
+    """Run the evaluation of the preprocessing steps."""
     input:
         rules.pre_fastp_fastqc.input,
         rules.pre_coverm.output,
@@ -28,23 +20,27 @@ rule pre_eval:
 
 
 rule pre_eval_with_singlem:
+    """Run the evaluation of the preprocessing steps + SingleM."""
     input:
         rules.pre_eval.input,
         rules.pre_singlem.output,
 
 
 rule pre_eval_with_nonpareil:
+    """Run the evaluation of the preprocessing steps + Nonpareil."""
     input:
         rules.pre_eval.input,
         rules.pre_nonpareil.output,
 
 
 rule pre_run:
+    """Run the preprocessing steps, without the evaluation ones"""
     input:
         rules.pre_bowtie2_extract_nonhost_all.input,
 
 
 rule pre:
+    """Run the preprocessing steps, included the evaluation ones"""
     input:
         rules.pre_run.input,
         rules.pre_eval.input,

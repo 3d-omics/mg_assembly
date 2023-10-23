@@ -83,6 +83,7 @@ rule pre_coverm_genome_aggregate_method:
 
 
 rule pre_coverm:
+    """Run both coverm genome over the preprocessed samples"""
     input:
         [
             PRE_COVERM / f"genome.{method}.tsv"
