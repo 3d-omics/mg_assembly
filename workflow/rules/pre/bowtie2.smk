@@ -18,6 +18,7 @@ rule pre_bowtie2_hosts_build:
     resources:
         mem_mb=double_ram(params["pre"]["bowtie2-build"]["memory_gb"]),
         runtime=24 * 60,
+    retries: 5
     shell:
         """
         bowtie2-build \
@@ -54,6 +55,7 @@ rule pre_bowtie2_host_map_one:
     resources:
         mem_mb=double_ram(params["pre"]["bowtie2"]["memory_gb"]),
         runtime=24 * 60,
+    retries: 5
     shell:
         """
         (bowtie2 \
