@@ -1,4 +1,5 @@
 rule assemble_samtools_stats_cram_assembly:
+    """Run samtools stats over one library, using as reference an assembly"""
     input:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
         crai=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
@@ -14,6 +15,7 @@ rule assemble_samtools_stats_cram_assembly:
 
 
 rule assemble_samtools:
+    """Get all the samtools stats for all assemblies and samples"""
     input:
         [
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.{extension}"

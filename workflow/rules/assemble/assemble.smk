@@ -13,6 +13,7 @@ rule assemble_run:
 
 
 rule assemble_eval:
+    """Run the assemble evaluation rules"""
     input:
         rules.assemble_quast.input,
         rules.assemble_coverm_contig.input,

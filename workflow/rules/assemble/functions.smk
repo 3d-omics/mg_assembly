@@ -48,17 +48,18 @@ def get_number_of_libraries_in_assembly(wildcards):
 
 
 def get_crams_to_merge_assembly(wildcards):
+    """Get all the cram files involver in a concrete assembly"""
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
-    cram_files = []
-    for sample_id, library_id in samples_in_assembly:
-        cram_files.append(
-            ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
-        )
+    cram_files = [
+        ASSEMBLY_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+        for sample_id, library_id in samples_in_assembly
+    ]
     return cram_files
 
 
 def get_tsvs_for_assembly_coverm_genome(wildcards):
+    """Get all the concrete coverm genome tsv files for a concrete assembly"""
     tsv_files = [
         ASSEMBLE_COVERM
         / "genome"
@@ -70,6 +71,7 @@ def get_tsvs_for_assembly_coverm_genome(wildcards):
 
 
 def get_tsvs_for_assembly_coverm_contig(wildcards):
+    """Get all the concrete coverm contig tsv files for a concrete assembly"""
     tsv_files = [
         ASSEMBLE_COVERM
         / "contig"
@@ -81,17 +83,21 @@ def get_tsvs_for_assembly_coverm_contig(wildcards):
 
 
 def compose_out_dir_for_assemble_megahit_one(wildcards):
+    """Compose output folder"""
     return MEGAHIT / wildcards.assembly_id
 
 
 def get_memory_bytes_for_assemble_megahit_one(wildcards, resources):
+    """Compose the memory for megahit dbg construction step in bytes"""
     # https://github.com/snakemake/snakemake/issues/499
     return resources.mem_mb * 1024**2
 
 
 def compose_input_dir_for_assemble_coverm_aggregate_contig(wildcards):
+    """Compose the input dir for coverme contig"""
     return ASSEMBLE_COVERM / "contig" / wildcards.method
 
 
 def compose_input_dir_for_assemble_coverm_aggregate_genome(wildcards):
+    """Compose the input dir for coverm genome"""
     return ASSEMBLE_COVERM / "genome" / wildcards.method

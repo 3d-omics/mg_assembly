@@ -99,6 +99,7 @@ rule assemble_coverm_aggregate_contig:
 
 
 rule assemble_coverm_contig:
+    """Run coverm contig over all assemblies"""
     input:
         [
             ASSEMBLE_COVERM / f"contig.{method}.tsv"
@@ -139,6 +140,7 @@ rule assemble_coverm_genome_one:
 
 
 rule assemble_coverm_aggregate_genome:
+    """Join all the results from coverm, for all assemblies and samples at once, but a single method"""
     input:
         get_tsvs_for_assembly_coverm_genome,
     output:
@@ -159,6 +161,7 @@ rule assemble_coverm_aggregate_genome:
 
 
 rule assemble_coverm_genome:
+    """Run coverm genome over all assemblies and methods"""
     input:
         [
             ASSEMBLE_COVERM / f"genome.{method}.tsv"
