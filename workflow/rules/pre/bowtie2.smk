@@ -85,6 +85,7 @@ rule pre_bowtie2_extract_nonhost_one:
     input:
         cram=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram",
         reference=REFERENCE / "{genome}.fa.gz",
+        fai=REFERENCE / "{genome}.fa.gz.fai",
     output:
         forward_=PRE_BOWTIE2 / "non{genome}/{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_BOWTIE2 / "non{genome}/{sample_id}.{library_id}_2.fq.gz",

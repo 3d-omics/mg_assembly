@@ -46,7 +46,9 @@ rule assemble_eval_coverm_contig_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
+        bai=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.bai",
         reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        fai=ASSEMBLE_RENAME / "{assembly_id}.fa.fai",
     output:
         tsv=ASSEMBLE_COVERM
         / "contig"
@@ -109,7 +111,9 @@ rule assemble_eval_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
+        bai=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.bai",
         reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        fai=ASSEMBLE_RENAME / "{assembly_id}.fa.fai",
     output:
         tsv=ASSEMBLE_COVERM
         / "genome/{method}/{assembly_id}.{sample_id}.{library_id}.tsv",

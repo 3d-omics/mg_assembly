@@ -9,6 +9,7 @@ rule dereplicate_eval_cram_to_bam_one:
         cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
         reference=DREP / "dereplicated_genomes.fa",
+        fai=DREP / "dereplicated_genomes.fa.fai",
     output:
         bam=temp(DREP_BOWTIE2 / "{sample_id}.{library_id}.bam"),
     log:
@@ -34,6 +35,7 @@ rule dereplicate_eval_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam",
+        bai=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam.bai",
     output:
         tsv=DREP_COVERM / "genome/{method}/{sample_id}.{library_id}.tsv",
     conda:
@@ -90,6 +92,7 @@ rule dereplicate_eval_coverm_contig_method_one:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         bam=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam",
+        bai=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam.bai",
     output:
         tsv=DREP_COVERM / "contig/{method}/{sample_id}.{library_id}.tsv",
     conda:

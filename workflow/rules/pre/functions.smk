@@ -41,6 +41,11 @@ def get_cram_for_pre_eval_cram_to_mapped_bam(wildcards):
     return PRE_BOWTIE2 / genome / f"{sample_id}.{library_id}.cram"
 
 
+def get_crai_for_pre_eval_cram_to_mapped_bam(wildcards):
+    bam = get_cram_for_pre_eval_cram_to_mapped_bam(wildcards)
+    return f"{bam}.bai"
+
+
 def get_kraken2_database(wildcards):
     """Get kraken2 database path from the name"""
     return features["kraken2_dbs"][wildcards.kraken_db]

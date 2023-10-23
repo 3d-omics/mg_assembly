@@ -7,6 +7,7 @@ rule pre_eval_cram_to_mapped_bam:
     """
     input:
         cram=get_cram_for_pre_eval_cram_to_mapped_bam,
+        crai=get_crai_for_pre_eval_cram_to_mapped_bam,
         reference=REFERENCE / f"{LAST_HOST}.fa.gz",
     output:
         bam=temp(PRE_COVERM / "bams/{sample_id}.{library_id}.bam"),
@@ -35,6 +36,7 @@ rule pre_eval_coverm_genome_method_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=PRE_COVERM / "bams/{sample}.{library_id}.bam",
+        bai=PRE_COVERM / "bams/{sample}.{library_id}.bam.bai",
     output:
         tsv=touch(PRE_COVERM / "genome/{method}/{sample}.{library_id}.tsv"),
     conda:
