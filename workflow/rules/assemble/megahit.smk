@@ -8,8 +8,8 @@ rule assemble_megahit_one:
         forwards=get_forwards_from_assembly_id,
         reverses=get_reverses_from_assembly_id,
     output:
-        # assemble_folder=directory(MEGAHIT / "{assembly_id}"),
-        assemble_fasta=MEGAHIT / "{assembly_id}/final.contigs.fa",
+        fasta=MEGAHIT / "{assembly_id}.fa",
+        tarball=MEGAHIT / "{assembly_id}.tar.gz",
     log:
         log=MEGAHIT / "{assembly_id}.log",
     conda:
@@ -39,6 +39,15 @@ rule assemble_megahit_one:
             -2 {params.reverses} \
             {params.extra} \
         2> {log} 1>&2
+
+        cp {params.out_dir}/final.contigs.fa {output.fasta} 2>> {log} 1>&2
+
+        ( tar cvf - {params.out_dir} \
+        | pigz -9 \
+        > {output.tarball} \
+        ) 2>> {log} 1>&2
+
+        rm -rf {params.out_dir} 2>> {log} 1>&2
         """
 
 
@@ -55,7 +64,7 @@ rule assemble_megahit_renaming_one:
     Also, secondary info in the header is removed.
     """
     input:
-        MEGAHIT / "{assembly_id}/final.contigs.fa",
+        MEGAHIT / "{assembly_id}.fa",
     output:
         ASSEMBLE_RENAME / "{assembly_id}.fa",
     log:
