@@ -108,14 +108,16 @@ rule pre_bowtie2_extract_nonhost_one:
             -o /dev/stdout \
             -f 12 \
             {input.cram} \
-        | samtools sort \
-            -n \
+        | samtools collate \
+            -O \
             -u \
-            -m {params.samtools_mem} \
-            --threads {threads} \
+            -f \
+            --reference {input.reference} \
+            -@ {threads} \
+            - \
         | samtools fastq \
-            -1 {output.forward_} \
-            -2 {output.reverse_} \
+            -1 >(pigz > {output.forward_}) \
+            -2 >(pigz > {output.reverse_}) \
             -0 /dev/null \
             -c 9 \
             --threads {threads} \
