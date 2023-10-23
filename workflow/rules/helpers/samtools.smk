@@ -37,6 +37,20 @@ rule samtools_faidx_fa:
         "samtools faidx {input} 2> {log} 1>&2"
 
 
+rule samtools_faidx_fa_gz:
+    input:
+        "{prefix}.fa.gz",
+    output:
+        fai="{prefix}.fa.gz.fai",
+        gzi="{prefix}.fa.gz.gzi",
+    conda:
+        "helpers.yml"
+    log:
+        "{prefix}.fa.gz.log",
+    shell:
+        "samtools faidx {input} 2> {log} 1>&2"
+
+
 rule samtools_idxstats_cram:
     """Compute idxstats for a cram"""
     input:
