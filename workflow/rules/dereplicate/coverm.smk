@@ -1,3 +1,35 @@
+rule dereplicate_eval_cram_to_bam_one:
+    """Convert cram to bam
+
+    Note: this step is needed because coverm probably does not support cram. The
+    log from coverm shows failures to get the reference online, but nonetheless
+    it works.
+    """
+    input:
+        cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
+        crai=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
+        reference=DREP / "dereplicated_genomes.fa",
+    output:
+        bam=temp(DREP_BOWTIE2 / "{sample_id}.{library_id}.bam"),
+    log:
+        DREP_BOWTIE2 / "{sample_id}.{library_id}.bam.log",
+    conda:
+        "dereplicate.yml"
+    resources:
+        runtime=1 * 60,
+        mem_mb=4 * 1024,
+    shell:
+        """
+        samtools view \
+            -F 4 \
+            --reference {input.reference} \
+            -o {output.bam} \
+            -1 \
+            {input.cram} \
+        2> {log}
+        """
+
+
 rule dereplicate_eval_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
