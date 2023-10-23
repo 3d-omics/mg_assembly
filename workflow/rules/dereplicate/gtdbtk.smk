@@ -1,4 +1,4 @@
-rule dereplicate_eval_gtdbtk:
+rule dereplicate_gtdbtk:
     input:
         bin_folder=DREP / "dereplicated_genomes",
         database=features["gtdbtk_database"],

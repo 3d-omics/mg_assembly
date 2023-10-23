@@ -13,7 +13,7 @@ rule dereplicate_samtools_stats_cram_dereplicate:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
 
-rule dereplicate_eval_samtools:
+rule dereplicate_samtools:
     input:
         [
             DREP_BOWTIE2 / f"{sample_id}.{library_id}.{extension}"

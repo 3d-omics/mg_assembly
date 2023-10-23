@@ -82,8 +82,8 @@ rule report_step_assemble:
 rule report_step_dereplicate:
     """Collect all reports for the dereplicate step"""
     input:
-        rules.dereplicate_eval_quast.input,
-        rules.dereplicate_eval_samtools.input,
+        rules.dereplicate_quast.input,
+        rules.dereplicate_samtools.input,
     output:
         html=REPORT_STEP / "dereplicate.html",
     log:

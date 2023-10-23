@@ -1,4 +1,4 @@
-rule dereplicate_eval_cram_to_bam_one:
+rule dereplicate_cram_to_bam_one:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
@@ -31,7 +31,7 @@ rule dereplicate_eval_cram_to_bam_one:
         """
 
 
-rule dereplicate_eval_coverm_genome_one:
+rule dereplicate_coverm_genome_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam",
@@ -59,7 +59,7 @@ rule dereplicate_eval_coverm_genome_one:
         """
 
 
-rule dereplicate_eval_coverm_genome_method:
+rule dereplicate_coverm_genome_method:
     input:
         get_tsvs_for_dereplicate_coverm_genome,
     output:
@@ -79,7 +79,7 @@ rule dereplicate_eval_coverm_genome_method:
         """
 
 
-rule dereplicate_eval_coverm_genome:
+rule dereplicate_coverm_genome:
     input:
         [
             DREP_COVERM / f"genome.{method}.tsv"
@@ -88,7 +88,7 @@ rule dereplicate_eval_coverm_genome:
 
 
 # coverm contig ----
-rule dereplicate_eval_coverm_contig_method_one:
+rule dereplicate_coverm_contig_method_one:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         bam=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam",
@@ -111,7 +111,7 @@ rule dereplicate_eval_coverm_contig_method_one:
         """
 
 
-rule dereplicate_eval_coverm_contig_method:
+rule dereplicate_coverm_contig_method:
     input:
         get_tsvs_for_dereplicate_coverm_contig,
     output:
@@ -131,7 +131,7 @@ rule dereplicate_eval_coverm_contig_method:
         """
 
 
-rule dereplicate_eval_coverm_contig:
+rule dereplicate_coverm_contig:
     input:
         [
             DREP_COVERM / f"contig.{method}.tsv"

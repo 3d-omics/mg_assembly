@@ -1,5 +1,5 @@
 
-rule dereplicate_eval_dram_setup_db:
+rule dereplicate_dram_setup_db:
     input:
         features["dram_database"],
     output:
@@ -12,7 +12,7 @@ rule dereplicate_eval_dram_setup_db:
         "python workflow/scripts/dram_setup.py {input} 2> {log}"
 
 
-rule dereplicate_eval_dram_annotate:
+rule dereplicate_dram_annotate:
     input:
         drep_folder=DREP / "dereplicated_genomes",
         mock_db="results/dram_db_setup.done",
@@ -47,7 +47,7 @@ rule dereplicate_eval_dram_annotate:
         """
 
 
-rule dereplicate_eval_dram_distill:
+rule dereplicate_dram_distill:
     input:
         indir=DREP_DRAM / "annotate/dereplicated_genomes",
         annotations=DREP_DRAM / "annotate/dereplicated_genomes/annotations.tsv",
@@ -77,4 +77,4 @@ rule dereplicate_eval_dram_distill:
 
 
 localrules:
-    dereplicate_eval_dram_setup_db,
+    dereplicate_dram_setup_db,
