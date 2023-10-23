@@ -38,6 +38,7 @@ METABAT2 = BIN / "metabat2/"
 MAXBIN2 = BIN / "maxbin2/"
 MAGSCOT = BIN / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
+BIN_QUAST = BIN / "quast/"
 
 
 # dereplicate

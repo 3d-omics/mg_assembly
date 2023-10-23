@@ -76,4 +76,4 @@ rule virify:
 
 localrules:
     virify_download_db,
-    virify_one,
+    virify_analyze_one,

@@ -79,6 +79,32 @@ rule report_step_assemble:
         """
 
 
+rule report_step_bin:
+    """Collect all reports for the bin step"""
+    input:
+        rules.bin_quast.input,
+    output:
+        html=REPORT_STEP / "bin.html",
+    log:
+        REPORT_STEP / "bin.log",
+    conda:
+        "report.yml"
+    params:
+        dir=REPORT_STEP,
+    shell:
+        """
+        multiqc \
+            --title bin \
+            --force \
+            --filename bin \
+            --outdir {params.dir} \
+            --dirs \
+            --dirs-depth 1 \
+            {input} \
+        2> {log} 1>&2
+        """
+
+
 rule report_step_dereplicate:
     """Collect all reports for the dereplicate step"""
     input:
@@ -111,6 +137,7 @@ rule report_step:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocessing.html",
         REPORT_STEP / "assemble.html",
+        REPORT_STEP / "bin.html",
 
 
 rule report_step_with_dereplicate:
@@ -123,5 +150,6 @@ localrules:
     report_step_reads,
     report_step_pre,
     report_step_assemble,
+    report_step_bin,
     report_step,
     report_step_with_dereplicate,

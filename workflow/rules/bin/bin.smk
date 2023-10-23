@@ -3,6 +3,7 @@ include: "concoct.smk"
 include: "metabat2.smk"
 include: "maxbin2.smk"
 include: "magscot.smk"
+include: "quast.smk"
 
 
 rule bin_run:
@@ -10,11 +11,12 @@ rule bin_run:
         rules.bin_magscot.input,
 
 
-# rule bin_eval:
-#     input:
-#         None
+rule bin_eval:
+    input:
+        rules.bin_quast.input,
 
 
 rule bin:
     input:
         rules.bin_magscot.input,
+        rules.bin_quast.input,
