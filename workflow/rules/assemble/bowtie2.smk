@@ -13,7 +13,7 @@ rule assemble_bowtie2_build_one:
         extra=params["assemble"]["bowtie2-build"]["extra"],
     resources:
         mem_mb=double_ram(params["assemble"]["bowtie2-build"]["memory_gb"]),
-        runtime=6 * 60,
+        runtime=24 * 60,
     retries: 5
     shell:
         """
@@ -53,7 +53,7 @@ rule assemble_bowtie2_one:
         rg_extra=compose_rg_extra,
     resources:
         mem_mb=double_ram(params["assemble"]["bowtie2"]["memory_gb"]),
-        runtime=6 * 60,
+        runtime=24 * 60,
     retries: 5
     shell:
         """

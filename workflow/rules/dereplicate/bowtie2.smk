@@ -47,6 +47,7 @@ rule dereplicate_bowtie2_one:
         rg_extra=compose_rg_extra,
     resources:
         mem_mb=double_ram(params["dereplicate"]["bowtie2"]["memory_gb"]),
+        runtime=24 * 60,
     shell:
         """
         (bowtie2 \
