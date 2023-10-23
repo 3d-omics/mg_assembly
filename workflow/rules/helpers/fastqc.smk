@@ -1,4 +1,5 @@
 rule fastqc:
+    """Run fastqc on a single file"""
     input:
         "{prefix}.fq.gz",
     output:

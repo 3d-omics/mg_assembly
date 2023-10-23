@@ -1,2 +1,3 @@
 include: "functions.smk"
-include: "run.smk"
+include: "fastqc.smk"
+include: "samtools.smk"

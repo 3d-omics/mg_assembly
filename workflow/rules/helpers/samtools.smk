@@ -1,4 +1,5 @@
 rule samtools_index_crai:
+    """Index a cram file"""
     input:
         "{prefix}.cram",
     output:
@@ -12,6 +13,7 @@ rule samtools_index_crai:
 
 
 rule samtools_index_bai:
+    """Index a bam file"""
     input:
         "{prefix}.bam",
     output:
@@ -25,6 +27,7 @@ rule samtools_index_bai:
 
 
 rule samtools_faidx_fa:
+    """Index a fasta file"""
     input:
         "{prefix}.fa",
     output:
@@ -38,6 +41,7 @@ rule samtools_faidx_fa:
 
 
 rule samtools_faidx_fa_gz:
+    """Index a gzipped fasta file"""
     input:
         "{prefix}.fa.gz",
     output:
