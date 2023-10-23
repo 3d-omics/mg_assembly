@@ -12,6 +12,7 @@ rule dereplicate_eval_gtdbtk:
     resources:
         mem_mb=double_ram(params["dereplicate"]["gtdbtk"]["memory_gb"]),
         runtime=24 * 60,
+    retries: 5
     shell:
         """
         export GTDBTK_DATA_PATH="{input.database}"
