@@ -24,7 +24,7 @@ rule bin_maxbin2_run_one:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
         coverage=MAXBIN2 / "prepare" / "{assembly_id}.coverage",
     output:
-        outdir=directory(MAXBIN2 / "bins" / "{assembly_id}/"),
+        outdir=directory(MAXBIN2 / "bins" / "{assembly_id}"),
     log:
         MAXBIN2 / "bins" / "{assembly_id}.log",
     conda:
@@ -53,4 +53,4 @@ rule bin_maxbin2_run_one:
 rule bin_maxbin2:
     """Run MaxBin2 over all assemblies"""
     input:
-        [MAXBIN2 / "bins" / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+        [MAXBIN2 / "bins" / assembly_id for assembly_id in ASSEMBLIES],

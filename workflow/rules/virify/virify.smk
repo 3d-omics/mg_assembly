@@ -61,7 +61,7 @@ rule virify_analyze_one:
 rule virify_all:
     """Analyze all assemblies with virify + clean folders"""
     input:
-        [VIRIFY / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+        [VIRIFY / assembly_id for assembly_id in ASSEMBLIES],
     conda:
         "virify.yml"
     log:

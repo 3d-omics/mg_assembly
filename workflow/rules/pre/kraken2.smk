@@ -69,7 +69,7 @@ rule pre_kraken2:
     """Run kraken2 over all samples"""
     input:
         [
-            KRAKEN2 / f"{kraken_db}/{sample_id}.{library_id}.report"
+            KRAKEN2 / kraken_db / f"{sample_id}.{library_id}.report"
             for sample_id, library_id in SAMPLE_LIBRARY
             for kraken_db in features["kraken2_dbs"]
         ],

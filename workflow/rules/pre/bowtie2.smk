@@ -43,9 +43,9 @@ rule pre_bowtie2_host_map_one:
         reference=REFERENCE / "{genome}.fa.gz",
         faidx=REFERENCE / "{genome}.fa.gz.fai",
     output:
-        cram=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram",
+        cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
     log:
-        PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.log",
+        PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.log",
     params:
         extra=params["pre"]["bowtie2"]["extra"],
         samtools_mem=params["pre"]["bowtie2"]["samtools"]["mem_per_thread"],
@@ -85,14 +85,14 @@ rule pre_bowtie2_extract_nonhost_one:
     than by coordinate, and convert to FASTQ.
     """
     input:
-        cram=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram",
+        cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
         reference=REFERENCE / "{genome}.fa.gz",
         fai=REFERENCE / "{genome}.fa.gz.fai",
     output:
-        forward_=PRE_BOWTIE2 / "non{genome}/{sample_id}.{library_id}_1.fq.gz",
-        reverse_=PRE_BOWTIE2 / "non{genome}/{sample_id}.{library_id}_2.fq.gz",
+        forward_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_2.fq.gz",
     log:
-        PRE_BOWTIE2 / "non{genome}/{sample_id}.{library_id}.log",
+        PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}.log",
     conda:
         "pre.yml"
     params:
@@ -131,7 +131,7 @@ rule pre_bowtie2_extract_nonhost_all:
     """Run bowtie2_extract_nonchicken_one for all PE libraries"""
     input:
         [
-            PRE_BOWTIE2 / f"non{genome}/{sample_id}.{library_id}_{end}.fq.gz"
+            PRE_BOWTIE2 / f"non{genome}" / f"{sample_id}.{library_id}_{end}.fq.gz"
             for genome in [LAST_HOST]
             if LAST_HOST
             for sample_id, library_id in SAMPLE_LIBRARY

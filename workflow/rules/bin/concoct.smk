@@ -124,4 +124,4 @@ rule bin_concoct_extract_fasta_bins_one:
 rule bin_concoct:
     """Run concoct on all assemblies."""
     input:
-        [CONCOCT / "fasta_bins" / f"{assembly_id}" for assembly_id in ASSEMBLIES],
+        [CONCOCT / "fasta_bins" / assembly_id for assembly_id in ASSEMBLIES],

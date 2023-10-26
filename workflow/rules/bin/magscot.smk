@@ -3,10 +3,10 @@ rule bin_magscot_prodigal_one:
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
     output:
-        proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
-        genes=MAGSCOT / "{assembly_id}/prodigal.ffn",
+        proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
+        genes=MAGSCOT / "{assembly_id}" / "prodigal.ffn",
     log:
-        MAGSCOT / "{assembly_id}/prodigal.log",
+        MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
         "magscot.yml"
     threads: 24
@@ -37,12 +37,12 @@ rule bin_magscot_prodigal_one:
 rule bin_magscot_hmmsearch_pfam_one:
     """Run hmmsearch over the predicted proteins of an assembly using Pfam as database"""
     input:
-        proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
+        proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
         hmm=features["magscot"]["pfam_hmm"],
     output:
-        tblout=MAGSCOT / "{assembly_id}/pfam.tblout",
+        tblout=MAGSCOT / "{assembly_id}" / "pfam.tblout",
     log:
-        MAGSCOT / "{assembly_id}/pfam.log",
+        MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
         "magscot.yml"
     threads: 4
@@ -68,12 +68,12 @@ rule bin_magscot_hmmsearch_pfam_one:
 rule bin_magscot_hmmsearch_tigr_one:
     """Run hmmsearch over the predicted proteins of an assembly using TIGR as database"""
     input:
-        proteins=MAGSCOT / "{assembly_id}/prodigal.faa",
+        proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
         hmm=features["magscot"]["tigr_hmm"],
     output:
-        tblout=MAGSCOT / "{assembly_id}/tigr.tblout",
+        tblout=MAGSCOT / "{assembly_id}" / "tigr.tblout",
     log:
-        MAGSCOT / "{assembly_id}/tigr.log",
+        MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
         "magscot.yml"
     threads: 4
@@ -98,12 +98,12 @@ rule bin_magscot_hmmsearch_tigr_one:
 rule bin_magscot_join_hmm_one:
     """Join the results of hmmsearch over TIGR and Pfam"""
     input:
-        tigr_out=MAGSCOT / "{assembly_id}/tigr.tblout",
-        pfam_out=MAGSCOT / "{assembly_id}/pfam.tblout",
+        tigr_out=MAGSCOT / "{assembly_id}" / "tigr.tblout",
+        pfam_out=MAGSCOT / "{assembly_id}" / "pfam.tblout",
     output:
-        merged=MAGSCOT / "{assembly_id}/hmm.tblout",
+        merged=MAGSCOT / "{assembly_id}" / "hmm.tblout",
     log:
-        MAGSCOT / "{assembly_id}/hmm.log",
+        MAGSCOT / "{assembly_id}" / "hmm.log",
     conda:
         "magscot.yml"
     shell:
@@ -116,13 +116,13 @@ rule bin_magscot_join_hmm_one:
 rule bin_magscot_merge_contig_to_bin_one:
     """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2"""
     input:
-        concoct=CONCOCT / "fasta_bins" / "{assembly_id}/",
-        maxbin2=MAXBIN2 / "bins" / "{assembly_id}/",
-        metabat2=METABAT2 / "bins/{assembly_id}/",
+        concoct=CONCOCT / "fasta_bins" / "{assembly_id}",
+        maxbin2=MAXBIN2 / "bins" / "{assembly_id}",
+        metabat2=METABAT2 / "bins" / "{assembly_id}",
     output:
-        MAGSCOT / "{assembly_id}/contigs_to_bin.tsv",
+        MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
     log:
-        MAGSCOT / "{assembly_id}/contigs_to_bin.log",
+        MAGSCOT / "{assembly_id}" / "contigs_to_bin.log",
     conda:
         "magscot.yml"
     shell:
@@ -153,15 +153,16 @@ rule bin_magscot_merge_contig_to_bin_one:
 rule bin_magscot_run_one:
     """Run MAGSCOT over one assembly"""
     input:
-        contigs_to_bin=MAGSCOT / "{assembly_id}/contigs_to_bin.tsv",
-        hmm=MAGSCOT / "{assembly_id}/hmm.tblout",
+        contigs_to_bin=MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
+        hmm=MAGSCOT / "{assembly_id}" / "hmm.tblout",
     output:
-        ar53=MAGSCOT / "{assembly_id}/magscot.gtdb_rel207_ar53.out",
-        bac120=MAGSCOT / "{assembly_id}/magscot.gtdb_rel207_bac120.out",
+        ar53=MAGSCOT / "{assembly_id}" / "magscot.gtdb_rel207_ar53.out",
+        bac120=MAGSCOT / "{assembly_id}" / "magscot.gtdb_rel207_bac120.out",
         refined_contig_to_bin=MAGSCOT
-        / "{assembly_id}/magscot.refined.contig_to_bin.out",
-        refined_out=MAGSCOT / "{assembly_id}/magscot.refined.out",
-        scores=MAGSCOT / "{assembly_id}/magscot.scores.out",
+        / "{assembly_id}"
+        / "magscot.refined.contig_to_bin.out",
+        refined_out=MAGSCOT / "{assembly_id}" / "magscot.refined.out",
+        scores=MAGSCOT / "{assembly_id}" / "magscot.scores.out",
     log:
         MAGSCOT / "{assembly_id}/magscot.log",
     conda:
@@ -185,11 +186,12 @@ rule bin_magscot_reformat_one:
     """Reformat the results from MAGSCOT"""
     input:
         refined_contig_to_bin=MAGSCOT
-        / "{assembly_id}/magscot.refined.contig_to_bin.out",
+        / "{assembly_id}"
+        / "magscot.refined.contig_to_bin.out",
     output:
-        clean=MAGSCOT / "{assembly_id}/magscot.reformat.tsv",
+        clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     log:
-        MAGSCOT / "{assembly_id}/magscot.reformat.log",
+        MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
         "magscot.yml"
     shell:
@@ -205,11 +207,11 @@ rule bin_magscot_rename_one:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
-        clean=MAGSCOT / "{assembly_id}/magscot.reformat.tsv",
+        clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     output:
         fasta=MAGSCOT / "{assembly_id}.fa",
     log:
-        MAGSCOT / "{assembly_id}/magscot.rename.log",
+        MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
         "magscot.yml"
     shell:
@@ -228,7 +230,7 @@ rule bin_magscot_split_into_bins:
     output:
         bins=directory(MAGSCOT / "{assembly_id}/bins"),
     log:
-        MAGSCOT / "{assembly_id}/bins.log",
+        MAGSCOT / "{assembly_id}" / "bins.log",
     conda:
         "magscot.yml"
     shell:
@@ -245,4 +247,4 @@ rule bin_magscot_split_into_bins:
 rule bin_magscot:
     """Run MAGSCOT over all assemblies"""
     input:
-        [MAGSCOT / f"{assembly_id}/bins" for assembly_id in ASSEMBLIES],
+        [MAGSCOT / assembly_id / "bins" for assembly_id in ASSEMBLIES],

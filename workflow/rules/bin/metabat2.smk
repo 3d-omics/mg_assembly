@@ -23,9 +23,9 @@ rule bin_metabat2_run_one:
     """Run metabat2 over a single assembly"""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
-        depth=METABAT2 / "prepare/{assembly_id}.depth",
+        depth=METABAT2 / "prepare" / "{assembly_id}.depth",
     output:
-        bins=directory(METABAT2 / "bins/{assembly_id}/"),
+        bins=directory(METABAT2 / "bins" / "{assembly_id}"),
     log:
         METABAT2 / "bins" / "{assembly_id}.log",
     conda:
@@ -50,4 +50,4 @@ rule bin_metabat2_run_one:
 rule bin_metabat2:
     """Run metabat2 over all assemblies"""
     input:
-        [METABAT2 / f"bins/{assembly_id}" for assembly_id in ASSEMBLIES],
+        [METABAT2 / "bins" / assembly_id for assembly_id in ASSEMBLIES],

@@ -37,11 +37,11 @@ rule dereplicate_coverm_genome_one:
         bam=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam",
         bai=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam.bai",
     output:
-        tsv=DREP_COVERM / "genome/{method}/{sample_id}.{library_id}.tsv",
+        tsv=DREP_COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
         "dereplicate.yml"
     log:
-        DREP_COVERM / "genome/{method}/{sample_id}.{library_id}.log",
+        DREP_COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
         min_covered_fraction=params["dereplicate"]["coverm"]["genome"][
@@ -70,7 +70,7 @@ rule dereplicate_coverm_genome_method:
     conda:
         "dereplicate.yml"
     params:
-        input_dir=DREP_COVERM / "genome/{method}",
+        input_dir=DREP_COVERM / "genome" / "{method}",
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
@@ -96,11 +96,11 @@ rule dereplicate_coverm_contig_method_one:
         bam=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam",
         bai=DREP_BOWTIE2 / "{sample_id}.{library_id}.bam.bai",
     output:
-        tsv=DREP_COVERM / "contig/{method}/{sample_id}.{library_id}.tsv",
+        tsv=DREP_COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
         "dereplicate.yml"
     log:
-        DREP_COVERM / "contig/{method}/{sample_id}.{library_id}.log",
+        DREP_COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
     shell:
@@ -124,7 +124,7 @@ rule dereplicate_coverm_contig_method:
     conda:
         "dereplicate.yml"
     params:
-        input_dir=DREP_COVERM / "contig/{method}",
+        input_dir=DREP_COVERM / "contig" / "{method}",
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \

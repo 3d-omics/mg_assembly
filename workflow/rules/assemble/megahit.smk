@@ -52,7 +52,7 @@ rule assemble_megahit_one:
 rule assemble_megahit_all:
     """Run megahit over all groups"""
     input:
-        [MEGAHIT / f"{assembly_id}/final.contigs.fa" for assembly_id in ASSEMBLIES],
+        [MEGAHIT / assembly_id / "final.contigs.fa" for assembly_id in ASSEMBLIES],
 
 
 rule assemble_megahit_renaming_one:
@@ -80,3 +80,9 @@ rule assemble_megahit_renaming_one:
         > {output} \
         ) 2> {log}
         """
+
+
+rule assemble_megahit_renaming_all:
+    """Rename all assemblies contigs to avoid future collisions"""
+    input:
+        [ASSEMBLE_RENAME / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],

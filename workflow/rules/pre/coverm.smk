@@ -11,9 +11,9 @@ rule pre_cram_to_mapped_bam:
         reference=REFERENCE / f"{LAST_HOST}.fa.gz",
         fai=REFERENCE / f"{LAST_HOST}.fa.gz.fai",
     output:
-        bam=temp(PRE_COVERM / "bams/{sample_id}.{library_id}.bam"),
+        bam=temp(PRE_COVERM / "bams" / "{sample_id}.{library_id}.bam"),
     log:
-        PRE_COVERM / "bams/{sample_id}.{library_id}.log",
+        PRE_COVERM / "bams" / "{sample_id}.{library_id}.log",
     conda:
         "pre.yml"
     threads: 24
@@ -36,14 +36,14 @@ rule pre_cram_to_mapped_bam:
 rule pre_coverm_genome_method_one:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=PRE_COVERM / "bams/{sample}.{library_id}.bam",
-        bai=PRE_COVERM / "bams/{sample}.{library_id}.bam.bai",
+        bam=PRE_COVERM / "bams" / "{sample}.{library_id}.bam",
+        bai=PRE_COVERM / "bams" / "{sample}.{library_id}.bam.bai",
     output:
-        tsv=touch(PRE_COVERM / "genome/{method}/{sample}.{library_id}.tsv"),
+        tsv=touch(PRE_COVERM / "genome" / "{method}" / "{sample}.{library_id}.tsv"),
     conda:
         "pre.yml"
     log:
-        PRE_COVERM / "genome/{method}/{sample}.{library_id}.log",
+        PRE_COVERM / "genome" / "{method}" / "{sample}.{library_id}.log",
     params:
         methods="{method}",
         min_covered_fraction=params["pre"]["coverm"]["genome"]["min_covered_fraction"],

@@ -3,9 +3,9 @@ rule dereplicate_dram_setup_db:
     input:
         features["dram_database"],
     output:
-        touch("results/dram_db_setup.done"),
+        touch(DREP_DRAM / "dram_db_setup.done"),
     log:
-        "results/dram_db_setup.log",
+        DREP_DRAM / "dram_db_setup.log",
     conda:
         "dram.yml"
     shell:
@@ -16,14 +16,14 @@ rule dereplicate_dram_annotate:
     """Annotate dereplicated genomes with DRAM."""
     input:
         drep_folder=DREP / "dereplicated_genomes",
-        mock_db="results/dram_db_setup.done",
+        mock_db=DREP_DRAM / "dram_db_setup.done",
     output:
-        outdir=DREP_DRAM / "annotate/dereplicated_genomes",
-        annotations=DREP_DRAM / "annotate/dereplicated_genomes/annotations.tsv",
-        trnas=touch(DREP_DRAM / "annotate/dereplicated_genomes/trnas.tsv"),
-        rrnas=touch(DREP_DRAM / "annotate/dereplicated_genomes/rrnas.tsv"),
+        outdir=DREP_DRAM / "annotate" / "dereplicated_genomes",
+        annotations=DREP_DRAM / "annotate" / "dereplicated_genomes" / "annotations.tsv",
+        trnas=touch(DREP_DRAM / "annotate" / "dereplicated_genomes" / "trnas.tsv"),
+        rrnas=touch(DREP_DRAM / "annotate" / "dereplicated_genomes" / "rrnas.tsv"),
     log:
-        DREP_DRAM / "annotate/dereplicated_genomes.log",
+        DREP_DRAM / "annotate" / "dereplicated_genomes.log",
     conda:
         "dram.yml"
     params:
@@ -51,15 +51,15 @@ rule dereplicate_dram_annotate:
 rule dereplicate_dram_distill:
     """Distill DRAM annotations."""
     input:
-        indir=DREP_DRAM / "annotate/dereplicated_genomes",
-        annotations=DREP_DRAM / "annotate/dereplicated_genomes/annotations.tsv",
-        trnas=DREP_DRAM / "annotate/dereplicated_genomes/trnas.tsv",
-        rrnas=DREP_DRAM / "annotate/dereplicated_genomes/rrnas.tsv",
-        mock_db="results/dram_db_setup.done",
+        indir=DREP_DRAM / "annotate" / "dereplicated_genomes",
+        annotations=DREP_DRAM / "annotate" / "dereplicated_genomes" / "annotations.tsv",
+        trnas=DREP_DRAM / "annotate" / "dereplicated_genomes" / "trnas.tsv",
+        rrnas=DREP_DRAM / "annotate" / " dereplicated_genomes" / "rrnas.tsv",
+        mock_db=DREP_DRAM / "dram_db_setup.done",
     output:
-        outdir=DREP_DRAM / "distill/dereplicated_genomes",
+        outdir=DREP_DRAM / "distill" / "dereplicated_genomes",
     log:
-        DREP_DRAM / "distill/dereplicated_genomes.log",
+        DREP_DRAM / "distill" / "dereplicated_genomes.log",
     conda:
         "dram.yml"
     resources:
