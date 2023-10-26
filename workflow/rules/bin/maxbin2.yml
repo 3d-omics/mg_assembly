@@ -7,3 +7,4 @@ channels:
 dependencies:
   - maxbin2=2.2.7
   - samtools=1.17
+  - rename=1.601
