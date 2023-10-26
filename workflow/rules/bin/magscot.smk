@@ -146,7 +146,7 @@ rule bin_magscot_compose_contig_to_bin_maxbin2_one:
         "magscot.yml"
     shell:
         """
-        (grep -H ^">" {input}/*.fasta \
+        (grep -H ^">" {input}/*.fa \
         | parallel -j 1 echo {{/}} \
         | sed 's/\.fa:>/\\t/' \
         | awk '{{print $0"\\tmaxbin2"}}' \

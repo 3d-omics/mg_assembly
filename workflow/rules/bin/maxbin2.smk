@@ -45,6 +45,8 @@ rule bin_maxbin2_run_one:
             -out {output.outdir}/maxbin2 \
             -abund {input.coverage} \
         2> {log} 1>&2
+
+        rename 's/\.fasta$/.fa/' {output.outdir}/*.fasta 2>> {log}
         """
 
 
