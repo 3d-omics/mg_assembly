@@ -9,6 +9,7 @@ rule assemble_cram_to_bam_one:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
         crai=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
         reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        fai=ASSEMBLE_RENAME / "{assembly_id}.fa.fai",
     output:
         bam=temp(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
     log:

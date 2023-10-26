@@ -32,6 +32,7 @@ rule dereplicate_bowtie2_one:
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
         reference=DREP / "dereplicated_genomes.fa",
+        fai=DREP / "dereplicated_genomes.fa.fai",
     output:
         cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
     log:

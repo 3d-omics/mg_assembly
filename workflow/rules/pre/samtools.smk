@@ -4,6 +4,7 @@ rule pre_samtools_stats_cram:
         cram=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram",
         crai=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram.crai",
         reference=REFERENCE / "{genome}.fa.gz",
+        fai=REFERENCE / "{genome}.fa.gz.fai",
     output:
         txt=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.stats.txt",
     log:

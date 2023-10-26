@@ -4,6 +4,7 @@ rule dereplicate_samtools_stats_cram_dereplicate:
         cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
         reference=DREP / "dereplicated_genomes.fa",
+        fai=DREP / "dereplicated_genomes.fa.fai",
     output:
         txt=DREP_BOWTIE2 / "{sample_id}.{library_id}.stats.txt",
     log:

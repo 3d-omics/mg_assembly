@@ -9,6 +9,7 @@ rule pre_cram_to_mapped_bam:
         cram=get_cram_for_pre_eval_cram_to_mapped_bam,
         crai=get_crai_for_pre_eval_cram_to_mapped_bam,
         reference=REFERENCE / f"{LAST_HOST}.fa.gz",
+        fai=REFERENCE / f"{LAST_HOST}.fa.gz.fai",
     output:
         bam=temp(PRE_COVERM / "bams/{sample_id}.{library_id}.bam"),
     log:

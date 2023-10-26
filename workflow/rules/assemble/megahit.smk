@@ -21,7 +21,6 @@ rule assemble_megahit_one:
         extra=params["assemble"]["megahit"]["extra"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
-        memory_bytes=get_memory_bytes_for_assemble_megahit_one,
     resources:
         mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
         runtime=24 * 60,
@@ -31,7 +30,6 @@ rule assemble_megahit_one:
         megahit \
             --num-cpu-threads {threads} \
             --min-contig-len {params.min_contig_len} \
-            --memory {params.memory_bytes} \
             --verbose \
             --force \
             --out-dir {params.out_dir} \

@@ -87,12 +87,6 @@ def compose_out_dir_for_assemble_megahit_one(wildcards):
     return MEGAHIT / wildcards.assembly_id
 
 
-def get_memory_bytes_for_assemble_megahit_one(wildcards, resources):
-    """Compose the memory for megahit dbg construction step in bytes"""
-    # https://github.com/snakemake/snakemake/issues/499
-    return resources.mem_mb * 1024**2
-
-
 def compose_input_dir_for_assemble_coverm_aggregate_contig(wildcards):
     """Compose the input dir for coverme contig"""
     return ASSEMBLE_COVERM / "contig" / wildcards.method

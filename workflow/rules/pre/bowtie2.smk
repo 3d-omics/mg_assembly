@@ -6,6 +6,7 @@ rule pre_bowtie2_hosts_build:
     """
     input:
         reference=REFERENCE / "{genome}.fa.gz",
+        faidx=REFERENCE / "{genome}.fa.gz.fai",
     output:
         mock=touch(PRE_INDEX / "{genome}"),
     log:
@@ -40,6 +41,7 @@ rule pre_bowtie2_host_map_one:
         reverse_=get_input_reverse_for_host_mapping,
         mock=PRE_INDEX / "{genome}",
         reference=REFERENCE / "{genome}.fa.gz",
+        faidx=REFERENCE / "{genome}.fa.gz.fai",
     output:
         cram=PRE_BOWTIE2 / "{genome}/{sample_id}.{library_id}.cram",
     log:
