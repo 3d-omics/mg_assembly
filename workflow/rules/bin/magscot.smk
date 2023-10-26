@@ -10,6 +10,10 @@ rule bin_magscot_prodigal_one:
     conda:
         "magscot.yml"
     threads: 24
+    resources:
+        runtime=24 * 60,
+        mem_mb=double_ram(8),
+    retries: 5
     shell:
         """
         (cat {input.assembly} \
@@ -42,6 +46,10 @@ rule bin_magscot_hmmsearch_pfam_one:
     conda:
         "magscot.yml"
     threads: 4
+    resources:
+        runtime=24 * 60,
+        mem_mb=double_ram(8),
+    retries: 5
     shell:
         """
         hmmsearch \
@@ -69,6 +77,9 @@ rule bin_magscot_hmmsearch_tigr_one:
     conda:
         "magscot.yml"
     threads: 4
+    resources:
+        runtime=24 * 60,
+        mem_mb=8 * 1024,
     shell:
         """
         hmmsearch \
@@ -201,6 +212,9 @@ rule bin_magscot_run_one:
         "magscot.yml"
     params:
         out_prefix=compose_out_prefix_for_bin_magscot_run_one,
+    resources:
+        runtime=8 * 60,
+        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \

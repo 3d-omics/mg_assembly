@@ -33,6 +33,9 @@ rule bin_metabat2_run_one:
     params:
         bins_prefix=compose_bins_prefix_for_metabat2_run_one,
     threads: 24
+    resources:
+        runtime=24 * 60,
+        mem_mb=8 * 1024,
     shell:
         """
         metabat2 \

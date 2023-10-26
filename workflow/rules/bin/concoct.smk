@@ -65,6 +65,10 @@ rule bin_concoct_run_one:
     params:
         basename=compose_basename_for_concoct_run_one,
     threads: 24
+    resources:
+        runtime=24 * 60,
+        mem_mb=double_ram(4),
+    retries: 5
     shell:
         """
         concoct \

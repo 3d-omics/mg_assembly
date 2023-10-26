@@ -11,6 +11,9 @@ rule assemble_quast_one:
     threads: 4
     params:
         extra=params["assemble"]["quast"]["extra"],
+    resources:
+        mem_mb=8 * 1024,
+        runtime=1 * 60,
     shell:
         """
         quast \

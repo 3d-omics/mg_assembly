@@ -33,6 +33,9 @@ rule bin_maxbin2_run_one:
     params:
         seed=1,
         out_prefix=compose_out_prefix_for_maxbin2_run_one,
+    resources:
+        runtime=24 * 60,
+        mem_mb=8 * 1024,
     shell:
         """
         mkdir --parents {output.outdir}
