@@ -23,7 +23,7 @@ rule assemble_megahit_one:
         reverses=aggregate_reverses_for_megahit,
     resources:
         mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
-        runtime=24 * 60,
+        runtime=7 * 24 * 60,
     retries: 5
     shell:
         """
