@@ -113,75 +113,12 @@ rule bin_magscot_join_hmm_one:
         """
 
 
-rule bin_magscot_compose_contig_to_bin_concoct_one:
-    """Compose the contig to bin file from CONCOCT"""
-    input:
-        CONCOCT / "fasta_bins" / "{assembly_id}/",
-    output:
-        MAGSCOT / "{assembly_id}/concoct.contigs_to_bin.tsv",
-    log:
-        MAGSCOT / "{assembly_id}/concoct.contigs_to_bin.log",
-    conda:
-        "magscot.yml"
-    shell:
-        """
-        (grep -H ^">" {input}/*.fa \
-        | parallel -j 1 echo {{/}} \
-        | sed 's/\.fa:>/\\t/' \
-        | awk '{{print $0"\\tconcoct"}}' \
-        > {output} \
-        ) 2> {log}
-        """
-
-
-rule bin_magscot_compose_contig_to_bin_maxbin2_one:
-    """Compose the contig to bin file from MaxBin2"""
-    input:
-        MAXBIN2 / "bins" / "{assembly_id}/",
-    output:
-        MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.tsv",
-    log:
-        MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.log",
-    conda:
-        "magscot.yml"
-    shell:
-        """
-        (grep -H ^">" {input}/*.fa \
-        | parallel -j 1 echo {{/}} \
-        | sed 's/\.fa:>/\\t/' \
-        | awk '{{print $0"\\tmaxbin2"}}' \
-        > {output} \
-        ) 2> {log}
-        """
-
-
-rule bin_magscot_compose_contig_to_bin_metabat2_one:
-    """Compose the contig to bin file from MetaBAT2"""
-    input:
-        METABAT2 / "bins/{assembly_id}/",
-    output:
-        MAGSCOT / "{assembly_id}/metabat2.contigs_to_bin.tsv",
-    log:
-        MAGSCOT / "{assembly_id}/metabat2.contigs_to_bin.log",
-    conda:
-        "magscot.yml"
-    shell:
-        """
-        (grep -H ^">" {input}/*.fa \
-        | parallel -j 1 echo {{/}} \
-        | sed 's/\.fa:>/\\t/' \
-        | awk '{{print $0"\\tmetabat2"}}' \
-        > {output} \
-        ) 2> {log}
-        """
-
-
 rule bin_magscot_merge_contig_to_bin_one:
     """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2"""
     input:
-        MAGSCOT / "{assembly_id}/concoct.contigs_to_bin.tsv",
-        MAGSCOT / "{assembly_id}/maxbin2.contigs_to_bin.tsv",
-        MAGSCOT / "{assembly_id}/metabat2.contigs_to_bin.tsv",
+        concoct=CONCOCT / "fasta_bins" / "{assembly_id}/",
+        maxbin2=MAXBIN2 / "bins" / "{assembly_id}/",
+        metabat2=METABAT2 / "bins/{assembly_id}/",
     output:
         MAGSCOT / "{assembly_id}/contigs_to_bin.tsv",
     log:
@@ -190,7 +127,26 @@ rule bin_magscot_merge_contig_to_bin_one:
         "magscot.yml"
     shell:
         """
-        cat {input} > {output} 2> {log}
+        (grep -H ^">" {input.concoct}/*.fa \
+        | parallel -j 1 echo {{/}} \
+        | sed 's/\.fa:>/\\t/' \
+        | awk '{{print $0"\\tconcoct"}}' \
+        > {output} \
+        ) 2> {log}
+
+        (grep -H ^">" {input.maxbin2}/*.fa \
+        | parallel -j 1 echo {{/}} \
+        | sed 's/\.fa:>/\\t/' \
+        | awk '{{print $0"\\tmaxbin2"}}' \
+        >> {output} \
+        ) 2>> {log}
+
+        (grep -H ^">" {input.metabat2}/*.fa \
+        | parallel -j 1 echo {{/}} \
+        | sed 's/\.fa:>/\\t/' \
+        | awk '{{print $0"\\tmetabat2"}}' \
+        >> {output} \
+        ) 2>> {log}
         """
 
 
