@@ -54,12 +54,14 @@ def get_stats_files_from_assembly_id(wildcards):
         if assembly_id == wildcards.assembly_id
     ]
 
+    # reads ----
     reads_fastqc = [
         READS / f"{sample}.{library}_{end}_fastqc.zip"
         for sample, library in sample_library
         for end in ["1", "2"]
     ]
 
+    # preprocessing ----
     pre_fastp_fastqc = [
         FASTP / f"{sample}.{library}_{end}_fastqc.zip"
         for sample, library in sample_library
@@ -95,6 +97,7 @@ def get_stats_files_from_assembly_id(wildcards):
         for kraken_db in KRAKEN2_DBS
     ]
 
+    # assembly ----
     assemble_quast = ASSEMBLE_QUAST / f"{wildcards.assembly_id}"
     assemble_samtools = [
         ASSEMBLE_BOWTIE2
