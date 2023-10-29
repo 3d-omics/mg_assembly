@@ -52,7 +52,7 @@ rule assemble_megahit_one:
 rule assemble_megahit_all:
     """Run megahit over all groups"""
     input:
-        [MEGAHIT / assembly_id / "final.contigs.fa" for assembly_id in ASSEMBLIES],
+        [MEGAHIT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
 
 
 rule assemble_megahit_renaming_one:
