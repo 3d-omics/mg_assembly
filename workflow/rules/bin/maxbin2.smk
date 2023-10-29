@@ -12,7 +12,7 @@ rule bin_maxbin2_prepare_one:
         runtime=6 * 60,
     shell:
         """
-        (samtools coverage {input.bams} \
+        ( samtools coverage {input.bams} \
         | awk '{{print $1"\t"$5}}' \
         | grep -v '^#' \
         > {output.coverage} \
@@ -41,6 +41,7 @@ rule bin_maxbin2_run_one:
     shell:
         """
         mkdir --parents {output.outdir}
+
         run_MaxBin.pl \
             -thread {threads} \
             -contig {input.assembly} \

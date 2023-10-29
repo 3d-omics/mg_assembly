@@ -90,6 +90,8 @@ rule assemble_coverm_aggregate_contig:
         "assemble.yml"
     params:
         input_dir=compose_input_dir_for_assemble_coverm_aggregate_contig,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -152,6 +154,8 @@ rule assemble_coverm_aggregate_genome:
         "assemble.yml"
     params:
         input_dir=compose_input_dir_for_assemble_coverm_aggregate_genome,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
@@ -168,3 +172,10 @@ rule assemble_coverm_genome:
             ASSEMBLE_COVERM / f"genome.{method}.tsv"
             for method in params["assemble"]["coverm"]["genome"]["methods"]
         ],
+
+
+rule assemble_coverm:
+    """Run both coverm genome and contig over all assemblies and methods"""
+    input:
+        rules.assemble_coverm_genome.input,
+        rules.assemble_coverm_contig.input,

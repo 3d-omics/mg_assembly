@@ -60,7 +60,9 @@ rule pre_bowtie2_host_map_one:
     retries: 5
     shell:
         """
-        (bowtie2 \
+        find $(dirname {output.cram}) -name "$(basename {output.cram}).tmp.*.bam" -delete 2> /dev/null 1>&2
+
+        ( bowtie2 \
             -x {input.mock} \
             -1 {input.forward_} \
             -2 {input.reverse_} \
@@ -75,7 +77,7 @@ rule pre_bowtie2_host_map_one:
             -o {output.cram} \
             --reference {input.reference} \
             --threads {threads} \
-        ) 2> {log} 1>&2
+        ) 2>> {log} 1>&2
         """
 
 
@@ -137,3 +139,9 @@ rule pre_bowtie2_extract_nonhost_all:
             for sample_id, library_id in SAMPLE_LIBRARY
             for end in ["1", "2"]
         ],
+
+
+rule pre_bowtie2:
+    """Run all the preprocessing steps for bowtie2"""
+    input:
+        rules.pre_bowtie2_extract_nonhost_all.input,

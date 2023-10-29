@@ -43,6 +43,7 @@ rule bin_metabat2_run_one:
             --abdFile {input.depth} \
             --outFile {params.bins_prefix} \
             --numThreads {threads} \
+            --verbose \
         2> {log} 1>&2
         """
 

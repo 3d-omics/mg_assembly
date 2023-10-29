@@ -9,15 +9,14 @@ include: "quast.smk"
 rule assemble_run:
     """Run all assembly rules (no evaluation)"""
     input:
-        rules.assemble_bowtie2_all.input,
+        rules.assemble_bowtie2.input,
 
 
 rule assemble_eval:
     """Run the assemble evaluation rules"""
     input:
         rules.assemble_quast.input,
-        rules.assemble_coverm_contig.input,
-        rules.assemble_coverm_genome.input,
+        rules.assemble_coverm.input,
         rules.assemble_samtools.input,
 
 

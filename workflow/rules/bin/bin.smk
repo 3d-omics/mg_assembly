@@ -2,6 +2,7 @@ include: "functions.smk"
 include: "concoct.smk"
 include: "metabat2.smk"
 include: "maxbin2.smk"
+# inlcude: "metawrap2.smk"
 include: "magscot.smk"
 include: "quast.smk"
 

@@ -16,7 +16,7 @@ rule bin_magscot_prodigal_one:
     retries: 5
     shell:
         """
-        (cat {input.assembly} \
+        ( cat {input.assembly} \
         | parallel \
             --jobs {threads} \
             --block 1M \
@@ -28,6 +28,7 @@ rule bin_magscot_prodigal_one:
                 -d {output.genes}.{{#}}.ffn \
                 -o /dev/null \
         ) 2> {log} 1>&2
+
         cat {output.proteins}.*.faa > {output.proteins} 2>> {log}
         cat {output.genes}.*.ffn > {output.genes} 2>> {log}
         rm -f {output.proteins}.*.faa {output.genes}.*.ffn 2>> {log} 2>&1
@@ -96,10 +97,13 @@ rule bin_magscot_hmmsearch_tigr_one:
 
 
 rule bin_magscot_join_hmm_one:
-    """Join the results of hmmsearch over TIGR and Pfam"""
+    """Join the results of hmmsearch over TIGR and Pfam
+
+    Note: "|| true" is used to avoid grep returning an error code when no lines are found
+    """
     input:
-        tigr_out=MAGSCOT / "{assembly_id}" / "tigr.tblout",
-        pfam_out=MAGSCOT / "{assembly_id}" / "pfam.tblout",
+        tigr_tblout=MAGSCOT / "{assembly_id}" / "tigr.tblout",
+        pfam_tblout=MAGSCOT / "{assembly_id}" / "pfam.tblout",
     output:
         merged=MAGSCOT / "{assembly_id}" / "hmm.tblout",
     log:
@@ -108,13 +112,17 @@ rule bin_magscot_join_hmm_one:
         "magscot.yml"
     shell:
         """
-        (grep -v "^#" {input.tigr_out} | awk '{{print $1"\\t"$3"\\t"$5}}' >  {output.merged}) 2>  {log}
-        (grep -v "^#" {input.pfam_out} | awk '{{print $1"\\t"$4"\\t"$5}}' >> {output.merged}) 2>> {log}
+        ( (grep -v "^#" {input.tigr_tblout} || true) | awk '{{print $1 "\\t" $3 "\\t" $5}}' ) >  {output.merged} 2>  {log}
+        ( (grep -v "^#" {input.pfam_tblout} || true) | awk '{{print $1 "\\t" $4 "\\t" $5}}' ) >> {output.merged} 2>> {log}
         """
 
 
 rule bin_magscot_merge_contig_to_bin_one:
-    """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2"""
+    """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2
+
+    The output file should have the following format:
+    BIN_ID <TAB> CONTIG_ID <TAB> METHOD
+    """
     input:
         concoct=CONCOCT / "fasta_bins" / "{assembly_id}",
         maxbin2=MAXBIN2 / "bins" / "{assembly_id}",
@@ -127,26 +135,23 @@ rule bin_magscot_merge_contig_to_bin_one:
         "magscot.yml"
     shell:
         """
-        (grep -H ^">" {input.concoct}/*.fa \
-        | parallel -j 1 echo {{/}} \
-        | sed 's/\.fa:>/\\t/' \
-        | awk '{{print $0"\\tconcoct"}}' \
-        > {output} \
-        ) 2> {log}
+        for file in $(find {input.concoct} -name "*.fa" -type f) ; do
+            bin_id=$(basename $file .fa)
+            grep ^">" $file | tr -d ">" \
+            | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tconcoct"}}'
+        done > {output} 2> {log}
 
-        (grep -H ^">" {input.maxbin2}/*.fa \
-        | parallel -j 1 echo {{/}} \
-        | sed 's/\.fa:>/\\t/' \
-        | awk '{{print $0"\\tmaxbin2"}}' \
-        >> {output} \
-        ) 2>> {log}
+        for file in $(find {input.maxbin2} -name "*.fa" -type f) ; do
+            bin_id=$(basename $file .fa)
+            grep ^">" $file | tr -d ">" \
+            | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmaxbin2"}}'
+        done >> {output} 2>> {log}
 
-        (grep -H ^">" {input.metabat2}/*.fa \
-        | parallel -j 1 echo {{/}} \
-        | sed 's/\.fa:>/\\t/' \
-        | awk '{{print $0"\\tmetabat2"}}' \
-        >> {output} \
-        ) 2>> {log}
+        for file in $(find {input.metabat2} -name "*.fa" -type f) ; do
+            bin_id=$(basename $file .fa)
+            grep ^">" $file | tr -d ">" \
+            | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmetabat2"}}'
+        done >> {output} 2>> {log}
         """
 
 
@@ -236,6 +241,7 @@ rule bin_magscot_split_into_bins:
     shell:
         """
         mkdir -p {output.bins} 2> {log}
+
         ( seqtk seq {input.fasta} \
         | paste - -  \
         | tr "@:" "\\t" \

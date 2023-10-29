@@ -82,7 +82,7 @@ rule assemble_megahit_renaming_one:
         """
 
 
-rule assemble_megahit_renaming_all:
+rule assemble_megahit:
     """Rename all assemblies contigs to avoid future collisions"""
     input:
         [ASSEMBLE_RENAME / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],

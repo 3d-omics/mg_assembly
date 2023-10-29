@@ -57,7 +57,13 @@ rule assemble_bowtie2_one:
     retries: 5
     shell:
         """
-        (bowtie2 \
+        find \
+            $(dirname {output.cram}) \
+            -name "$(basename {output.cram}).tmp.*.bam" \
+            -delete \
+        2> /dev/null 1>&2
+
+        ( bowtie2 \
             -x {input.mock} \
             -1 {input.forward_} \
             -2 {input.reverse_} \
@@ -72,11 +78,11 @@ rule assemble_bowtie2_one:
             -o {output.cram} \
             --reference {input.reference} \
             --threads {threads} \
-        ) 2> {log} 1>&2
+        ) 2>> {log} 1>&2
         """
 
 
-rule assemble_bowtie2_all:
+rule assemble_bowtie2:
     """Map all samples to all the assemblies that they belong to"""
     input:
         [
