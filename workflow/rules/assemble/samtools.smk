@@ -11,6 +11,9 @@ rule assemble_samtools_stats_cram_assembly:
         ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.log",
     conda:
         "assemble.yml"
+    resources:
+        runtime=6 * 60,
+        mem_mb=8 * 1024,
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 

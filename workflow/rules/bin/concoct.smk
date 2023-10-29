@@ -34,6 +34,8 @@ rule bin_concoct_coverage_table_one:
         CONCOCT / "prepare" / "{assembly_id}.coverage.log",
     conda:
         "concoct.yml"
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         concoct_coverage_table.py \

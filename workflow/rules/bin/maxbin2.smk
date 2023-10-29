@@ -8,6 +8,8 @@ rule bin_maxbin2_prepare_one:
         MAXBIN2 / "prepare" / "{assembly_id}.log",
     conda:
         "maxbin2.yml"
+    resources:
+        runtime=6 * 60,
     shell:
         """
         (samtools coverage {input.bams} \

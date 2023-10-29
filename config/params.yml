@@ -26,15 +26,15 @@ assemble:
   megahit:
     extra: ""
     min_contig_len: 1500
-    memory_gb: 4
+    memory_gb: 32
   quast:
     extra: ""
   bowtie2-build:
     extra: ""
-    memory_gb: 8
+    memory_gb: 16
   bowtie2:
     extra: ""
-    memory_gb: 8
+    memory_gb: 32
   samtools:
     mem: 1G
   coverm:
@@ -61,10 +61,10 @@ dereplicate:
     memory_gb: 22  # 22GB * pplacer cores
   bowtie2-build:
     extra: ""
-    memory_gb: 8
+    memory_gb: 16
   bowtie2:
     extra: ""
-    memory_gb: 8
+    memory_gb: 32
   samtools:
     mem: 1G
   coverm:
