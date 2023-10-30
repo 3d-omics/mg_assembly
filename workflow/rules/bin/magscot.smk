@@ -199,6 +199,8 @@ rule bin_magscot_reformat_one:
         MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
         "magscot.yml"
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
