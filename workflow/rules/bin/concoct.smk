@@ -112,6 +112,8 @@ rule bin_concoct_extract_fasta_bins_one:
         CONCOCT / "fasta_bins/{assembly_id}.log",
     conda:
         "concoct.yml"
+    resources:
+        mem_mb=4 * 1024,
     shell:
         """
         mkdir --parents {output.bins}
