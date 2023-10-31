@@ -10,6 +10,8 @@ rule report_step_reads:
         "report.yml"
     params:
         dir=REPORT_STEP,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         multiqc \
@@ -38,6 +40,8 @@ rule report_step_pre:
         "report.yml"
     params:
         dir=REPORT_STEP,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         multiqc \
@@ -65,6 +69,8 @@ rule report_step_assemble:
         "report.yml"
     params:
         dir=REPORT_STEP,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         multiqc \
@@ -91,6 +97,8 @@ rule report_step_bin:
         "report.yml"
     params:
         dir=REPORT_STEP,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         multiqc \
@@ -118,6 +126,8 @@ rule report_step_dereplicate:
         "report.yml"
     params:
         dir=REPORT_STEP,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         multiqc \

@@ -14,6 +14,8 @@ rule report_assembly_one:
     params:
         dir=REPORT_ASSEMBLY,
         title="{assembly_id}",
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         multiqc \
