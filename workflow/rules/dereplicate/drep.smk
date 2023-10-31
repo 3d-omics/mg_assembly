@@ -2,30 +2,30 @@ rule dereplicate_drep_separate_bins:
     input:
         assemblies=[MAGSCOT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
     output:
-        out_dir=directory(DREP / "separated_bins"),
+        out_dir=directory(DEREPLICATE / "separated_bins"),
     log:
         DEREPLICATE / "separate_bins.log",
     conda:
         "dereplicate.yml"
     shell:
         """
-        cat /dev/null > {log}
+        mkdir --parents {output.out_dir}
 
         ( cat {input.assemblies} \
         | paste - - \
         | tr -d ">" \
-        | tr "@:" "\t" \
+        | tr "@" "\t" \
         | awk \
             -v out_dir="{output.out_dir}" \
-            '{{print ">" $1 ":" $2 "@" $3 "\n" $4 > out_dir "/" $1 ":" $2 ".fa" }}' \
-        ) >> {log} 2>&1
+            '{{print ">" $1 "@" $2 "\\n" $4 > out_dir "/" $1 ".fa" }}' \
+        ) > {log} 2>&1
         """
 
 
 rule dereplicate_drep:
     """Dereplicate all the bins using dRep."""
     input:
-        genomes=DREP / "separated_bins",
+        genomes=DEREPLICATE / "separated_bins",
     output:
         out_dir=directory(DREP / "dereplicated_genomes"),
     log:
@@ -46,7 +46,7 @@ rule dereplicate_drep:
             --processors {threads} \
             --completeness 50 \
             --S_ani 0.9 \
-            --genomes {input.genomes} \
+            --genomes {input.genomes}/*.fa \
         2> {log}
         """
 
