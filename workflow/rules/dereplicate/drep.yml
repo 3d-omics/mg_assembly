@@ -1,0 +1,10 @@
+# drep: environment to use drep bins
+---
+name: drep
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - drep=3.4.3
+  - checkm-genome=1.2.2
