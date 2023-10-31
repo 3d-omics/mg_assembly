@@ -10,6 +10,7 @@ rule bin_maxbin2_prepare_one:
         "maxbin2.yml"
     resources:
         runtime=6 * 60,
+        mem_mb=8 * 1024,
     shell:
         """
         ( samtools coverage {input.bams} \
