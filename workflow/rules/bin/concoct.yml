@@ -7,3 +7,4 @@ channels:
 dependencies:
   - concoct=1.1.0
   - conda-forge::gsl
+  - conda-forge::libopenblas=*=*openmp*
