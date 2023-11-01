@@ -41,8 +41,6 @@ rule dereplicate_dram_annotate:
             --input_fasta {input.drep_folder} \
             --output_dir {output.outdir} \
             --threads {threads} \
-            --rrna_path {output.rrnas} \
-            --trna_path {output.trnas} \
             --min_contig_size {params.min_contig_size} \
         2>> {log} 1>&2
         """
