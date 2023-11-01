@@ -26,7 +26,11 @@ rule dereplicate_drep_run:
     input:
         genomes=DREP / "separated_bins",
     output:
-        out_dir=directory(DREP / "dereplicated_genomes"),
+        data=directory(DREP / "data"),
+        data_tables=directory(DREP / "data_tables"),
+        dereplicated_genomes=directory(DREP / "dereplicated_genomes"),
+        figures=directory(DREP / "figures"),
+        log=directory(DREP / "log"),
     log:
         DREP / "drep.log",
     conda:
@@ -41,7 +45,7 @@ rule dereplicate_drep_run:
     shell:
         """
         dRep dereplicate \
-            {output.out_dir} \
+            {params.out_dir} \
             --processors {threads} \
             --completeness 50 \
             --S_ani 0.9 \
