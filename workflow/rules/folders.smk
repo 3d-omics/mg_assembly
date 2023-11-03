@@ -41,7 +41,7 @@ PRODIGAL = MAGSCOT / "prodigal/"
 BIN_QUAST = BIN / "quast/"
 
 
-# dereplicate
+# dereplicate - this is confusing
 DEREPLICATE = Path("results/dereplicate/")
 DREP = DEREPLICATE / "drep/"
 DREP_INDEX = DEREPLICATE / "index/"
