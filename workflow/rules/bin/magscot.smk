@@ -222,7 +222,7 @@ rule bin_magscot_rename_one:
     conda:
         "magscot.yml"
     resources:
-        mem_mb=4 * 1024,
+        mem_mb=8 * 1024,
     shell:
         """
         python workflow/scripts/reformat_fasta_magscot.py \
