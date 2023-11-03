@@ -10,6 +10,8 @@ rule dereplicate_gtdbtk_classify:
         DREP_GTDBTK / "gtdbtk_classify.log",
     conda:
         "gtdbtk.yml"
+    params:
+        out_dir=DREP_GTDBTK,
     threads: 24
     resources:
         mem_mb=double_ram(params["dereplicate"]["gtdbtk"]["memory_gb"]),
@@ -22,7 +24,7 @@ rule dereplicate_gtdbtk_classify:
         gtdbtk classify_wf \
             --genome_dir {input.bin_folder} \
             --extension fa \
-            --out_dir {output.outdir} \
+            --out_dir {params.out_dir} \
             --cpus {threads} \
             --skip_ani_screen \
         2> {log} 1>&2
