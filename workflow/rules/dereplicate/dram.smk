@@ -50,13 +50,13 @@ rule dereplicate_dram_annotate:
         ::: {input.dereplicated_genomes}/*.fa \
         2>> {log} 1>&2
 
-        for i in {{annotations,trnas,rrnas}} ; do
+        for file in annotations trnas rrnas ; do
             ( csvstack \
                 --tabs \
-                {params.tmp_dir}/*/annotations.tsv \
+                {params.tmp_dir}/*/$file.tsv \
             | csvformat \
                 --out-tabs \
-            > {params.out_dir}/$i.tsv \
+            > {params.out_dir}/$file.tsv \
             ) 2>> {log}
         done
 
