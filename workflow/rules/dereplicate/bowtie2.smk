@@ -50,7 +50,11 @@ rule dereplicate_bowtie2_one:
         runtime=24 * 60,
     shell:
         """
-        find $(dirname {output.cram}) -name "$(basename {output.cram}).tmp.*.bam" -delete 2> {log} 1>&2
+        find \
+            $(dirname {output.cram}) \
+            -name "$(basename {output.cram}).tmp.*.bam" \
+            -delete \
+        2> {log} 1>&2
 
         ( bowtie2 \
             -x {input.mock} \
