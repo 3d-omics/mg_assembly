@@ -31,6 +31,7 @@ rule dereplicate_dram_annotate:
     params:
         min_contig_size=1500,
         tmp_dir=DREP_DRAM / "annotate",
+        out_dir=DREP_DRAM,
     resources:
         mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
         runtime=48 * 60,
@@ -55,7 +56,7 @@ rule dereplicate_dram_annotate:
                 {params.tmp_dir}/*/annotations.tsv \
             | csvformat \
                 --out-tabs \
-            > $i.tsv \
+            > {params.out_dir}/$i.tsv \
             ) 2>> {log}
         done
 
