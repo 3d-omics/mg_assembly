@@ -57,8 +57,8 @@ bin:
 
 dereplicate:
   drep:
-    threads: 1  # Careful with pplacer!
-    memory_gb: 22  # 22GB * pplacer cores
+    threads: 24
+    memory_gb: 32
   bowtie2-build:
     extra: ""
     memory_gb: 16
@@ -77,6 +77,6 @@ dereplicate:
   quast:
     extra: ""
   gtdbtk:
-    memory_gb: 32
+    memory_gb: 64
   dram:
-    memory_gb: 32
+    memory_gb: 16
