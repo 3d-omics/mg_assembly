@@ -24,6 +24,5 @@ rule dereplicate_gtdbtk:
             --out_dir {output.outdir} \
             --cpus {threads} \
             --skip_ani_screen \
-            --full_tree \
         2> {log} 1>&2
         """
