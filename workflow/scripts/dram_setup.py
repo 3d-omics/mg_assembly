@@ -34,7 +34,7 @@ def get_dbcan_db_loc(folder):
     return folder + "/dbCAN-HMMdb-V9.txt"
 
 
-def get_dbcan_fam_activities_loc(folder):
+def get_dbcan_fam_activities(folder):
     files = os.listdir(folder)
     dbcan_fam_activities_file = [
         file
@@ -134,8 +134,8 @@ def compose_dram_setup_set_database_locations(folder):
         get_pfam_hmm_dat(folder),
         "--dbcan_db_loc",
         get_dbcan_db_loc(folder),
-        "--dbcan_fam_activities_loc",
-        get_dbcan_fam_activities_loc(folder),
+        "--dbcan_fam_activities",
+        get_dbcan_fam_activities(folder),
         "--vogdb_db_loc",
         get_vogdb_db_loc(folder),
         "--vog_annotations",
