@@ -143,7 +143,7 @@ def compose_dram_setup_set_database_locations(folder):
         "--viral_db_loc",
         get_viral_db_loc(folder),
         "--peptidase_db_loc",
-        get_peptidase_loc(folder),
+        get_peptidase_db_loc(folder),
         "--description_db_loc",
         get_description_db_loc(folder),
         "--genome_summary_form_loc",
