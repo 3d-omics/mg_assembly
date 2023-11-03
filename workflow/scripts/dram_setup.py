@@ -31,7 +31,7 @@ def get_pfam_hmm_dat(folder):
 
 
 def get_dbcan_db_loc(folder):
-    return folder + "/dbCAN-HMMdb-V9.txt"
+    return folder + "/dbCAN-HMMdb-V11.txt"
 
 
 def get_dbcan_fam_activities(folder):
