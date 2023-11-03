@@ -40,7 +40,7 @@ rule dereplicate_drep_run:
         out_dir=DREP,
     resources:
         mem_mb=double_ram(params["dereplicate"]["drep"]["memory_gb"]),
-        runtime=24 * 60,
+        runtime=7 * 24 * 60,
     retries: 5
     shell:
         """
