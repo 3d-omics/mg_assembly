@@ -52,7 +52,7 @@ rule dereplicate_dram_annotate:
         for i in {{annotations,trnas,rrnas}} ; do
             ( csvstack \
                 --tabs \
-                {params.tmp_dir}*/annotations.tsv \
+                {params.tmp_dir}/*/annotations.tsv \
             | csvformat \
                 --out-tabs \
             > $i.tsv \
