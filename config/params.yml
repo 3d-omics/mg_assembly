@@ -58,7 +58,7 @@ bin:
 dereplicate:
   drep:
     threads: 24
-    memory_gb: 32
+    memory_gb: 64
   bowtie2-build:
     extra: ""
     memory_gb: 16
