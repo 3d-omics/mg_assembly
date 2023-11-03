@@ -12,41 +12,6 @@ rule dereplicate_dram_setup_db:
         "python workflow/scripts/dram_setup.py {input} 2> {log}"
 
 
-# rule dereplicate_dram_annotate:
-#     """Annotate dereplicated genomes with DRAM."""
-#     input:
-#         drep_folder=DREP / "dereplicated_genomes",
-#         mock_db=DREP_DRAM / "dram_db_setup.done",
-#         gtdbtk_tree=GTDDBTK / "gtdbtk.bac120.summary.tree",
-#     output:
-#         outdir=DREP_DRAM / "annotate" / "dereplicated_genomes",
-#         annotations=DREP_DRAM / "annotate" / "dereplicated_genomes" / "annotations.tsv",
-#         trnas=touch(DREP_DRAM / "annotate" / "dereplicated_genomes" / "trnas.tsv"),
-#         rrnas=touch(DREP_DRAM / "annotate" / "dereplicated_genomes" / "rrnas.tsv"),
-#     log:
-#         DREP_DRAM / "annotate" / "dereplicated_genomes.log",
-#     conda:
-#         "dram.yml"
-#     params:
-#         min_contig_size=1500,
-#     threads: 24
-#     resources:
-#         mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
-#         runtime=24 * 60,
-#     retries: 5
-#     shell:
-#         """
-#         rm -rfv {output.outdir} 2> {log} 1>&2
-
-#         DRAM.py annotate \
-#             --input_fasta "{input.drep_folder}/*.fa" \
-#             --output_dir {output.outdir} \
-#             --threads {threads} \
-#             --min_contig_size {params.min_contig_size} \
-#         2>> {log} 1>&2
-#         """
-
-
 rule dereplicate_dram_annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
@@ -57,6 +22,7 @@ rule dereplicate_dram_annotate:
         annotation=DREP_DRAM / "annotations.tsv",
         trnas=DREP_DRAM / "trnas.tsv",
         rrnas=DREP_DRAM / "rrnas.tsv",
+        tarball=DREP_DRAM / "annotate.tar.gz",
     log:
         DREP_DRAM / "annotate.log",
     conda:
@@ -79,7 +45,7 @@ rule dereplicate_dram_annotate:
                 --input_fasta {{}} \
                 --output_dir {params.tmp_dir}/{{/.}} \
                 --threads 1 \
-                --gtdb_taxonomy {input.gtdb_summary} \
+                --gtdb_taxonomy {input.gtdbtk_summary} \
         ::: {input.dereplicated_genomes}/*.fa
 
         for i in {annotations,trnas,rrnas} ; do
@@ -92,7 +58,12 @@ rule dereplicate_dram_annotate:
             ) 2>> {log}
         done
 
-        tar cvf - {params.tmp_dir} | pigz > {params.tmp_dir}.tar.gz
+        ( tar cvf - {params.tmp_dir} \
+        | pigz \
+        > {output.tarball} ) \
+        2>> {log}
+
+        rm --recursive --force --verbose {params.tmp_dir} 2>> {log} 1>&2
         """
 
 
