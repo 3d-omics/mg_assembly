@@ -89,6 +89,7 @@ rule dereplicate_dram_distill:
         mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
         runtime=24 * 60,
     params:
+        outdir_tmp=DREP_DRAM / "distill",
         outdir=DREP_DRAM,
     retries: 5
     shell:
@@ -99,6 +100,9 @@ rule dereplicate_dram_distill:
             --trna_path {input.trnas} \
             --output_dir {params.outdir} \
         2> {log} 1>&2
+
+        mv {params.outdir_tmp}/* {params.outdir}/
+        rmdir {params.outdir_tmp} 2> {log}
         """
 
 
