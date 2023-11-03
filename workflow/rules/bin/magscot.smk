@@ -221,6 +221,8 @@ rule bin_magscot_rename_one:
         MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
         "magscot.yml"
+    resources:
+        mem_mb=4 * 1024,
     shell:
         """
         python workflow/scripts/reformat_fasta_magscot.py \
