@@ -14,23 +14,23 @@ def get_kofam_ko_list_loc(folder):
     return folder + "/kofam_ko_list.tsv"
 
 
-def get_uniref_loc(folder):
-    files = os.listdir(folder)
-    uniref_file = [
-        file for file in files if ("uniref90" in file and file.endswith(".mmsdb"))
-    ][0]
-    return f"{folder}/{uniref_file}"
+# def get_uniref_loc(folder):
+#     files = os.listdir(folder)
+#     uniref_file = [
+#         file for file in files if ("uniref90" in file and file.endswith(".mmsdb"))
+#     ][0]
+#     return f"{folder}/{uniref_file}"
 
 
 def get_pfam_loc(folder):
     return folder + "/pfam.mmspro"
 
 
-def get_pfam_hmm_loc(folder):
+def get_pfam_hmm_dat(folder):
     return folder + "/Pfam-A.hmm.dat.gz"
 
 
-def get_dbcan_loc(folder):
+def get_dbcan_db_loc(folder):
     return folder + "/dbCAN-HMMdb-V9.txt"
 
 
@@ -44,7 +44,7 @@ def get_dbcan_fam_activities_loc(folder):
     return f"{folder}/{dbcan_fam_activities_file}"
 
 
-def get_viral_loc(folder):
+def get_viral_db_loc(folder):
     files = os.listdir(folder)
     viral_file = [
         file for file in files if ("refseq_viral" in file and file.endswith(".mmsdb"))
@@ -52,7 +52,7 @@ def get_viral_loc(folder):
     return f"{folder}/{viral_file}"
 
 
-def get_peptidase_loc(folder):
+def get_peptidase_db_loc(folder):
     files = os.listdir(folder)
     peptidase_file = [
         file for file in files if ("peptidases" in file and file.endswith(".mmsdb"))
@@ -60,11 +60,11 @@ def get_peptidase_loc(folder):
     return f"{folder}/{peptidase_file}"
 
 
-def get_vogdb_loc(folder):
+def get_vogdb_db_loc(folder):
     return folder + "/vog_latest_hmms.txt"
 
 
-def get_vog_annotations_loc(folder):
+def get_vog_annotations(folder):
     return folder + "/vog_annotations_latest.tsv.gz"
 
 
@@ -128,21 +128,21 @@ def compose_dram_setup_set_database_locations(folder):
         get_kofam_ko_list_loc(folder),
         "--uniref_loc",
         get_uniref_loc(folder),
-        "--pfam_loc",
+        "--pfam_db_loc",
         get_pfam_loc(folder),
-        "--pfam_hmm_loc",
-        get_pfam_hmm_loc(folder),
-        "--dbcan_loc",
-        get_dbcan_loc(folder),
+        "--pfam_hmm_dat",
+        get_pfam_hmm_dat(folder),
+        "--dbcan_db_loc",
+        get_dbcan_db_loc(folder),
         "--dbcan_fam_activities_loc",
         get_dbcan_fam_activities_loc(folder),
-        "--vogdb_loc",
-        get_vogdb_loc(folder),
-        "--vog_annotations_loc",
-        get_vog_annotations_loc(folder),
-        "--viral_loc",
-        get_viral_loc(folder),
-        "--peptidase_loc",
+        "--vogdb_db_loc",
+        get_vogdb_db_loc(folder),
+        "--vog_annotations",
+        get_vog_annotations(folder),
+        "--viral_db_loc",
+        get_viral_db_loc(folder),
+        "--peptidase_db_loc",
         get_peptidase_loc(folder),
         "--description_db_loc",
         get_description_db_loc(folder),
