@@ -46,7 +46,8 @@ rule dereplicate_dram_annotate:
                 --output_dir {params.tmp_dir}/{{/.}} \
                 --threads 1 \
                 --gtdb_taxonomy {input.gtdbtk_summary} \
-        ::: {input.dereplicated_genomes}/*.fa
+        ::: {input.dereplicated_genomes}/*.fa \
+        2>> {log} 1>&2
 
         for i in {{annotations,trnas,rrnas}} ; do
             ( csvstack \
