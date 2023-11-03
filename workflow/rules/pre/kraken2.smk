@@ -19,10 +19,10 @@ rule pre_kraken2_assign_all:
         ],
     log:
         KRAKEN2 / "{kraken_db}.log",
-    threads: 24
+    threads: 8
     resources:
         mem_mb=params["pre"]["kraken2"]["memory_gb"] * 1024,
-        runtime=60,
+        runtime=24 * 60,
     params:
         in_folder=FASTP,
         out_folder=compose_out_folder_for_eval_kraken2_assign_all,
@@ -49,7 +49,10 @@ rule pre_kraken2_assign_all:
                     --db {params.kraken_db_shm} \
                     --threads {threads} \
                     --gzip-compressed \
-                    --output >(pigz > {params.out_folder}/${{sample_id}}.out.gz) \
+                    --output >( \
+                        pigz --processes {threads} \
+                        > {params.out_folder}/${{sample_id}}.out.gz
+                    ) \
                     --report {params.out_folder}/${{sample_id}}.report \
                     --memory-mapping \
                     {params.in_folder}/${{sample_id}}_1.fq.gz \
