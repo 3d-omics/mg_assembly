@@ -101,8 +101,8 @@ rule dereplicate_dram_distill:
             --output_dir {params.outdir} \
         2> {log} 1>&2
 
-        mv {params.outdir_tmp}/* {params.outdir}/
-        rmdir {params.outdir_tmp} 2> {log}
+        mv {params.outdir_tmp}/* {params.outdir}/ 2>> {log} 1>&2
+        rmdir {params.outdir_tmp} 2>> {log} 1>&2
         """
 
 
