@@ -61,7 +61,7 @@ rule assemble_bowtie2_one:
             $(dirname {output.cram}) \
             -name "$(basename {output.cram}).tmp.*.bam" \
             -delete \
-        2> /dev/null 1>&2
+        2> {log} 1>&2
 
         ( bowtie2 \
             -x {input.mock} \

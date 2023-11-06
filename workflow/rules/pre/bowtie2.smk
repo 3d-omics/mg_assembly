@@ -60,7 +60,11 @@ rule pre_bowtie2_host_map_one:
     retries: 5
     shell:
         """
-        find $(dirname {output.cram}) -name "$(basename {output.cram}).tmp.*.bam" -delete 2> /dev/null 1>&2
+        find \
+            $(dirname {output.cram}) \
+            -name "$(basename {output.cram}).tmp.*.bam" \
+            -delete \
+        2> {log} 1>&2
 
         ( bowtie2 \
             -x {input.mock} \
