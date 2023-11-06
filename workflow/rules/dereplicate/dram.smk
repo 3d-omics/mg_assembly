@@ -91,14 +91,13 @@ rule dereplicate_dram_distill:
     params:
         outdir_tmp=DREP_DRAM / "distill",
         outdir=DREP_DRAM,
-    retries: 5
     shell:
         """
         DRAM.py distill \
             --input_file {input.annotations} \
             --rrna_path {input.rrnas} \
             --trna_path {input.trnas} \
-            --output_dir {params.outdir} \
+            --output_dir {params.outdir_tmp} \
         2> {log} 1>&2
 
         mv {params.outdir_tmp}/* {params.outdir}/ 2>> {log} 1>&2
