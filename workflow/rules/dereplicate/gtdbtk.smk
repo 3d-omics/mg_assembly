@@ -4,14 +4,15 @@ rule dereplicate_gtdbtk_classify:
         bin_folder=DREP / "dereplicated_genomes",
         database=features["gtdbtk_database"],
     output:
-        ar53=touch(DREP_GTDBTK / "gtdbtk.ar53.summary.tsv"),
-        bac120=touch(DREP_GTDBTK / "gtdbtk.bac120.summary.tsv"),
+        summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
     log:
         DREP_GTDBTK / "gtdbtk_classify.log",
     conda:
         "gtdbtk.yml"
     params:
         out_dir=DREP_GTDBTK,
+        ar53=DREP_GTDBTK / "gtdbtk.ar53.summary.tsv",
+        bac120=DREP_GTDBTK / "gtdbtk.bac120.summary.tsv",
     threads: 24
     resources:
         mem_mb=double_ram(params["dereplicate"]["gtdbtk"]["memory_gb"]),
@@ -28,34 +29,23 @@ rule dereplicate_gtdbtk_classify:
             --cpus {threads} \
             --skip_ani_screen \
         2> {log} 1>&2
-        """
 
-
-rule dereplicate_gtdbtk_join_summaries:
-    """Join both bacterial and archaeal summaries"""
-    input:
-        ar53=DREP_GTDBTK / "gtdbtk.ar53.summary.tsv",
-        bac120=DREP_GTDBTK / "gtdbtk.bac120.summary.tsv",
-    output:
-        summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
-    log:
-        DREP_GTDBTK / "gtdbtk.summary.log",
-    conda:
-        "gtdbtk.yml"
-    shell:
-        """
-        ( csvstack \
-            --tabs \
-            {input.bac120} \
-            {input.ar53} \
-        | csvformat \
-            --out-tabs \
-        > {output.summary} ) \
-        2> {log}
+        if [[ -f {params.ar53} ]] ; then
+            ( csvstack \
+                --tabs \
+                {params.bac120} \
+                {params.ar54} \
+            | csvformat \
+                --out-tabs \
+            > {output.summary} ) \
+            2>> {log}
+        else
+            cp {params.bac120} {output.summary} 2>> {log}
+        fi
         """
 
 
 rule dereplicate_gtdbtk:
     """Run the gtdbtk subworkflow"""
     input:
-        rules.dereplicate_gtdbtk_join_summaries.output,
+        rules.dereplicate_gtdbtk_classify.output,
