@@ -50,7 +50,7 @@ jobs:
             seqtk
             pigz
             samtools
-          # cache-environment: true
+          cache-environment: true
           post-cleanup: 'all'
           condarc: |
             channels:
