@@ -41,21 +41,27 @@ jobs:
             ~/.cache/pre-commit/
           key: snakemake-conda-${{ env.CACHE_NUMBER }}
 
-      - name: Create mock reads
+      - name: Prepare micromamba
         uses: mamba-org/setup-micromamba@v1
-        environment-file: false
-        environment-name: base
-        condarc:
-          channels:
+        with:
+          environment-file: false
+          environment-name: base
+          init-shell: >-
+            bash
+          create-args: >-
+            seqtk
+            pigz
+          cache-environment: true
+          post-cleanup: 'all'
+          condarc: |
+            channels:
             - conda-forge
             - bioconda
             - defaults
-          channel_priority: strict
-        with:
-          extra-specs:
-            seqtk
-            pigz
-        shell: bash -l {0}
+            channel_priority: strict
+
+      - name: Create mock reads
+        shell: bash -el {0}
         run: bash workflow/scripts/generate_mock_data.sh
 
       - name: Clean conda cache
