@@ -1,18 +1,20 @@
 rule dereplicate_checkm2_download:
     output:
-        features["checkm2_database"],
+        directory(features["checkm2_database"]),
     log:
         DREP_CHECKM / "download.log",
     conda:
         "checkm2.yml"
     shell:
         """
+        mkdir --parents {output} 2> {log} 1>&2
+
         checkm2 database \
             --download \
             --path $(dirname {output}) \
-        2> {log} 1>&2
+        2>> {log} 1>&2
 
-        mv $(dirname {output})/CheckM2_database/* {output} 1>&2
+        mv $(dirname {output})/CheckM2_database/* {output}/ 2>> {log} 1>&2
         rmdir $(dirname {output})/CheckM2_database 2>>{log} 1>&2
         """
 
@@ -40,7 +42,7 @@ rule dereplicate_checkm2_predict:
             --input {input.mags} \
             --extension .fa \
             --output-directory {params.out_dir} \
-            --database_path {input.db} \
+            --database_path {input.db}/uniref100.KO.1.dmnd \
             --remove_intermediates \
         2>> {log} 1>&2
 
