@@ -49,7 +49,7 @@ jobs:
           create-args: >-
             seqtk
             pigz
-          cache-environment: true
+          # cache-environment: true
           post-cleanup: 'all'
           condarc: |
             channels:
