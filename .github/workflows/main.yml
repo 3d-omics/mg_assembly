@@ -44,10 +44,8 @@ jobs:
       - name: Prepare micromamba
         uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: false
-          environment-name: bash
-          init-shell: >-
-            bash
+          init-shell: bash
+          # environment-name: bash
           create-args: >-
             seqtk
             pigz
@@ -59,9 +57,11 @@ jobs:
             - bioconda
             - defaults
             channel_priority: strict
+        env:
+          ACTIONS_STEP_DEBUG: true
 
       - name: Create mock reads
-        shell: bash -el {0}
+        shell: bash -leo pipefail {0}
         run: bash workflow/scripts/generate_mock_data.sh
 
       - name: Clean conda cache
