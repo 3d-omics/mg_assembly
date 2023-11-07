@@ -42,9 +42,21 @@ jobs:
           key: snakemake-conda-${{ env.CACHE_NUMBER }}
 
       - name: Create mock reads
-        run:  >
-          mamba install -c bioconda seqtk pigz &&
-          bash workflow/scripts/generate_mock_data.sh
+        uses: mamba-org/setup-micromamba@v1
+        environment-file: false
+        environment-name: base
+        condarc:
+          channels:
+            - conda-forge
+            - bioconda
+            - defaults
+          channel_priority: strict
+        with:
+          extra-specs:
+            seqtk
+            pigz
+        shell: bash -l {0}
+        run: bash workflow/scripts/generate_mock_data.sh
 
       - name: Clean conda cache
         run: conda clean --all --yes
