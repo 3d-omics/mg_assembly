@@ -49,6 +49,7 @@ jobs:
           create-args: >-
             seqtk
             pigz
+            samtools
           # cache-environment: true
           post-cleanup: 'all'
           condarc: |
