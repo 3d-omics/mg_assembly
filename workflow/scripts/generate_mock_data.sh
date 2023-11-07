@@ -37,11 +37,19 @@ mkdir --parents resources/reads/
 
 # Simulate one experiment. In the samples.tsv will trick it into thinking there are more
 wgsim \
+    -S 0 \
+    -N 100000 \
+     resources/reference/contigs.fa.gz \
+    >(pigz -1 > resources/reads/sample1_1.fq.gz) \
+    >(pigz -1 > resources/reads/sample1_2.fq.gz) \
+> /dev/null
+
+wgsim \
     -S 1 \
     -N 600000 \
     resources/reference/contigs.fa.gz \
-    >(pigz > resources/reads/sample2_1.fq.gz) \
-    >(pigz > resources/reads/sample2_2.fq.gz) \
+    >(pigz -1 > resources/reads/sample2_1.fq.gz) \
+    >(pigz -1 > resources/reads/sample2_2.fq.gz) \
 > /dev/null
 
 # 10M works

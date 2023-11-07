@@ -41,16 +41,10 @@ jobs:
             ~/.cache/pre-commit/
           key: snakemake-conda-${{ env.CACHE_NUMBER }}
 
-      # - name: Download environments
-      #   uses: snakemake/snakemake-github-action@v1.24.0
-      #   with:
-      #     directory: .
-      #     snakefile: workflow/Snakefile
-      #     args: >
-      #       --use-conda
-      #       --conda-create-envs-only
-      #       --conda-frontend mamba
-      #       --cores 1
+      - name: Create mock reads
+        run:  >
+          mamba install -c bioconda seqtk pigz &&
+          bash workflow/scripts/generate_mock_data.sh
 
       - name: Clean conda cache
         run: conda clean --all --yes
