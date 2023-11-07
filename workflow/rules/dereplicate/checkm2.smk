@@ -33,6 +33,8 @@ rule dereplicate_checkm2_predict:
         out_dir=DREP_CHECKM / "predict",
     shell:
         """
+        rm -rfv {params.out_dir} 2> {log} 1>&2
+
         checkm2 predict \
             --threads {threads} \
             --input {input.mags} \
@@ -40,7 +42,7 @@ rule dereplicate_checkm2_predict:
             --output-directory {params.out_dir} \
             --database_path {input.db} \
             --remove_intermediates \
-        2> {log} 1>&2
+        2>> {log} 1>&2
 
         mv {params.out_dir}/quality_report.tsv {output} 2>> {log} 1>&2
         rm --recursive --verbose --force {params.out_dir} 2>> {log} 1>&2
