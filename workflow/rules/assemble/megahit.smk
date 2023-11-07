@@ -33,6 +33,7 @@ rule assemble_megahit_one:
             --verbose \
             --force \
             --out-dir {params.out_dir} \
+            --continue \
             -1 {params.forwards} \
             -2 {params.reverses} \
             {params.extra} \
