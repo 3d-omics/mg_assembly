@@ -45,7 +45,7 @@ jobs:
         uses: mamba-org/setup-micromamba@v1
         with:
           init-shell: bash
-          # environment-name: bash
+          environment-name: base
           create-args: >-
             seqtk
             pigz
