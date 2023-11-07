@@ -7,9 +7,10 @@ magscot:
   pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
   tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
 
-dram_database: "resources/mock_dram_db"
-gtdbtk_database: "resources/mock_gtdbtk_db"
-singlem_database: "resources/mock_singlem_db"
+dram_database: resources/mock_dram_db
+gtdbtk_database: resources/mock_gtdbtk_db
+singlem_database: resources/mock_singlem_db
 kraken2_dbs:
-  mock: "resources/kraken2_mock"
-virify_database: "resources/virify"
+  mock: resources/kraken2_mock
+virify_database: resources/virify
+checkm2_database: resources/checkm2_db/uniref100.KO.1.dmnd
