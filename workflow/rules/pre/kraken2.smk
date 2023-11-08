@@ -31,7 +31,7 @@ rule pre_kraken2_assign_all:
         "pre.yml"
     shell:
         """
-        mapfile -t sample_ids < <(find "{params.in_folder}" -name "*_1.fq.gz" -exec basename {{}} _1.fq.gz \;)
+        mapfile -t sample_ids < <(echo {input.files} | tr " " "\\n" | grep _1.fq.gz | xargs -I {{}} basename {{}} _1.fq.gz)
 
         {{
             mkdir --parents {params.kraken_db_shm}
