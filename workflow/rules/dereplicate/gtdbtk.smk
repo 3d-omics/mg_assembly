@@ -34,7 +34,7 @@ rule dereplicate_gtdbtk_classify:
             ( csvstack \
                 --tabs \
                 {params.bac120} \
-                {params.ar54} \
+                {params.ar53} \
             | csvformat \
                 --out-tabs \
             > {output.summary} ) \
