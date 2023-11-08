@@ -39,7 +39,7 @@ jobs:
           path: |
             .snakemake/conda
             ~/.cache/pre-commit/
-          key: snakemake-conda-${{ env.CACHE_NUMBER }}
+          key: snakemake-conda
 
       # - name: Prepare micromamba
       #   uses: mamba-org/setup-micromamba@v1
