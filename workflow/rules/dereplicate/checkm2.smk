@@ -34,7 +34,7 @@ rule dereplicate_checkm2_predict:
     params:
         out_dir=DREP_CHECKM / "predict",
     resources:
-        mem_mb=8 * 1024,
+        mem_mb=16 * 1024,
     shell:
         """
         rm -rfv {params.out_dir} 2> {log} 1>&2
