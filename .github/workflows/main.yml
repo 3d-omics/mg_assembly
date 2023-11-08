@@ -131,6 +131,7 @@ jobs:
             --conda-frontend mamba
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
+            -j 1
 
       # - uses: actions/upload-artifact@v3
       #   if: failure()
