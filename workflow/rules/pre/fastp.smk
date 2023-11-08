@@ -52,3 +52,12 @@ rule pre_fastp:
             for sample_id, library_id in SAMPLE_LIBRARY
             for end in "1 2 u1 u2".split(" ")
         ],
+
+
+rule pre_fastp_json:
+    """Get report from fastp + fastqc"""
+    input:
+        [
+            FASTP / f"{sample_id}.{library_id}_fastp.json"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],

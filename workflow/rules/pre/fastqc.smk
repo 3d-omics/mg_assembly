@@ -4,7 +4,7 @@ rule pre_fastp_fastqc:
         [
             FASTP / f"{sample_id}.{library_id}_{end}_fastqc.{extension}"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for end in "1 2 u1 u2".split(" ")
+            for end in "1 2".split(" ")
             for extension in "html zip".split(" ")
         ],
 

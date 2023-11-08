@@ -27,8 +27,8 @@ rule report_step_reads:
 rule report_step_pre:
     """Collect all reports for the preprocessing step"""
     input:
-        rules.pre_fastp.input,
         rules.pre_fastp_fastqc.input,
+        rules.pre_fastp_json.input,
         rules.pre_samtools.input,
         rules.pre_nonhost_fastqc.input,
         rules.pre_kraken2.input,
