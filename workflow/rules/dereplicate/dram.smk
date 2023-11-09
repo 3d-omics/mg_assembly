@@ -32,6 +32,7 @@ rule dereplicate_dram_annotate:
         min_contig_size=1500,
         tmp_dir=DREP_DRAM / "annotate",
         out_dir=DREP_DRAM,
+        parallel_retries=5,
     resources:
         mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
         runtime=48 * 60,
@@ -42,6 +43,8 @@ rule dereplicate_dram_annotate:
         mkdir --parents {params.tmp_dir} 2>>{log} 1>&2
 
         parallel \
+            --jobs {threads} \
+            --retries {params.parallel_retries} \
             DRAM.py annotate \
                 --input_fasta {{}} \
                 --output_dir {params.tmp_dir}/{{/.}} \
