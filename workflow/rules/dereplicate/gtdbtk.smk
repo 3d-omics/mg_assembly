@@ -1,5 +1,38 @@
+rule dereplicate_gtdbtk_download:
+    output:
+        directory(features["gtdbtk_database"]),
+    log:
+        features["gtdbtk_database"] + ".log",
+    conda:
+        "gtdbtk.yml"
+    params:
+        tarball="{output}.tar.gz",
+    shell:
+        """
+        mkdir --parents {output} 2> {log} 1>&2
+
+        wget \
+            --continue \
+            --directory {output} \
+            https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz \
+        2>> {log} 1>&2
+
+        tar \
+            --extract \
+            --verbose \
+            --file {output}/gtdbtk_data.tar.gz \
+            --directory {output} \
+        2>> {log} 1>&2
+
+        mv \
+            {output}/release*/* \
+            {output}/ \
+        2>> {log} 1>&2
+        """
+
+
 rule dereplicate_gtdbtk_classify:
-    """Run GTDB-Tk over the dereplicated genomes.""" ""
+    """Run GTDB-Tk over the dereplicated genomes."""
     input:
         bin_folder=DREP / "dereplicated_genomes",
         database=features["gtdbtk_database"],
