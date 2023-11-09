@@ -102,7 +102,6 @@ jobs:
         run: >
           sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/assemble/renaming/all.fa"
 
-
       - name: Test workflow - Bin
         uses: snakemake/snakemake-github-action@v1.24.0
         with:
@@ -110,6 +109,38 @@ jobs:
           snakefile: workflow/Snakefile
           args: >
             bin
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            --rerun-triggers mtime
+
+      - name: Put the mock assembly as a dereplicated genome
+        run: >
+          sudo mkdir --parents results/dereplicate/drep/dereplicated_genomes &&
+          sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/dereplicate/drep/dereplicated_genomes/all:bin_00001.fa" &&
+          sudo touch results/dereplicate/drep/dereplicated_genomes/.snakemake_timestamp
+
+      - name: Test workflow - Dereplicate
+        uses: snakemake/snakemake-github-action@v1.24.0
+        with:
+          args: >
+            dereplicate
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            --rerun-triggers mtime
+
+      - name: Test workflow - Report
+        uses: snakemake/snakemake-github-action@v1.24.0
+        with:
+          args: >
+            report
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
