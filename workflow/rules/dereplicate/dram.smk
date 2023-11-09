@@ -1,3 +1,30 @@
+rule dereplicate_dram_download_db:
+    """Download dram database if it does not exist
+
+    Will skip UniRef and Kegg.
+    """
+    output:
+        db=directory(features["dram_database"]),
+        config=features["dram_database"] + ".config",
+    log:
+        features["dram_database"] + ".log",
+    conda:
+        "dram.yml"
+    shell:
+        """
+        DRAM-setup.py prepare_databases \
+            --skip_uniref \
+            --output_dir {output} \
+            --threads 10 \
+            --verbose \
+        2> {log} 1>&2
+
+        DRAM-setup.py export_config \
+        > {output.config} \
+        2>> {log}
+        """
+
+
 rule dereplicate_dram_setup_db:
     """Set up the DRAM database."""
     input:
