@@ -36,7 +36,6 @@ rule dereplicate_dram_annotate:
     resources:
         mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
         runtime=48 * 60,
-    retries: 5
     shell:
         """
         rm -rfv {params.tmp_dir} 2> {log} 1>&2
