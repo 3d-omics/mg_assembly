@@ -26,11 +26,7 @@ rule dereplicate_drep_run:
     input:
         genomes=DREP / "separated_bins",
     output:
-        data=directory(DREP / "data"),
-        data_tables=directory(DREP / "data_tables"),
         dereplicated_genomes=directory(DREP / "dereplicated_genomes"),
-        figures=directory(DREP / "figures"),
-        log=directory(DREP / "log"),
     log:
         DREP / "drep.log",
     conda:
