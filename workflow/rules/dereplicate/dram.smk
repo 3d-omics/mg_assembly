@@ -36,7 +36,28 @@ rule dereplicate_dram_setup_db:
     conda:
         "dram.yml"
     shell:
-        "python workflow/scripts/dram_setup.py {input} 2> {log}"
+        """
+        DRAM-setup.py set_database_locations \
+            --amg_database_loc {input}/amg_database.*.tsv \
+            --dbcan_fam_activities_loc {input}/CAZyDB.*.fam-activities.txt \
+            --dbcan_loc {input}/dbCAN-HMMdb-V*.txt \
+            --dbcan_subfam_ec_loc {input}/CAZyDB.*.fam.subfam.ec.txt \
+            --description_db_loc {input}/description_db.sqlite
+            --etc_module_database_loc {input}/etc_mdoule_database.*.tsv \
+            --function_heatmap_form_loc {input}/function_heatmap_form.*.tsv \
+            --genome_summary_form_loc {input}/genome_summary_form.*.tsv \
+            --kofam_hmm_loc {input}/kofam_profiles.hmm \
+            --kofam_ko_list_loc {input}/kofam_ko_list.tsv \
+            --module_step_form_loc {input}/module_step_form.*.tsv \
+            --peptidase_loc {input}/peptidases.*.mmsdb \
+            --pfam_hmm_loc {input}/Pfam-A.hmm.dat.gz \
+            --pfam_loc {input}/pfam.mmspro \
+            --update_description_db \
+            --viral_loc {input}/refseq_viral.*.mmsdb \
+            --vog_annotations_loc {input}/vog_annotations_latest.tsv.gz \
+            --vogdb_loc {input}/vog_latest_hmms.txt \
+        2> {log} 1>&2
+        """
 
 
 rule dereplicate_dram_annotate:
