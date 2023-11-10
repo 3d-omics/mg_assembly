@@ -42,7 +42,7 @@ rule dereplicate_dram_setup_db:
             --dbcan_fam_activities_loc {input}/CAZyDB.*.fam-activities.txt \
             --dbcan_loc {input}/dbCAN-HMMdb-V*.txt \
             --dbcan_subfam_ec_loc {input}/CAZyDB.*.fam.subfam.ec.txt \
-            --description_db_loc {input}/description_db.sqlite
+            --description_db_loc {input}/description_db.sqlite \
             --etc_module_database_loc {input}/etc_mdoule_database.*.tsv \
             --function_heatmap_form_loc {input}/function_heatmap_form.*.tsv \
             --genome_summary_form_loc {input}/genome_summary_form.*.tsv \
