@@ -5,8 +5,6 @@ rule dereplicate_gtdbtk_download:
         features["gtdbtk_database"] + ".log",
     conda:
         "gtdbtk.yml"
-    params:
-        tarball="{output}.tar.gz",
     shell:
         """
         mkdir --parents {output} 2> {log} 1>&2
