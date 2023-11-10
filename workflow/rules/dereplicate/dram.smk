@@ -52,7 +52,6 @@ rule dereplicate_dram_setup_db:
             --peptidase_loc {input}/peptidases.*.mmsdb \
             --pfam_hmm_loc {input}/Pfam-A.hmm.dat.gz \
             --pfam_loc {input}/pfam.mmspro \
-            --update_description_db \
             --viral_loc {input}/refseq_viral.*.mmsdb \
             --vog_annotations_loc {input}/vog_annotations_latest.tsv.gz \
             --vogdb_loc {input}/vog_latest_hmms.txt \
