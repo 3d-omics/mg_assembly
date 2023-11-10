@@ -13,4 +13,4 @@ singlem_database: resources/mock_singlem_db
 kraken2_dbs:
   mock: resources/kraken2_mock
 virify_database: resources/virify
-checkm2_database: resources/checkm2_db
+checkm2_database: resources/mock_checkm2_db
