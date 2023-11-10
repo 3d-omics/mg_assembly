@@ -41,29 +41,19 @@ jobs:
             ~/.cache/pre-commit/
           key: snakemake-conda
 
-      # - name: Prepare micromamba
-      #   uses: mamba-org/setup-micromamba@v1
-      #   with:
-      #     init-shell: bash
-      #     environment-name: mock
-      #     create-args: >-
-      #       seqtk
-      #       pigz
-      #       samtools
-      #     cache-environment: true
-      #     post-cleanup: 'all'
-      #     condarc: |
-      #       channels:
-      #       - conda-forge
-      #       - bioconda
-      #       - defaults
-      #       channel_priority: strict
-      #   env:
-      #     ACTIONS_STEP_DEBUG: true
-
-      # - name: Create mock reads
-      #   shell: bash -leo pipefail {0}
-      #   run: bash workflow/scripts/generate_mock_data.sh
+      - name: Download All Environments
+        uses: snakemake/snakemake-github-action@v1.24.0
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            pre assemble bin dereplicate report
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --conda-create-envs-only
 
       - name: Clean conda cache
         run: conda clean --all --yes
@@ -82,22 +72,6 @@ jobs:
             --conda-cleanup-pkgs cache
             --latency-wait 5
 
-      - name: Preprocessing - Clean snakemake
-        uses: snakemake/snakemake-github-action@v1.24.0
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            pre
-            --use-conda
-            --conda-frontend mamba
-            --show-failed-logs
-            --cores 3
-            --conda-cleanup-pkgs cache
-
-      - name: Preprocessing - Clean conda
-        run: conda clean --packages --tarballs --yes
-
       - name: Assemble
         uses: snakemake/snakemake-github-action@v1.24.0
         with:
@@ -111,22 +85,6 @@ jobs:
             --cores 3
             --conda-cleanup-pkgs cache
             --latency-wait 5
-
-      - name: Assemble - Clean snakemake
-        uses: snakemake/snakemake-github-action@v1.24.0
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            assemble
-            --use-conda
-            --conda-frontend mamba
-            --show-failed-logs
-            --cores 3
-            --conda-cleanup-pkgs cache
-
-      - name: Assemble - Clean conda
-        run: conda clean --packages --tarballs --yes
 
       - name: Give to the binning steps an assembly that will work
         run: >
@@ -146,22 +104,6 @@ jobs:
             --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
-
-      - name: Bin - Clean snakemake
-        uses: snakemake/snakemake-github-action@v1.24.0
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            bin
-            --use-conda
-            --conda-frontend mamba
-            --show-failed-logs
-            --cores 3
-            --conda-cleanup-pkgs cache
-
-      - name: Bin - Clean conda
-        run: conda clean --packages --tarballs --yes
 
       - name: Put the mock assembly as a dereplicated genome
         run: |
@@ -184,22 +126,6 @@ jobs:
             --latency-wait 5
             --rerun-triggers mtime
 
-      - name: Dereplicate - Clean snakemake
-        uses: snakemake/snakemake-github-action@v1.24.0
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            dereplicate
-            --use-conda
-            --conda-frontend mamba
-            --show-failed-logs
-            --cores 3
-            --conda-cleanup-pkgs cache
-
-      - name: Dereplicate - Clean conda
-        run: conda clean --packages --tarballs --yes
-
       - name: Test workflow - Report
         uses: snakemake/snakemake-github-action@v1.24.0
         with:
@@ -214,22 +140,6 @@ jobs:
             --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
-
-      - name: Report - Clean snakemake
-        uses: snakemake/snakemake-github-action@v1.24.0
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            report
-            --use-conda
-            --conda-frontend mamba
-            --show-failed-logs
-            --cores 3
-            --conda-cleanup-pkgs cache
-
-      - name: Report - Clean conda
-        run: conda clean --packages --tarballs --yes
 
       - uses: actions/upload-artifact@v3
         if: failure()
