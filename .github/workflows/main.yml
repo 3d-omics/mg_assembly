@@ -172,7 +172,7 @@ jobs:
         with:
           name: results
           path: |
-            **/*.log
+            results/**/*.log
             # results/
             # reports/
             # !**/*.cram
