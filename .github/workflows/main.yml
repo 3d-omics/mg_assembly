@@ -141,6 +141,10 @@ jobs:
             --latency-wait 5
             --rerun-triggers mtime
 
+      - name: Delete everything
+        run: |
+          sudo rm -rf results
+
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
