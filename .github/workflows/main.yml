@@ -96,7 +96,7 @@ jobs:
             --conda-cleanup-pkgs cache
 
       - name: Preprocessing - Clean conda
-        run: conda clean --packages --cache --yes
+        run: conda clean --packages --tarbals --yes
 
       - name: Assemble
         uses: snakemake/snakemake-github-action@v1.24.0
@@ -125,8 +125,8 @@ jobs:
             --cores 3
             --conda-cleanup-pkgs cache
 
-      - name: Preprocessing - Clean conda
-        run: conda clean --packages --cache --yes
+      - name: Assemble - Clean conda
+        run: conda clean --packages --tarbals --yes
 
       - name: Give to the binning steps an assembly that will work
         run: >
@@ -161,7 +161,7 @@ jobs:
             --conda-cleanup-pkgs cache
 
       - name: Bin - Clean conda
-        run: conda clean --packages --cache --yes
+        run: conda clean --packages --tarbals --yes
 
       - name: Put the mock assembly as a dereplicated genome
         run: |
@@ -198,7 +198,7 @@ jobs:
             --conda-cleanup-pkgs cache
 
       - name: Dereplicate - Clean conda
-        run: conda clean --packages --cache --yes
+        run: conda clean --packages --tarbals --yes
 
       - name: Test workflow - Report
         uses: snakemake/snakemake-github-action@v1.24.0
@@ -229,7 +229,7 @@ jobs:
             --conda-cleanup-pkgs cache
 
       - name: Report - Clean conda
-        run: conda clean --packages --cache --yes
+        run: conda clean --packages --tarbals --yes
 
       - uses: actions/upload-artifact@v3
         if: failure()
