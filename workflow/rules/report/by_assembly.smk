@@ -24,7 +24,7 @@ rule report_assembly_one:
             --filename {params.title} \
             --outdir {params.dir} \
             --dirs \
-            --dirs-depth 1 \
+            --dirs-depth 2 \
             {input} \
         2> {log} 1>&2
         """
