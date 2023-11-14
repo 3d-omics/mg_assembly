@@ -6,4 +6,4 @@ channels:
   - defaults
 dependencies:
   - gtdbtk=2.3.2
-  - csvkit
+  - csvkit=1.3.0

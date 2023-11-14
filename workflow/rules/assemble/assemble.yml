@@ -5,12 +5,12 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - megahit=1.2.9
-  - quast=5.2.0
   - bowtie2=2.5.1
-  - samtools=1.18
   - coverm=0.6.1
+  - megahit=1.2.9
+  - pigz=2.8
+  - quast=5.2.0
+  - r-argparse=2.2.2
+  - r-tidyverse=2.0.0
+  - samtools=1.18
   - seqtk=1.4
-  - pigz
-  - r-tidyverse
-  - r-argparse

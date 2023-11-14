@@ -6,5 +6,5 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - drep=3.4.3
   - checkm-genome=1.2.2
+  - drep=3.4.3

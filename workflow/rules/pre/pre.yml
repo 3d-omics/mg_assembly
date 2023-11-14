@@ -5,18 +5,18 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - bird_tool_utils_python=0.4.1
+  - bowtie2=2.5.1
+  - coverm=0.6.1
   - fastp=0.23.4
   - fastqc=0.12.1
   - gzip=1.10
-  - pigz=2.8
-  - bowtie2=2.5.1
-  - samtools=1.18
-  - nonpareil=3.4.1
-  - r-nonpareil=3.4.0
-  - r-argparse=2.2.2
-  - r-tidyverse=2.0.0
-  - bird_tool_utils_python=0.4.1
-  - coverm=0.6.1
   - kraken2=2.1.3
+  - nonpareil=3.4.1
+  - pigz=2.8
+  - r-argparse=2.2.2
+  - r-nonpareil=3.4.0
+  - r-tidyverse=2.0.0
+  - rsync=3.2.7
+  - samtools=1.18
   - singlem=0.15.0
-  - rsync

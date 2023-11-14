@@ -5,5 +5,5 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - samtools=1.18
   - fastqc=0.12.1
+  - samtools=1.18
