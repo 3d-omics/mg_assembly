@@ -3,9 +3,9 @@ rule dereplicate_quast:
     input:
         DREP / "dereplicated_genomes.fa",
     output:
-        directory(DREP_QUAST / "dereplicated_genomes"),
+        directory(DREP_QUAST),
     log:
-        DREP_QUAST / "dereplicated_genomes.log",
+        DREP_QUAST / "quast.log",
     conda:
         "dereplicate.yml"
     threads: 4
