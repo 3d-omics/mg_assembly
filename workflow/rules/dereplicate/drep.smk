@@ -46,41 +46,27 @@ rule dereplicate_drep_run:
             --completeness 50 \
             --S_ani 0.9 \
             --genomes {input.genomes}/*.fa \
-        2> {log}
+        2>> {log} 1>&2
 
-        ( tar \
-            --compress \
+        tar \
+            --create \
             --verbose \
+            --remove-files \
+            --use-compress-program="pigz --processes {threads}" \
             --file \
-            - \
-            {params.out_dir}/data \
-        | pigz \
-            --processes {threads} \
-        > {params.out_dir}/data.tar.gz \
-        ) 2>> {log}
-
-        rm \
-            --recursive \
-            --force \
+            {params.out_dir}/data.tar.gz \
             {params.out_dir}/data \
         2>> {log} 1>&2
 
-        ( tar \
-            --compress \
+        tar \
+            --create \
             --verbose \
+            --remove-files \
+            --use-compress-program="pigz --processes {threads}" \
             --file \
-            - \
+            {params.out_dir}/data_tables.tar.gz \
             {params.out_dir}/data_tables \
-        | pigz \
-            --processes {threads} \
-        > {params.out_dir}/data_tables.tar.gz \
-        ) 2>> {log}
-
-        rm \
-            --recursive \
-            --force \
-            {params.out_dir}/data_tables \
-        2>> {log} 1>&2
+        2>> {log}
         """
 
 
