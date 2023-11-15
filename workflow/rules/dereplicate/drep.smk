@@ -48,25 +48,16 @@ rule dereplicate_drep_run:
             --genomes {input.genomes}/*.fa \
         2>> {log} 1>&2
 
-        tar \
-            --create \
-            --verbose \
-            --remove-files \
-            --use-compress-program="pigz --processes {threads}" \
-            --file \
-            {params.out_dir}/data.tar.gz \
-            {params.out_dir}/data \
-        2>> {log} 1>&2
-
-        tar \
-            --create \
-            --verbose \
-            --remove-files \
-            --use-compress-program="pigz --processes {threads}" \
-            --file \
-            {params.out_dir}/data_tables.tar.gz \
-            {params.out_dir}/data_tables \
-        2>> {log}
+        for folder in data data_tables ; do
+            tar \
+                --create \
+                --verbose \
+                --remove-files \
+                --use-compress-program="pigz --processes {threads}" \
+                --file {params.out_dir}/${{folder}}.tar.gz \
+                {params.out_dir}/${{folder}} \
+            2>> {log} 1>&2
+        done
         """
 
 
