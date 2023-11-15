@@ -150,7 +150,6 @@ rule dereplicate_dram_distill:
             --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
         2>> {log} 1>&2
 
-
         DRAM.py distill \
             --input_file {input.annotations} \
             --rrna_path {input.rrnas} \
