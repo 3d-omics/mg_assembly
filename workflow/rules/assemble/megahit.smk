@@ -41,12 +41,14 @@ rule assemble_megahit_one:
 
         cp {params.out_dir}/final.contigs.fa {output.fasta} 2>> {log} 1>&2
 
-        ( tar cvf - {params.out_dir} \
-        | pigz -9 \
-        > {output.tarball} \
-        ) 2>> {log} 1>&2
-
-        rm -rf {params.out_dir} 2>> {log} 1>&2
+        tar \
+            --create \
+            --file {output.tarball} \
+            --remove-files \
+            --use-compress-program="pigz --processes {threads}" \
+            --verbose \
+            {params.out_dir} \
+        2>> {log} 1>&2
         """
 
 
