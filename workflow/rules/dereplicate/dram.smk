@@ -96,12 +96,14 @@ rule dereplicate_dram_annotate:
             ) 2>> {log}
         done
 
-        ( tar --compress --verbose --file - {params.tmp_dir} \
-        | pigz \
-        > {output.tarball} \
-        ) 2>> {log}
-
-        rm --recursive --force --verbose {params.tmp_dir} 2>> {log} 1>&2
+        tar \
+            --create \
+            --verbose \
+            --remove-files \
+            --use-compress-program="pigz --processes {threads}" \
+            --file {output.tarball} \
+            {params.tmp_dir} \
+        2>> {log} 1>&2
         """
 
 
