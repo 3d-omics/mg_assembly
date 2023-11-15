@@ -25,46 +25,13 @@ rule dereplicate_dram_download_db:
         """
 
 
-rule dereplicate_dram_setup_db:
-    """Set up the DRAM database."""
-    input:
-        features["dram_database"],
-    output:
-        touch(DREP_DRAM / "dram_db_setup.done"),
-    log:
-        DREP_DRAM / "dram_db_setup.log",
-    conda:
-        "dram.yml"
-    shell:
-        """
-        DRAM-setup.py set_database_locations \
-            --amg_database_loc          {input}/amg_database.*.tsv \
-            --dbcan_fam_activities_loc  {input}/CAZyDB.*.fam-activities.txt \
-            --dbcan_loc                 {input}/dbCAN-HMMdb-V*.txt \
-            --dbcan_subfam_ec_loc       {input}/CAZyDB.*.fam.subfam.ec.txt \
-            --description_db_loc        {input}/description_db.sqlite \
-            --etc_module_database_loc   {input}/etc_mdoule_database.*.tsv \
-            --function_heatmap_form_loc {input}/function_heatmap_form.*.tsv \
-            --genome_summary_form_loc   {input}/genome_summary_form.*.tsv \
-            --kofam_hmm_loc             {input}/kofam_profiles.hmm \
-            --kofam_ko_list_loc         {input}/kofam_ko_list.tsv \
-            --module_step_form_loc      {input}/module_step_form.*.tsv \
-            --peptidase_loc             {input}/peptidases.*.mmsdb \
-            --pfam_hmm_loc              {input}/Pfam-A.hmm.dat.gz \
-            --pfam_loc                  {input}/pfam.mmspro \
-            --viral_loc                 {input}/refseq_viral.*.mmsdb \
-            --vog_annotations_loc       {input}/vog_annotations_latest.tsv.gz \
-            --vogdb_loc                 {input}/vog_latest_hmms.txt \
-        2> {log} 1>&2
-        """
-
-
 rule dereplicate_dram_annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes",
         mock_db=DREP_DRAM / "dram_db_setup.done",
         gtdbtk_summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
+        dram_db=features["dram_database"],
     output:
         annotation=DREP_DRAM / "annotations.tsv",
         trnas=DREP_DRAM / "trnas.tsv",
@@ -87,6 +54,26 @@ rule dereplicate_dram_annotate:
         """
         rm --recursive --force --verbose {params.tmp_dir} 2> {log} 1>&2
         mkdir --parents {params.tmp_dir} 2>>{log} 1>&2
+
+        DRAM-setup.py set_database_locations \
+            --amg_database_loc          {input.dram_db}/amg_database.*.tsv \
+            --dbcan_fam_activities_loc  {input.dram_db}/CAZyDB.*.fam-activities.txt \
+            --dbcan_loc                 {input.dram_db}/dbCAN-HMMdb-V*.txt \
+            --dbcan_subfam_ec_loc       {input.dram_db}/CAZyDB.*.fam.subfam.ec.txt \
+            --description_db_loc        {input.dram_db}/description_db.sqlite \
+            --etc_module_database_loc   {input.dram_db}/etc_mdoule_database.*.tsv \
+            --function_heatmap_form_loc {input.dram_db}/function_heatmap_form.*.tsv \
+            --genome_summary_form_loc   {input.dram_db}/genome_summary_form.*.tsv \
+            --kofam_hmm_loc             {input.dram_db}/kofam_profiles.hmm \
+            --kofam_ko_list_loc         {input.dram_db}/kofam_ko_list.tsv \
+            --module_step_form_loc      {input.dram_db}/module_step_form.*.tsv \
+            --peptidase_loc             {input.dram_db}/peptidases.*.mmsdb \
+            --pfam_hmm_loc              {input.dram_db}/Pfam-A.hmm.dat.gz \
+            --pfam_loc                  {input.dram_db}/pfam.mmspro \
+            --viral_loc                 {input.dram_db}/refseq_viral.*.mmsdb \
+            --vog_annotations_loc       {input.dram_db}/vog_annotations_latest.tsv.gz \
+            --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
+        2>> {log} 1>&2
 
         parallel \
             --jobs {threads} \
@@ -125,6 +112,7 @@ rule dereplicate_dram_distill:
         trnas=DREP_DRAM / "trnas.tsv",
         rrnas=DREP_DRAM / "rrnas.tsv",
         mock_db=DREP_DRAM / "dram_db_setup.done",
+        dram_db=features["dram_database"],
     output:
         genome=DREP_DRAM / "genome_stats.tsv",
         metabolism=DREP_DRAM / "metabolism_summary.xlsx",
@@ -142,6 +130,27 @@ rule dereplicate_dram_distill:
         outdir=DREP_DRAM,
     shell:
         """
+        DRAM-setup.py set_database_locations \
+            --amg_database_loc          {input.dram_db}/amg_database.*.tsv \
+            --dbcan_fam_activities_loc  {input.dram_db}/CAZyDB.*.fam-activities.txt \
+            --dbcan_loc                 {input.dram_db}/dbCAN-HMMdb-V*.txt \
+            --dbcan_subfam_ec_loc       {input.dram_db}/CAZyDB.*.fam.subfam.ec.txt \
+            --description_db_loc        {input.dram_db}/description_db.sqlite \
+            --etc_module_database_loc   {input.dram_db}/etc_mdoule_database.*.tsv \
+            --function_heatmap_form_loc {input.dram_db}/function_heatmap_form.*.tsv \
+            --genome_summary_form_loc   {input.dram_db}/genome_summary_form.*.tsv \
+            --kofam_hmm_loc             {input.dram_db}/kofam_profiles.hmm \
+            --kofam_ko_list_loc         {input.dram_db}/kofam_ko_list.tsv \
+            --module_step_form_loc      {input.dram_db}/module_step_form.*.tsv \
+            --peptidase_loc             {input.dram_db}/peptidases.*.mmsdb \
+            --pfam_hmm_loc              {input.dram_db}/Pfam-A.hmm.dat.gz \
+            --pfam_loc                  {input.dram_db}/pfam.mmspro \
+            --viral_loc                 {input.dram_db}/refseq_viral.*.mmsdb \
+            --vog_annotations_loc       {input.dram_db}/vog_annotations_latest.tsv.gz \
+            --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
+        2>> {log} 1>&2
+
+
         DRAM.py distill \
             --input_file {input.annotations} \
             --rrna_path {input.rrnas} \
@@ -161,4 +170,4 @@ rule dereplicate_dram:
 
 
 localrules:
-    dereplicate_dram_setup_db,
+    dereplicate_dram_download_db,
