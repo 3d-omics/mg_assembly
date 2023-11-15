@@ -32,7 +32,7 @@ rule bin_maxbin2_run_one:
         MAXBIN2 / "bins" / "{assembly_id}.log",
     conda:
         "maxbin2.yml"
-    threads: 24
+    threads: 4
     params:
         seed=1,
         out_prefix=compose_out_prefix_for_maxbin2_run_one,
