@@ -29,6 +29,10 @@ jobs:
     needs:
       - Pre-Commit
     steps:
+
+      - name: Maximize build disk space
+        uses: easimon/maximize-build-space@v8
+
       - uses: actions/checkout@v3
         with:
           lfs: 'true'
