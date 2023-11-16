@@ -73,6 +73,17 @@ rule dereplicate_gtdbtk_classify:
         else
             cp {params.bac120} {output.summary} 2>> {log}
         fi
+
+        for folder in align classify identify ; do
+            tar \
+                --create \
+                --verbose \
+                --remove-files \
+                --use-compress-program="pigz --processes {threads}" \
+                --file {params.out_dir}/${{folder}}.tar.gz \
+                {params.out_dir}/${{folder}} \
+            2>> {log} 1>&2
+        done
         """
 
 
