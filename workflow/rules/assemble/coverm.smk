@@ -94,7 +94,7 @@ rule assemble_coverm_aggregate_contig:
         mem_mb=8 * 1024,
     shell:
         """
-        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+        Rscript --vanilla workflow/scripts/aggregate_coverm.R \
             --input-folder {params.input_dir} \
             --output-file {output} \
         2> {log} 1>&2
@@ -158,7 +158,7 @@ rule assemble_coverm_aggregate_genome:
         mem_mb=8 * 1024,
     shell:
         """
-        Rscript --no-init-file workflow/scripts/aggregate_coverm.R \
+        Rscript --vanilla workflow/scripts/aggregate_coverm.R \
             --input-folder {params.input_dir} \
             --output-file {output} \
         2> {log} 1>&2
