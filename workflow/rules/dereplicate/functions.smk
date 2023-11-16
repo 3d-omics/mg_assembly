@@ -16,3 +16,13 @@ def get_tsvs_for_dereplicate_coverm_contig(wildcards):
         for sample_id, library_id in SAMPLE_LIBRARY
     ]
     return tsv_files
+
+
+def compose_input_dir_for_dereplicate_coverm_contig_method(wildcards):
+    """Get the input folder for coverm contig"""
+    return DREP_COVERM / "contig" / wildcards.method
+
+
+def compose_input_dir_for_dereplicate_coverm_genome_method(wildcards):
+    """Get the input folder for coverm genome"""
+    return DREP_COVERM / "genome" / wildcards.method
