@@ -45,6 +45,8 @@ rule pre_kraken2_assign_all:
 
             for sample_id in ${{sample_ids[@]}} ; do \
 
+                echo Processing $sample_id 2>> {log} 1>&2
+
                 kraken2 \
                     --db {params.kraken_db_shm} \
                     --threads {threads} \
