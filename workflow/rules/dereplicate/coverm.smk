@@ -71,6 +71,8 @@ rule dereplicate_coverm_genome_method:
         "dereplicate.yml"
     params:
         input_dir=compose_input_dir_for_dereplicate_coverm_genome_method,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
@@ -125,6 +127,8 @@ rule dereplicate_coverm_contig_method:
         "dereplicate.yml"
     params:
         input_dir=compose_input_dir_for_dereplicate_coverm_contig_method,
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
@@ -141,3 +145,9 @@ rule dereplicate_coverm_contig:
             DREP_COVERM / f"contig.{method}.tsv"
             for method in params["dereplicate"]["coverm"]["contig"]["methods"]
         ],
+
+
+rule dereplicate_coverm:
+    input:
+        rules.dereplicate_coverm_contig.input,
+        rules.dereplicate_coverm_genome.input,
