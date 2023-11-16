@@ -29,7 +29,6 @@ rule dereplicate_dram_annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes",
-        mock_db=DREP_DRAM / "dram_db_setup.done",
         gtdbtk_summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
         dram_db=features["dram_database"],
     output:
@@ -113,7 +112,6 @@ rule dereplicate_dram_distill:
         annotations=DREP_DRAM / "annotations.tsv",
         trnas=DREP_DRAM / "trnas.tsv",
         rrnas=DREP_DRAM / "rrnas.tsv",
-        mock_db=DREP_DRAM / "dram_db_setup.done",
         dram_db=features["dram_database"],
     output:
         genome=DREP_DRAM / "genome_stats.tsv",
