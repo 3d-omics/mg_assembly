@@ -2,10 +2,11 @@ rule pre_kraken2_assign_all:
     """Run kraken2 over all samples at once using the /dev/shm/ trick. NOTE: /dev/shm may be not empty after the job is done.
     """
     input:
-        files=[
-            FASTP / f"{sample}.{library}_{ending}.fq.gz"
-            for sample, library in SAMPLE_LIBRARY
-            for ending in ["1", "2"]
+        forwards=[
+            FASTP / f"{sample}.{library}_1.fq.gz" for sample, library in SAMPLE_LIBRARY
+        ],
+        rerverses=[
+            FASTP / f"{sample}.{library}_2.fq.gz" for sample, library in SAMPLE_LIBRARY
         ],
         database=get_kraken2_database,
     output:
@@ -31,7 +32,7 @@ rule pre_kraken2_assign_all:
         "pre.yml"
     shell:
         """
-        mapfile -t sample_ids < <(echo {input.files} | tr " " "\\n" | grep _1.fq.gz | xargs -I {{}} basename {{}} _1.fq.gz)
+        mapfile -t sample_ids < <(echo {input.forwards} | tr " " "\\n" | xargs -I {{}} basename {{}} _1.fq.gz)
 
         {{
             mkdir --parents {params.kraken_db_shm}
