@@ -18,8 +18,7 @@ rule dereplicate_run:
 rule dereplicate_eval:
     """Evaluate the dereplication steps"""
     input:
-        rules.dereplicate_coverm_genome.output,
-        rules.dereplicate_coverm_contig.output,
+        rules.dereplicate_coverm.input,
         rules.dereplicate_samtools.input,
         rules.dereplicate_quast.output,
         rules.dereplicate_checkm2.output,
