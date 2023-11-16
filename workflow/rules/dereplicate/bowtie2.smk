@@ -7,7 +7,7 @@ rule dereplicate_bowtie2_build_one:
     log:
         DREP_INDEX / "dereplicated_genomes.log",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     threads: 24
     params:
         extra=params["dereplicate"]["bowtie2-build"]["extra"],
@@ -38,7 +38,7 @@ rule dereplicate_bowtie2_one:
     log:
         DREP_BOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     threads: 24
     params:
         extra=params["dereplicate"]["bowtie2"]["extra"],

@@ -17,7 +17,7 @@ rule pre_nonpareil_one:
     log:
         NONPAREIL / "{sample_id}.{library_id}.log",
     conda:
-        "pre.yml"
+        "_env.yml"
     params:
         prefix=compose_prefix_for_nonpareil,
     resources:
@@ -48,7 +48,7 @@ rule pre_nonpareil:
     log:
         NONPAREIL / "nonpareil.log",
     conda:
-        "pre.yml"
+        "_env.yml"
     params:
         input_dir=NONPAREIL,
     shell:

@@ -7,7 +7,7 @@ rule report_step_reads:
     log:
         REPORT_STEP / "reads.log",
     conda:
-        "report.yml"
+        "_env.yml"
     params:
         dir=REPORT_STEP,
     resources:
@@ -37,7 +37,7 @@ rule report_step_pre:
     log:
         REPORT_STEP / "preprocessing.log",
     conda:
-        "report.yml"
+        "_env.yml"
     params:
         dir=REPORT_STEP,
     resources:
@@ -66,7 +66,7 @@ rule report_step_assemble:
     log:
         REPORT_STEP / "assemble.log",
     conda:
-        "report.yml"
+        "_env.yml"
     params:
         dir=REPORT_STEP,
     resources:
@@ -94,7 +94,7 @@ rule report_step_bin:
     log:
         REPORT_STEP / "bin.log",
     conda:
-        "report.yml"
+        "_env.yml"
     params:
         dir=REPORT_STEP,
     resources:
@@ -123,7 +123,7 @@ rule report_step_dereplicate:
     log:
         REPORT_STEP / "dereplicate.log",
     conda:
-        "report.yml"
+        "_env.yml"
     params:
         dir=REPORT_STEP,
     resources:

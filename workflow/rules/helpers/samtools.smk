@@ -5,7 +5,7 @@ rule samtools_index_crai:
     output:
         "{prefix}.cram.crai",
     conda:
-        "helpers.yml"
+        "_env.yml"
     log:
         "{prefix}.cram.crai.log",
     shell:
@@ -19,7 +19,7 @@ rule samtools_index_bai:
     output:
         "{prefix}.bam.bai",
     conda:
-        "helpers.yml"
+        "_env.yml"
     log:
         "{prefix}.bam.bai.log",
     shell:
@@ -33,7 +33,7 @@ rule samtools_faidx_fa:
     output:
         "{prefix}.fa.fai",
     conda:
-        "helpers.yml"
+        "_env.yml"
     log:
         "{prefix}.fa.fai.log",
     shell:
@@ -48,7 +48,7 @@ rule samtools_faidx_fa_gz:
         fai="{prefix}.fa.gz.fai",
         gzi="{prefix}.fa.gz.gzi",
     conda:
-        "helpers.yml"
+        "_env.yml"
     log:
         "{prefix}.fa.gz.log",
     shell:
@@ -65,7 +65,7 @@ rule samtools_idxstats_cram:
     log:
         "{prefix}.idxstats.log",
     conda:
-        "helpers.yml"
+        "_env.yml"
     shell:
         "samtools idxstats {input.cram} > {output.tsv} 2> {log}"
 
@@ -80,6 +80,6 @@ rule samtools_flagstats_cram:
     log:
         "{prefix}.flagstats.log",
     conda:
-        "helpers.yml"
+        "_env.yml"
     shell:
         "samtools flagstats {input.cram} > {output.txt} 2> {log}"

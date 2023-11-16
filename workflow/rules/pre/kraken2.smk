@@ -29,7 +29,7 @@ rule pre_kraken2_assign_all:
         out_folder=compose_out_folder_for_eval_kraken2_assign_all,
         kraken_db_shm="/dev/shm/{kraken_db}",
     conda:
-        "pre.yml"
+        "_env.yml"
     shell:
         """
         mapfile -t sample_ids < <(echo {input.forwards} | tr " " "\\n" | xargs -I {{}} basename {{}} _1.fq.gz)

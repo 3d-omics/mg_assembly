@@ -7,7 +7,7 @@ rule bin_quast_one:
     log:
         BIN_QUAST / "{assembly_id}.log",
     conda:
-        "bin.yml"
+        "_env.yml"
     threads: 4
     params:
         extra=params["assemble"]["quast"]["extra"],

@@ -15,7 +15,7 @@ rule dereplicate_cram_to_bam_one:
     log:
         DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam.log",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     resources:
         runtime=1 * 60,
         mem_mb=4 * 1024,
@@ -39,7 +39,7 @@ rule dereplicate_coverm_genome_one:
     output:
         tsv=DREP_COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     log:
         DREP_COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -68,7 +68,7 @@ rule dereplicate_coverm_genome_method:
     log:
         DREP_COVERM / "genome.{method}.log",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     params:
         input_dir=compose_input_dir_for_dereplicate_coverm_genome_method,
     resources:
@@ -100,7 +100,7 @@ rule dereplicate_coverm_contig_method_one:
     output:
         tsv=DREP_COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     log:
         DREP_COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -124,7 +124,7 @@ rule dereplicate_coverm_contig_method:
     log:
         DREP_COVERM / "contig.{method}.log",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     params:
         input_dir=compose_input_dir_for_dereplicate_coverm_contig_method,
     resources:

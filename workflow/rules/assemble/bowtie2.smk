@@ -7,7 +7,7 @@ rule assemble_bowtie2_build_one:
     log:
         ASSEMBLE_INDEX / "{assembly_id}.log",
     conda:
-        "assemble.yml"
+        "_env.yml"
     threads: 24
     params:
         extra=params["assemble"]["bowtie2-build"]["extra"],
@@ -44,7 +44,7 @@ rule assemble_bowtie2_one:
     log:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "assemble.yml"
+        "_env.yml"
     threads: 24
     params:
         extra=params["assemble"]["bowtie2"]["extra"],

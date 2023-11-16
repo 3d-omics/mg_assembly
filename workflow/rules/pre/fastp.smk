@@ -13,7 +13,7 @@ rule pre_fastp_trim_one:
     log:
         FASTP / "{sample_id}.{library_id}.log",
     conda:
-        "pre.yml"
+        "_env.yml"
     params:
         adapter_forward=get_forward_adapter,
         adapter_reverse=get_reverse_adapter,

@@ -7,7 +7,7 @@ rule dereplicate_quast:
     log:
         DREP_QUAST / "quast.log",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     threads: 4
     params:
         extra=params["dereplicate"]["quast"]["extra"],

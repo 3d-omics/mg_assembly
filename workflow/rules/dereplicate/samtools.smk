@@ -10,7 +10,7 @@ rule dereplicate_samtools_stats_cram_dereplicate:
     log:
         DREP_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
     conda:
-        "dereplicate.yml"
+        "_env.yml"
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 

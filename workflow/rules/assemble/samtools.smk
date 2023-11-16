@@ -10,7 +10,7 @@ rule assemble_samtools_stats_cram_assembly:
     log:
         ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.stats.log",
     conda:
-        "assemble.yml"
+        "_env.yml"
     resources:
         runtime=6 * 60,
         mem_mb=8 * 1024,

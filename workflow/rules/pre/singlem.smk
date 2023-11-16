@@ -15,7 +15,7 @@ rule pre_singlem_pipe_one:
     log:
         SINGLEM / "{sample_id}.{library_id}.log",
     conda:
-        "pre.yml"
+        "_env.yml"
     threads: 24
     resources:
         runtime=4 * 60,
@@ -47,7 +47,7 @@ rule pre_singlem:
     log:
         SINGLEM / "singlem.log",
     conda:
-        "pre.yml"
+        "_env.yml"
     params:
         input_dir=SINGLEM,
     shell:

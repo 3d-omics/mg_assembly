@@ -15,7 +15,7 @@ rule assemble_cram_to_bam_one:
     log:
         ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam.log",
     conda:
-        "assemble.yml"
+        "_env.yml"
     threads: 24
     resources:
         runtime=1 * 60,
@@ -56,7 +56,7 @@ rule assemble_coverm_contig_one:
         / "{method}"
         / "{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "assemble.yml"
+        "_env.yml"
     log:
         ASSEMBLE_COVERM
         / "contig"
@@ -87,7 +87,7 @@ rule assemble_coverm_aggregate_contig:
     log:
         ASSEMBLE_COVERM / "contig.{method}.log",
     conda:
-        "assemble.yml"
+        "_env.yml"
     params:
         input_dir=compose_input_dir_for_assemble_coverm_aggregate_contig,
     resources:
@@ -122,7 +122,7 @@ rule assemble_coverm_genome_one:
         tsv=ASSEMBLE_COVERM
         / "genome/{method}/{assembly_id}.{sample_id}.{library_id}.tsv",
     conda:
-        "assemble.yml"
+        "_env.yml"
     log:
         ASSEMBLE_COVERM / "genome/{method}/{assembly_id}.{sample_id}.{library_id}.log",
     params:
@@ -151,7 +151,7 @@ rule assemble_coverm_aggregate_genome:
     log:
         ASSEMBLE_COVERM / "genome.{method}.log",
     conda:
-        "assemble.yml"
+        "_env.yml"
     params:
         input_dir=compose_input_dir_for_assemble_coverm_aggregate_genome,
     resources:

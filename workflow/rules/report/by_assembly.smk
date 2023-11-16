@@ -10,7 +10,7 @@ rule report_assembly_one:
     log:
         REPORT_ASSEMBLY / "{assembly_id}.log",
     conda:
-        "report.yml"
+        "_env.yml"
     params:
         dir=REPORT_ASSEMBLY,
         title="{assembly_id}",
