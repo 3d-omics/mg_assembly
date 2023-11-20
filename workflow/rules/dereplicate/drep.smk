@@ -51,11 +51,11 @@ rule dereplicate_drep_run:
         for folder in data data_tables ; do
             tar \
                 --create \
-                --verbose \
+                --directory {params.out_dir}/${{folder}} \
+                --file {params.out_dir}/${{folder}}.tar.gz \
                 --remove-files \
                 --use-compress-program="pigz --processes {threads}" \
-                --file {params.out_dir}/${{folder}}.tar.gz \
-                {params.out_dir}/${{folder}} \
+                --verbose \
             2>> {log} 1>&2
         done
         """
