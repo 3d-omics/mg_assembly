@@ -101,7 +101,7 @@ rule dereplicate_dram_annotate:
             --remove-files \
             --use-compress-program="pigz --processes {threads}" \
             --file {output.tarball} \
-            {params.tmp_dir} \
+            --directory {params.tmp_dir} \
         2>> {log} 1>&2
         """
 
