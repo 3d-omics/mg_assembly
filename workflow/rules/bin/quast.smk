@@ -1,4 +1,4 @@
-rule bin_quast_one:
+rule _bin__quast__run:
     """Run quast over one assembly group"""
     input:
         MAGSCOT / "{assembly_id}.fa",
@@ -25,7 +25,7 @@ rule bin_quast_one:
         """
 
 
-rule bin_quast:
+rule bin__quast:
     """Run quast over all assembly groups"""
     input:
         [BIN_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],

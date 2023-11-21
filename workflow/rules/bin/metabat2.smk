@@ -1,4 +1,4 @@
-rule bin_metabat2_prepare_one:
+rule _bin__metabat2__prepare:
     """Compute coverages for metabat2"""
     input:
         bams=get_bams_from_assembly_id,
@@ -19,7 +19,7 @@ rule bin_metabat2_prepare_one:
         """
 
 
-rule bin_metabat2_run_one:
+rule _bin__metabat2__run:
     """Run metabat2 over a single assembly"""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
@@ -48,7 +48,7 @@ rule bin_metabat2_run_one:
         """
 
 
-rule bin_metabat2:
+rule bin__metabat2:
     """Run metabat2 over all assemblies"""
     input:
         [METABAT2 / "bins" / assembly_id for assembly_id in ASSEMBLIES],

@@ -1,4 +1,4 @@
-rule bin_magscot_prodigal_one:
+rule _bin__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
@@ -35,7 +35,7 @@ rule bin_magscot_prodigal_one:
         """
 
 
-rule bin_magscot_hmmsearch_pfam_one:
+rule _bin__magscot__hmmsearch_pfam:
     """Run hmmsearch over the predicted proteins of an assembly using Pfam as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
@@ -66,7 +66,7 @@ rule bin_magscot_hmmsearch_pfam_one:
         """
 
 
-rule bin_magscot_hmmsearch_tigr_one:
+rule _bin__magscot__hmmsearch_tigr:
     """Run hmmsearch over the predicted proteins of an assembly using TIGR as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
@@ -96,7 +96,7 @@ rule bin_magscot_hmmsearch_tigr_one:
         """
 
 
-rule bin_magscot_join_hmm_one:
+rule _bin__magscot__join_hmms:
     """Join the results of hmmsearch over TIGR and Pfam
 
     Note: "|| true" is used to avoid grep returning an error code when no lines are found
@@ -117,7 +117,7 @@ rule bin_magscot_join_hmm_one:
         """
 
 
-rule bin_magscot_merge_contig_to_bin_one:
+rule _bin__magscot__merge_contig_to_bin:
     """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2
 
     The output file should have the following format:
@@ -155,7 +155,7 @@ rule bin_magscot_merge_contig_to_bin_one:
         """
 
 
-rule bin_magscot_run_one:
+rule _bin__magscot__run:
     """Run MAGSCOT over one assembly"""
     input:
         contigs_to_bin=MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
@@ -187,7 +187,7 @@ rule bin_magscot_run_one:
         """
 
 
-rule bin_magscot_reformat_one:
+rule _bin__magscot__reformat:
     """Reformat the results from MAGSCOT"""
     input:
         refined_contig_to_bin=MAGSCOT
@@ -210,7 +210,7 @@ rule bin_magscot_reformat_one:
         """
 
 
-rule bin_magscot_rename_one:
+rule _bin__magscot__rename:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
@@ -232,7 +232,7 @@ rule bin_magscot_rename_one:
         """
 
 
-rule bin_magscot_split_into_bins:
+rule _bin__magscot__split_into_bins:
     """Split the magscot fasta into bins"""
     input:
         fasta=MAGSCOT / "{assembly_id}.fa",
@@ -254,7 +254,7 @@ rule bin_magscot_split_into_bins:
         """
 
 
-rule bin_magscot:
+rule bin__magscot:
     """Run MAGSCOT over all assemblies"""
     input:
         [MAGSCOT / assembly_id / "bins" for assembly_id in ASSEMBLIES],

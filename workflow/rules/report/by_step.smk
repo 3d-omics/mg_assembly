@@ -88,7 +88,7 @@ rule report_step_assemble:
 rule report_step_bin:
     """Collect all reports for the bin step"""
     input:
-        rules.bin_quast.input,
+        rules.bin__quast.input,
     output:
         html=REPORT_STEP / "bin.html",
     log:
