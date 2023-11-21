@@ -80,8 +80,7 @@ The latest stages of the pipeline are CPU and RAM intensive, so not all steps ar
   - SingleM: `pre_eval_with_singlem`
 - Dereplication:
   - dRep + CoverM: `dereplicate_eval`
-  - dRep + DRAM: `dereplicate_eval_with_dram`
-  - dRep + GTDBTK: `dereplicate_eval_with_gtdbtk`
+  - dRep + DRAM + GTDB-Tk: `dereplicate_eval_with_dram`
 
 Example:
 
@@ -93,3 +92,22 @@ snakemake --jobs 40 --use-conda all pre_eval_with_non_pareil
 
 
 ## References
+
+- [`fastp`](https://github.com/OpenGene/fastp)
+- [`kraken2`](https://github.com/DerrickWood/kraken2)
+- [`SingleM`](https://github.com/wwood/singlem)
+- [`Nonpareil`](https://github.com/lmrodriguezr/nonpareil)
+- [`bowtie2`](https://github.com/BenLangmead/bowtie2)
+- [`samtools`](https://github.com/samtools/samtools)
+- [`MEGAHIT`](https://github.com/voutcn/megahit)
+- [`CONCOCT`](https://github.com/BinPro/CONCOCT)
+- [`MaxBin2`](http://downloads.jbei.org/data/microbial_communities/MaxBin/MaxBin.html)
+- [`MetaBat2`](https://bitbucket.org/berkeleylab/metabat)
+- [`MAGScoT`](https://github.com/ikmb/MAGScoT)
+- [`dRep`](https://github.com/MrOlm/drep)
+- [`QUAST`](https://github.com/ablab/quast)
+- [`GTDB-Tk`](https://github.com/Ecogenomics/GTDBTk)
+- [`DRAM`](https://github.com/WrightonLabCSU/DRAM)
+- [`CoverM`](https://github.com/wwood/CoverM)
+- [`FastQC`](https://github.com/s-andrews/FastQC)
+- [`multiqc`](https://github.com/ewels/MultiQC)
