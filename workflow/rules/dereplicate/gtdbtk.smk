@@ -36,6 +36,9 @@ rule dereplicate_gtdbtk_classify:
         database=features["gtdbtk_database"],
     output:
         summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
+        align=DREP_GTDBTK / "align.tar.gz",
+        classify=DREP_GTDBTK / "classify.tar.gz",
+        identify=DREP_GTDBTK / "identify.tar.gz",
     log:
         DREP_GTDBTK / "gtdbtk_classify.log",
     conda:
