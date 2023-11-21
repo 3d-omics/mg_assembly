@@ -48,7 +48,7 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            pre assemble bin dereplicate report
+            preprocess assemble bin dereplicate report
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
