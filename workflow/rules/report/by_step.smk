@@ -59,8 +59,8 @@ rule report_step_pre:
 rule report_step_assemble:
     """Collect all reports for the assemble step"""
     input:
-        rules.assemble_quast.input,
-        rules.assemble_samtools.input,
+        rules.assemble__quast.input,
+        rules.assemble__samtools.input,
     output:
         html=REPORT_STEP / "assemble.html",
     log:

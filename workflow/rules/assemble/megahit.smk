@@ -1,4 +1,4 @@
-rule assemble_megahit_one:
+rule _assemble__megahit:
     """Run megahit over one sample, merging all libraries in the process
 
     Note: the initial rm -rf is to delete the folder that snakemake creates.
@@ -52,13 +52,7 @@ rule assemble_megahit_one:
         """
 
 
-rule assemble_megahit_all:
-    """Run megahit over all groups"""
-    input:
-        [MEGAHIT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
-
-
-rule assemble_megahit_renaming_one:
+rule _assemble__megahit__rename:
     """Rename contigs to avoid future collisions
 
     Contigs are renamed to `megahit_{assembly_id}.{contig_number}`.
@@ -85,7 +79,7 @@ rule assemble_megahit_renaming_one:
         """
 
 
-rule assemble_megahit:
+rule assemble__megahit:
     """Rename all assemblies contigs to avoid future collisions"""
     input:
         [ASSEMBLE_RENAME / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],

@@ -1,4 +1,4 @@
-rule assemble_cram_to_bam_one:
+rule _assemble__coverm__cram_to_bam:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
@@ -33,7 +33,7 @@ rule assemble_cram_to_bam_one:
         """
 
 
-rule assemble_cram_to_bam_all:
+rule assemble__coverm__cram_to_bam:
     """Convert cram to bam for all cram files"""
     input:
         [
@@ -43,7 +43,7 @@ rule assemble_cram_to_bam_all:
 
 
 # Coverm contig ----
-rule assemble_coverm_contig_one:
+rule _assemble__coverm__contig:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
@@ -78,7 +78,7 @@ rule assemble_coverm_contig_one:
         """
 
 
-rule assemble_coverm_aggregate_contig:
+rule _assemble__coverm__aggregate_contig:
     """Aggregate coverm contig results"""
     input:
         get_tsvs_for_assembly_coverm_contig,
@@ -101,7 +101,7 @@ rule assemble_coverm_aggregate_contig:
         """
 
 
-rule assemble_coverm_contig:
+rule assemble__coverm__contig:
     """Run coverm contig over all assemblies"""
     input:
         [
@@ -111,7 +111,7 @@ rule assemble_coverm_contig:
 
 
 # Coverm genome ----
-rule assemble_coverm_genome_one:
+rule _assemble__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
@@ -142,7 +142,7 @@ rule assemble_coverm_genome_one:
         """
 
 
-rule assemble_coverm_aggregate_genome:
+rule _assemble__coverm__aggregate_genome:
     """Join all the results from coverm, for all assemblies and samples at once, but a single method"""
     input:
         get_tsvs_for_assembly_coverm_genome,
@@ -165,7 +165,7 @@ rule assemble_coverm_aggregate_genome:
         """
 
 
-rule assemble_coverm_genome:
+rule assemble__coverm__genome:
     """Run coverm genome over all assemblies and methods"""
     input:
         [
@@ -174,8 +174,8 @@ rule assemble_coverm_genome:
         ],
 
 
-rule assemble_coverm:
+rule assemble__coverm:
     """Run both coverm genome and contig over all assemblies and methods"""
     input:
-        rules.assemble_coverm_genome.input,
-        rules.assemble_coverm_contig.input,
+        rules.assemble__coverm__genome.input,
+        rules.assemble__coverm__contig.input,

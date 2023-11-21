@@ -6,22 +6,22 @@ include: "coverm.smk"
 include: "quast.smk"
 
 
-rule assemble_run:
+rule assemble__run:
     """Run all assembly rules (no evaluation)"""
     input:
-        rules.assemble_bowtie2.input,
+        rules.assemble__bowtie2.input,
 
 
-rule assemble_eval:
+rule assemble__eval:
     """Run the assemble evaluation rules"""
     input:
-        rules.assemble_quast.input,
-        rules.assemble_coverm.input,
-        rules.assemble_samtools.input,
+        rules.assemble__quast.input,
+        rules.assemble__coverm.input,
+        rules.assemble__samtools.input,
 
 
 rule assemble:
     """Run the assemble module"""
     input:
-        rules.assemble_eval.input,
-        rules.assemble_run.input,
+        rules.assemble__eval.input,
+        rules.assemble__run.input,

@@ -1,4 +1,4 @@
-rule assemble_bowtie2_build_one:
+rule _assemble__bowtie2__build:
     """Index a megahit assembly"""
     input:
         contigs=ASSEMBLE_RENAME / "{assembly_id}.fa",
@@ -26,13 +26,13 @@ rule assemble_bowtie2_build_one:
         """
 
 
-rule assemble_bowtie2_build_all:
+rule assemble__bowtie2__build:
     """Index all megahit assemblies"""
     input:
         [ASSEMBLE_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],
 
 
-rule assemble_bowtie2_one:
+rule _assemble__bowtie2:
     """Map one sample to one megahit assembly"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
@@ -82,7 +82,7 @@ rule assemble_bowtie2_one:
         """
 
 
-rule assemble_bowtie2:
+rule assemble__bowtie2:
     """Map all samples to all the assemblies that they belong to"""
     input:
         [

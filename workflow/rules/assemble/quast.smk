@@ -1,4 +1,4 @@
-rule assemble_quast_one:
+rule _assemble__quast:
     """Run quast over one assembly group"""
     input:
         ASSEMBLE_RENAME / "{assembly_id}.fa",
@@ -25,7 +25,7 @@ rule assemble_quast_one:
         """
 
 
-rule assemble_quast:
+rule assemble__quast:
     """Run quast over all assembly groups"""
     input:
         [ASSEMBLE_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],

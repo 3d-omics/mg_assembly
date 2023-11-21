@@ -1,4 +1,4 @@
-rule assemble_samtools_stats_cram_assembly:
+rule _assemble__samtools__stats:
     """Run samtools stats over one library, using as reference an assembly"""
     input:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
@@ -18,7 +18,7 @@ rule assemble_samtools_stats_cram_assembly:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
 
-rule assemble_samtools:
+rule assemble__samtools:
     """Get all the samtools stats for all assemblies and samples"""
     input:
         [
