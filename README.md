@@ -2,10 +2,8 @@
 
 A Snakemake workflow for Genome Resolved Metagenomics
 
-## Set up required softwares
-
 ## Usage
-1. Make sure you have `conda`, `mamba` and `snakemake`` installed.
+1. Make sure you have `conda`, `mamba` and `snakemake` installed.
     ```bash
     conda --version
     snakemake --version
