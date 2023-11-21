@@ -1,4 +1,4 @@
-rule dereplicate_dram_download_db:
+rule _dereplicate__dram__download_db:
     """Download dram database if it does not exist
 
     Will skip UniRef and Kegg.
@@ -25,7 +25,7 @@ rule dereplicate_dram_download_db:
         """
 
 
-rule dereplicate_dram_annotate:
+rule _dereplicate__dram__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes",
@@ -106,7 +106,7 @@ rule dereplicate_dram_annotate:
         """
 
 
-rule dereplicate_dram_distill:
+rule _dereplicate__dram__distill:
     """Distill DRAM annotations."""
     input:
         annotations=DREP_DRAM / "annotations.tsv",
@@ -162,11 +162,11 @@ rule dereplicate_dram_distill:
         """
 
 
-rule dereplicate_dram:
+rule dereplicate__dram:
     """Run DRAM on dereplicated genomes."""
     input:
-        rules.dereplicate_dram_distill.output,
+        rules._dereplicate__dram__distill.output,
 
 
 localrules:
-    dereplicate_dram_download_db,
+    _dereplicate__dram__download_db,

@@ -1,4 +1,4 @@
-rule dereplicate_drep_separate_bins:
+rule _dereplicate__drep__separate_bins:
     input:
         assemblies=[MAGSCOT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
     output:
@@ -21,7 +21,7 @@ rule dereplicate_drep_separate_bins:
         """
 
 
-rule dereplicate_drep_run:
+rule _dereplicate__drep__run:
     """Dereplicate all the bins using dRep."""
     input:
         genomes=DREP / "separated_bins",
@@ -63,7 +63,7 @@ rule dereplicate_drep_run:
         """
 
 
-rule dereplicate_drep_join_genomes:
+rule _dereplicate__drep__join_genomes:
     """Join all the dereplicated genomes into a single file."""
     input:
         DREP / "dereplicated_genomes",
@@ -80,6 +80,6 @@ rule dereplicate_drep_join_genomes:
         """
 
 
-rule dereplicate_drep:
+rule dereplicate__drep:
     input:
         DREP / "dereplicated_genomes.fa",

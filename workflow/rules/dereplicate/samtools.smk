@@ -1,4 +1,4 @@
-rule dereplicate_samtools_stats_cram_dereplicate:
+rule _dereplicate__samtools__stats_cram:
     """Get stats from CRAM files using samtools stats."""
     input:
         cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -15,7 +15,7 @@ rule dereplicate_samtools_stats_cram_dereplicate:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
 
-rule dereplicate_samtools:
+rule dereplicate__samtools:
     """Get stats from CRAM files using samtools stats."""
     input:
         [

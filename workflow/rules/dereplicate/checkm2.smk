@@ -1,4 +1,4 @@
-rule dereplicate_checkm2_download:
+rule _dereplicate__checkm2__download:
     output:
         directory(features["checkm2_database"]),
     log:
@@ -19,7 +19,7 @@ rule dereplicate_checkm2_download:
         """
 
 
-rule dereplicate_checkm2_predict:
+rule _dereplicate__checkm2__predict:
     """Run CheckM2 over the dereplicated mags"""
     input:
         mags=DREP / "dereplicated_genomes",
@@ -53,7 +53,7 @@ rule dereplicate_checkm2_predict:
         """
 
 
-rule dereplicate_checkm2:
+rule dereplicate__checkm2:
     """Run CheckM2"""
     input:
-        rules.dereplicate_checkm2_predict.output,
+        rules._dereplicate__checkm2__predict.output,

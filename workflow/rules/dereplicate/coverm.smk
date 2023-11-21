@@ -1,4 +1,4 @@
-rule dereplicate_cram_to_bam_one:
+rule _dereplicate__coverm__cram_to_bam:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
@@ -31,7 +31,7 @@ rule dereplicate_cram_to_bam_one:
         """
 
 
-rule dereplicate_coverm_genome_one:
+rule _dereplicate__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam",
@@ -59,7 +59,7 @@ rule dereplicate_coverm_genome_one:
         """
 
 
-rule dereplicate_coverm_genome_method:
+rule _dereplicate__coverm__genome_aggregate:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_genome,
@@ -82,7 +82,7 @@ rule dereplicate_coverm_genome_method:
         """
 
 
-rule dereplicate_coverm_genome:
+rule dereplicate__coverm__genome:
     """Run coverm genome and all methods"""
     input:
         [
@@ -92,7 +92,7 @@ rule dereplicate_coverm_genome:
 
 
 # coverm contig ----
-rule dereplicate_coverm_contig_method_one:
+rule _dereplicate__coverm__contig:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         bam=DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam",
@@ -115,7 +115,7 @@ rule dereplicate_coverm_contig_method_one:
         """
 
 
-rule dereplicate_coverm_contig_method:
+rule _dereplicate__coverm__contig_aggregate:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_contig,
@@ -138,7 +138,7 @@ rule dereplicate_coverm_contig_method:
         """
 
 
-rule dereplicate_coverm_contig:
+rule dereplicate__coverm__contig:
     """Run coverm contig and all methods"""
     input:
         [
@@ -147,7 +147,7 @@ rule dereplicate_coverm_contig:
         ],
 
 
-rule dereplicate_coverm:
+rule dereplicate__coverm:
     input:
-        rules.dereplicate_coverm_contig.input,
-        rules.dereplicate_coverm_genome.input,
+        rules.dereplicate__coverm__contig.input,
+        rules.dereplicate__coverm__genome.input,

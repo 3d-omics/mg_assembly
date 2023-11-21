@@ -1,4 +1,4 @@
-rule dereplicate_gtdbtk_download:
+rule _dereplicate__gtdbtk__download:
     output:
         directory(features["gtdbtk_database"]),
     log:
@@ -29,7 +29,7 @@ rule dereplicate_gtdbtk_download:
         """
 
 
-rule dereplicate_gtdbtk_classify:
+rule _dereplicate__gtdbtk__classify:
     """Run GTDB-Tk over the dereplicated genomes."""
     input:
         bin_folder=DREP / "dereplicated_genomes",
@@ -90,7 +90,7 @@ rule dereplicate_gtdbtk_classify:
         """
 
 
-rule dereplicate_gtdbtk:
+rule dereplicate__gtdbtk:
     """Run the gtdbtk subworkflow"""
     input:
-        rules.dereplicate_gtdbtk_classify.output,
+        rules._dereplicate__gtdbtk__classify.output,

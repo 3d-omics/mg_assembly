@@ -1,4 +1,4 @@
-rule dereplicate_quast:
+rule dereplicate__quast:
     """Run quast over one the dereplicated mags"""
     input:
         DREP / "dereplicated_genomes.fa",

@@ -56,7 +56,7 @@ rule report_step_pre:
         """
 
 
-rule report_step_assemble:
+rule report__step__assemble:
     """Collect all reports for the assemble step"""
     input:
         rules.assemble__quast.input,
@@ -85,7 +85,7 @@ rule report_step_assemble:
         """
 
 
-rule report_step_bin:
+rule report__step__bin:
     """Collect all reports for the bin step"""
     input:
         rules.bin__quast.input,
@@ -113,11 +113,11 @@ rule report_step_bin:
         """
 
 
-rule report_step_dereplicate:
+rule report__step__dereplicate:
     """Collect all reports for the dereplicate step"""
     input:
-        rules.dereplicate_quast.input,
-        rules.dereplicate_samtools.input,
+        rules.dereplicate__quast.input,
+        rules.dereplicate__samtools.input,
     output:
         html=REPORT_STEP / "dereplicate.html",
     log:
