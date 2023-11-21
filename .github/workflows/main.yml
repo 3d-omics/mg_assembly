@@ -34,13 +34,13 @@ jobs:
         with:
           lfs: 'true'
 
-      - name: Set up caches
-        uses: actions/cache@v3
-        with:
-          path: |
-            .snakemake/conda
-            ~/.cache/pre-commit/
-          key: snakemake-conda
+      # - name: Set up caches
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       .snakemake/conda
+      #       ~/.cache/pre-commit/
+      #     key: snakemake-conda
 
       - name: Download All Environments
         uses: snakemake/snakemake-github-action@v1.24.0
