@@ -1,4 +1,4 @@
-rule report_assembly_one:
+rule _report__assembly:
     """Create a report for a single assembly
 
     To do so, collect all the files and all the libraries related to that assembly
@@ -30,7 +30,7 @@ rule report_assembly_one:
         """
 
 
-rule report_assembly:
+rule report__assembly:
     """Report all the assemblies"""
     input:
         [REPORT_ASSEMBLY / f"{assembly_id}.html" for assembly_id in ASSEMBLIES],

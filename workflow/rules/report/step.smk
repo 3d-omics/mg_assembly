@@ -141,7 +141,7 @@ rule report__step__dereplicate:
         """
 
 
-rule report_step:
+rule report__step:
     """Report for all steps"""
     input:
         REPORT_STEP / "reads.html",
@@ -153,7 +153,7 @@ rule report_step:
 rule report__step__with_dereplicate:
     """Report all steps + dereplicate"""
     input:
-        rules.report_step.input,
+        rules.report__step.input,
         REPORT_STEP / "dereplicate.html",
 
 
@@ -162,6 +162,6 @@ localrules:
     report__step__preprocess,
     report__step__assemble,
     report__step__bin,
-    report_step,
+    report__step,
     report__step__dereplicate,
     report__step__with_dereplicate,
