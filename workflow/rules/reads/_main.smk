@@ -1,7 +1,7 @@
 include: "_functions.smk"
 
 
-rule reads_link_one:
+rule _reads__link:
     """Make a link to the original file, with a prettier name than default"""
     input:
         forward_=get_forward,
@@ -20,7 +20,7 @@ rule reads_link_one:
         """
 
 
-rule reads_link_all:
+rule reads__link:
     """Link all reads in the samples.tsv"""
     input:
         [
@@ -30,7 +30,7 @@ rule reads_link_all:
         ],
 
 
-rule reads_fastqc:
+rule reads__fastqc:
     """Get all fastqc reports of the raw reads"""
     input:
         [
@@ -40,24 +40,24 @@ rule reads_fastqc:
         ],
 
 
-rule reads_eval:
+rule reads__eval:
     """Perform the evaluation steps of the reads"""
     input:
-        rules.reads_fastqc.input,
+        rules.reads__fastqc.input,
 
 
-rule reads_run:
+rule reads__run:
     """Only perform the "run" in reads without the evaluation steps"""
     input:
-        rules.reads_link_all.input,
+        rules.reads__link.input,
 
 
 rule reads:
     """Link all reads and run fastqc on them"""
     input:
-        rules.reads_run.input,
-        rules.reads_eval.input,
+        rules.reads__run.input,
+        rules.reads__eval.input,
 
 
 localrules:
-    reads_link_one,
+    _reads__link,
