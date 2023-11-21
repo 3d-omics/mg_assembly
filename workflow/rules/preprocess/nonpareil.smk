@@ -1,4 +1,4 @@
-rule pre_nonpareil_one:
+rule _preprocess__nonpareil__run:
     """Run nonpareil over one sample
 
     Note: Nonpareil only ask for one of the pair-end reads
@@ -36,7 +36,7 @@ rule pre_nonpareil_one:
         """
 
 
-rule pre_nonpareil:
+rule _preprocess__nonpareil__aggregate:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [
@@ -58,3 +58,8 @@ rule pre_nonpareil:
             --output-file {output} \
         2> {log} 1>&2
         """
+
+
+rule preprocess__nonpareil:
+    input:
+        rules._preprocess__nonpareil__aggregate.output,

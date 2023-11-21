@@ -1,4 +1,4 @@
-rule pre_cram_to_mapped_bam:
+rule _preprocess__coverm__cram_to_bam:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
@@ -6,8 +6,8 @@ rule pre_cram_to_mapped_bam:
     it works.
     """
     input:
-        cram=get_cram_for_pre_eval_cram_to_mapped_bam,
-        crai=get_crai_for_pre_eval_cram_to_mapped_bam,
+        cram=get_cram_for_preprocess_eval_cram_to_mapped_bam,
+        crai=get_crai_for_preprocess_eval_cram_to_mapped_bam,
         reference=REFERENCE / f"{LAST_HOST}.fa.gz",
         fai=REFERENCE / f"{LAST_HOST}.fa.gz.fai",
     output:
@@ -33,7 +33,7 @@ rule pre_cram_to_mapped_bam:
         """
 
 
-rule pre_coverm_genome_method_one:
+rule _preprocess__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=PRE_COVERM / "bams" / "{sample}.{library_id}.bam",
@@ -59,7 +59,7 @@ rule pre_coverm_genome_method_one:
         """
 
 
-rule pre_coverm_genome_aggregate_method:
+rule _preprocess__coverm__genome_aggregate:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [
@@ -83,7 +83,7 @@ rule pre_coverm_genome_aggregate_method:
         """
 
 
-rule pre_coverm:
+rule preprocess__coverm:
     """Run both coverm genome over the preprocessed samples"""
     input:
         [

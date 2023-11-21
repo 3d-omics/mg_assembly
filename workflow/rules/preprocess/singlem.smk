@@ -1,4 +1,4 @@
-rule pre_singlem_pipe_one:
+rule _preprocess__singlem__pipe:
     """Run singlem over one sample
 
     Note: SingleM asks in the documentation for the raw reads. Here we are
@@ -34,7 +34,7 @@ rule pre_singlem_pipe_one:
         """
 
 
-rule pre_singlem:
+rule _preprocess__singlem__condense:
     """Aggregate all the singlem results into a single table"""
     input:
         archive_otu_tables=[
@@ -58,3 +58,8 @@ rule pre_singlem:
             --metapackage {input.database} \
         2> {log} 1>&2
         """
+
+
+rule preprocess__singlem:
+    input:
+        rules._preprocess__singlem__condense.output,

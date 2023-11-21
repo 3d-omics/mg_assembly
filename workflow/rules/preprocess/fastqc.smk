@@ -1,4 +1,4 @@
-rule pre_fastp_fastqc:
+rule preprocess__fastqc__fastp:
     """Run fastqc over all libraries after fastp"""
     input:
         [
@@ -9,7 +9,7 @@ rule pre_fastp_fastqc:
         ],
 
 
-rule pre_nonhost_fastqc:
+rule preprocess__fastqc__nonhost:
     """Run fastqc over all libraries after fastp"""
     input:
         [
@@ -20,3 +20,10 @@ rule pre_nonhost_fastqc:
             for extension in "html zip".split(" ")
             for genome in HOST_NAMES
         ],
+
+
+rule preprocess__fastqc:
+    """Run fastqc over all fastq files in prepreprocess"""
+    input:
+        rules.preprocess__fastqc__fastp.input,
+        rules.preprocess__fastqc__nonhost.input,

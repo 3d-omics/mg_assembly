@@ -1,4 +1,4 @@
-rule pre_bowtie2_hosts_build:
+rule _preprocess__bowtie2__build:
     """Build PRE_BOWTIE2 index for the host reference
 
     Let the script decide to use a small or a large index based on the size of
@@ -31,7 +31,7 @@ rule pre_bowtie2_hosts_build:
         """
 
 
-rule pre_bowtie2_host_map_one:
+rule _preprocess__bowtie2__map:
     """Map one library to reference genome using bowtie2
 
     Output SAM file is piped to samtools sort to generate a CRAM file.
@@ -85,7 +85,7 @@ rule pre_bowtie2_host_map_one:
         """
 
 
-rule pre_bowtie2_extract_nonhost_one:
+rule _preprocess__bowtie2__extract_nonhost:
     """
     Keep only pairs unmapped to the human reference genome, sort by name rather
     than by coordinate, and convert to FASTQ.
@@ -133,7 +133,7 @@ rule pre_bowtie2_extract_nonhost_one:
         """
 
 
-rule pre_bowtie2_extract_nonhost_all:
+rule preprocess__bowtie2__extract_nonhost:
     """Run bowtie2_extract_nonchicken_one for all PE libraries"""
     input:
         [
@@ -145,7 +145,7 @@ rule pre_bowtie2_extract_nonhost_all:
         ],
 
 
-rule pre_bowtie2:
+rule preprocess__bowtie2:
     """Run all the preprocessing steps for bowtie2"""
     input:
-        rules.pre_bowtie2_extract_nonhost_all.input,
+        rules.preprocess__bowtie2__extract_nonhost.input,

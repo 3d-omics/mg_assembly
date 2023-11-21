@@ -24,18 +24,17 @@ rule report_step_reads:
         """
 
 
-rule report_step_pre:
+rule report__step__preprocess:
     """Collect all reports for the preprocessing step"""
     input:
-        rules.pre_fastp_fastqc.input,
-        rules.pre_fastp_json.input,
-        rules.pre_samtools.input,
-        rules.pre_nonhost_fastqc.input,
-        rules.pre_kraken2.input,
+        rules.preprocess__fastqc.input,
+        rules.preprocess__fastp__json.input,
+        rules.preprocess__samtools.input,
+        rules.preprocess__kraken2.input,
     output:
-        html=REPORT_STEP / "preprocessing.html",
+        html=REPORT_STEP / "preprocess.html",
     log:
-        REPORT_STEP / "preprocessing.log",
+        REPORT_STEP / "preprocess.log",
     conda:
         "_env.yml"
     params:
@@ -45,9 +44,9 @@ rule report_step_pre:
     shell:
         """
         multiqc \
-            --title preprocessing \
+            --title preprocess \
             --force \
-            --filename preprocessing \
+            --filename preprocess \
             --outdir {params.dir} \
             --dirs \
             --dirs-depth 1 \
@@ -146,12 +145,12 @@ rule report_step:
     """Report for all steps"""
     input:
         REPORT_STEP / "reads.html",
-        REPORT_STEP / "preprocessing.html",
+        REPORT_STEP / "preprocess.html",
         REPORT_STEP / "assemble.html",
         REPORT_STEP / "bin.html",
 
 
-rule report_step_with_dereplicate:
+rule report__step__with_dereplicate:
     """Report all steps + dereplicate"""
     input:
         rules.report_step.input,
@@ -160,8 +159,9 @@ rule report_step_with_dereplicate:
 
 localrules:
     report_step_reads,
-    report_step_pre,
-    report_step_assemble,
-    report_step_bin,
+    report__step__preprocess,
+    report__step__assemble,
+    report__step__bin,
     report_step,
-    report_step_with_dereplicate,
+    report__step__dereplicate,
+    report__step__with_dereplicate,

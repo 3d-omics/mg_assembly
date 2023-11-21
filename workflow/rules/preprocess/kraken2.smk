@@ -1,5 +1,8 @@
-rule pre_kraken2_assign_all:
-    """Run kraken2 over all samples at once using the /dev/shm/ trick. NOTE: /dev/shm may be not empty after the job is done.
+rule __preprocess__kraken2__assign:
+    """
+    Run kraken2 over all samples at once using the /dev/shm/ trick.
+
+    NOTE: /dev/shm may be not empty after the job is done.
     """
     input:
         forwards=[
@@ -72,7 +75,7 @@ rule pre_kraken2_assign_all:
         """
 
 
-rule pre_kraken2:
+rule preprocess__kraken2:
     """Run kraken2 over all samples"""
     input:
         [

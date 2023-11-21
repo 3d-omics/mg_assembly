@@ -35,7 +35,7 @@ include: "rules/folders.smk"
 include: "rules/helpers/_main.smk"
 include: "rules/reads/_main.smk"
 include: "rules/reference/_main.smk"
-include: "rules/pre/_main.smk"
+include: "rules/preprocess/_main.smk"
 include: "rules/assemble/_main.smk"
 include: "rules/virify/virify.smk"
 include: "rules/bin/_main.smk"
@@ -47,7 +47,7 @@ rule all:
     """Run the entire pipeline"""
     input:
         rules.reads.input,
-        rules.pre.input,
+        rules.preprocess.input,
         rules.assemble.input,
         rules.bin.input,
         rules.report.input,

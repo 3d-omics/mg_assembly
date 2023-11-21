@@ -40,7 +40,7 @@ def compose_prefix_for_nonpareil(wildcards):
     return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"
 
 
-def get_cram_for_pre_eval_cram_to_mapped_bam(wildcards):
+def get_cram_for_preprocess_eval_cram_to_mapped_bam(wildcards):
     """Get the cram file of the last host"""
     genome = LAST_HOST
     sample_id = wildcards.sample_id
@@ -48,7 +48,7 @@ def get_cram_for_pre_eval_cram_to_mapped_bam(wildcards):
     return PRE_BOWTIE2 / genome / f"{sample_id}.{library_id}.cram"
 
 
-def get_crai_for_pre_eval_cram_to_mapped_bam(wildcards):
+def get_crai_for_preprocess_eval_cram_to_mapped_bam(wildcards):
     """Get the crai file of the last host"""
     bam = get_cram_for_pre_eval_cram_to_mapped_bam(wildcards)
     return f"{bam}.bai"

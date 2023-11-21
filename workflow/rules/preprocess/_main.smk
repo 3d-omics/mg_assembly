@@ -9,38 +9,37 @@ include: "kraken2.smk"
 include: "samtools.smk"
 
 
-rule pre_eval:
+rule preprocess__eval:
     """Run the evaluation of the preprocessing steps."""
     input:
-        rules.pre_fastp_fastqc.input,
-        rules.pre_coverm.output,
-        rules.pre_samtools.input,
-        rules.pre_nonhost_fastqc.input,
-        rules.pre_kraken2.output,
+        rules.preprocess__fastqc.input,
+        rules.preprocess__coverm.output,
+        rules.preprocess__samtools.input,
+        rules.preprocess__kraken2.output,
 
 
-rule pre_eval_with_singlem:
+rule prerocess__eval_with_singlem:
     """Run the evaluation of the preprocessing steps + SingleM."""
     input:
-        rules.pre_eval.input,
-        rules.pre_singlem.output,
+        rules.preprocess__eval.input,
+        rules.preprocess__singlem.output,
 
 
-rule pre_eval_with_nonpareil:
+rule preprocess__eval_with_nonpareil:
     """Run the evaluation of the preprocessing steps + Nonpareil."""
     input:
-        rules.pre_eval.input,
-        rules.pre_nonpareil.output,
+        rules.preprocess__eval.input,
+        rules.preprocess__nonpareil.output,
 
 
-rule pre_run:
+rule preprocess__run:
     """Run the preprocessing steps, without the evaluation ones"""
     input:
-        rules.pre_bowtie2_extract_nonhost_all.input,
+        rules.preprocess__bowtie2__extract_nonhost.input,
 
 
-rule pre:
+rule preprocess:
     """Run the preprocessing steps, included the evaluation ones"""
     input:
-        rules.pre_run.input,
-        rules.pre_eval.input,
+        rules.preprocess__run.input,
+        rules.preprocess__eval.input,
