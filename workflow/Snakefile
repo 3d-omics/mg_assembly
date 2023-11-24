@@ -22,7 +22,7 @@ samples = samples.assign(assembly_id=samples.assembly_id.str.strip())
 SAMPLES = samples.sample_id.unique()
 SAMPLE_LIBRARY = samples[["sample_id", "library_id"]].values.tolist()
 ASSEMBLY_SAMPLE_LIBRARY = (
-    samples[["assembly_id", "sample_id", "library_id"]].dropna().values.tolist()
+    samples[["assembly_id", "sample_id", "library_id"]].dropna(axis=0).values.tolist()
 )
 ASSEMBLIES = [
     assembly_id
