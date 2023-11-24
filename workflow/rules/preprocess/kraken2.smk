@@ -49,7 +49,7 @@ rule _preprocess__kraken2__assign:
 
             for sample_id in ${{sample_ids[@]}} ; do \
 
-                echo Processing $sample_id 2>> {log} 1>&2
+                echo $(date) Processing $sample_id 2>> {log} 1>&2
 
                 kraken2 \
                     --db {params.kraken_db_shm} \
