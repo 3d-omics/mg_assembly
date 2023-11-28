@@ -1,16 +1,16 @@
 # Paths and parameters relative to references
 ---
-hosts:
+hosts:  # Add more in case of multi-host, remove entries in case of environmental sample
   chicken: resources/reference/chicken_39_sub.fa.gz
 
 magscot:
   pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
   tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
 
-dram_database: resources/mock_dram_db
-gtdbtk_database: resources/mock_gtdbtk_db
-singlem_database: resources/mock_singlem_db
-kraken2_dbs:
-  mock: resources/kraken2_mock
-virify_database: resources/virify
-checkm2_database: resources/mock_checkm2_db
+dram_database: resources/databases/dram/20230811
+gtdbtk_database: resources/databases/gtdbtk/release214
+singlem_database: resources/databases/singlem/S3.2.1.GTDB_r214.metapackage_20231006.smpkg.zb
+kraken2_dbs:  # add entries as necessary
+  refseq500: resources/databases/kraken2/kraken2_RefSeqV205_Complete_500GB
+virify_database: resources/databases/virify
+checkm2_database: resources/databases/checkm2/uniref100.KO.1.dmnd
