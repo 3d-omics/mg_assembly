@@ -155,13 +155,3 @@ rule report__step__with_dereplicate:
     input:
         rules.report__step.input,
         REPORT_STEP / "dereplicate.html",
-
-
-localrules:
-    report__step__reads,
-    report__step__preprocess,
-    report__step__assemble,
-    report__step__bin,
-    report__step,
-    report__step__dereplicate,
-    report__step__with_dereplicate,
