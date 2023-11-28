@@ -1,3 +1,5 @@
+![Actions](https://github.com/3d-omics/Bioinfo_Macro_Genome_Resolved_Metagenomics/actions/workflows/devel/badge.svg)
+
 # Snakemake workflow: `Bioinfo_Macro_Genome_Resolved_Metagenomics`
 
 A Snakemake workflow for Genome Resolved Metagenomics
