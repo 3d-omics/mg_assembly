@@ -56,7 +56,7 @@ def get_crai_for_preprocess_eval_cram_to_mapped_bam(wildcards):
 
 def get_kraken2_database(wildcards):
     """Get kraken2 database path from the name"""
-    return features["kraken2_dbs"][wildcards.kraken_db]
+    return features["databases"]["kraken2"][wildcards.kraken_db]
 
 
 def compose_out_folder_for_eval_kraken2_assign_all(wildcards):

@@ -1,6 +1,6 @@
 rule _dereplicate__checkm2__download:
     output:
-        directory(features["checkm2_database"]),
+        directory(features["databases"]["checkm2"]),
     log:
         DREP_CHECKM / "download.log",
     conda:
@@ -23,7 +23,7 @@ rule _dereplicate__checkm2__predict:
     """Run CheckM2 over the dereplicated mags"""
     input:
         mags=DREP / "dereplicated_genomes",
-        db=features["checkm2_database"],
+        db=features["databases"]["checkm2"],
     output:
         DREP_CHECKM / "quality_report.tsv",
     log:

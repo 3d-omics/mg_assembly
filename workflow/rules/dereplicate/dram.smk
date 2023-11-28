@@ -4,10 +4,10 @@ rule _dereplicate__dram__download_db:
     Will skip UniRef and Kegg.
     """
     output:
-        db=directory(features["dram_database"]),
-        config=features["dram_database"] + ".config",
+        db=directory(features["databases"]["dram"]),
+        config=features["databases"]["dram"] + ".config",
     log:
-        features["dram_database"] + ".log",
+        features["databases"]["dram"] + ".log",
     conda:
         "dram.yml"
     shell:
@@ -30,7 +30,7 @@ rule _dereplicate__dram__annotate:
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes",
         gtdbtk_summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
-        dram_db=features["dram_database"],
+        dram_db=features["databases"]["dram"],
     output:
         annotation=DREP_DRAM / "annotations.tsv",
         trnas=DREP_DRAM / "trnas.tsv",
@@ -113,7 +113,7 @@ rule _dereplicate__dram__distill:
         annotations=DREP_DRAM / "annotations.tsv",
         trnas=DREP_DRAM / "trnas.tsv",
         rrnas=DREP_DRAM / "rrnas.tsv",
-        dram_db=features["dram_database"],
+        dram_db=features["databases"]["dram"],
     output:
         genome=DREP_DRAM / "genome_stats.tsv",
         metabolism=DREP_DRAM / "metabolism_summary.xlsx",

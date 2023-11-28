@@ -1,8 +1,8 @@
 rule _dereplicate__gtdbtk__download:
     output:
-        directory(features["gtdbtk_database"]),
+        directory(features["databases"]["gtdbtk"]),
     log:
-        features["gtdbtk_database"] + ".log",
+        features["databases"]["gtdbtk"] + ".log",
     conda:
         "gtdbtk.yml"
     shell:
@@ -33,7 +33,7 @@ rule _dereplicate__gtdbtk__classify:
     """Run GTDB-Tk over the dereplicated genomes."""
     input:
         bin_folder=DREP / "dereplicated_genomes",
-        database=features["gtdbtk_database"],
+        database=features["databases"]["gtdbtk"],
     output:
         summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
         align=DREP_GTDBTK / "align.tar.gz",

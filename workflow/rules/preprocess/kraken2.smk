@@ -81,5 +81,5 @@ rule preprocess__kraken2:
         [
             KRAKEN2 / kraken_db / f"{sample_id}.{library_id}.report"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for kraken_db in features["kraken2_dbs"]
+            for kraken_db in features["databases"]["kraken2"]
         ],

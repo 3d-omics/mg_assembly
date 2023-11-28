@@ -1,7 +1,7 @@
 rule _virify__download_db:
     """Download the virify databases"""
     output:
-        db_folder=features["virify_database"],
+        db_folder=features["databases"]["virify"],
     log:
         VIRIFY / "databases.log",
     conda:
@@ -27,7 +27,7 @@ rule _virify__run:
     """Analyze a single assembly with virify"""
     input:
         fasta=ASSEMBLE_RENAME / "{assembly_id}.fa",
-        db_folder=features["virify_database"],
+        db_folder=features["databases"]["virify"],
     output:
         out_folder=directory(VIRIFY / "{assembly_id}"),
     log:
