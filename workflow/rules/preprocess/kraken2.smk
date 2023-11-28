@@ -25,7 +25,7 @@ rule _preprocess__kraken2__assign:
         KRAKEN2 / "{kraken_db}.log",
     threads: 8
     resources:
-        mem_mb=params["pre"]["kraken2"]["memory_gb"] * 1024,
+        mem_mb=params["preprocess"]["kraken2"]["memory_gb"] * 1024,
         runtime=24 * 60,
     params:
         in_folder=FASTP,

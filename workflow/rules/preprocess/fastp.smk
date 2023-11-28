@@ -17,8 +17,8 @@ rule _preprocess__fastp__run:
     params:
         adapter_forward=get_forward_adapter,
         adapter_reverse=get_reverse_adapter,
-        extra=params["pre"]["fastp"]["extra"],
-        length_required=params["pre"]["fastp"]["length_required"],
+        extra=params["preprocess"]["fastp"]["extra"],
+        length_required=params["preprocess"]["fastp"]["length_required"],
     threads: 24
     resources:
         mem_mb=4 * 1024,

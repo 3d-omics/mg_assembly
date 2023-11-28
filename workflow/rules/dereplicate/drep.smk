@@ -33,11 +33,11 @@ rule _dereplicate__drep__run:
         DREP / "drep.log",
     conda:
         "drep.yml"
-    threads: params["dereplicate"]["drep"]["threads"]
+    threads: 24
     params:
         out_dir=DREP,
     resources:
-        mem_mb=double_ram(params["dereplicate"]["drep"]["memory_gb"]),
+        mem_mb=64 * 1024,
         runtime=7 * 24 * 60,
     retries: 5
     shell:

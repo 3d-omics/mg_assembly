@@ -1,6 +1,6 @@
 # Execution parameters
 ---
-pre:
+preprocess:
   fastp:
     length_required: 25  # nonpareil requires at least 25bp
     extra: "--trim_poly_g --trim_poly_x"
@@ -16,7 +16,7 @@ pre:
     genome:
       methods: ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
       min_covered_fraction: 0.0
-      separator: "^"
+      separator: "@"
     contig:
       methods: ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
   kraken2:
@@ -56,9 +56,6 @@ bin:
     mem: 1G
 
 dereplicate:
-  drep:
-    threads: 24
-    memory_gb: 64
   bowtie2-build:
     extra: ""
     memory_gb: 16
@@ -76,7 +73,3 @@ dereplicate:
       methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
   quast:
     extra: ""
-  gtdbtk:
-    memory_gb: 64
-  dram:
-    memory_gb: 16

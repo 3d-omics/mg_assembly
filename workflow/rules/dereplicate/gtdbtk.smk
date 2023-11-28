@@ -49,9 +49,8 @@ rule _dereplicate__gtdbtk__classify:
         bac120=DREP_GTDBTK / "gtdbtk.bac120.summary.tsv",
     threads: 24
     resources:
-        mem_mb=double_ram(params["dereplicate"]["gtdbtk"]["memory_gb"]),
+        mem_mb=64 * 1024,
         runtime=24 * 60,
-    retries: 5
     shell:
         """
         export GTDBTK_DATA_PATH="{input.database}"

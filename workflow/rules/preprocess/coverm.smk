@@ -46,8 +46,10 @@ rule _preprocess__coverm__genome:
         PRE_COVERM / "genome" / "{method}" / "{sample}.{library_id}.log",
     params:
         methods="{method}",
-        min_covered_fraction=params["pre"]["coverm"]["genome"]["min_covered_fraction"],
-        separator=params["pre"]["coverm"]["genome"]["separator"],
+        min_covered_fraction=params["preprocess"]["coverm"]["genome"][
+            "min_covered_fraction"
+        ],
+        separator=params["preprocess"]["coverm"]["genome"]["separator"],
     shell:
         """
         coverm genome \
@@ -88,5 +90,5 @@ rule preprocess__coverm:
     input:
         [
             PRE_COVERM / f"genome.{method}.tsv"
-            for method in params["pre"]["coverm"]["genome"]["methods"]
+            for method in params["preprocess"]["coverm"]["genome"]["methods"]
         ],

@@ -47,7 +47,7 @@ rule _dereplicate__dram__annotate:
         tmp_dir=DREP_DRAM / "annotate",
         parallel_retries=5,
     resources:
-        mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
+        mem_mb=16 * 1024,
         runtime=48 * 60,
     shell:
         """
@@ -124,7 +124,7 @@ rule _dereplicate__dram__distill:
     conda:
         "dram.yml"
     resources:
-        mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
+        mem_mb=16 * 1024,
         runtime=24 * 60,
     params:
         outdir_tmp=DREP_DRAM / "distill",
