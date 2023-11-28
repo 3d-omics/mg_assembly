@@ -5,7 +5,6 @@ channels:
   - bioconda
   - defaults
 dependencies:
-
   - bowtie2=2.5.1
   - coverm=0.6.1
   - quast=5.2.0
