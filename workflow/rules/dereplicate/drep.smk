@@ -53,11 +53,12 @@ rule _dereplicate__drep__run:
         for folder in data data_tables ; do
             tar \
                 --create \
-                --directory {params.out_dir}/${{folder}} \
+                --directory {params.out_dir} \
                 --file {params.out_dir}/${{folder}}.tar.gz \
                 --remove-files \
                 --use-compress-program="pigz --processes {threads}" \
                 --verbose \
+                ${{folder}} \
             2>> {log} 1>&2
         done
         """

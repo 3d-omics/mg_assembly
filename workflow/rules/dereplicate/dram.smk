@@ -43,8 +43,8 @@ rule _dereplicate__dram__annotate:
     threads: 24
     params:
         min_contig_size=1500,
-        tmp_dir=DREP_DRAM / "annotate",
         out_dir=DREP_DRAM,
+        tmp_dir=DREP_DRAM / "annotate",
         parallel_retries=5,
     resources:
         mem_mb=double_ram(params["dereplicate"]["dram"]["memory_gb"]),
@@ -97,11 +97,12 @@ rule _dereplicate__dram__annotate:
 
         tar \
             --create \
-            --verbose \
+            --directory {params.out_dir} \
+            --file {output.tarball} \
             --remove-files \
             --use-compress-program="pigz --processes {threads}" \
-            --file {output.tarball} \
-            --directory {params.tmp_dir} \
+            --verbose \
+            annotate \
         2>> {log} 1>&2
         """
 

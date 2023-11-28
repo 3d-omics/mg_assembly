@@ -80,13 +80,22 @@ rule _dereplicate__gtdbtk__classify:
         for folder in align classify identify ; do
             tar \
                 --create \
-                --verbose \
+                --directory {params.out_dir} \
+                --file {params.out_dir}/${{folder}}.tar.gz \
                 --remove-files \
                 --use-compress-program="pigz --processes {threads}" \
-                --file ${{folder}}.tar.gz \
-                --directory {params.out_dir}/${{folder}} \
+                --verbose \
+                ${{folder}} \
             2>> {log} 1>&2
         done
+
+        rm \
+            --recursive \
+            --force \
+            --verbose \
+            {params.ar53} \
+            {params.bac120} \
+        2>> {log} 1>&2
         """
 
 
