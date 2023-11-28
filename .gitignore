@@ -7,8 +7,7 @@ renv.lock
 .cache/
 .ipynb_checkpoints/
 .Rprofile
-./report/
-resources/S3.2.0.GTDB_r214.metapackage_20230428.smpkg.zb/
+report
 resources/virify/
 *.fai
 *.gzi
