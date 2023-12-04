@@ -4,7 +4,6 @@ include: "bowtie2.smk"
 include: "fastqc.smk"
 include: "nonpareil.smk"
 include: "singlem.smk"
-include: "coverm.smk"
 include: "kraken2.smk"
 include: "samtools.smk"
 
@@ -13,7 +12,6 @@ rule preprocess__eval:
     """Run the evaluation of the preprocessing steps."""
     input:
         rules.preprocess__fastqc.input,
-        rules.preprocess__coverm.output,
         rules.preprocess__samtools.input,
         rules.preprocess__kraken2.output,
 
