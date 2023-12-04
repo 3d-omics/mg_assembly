@@ -1,28 +1,28 @@
-rule _dereplicate__dram__download_db:
-    """Download dram database if it does not exist
+# rule _dereplicate__dram__download_db:
+#     """Download dram database if it does not exist
 
-    Will skip UniRef and Kegg.
-    """
-    output:
-        db=directory(features["databases"]["dram"]),
-        config=features["databases"]["dram"] + ".config",
-    log:
-        features["databases"]["dram"] + ".log",
-    conda:
-        "dram.yml"
-    shell:
-        """
-        DRAM-setup.py prepare_databases \
-            --skip_uniref \
-            --output_dir {output} \
-            --threads 10 \
-            --verbose \
-        2> {log} 1>&2
+#     Will skip UniRef and Kegg.
+#     """
+#     output:
+#         db=directory(features["databases"]["dram"]),
+#         config=features["databases"]["dram"] + ".config",
+#     log:
+#         features["databases"]["dram"] + ".log",
+#     conda:
+#         "dram.yml"
+#     shell:
+#         """
+#         DRAM-setup.py prepare_databases \
+#             --skip_uniref \
+#             --output_dir {output} \
+#             --threads 10 \
+#             --verbose \
+#         2> {log} 1>&2
 
-        DRAM-setup.py export_config \
-        > {output.config} \
-        2>> {log}
-        """
+#         DRAM-setup.py export_config \
+#         > {output.config} \
+#         2>> {log}
+#         """
 
 
 rule _dereplicate__dram__annotate:
@@ -169,5 +169,5 @@ rule dereplicate__dram:
         rules._dereplicate__dram__distill.output,
 
 
-localrules:
-    _dereplicate__dram__download_db,
+# localrules:
+#     _dereplicate__dram__download_db,
