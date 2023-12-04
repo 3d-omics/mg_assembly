@@ -1,24 +1,13 @@
 include: "_functions.smk"
-include: "bowtie2.smk"
-include: "coverm.smk"
 include: "quast.smk"
-include: "samtools.smk"
 include: "gtdbtk.smk"
 include: "dram.smk"
 include: "checkm2.smk"
 
 
-rule dereplicate__run:
-    """Run the dereplication steps without evaluation"""
-    input:
-        rules.dereplicate__bowtie2.input,
-
-
 rule dereplicate__eval:
     """Evaluate the dereplication steps"""
     input:
-        rules.dereplicate__coverm.input,
-        rules.dereplicate__samtools.input,
         rules.dereplicate__quast.output,
         rules.dereplicate__checkm2.output,
 
@@ -40,5 +29,4 @@ rule dereplicate__eval_with_dram:
 rule dereplicate:
     """Run the dereplication steps with evaluation"""
     input:
-        rules.dereplicate__run.input,
         rules.dereplicate__eval.input,

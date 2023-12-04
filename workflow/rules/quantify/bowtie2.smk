@@ -1,11 +1,11 @@
-rule _dereplicate__bowtie2__build:
+rule _quantify__bowtie2__build:
     """Index dereplicader"""
     input:
         contigs=DREP / "dereplicated_genomes.fa",
     output:
-        mock=touch(DREP_INDEX / "dereplicated_genomes"),
+        mock=touch(QUANT_INDEX / "dereplicated_genomes"),
     log:
-        DREP_INDEX / "dereplicated_genomes.log",
+        QUANT_INDEX / "dereplicated_genomes.log",
     conda:
         "_env.yml"
     threads: 24
@@ -25,18 +25,18 @@ rule _dereplicate__bowtie2__build:
         """
 
 
-rule _dereplicate__bowtie2__map:
+rule _quantify__bowtie2__map:
     """Align one sample to the dereplicated genomes"""
     input:
-        mock=DREP_INDEX / "dereplicated_genomes",
+        mock=QUANT_INDEX / "dereplicated_genomes",
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
         reference=DREP / "dereplicated_genomes.fa",
         fai=DREP / "dereplicated_genomes.fa.fai",
     output:
-        cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
+        cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
     log:
-        DREP_BOWTIE2 / "{sample_id}.{library_id}.log",
+        QUANT_BOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
         "_env.yml"
     threads: 24
@@ -75,10 +75,10 @@ rule _dereplicate__bowtie2__map:
         """
 
 
-rule dereplicate__bowtie2:
+rule quantify__bowtie2:
     """Align all samples to the dereplicated genomes"""
     input:
         [
-            DREP_BOWTIE2 / f"{sample_id}.{library_id}.cram"
+            QUANT_BOWTIE2 / f"{sample_id}.{library_id}.cram"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],

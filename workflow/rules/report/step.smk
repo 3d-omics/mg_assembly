@@ -55,33 +55,33 @@ rule report__step__preprocess:
         """
 
 
-rule report__step__dereplicate:
-    """Collect all reports for the dereplicate step"""
-    input:
-        rules.dereplicate__quast.input,
-        rules.dereplicate__samtools.input,
-    output:
-        html=REPORT_STEP / "dereplicate.html",
-    log:
-        REPORT_STEP / "dereplicate.log",
-    conda:
-        "_env.yml"
-    params:
-        dir=REPORT_STEP,
-    resources:
-        mem_mb=8 * 1024,
-    shell:
-        """
-        multiqc \
-            --title dereplicate \
-            --force \
-            --filename dereplicate \
-            --outdir {params.dir} \
-            --dirs \
-            --dirs-depth 1 \
-            {input} \
-        2> {log} 1>&2
-        """
+# rule report__step__dereplicate:
+#     """Collect all reports for the dereplicate step"""
+#     input:
+#         rules.dereplicate__quast.input,
+#         rules.dereplicate__samtools.input,
+#     output:
+#         html=REPORT_STEP / "dereplicate.html",
+#     log:
+#         REPORT_STEP / "dereplicate.log",
+#     conda:
+#         "_env.yml"
+#     params:
+#         dir=REPORT_STEP,
+#     resources:
+#         mem_mb=8 * 1024,
+#     shell:
+#         """
+#         multiqc \
+#             --title dereplicate \
+#             --force \
+#             --filename dereplicate \
+#             --outdir {params.dir} \
+#             --dirs \
+#             --dirs-depth 1 \
+#             {input} \
+#         2> {log} 1>&2
+#         """
 
 
 rule report__step:
@@ -89,8 +89,6 @@ rule report__step:
     input:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocess.html",
-        # REPORT_STEP / "assemble.html",
-        REPORT_STEP / "bin.html",
 
 
 rule report__step__with_dereplicate:

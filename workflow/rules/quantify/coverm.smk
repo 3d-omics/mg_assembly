@@ -1,4 +1,4 @@
-rule _dereplicate__coverm__cram_to_bam:
+rule _quantify__coverm__cram_to_bam:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
@@ -6,14 +6,14 @@ rule _dereplicate__coverm__cram_to_bam:
     it works.
     """
     input:
-        cram=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=DREP_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
+        cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
+        crai=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
         reference=DREP / "dereplicated_genomes.fa",
         fai=DREP / "dereplicated_genomes.fa.fai",
     output:
-        bam=temp(DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam"),
+        bam=temp(COVERM / "bams" / "{sample_id}.{library_id}.bam"),
     log:
-        DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam.log",
+        COVERM / "bams" / "{sample_id}.{library_id}.bam.log",
     conda:
         "_env.yml"
     resources:
@@ -22,26 +22,26 @@ rule _dereplicate__coverm__cram_to_bam:
     shell:
         """
         samtools view \
-            -F 4 \
+            --exclude-flags 4 \
             --reference {input.reference} \
-            -o {output.bam} \
-            -1 \
+            --output {output.bam} \
+            --fast \
             {input.cram} \
         2> {log}
         """
 
 
-rule _dereplicate__coverm__genome:
+rule _quantify__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        bam=DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam",
-        bai=DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam.bai",
+        bam=COVERM / "bams" / "{sample_id}.{library_id}.bam",
+        bai=COVERM / "bams" / "{sample_id}.{library_id}.bam.bai",
     output:
-        tsv=DREP_COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
+        tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
         "_env.yml"
     log:
-        DREP_COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
+        COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
         min_covered_fraction=params["dereplicate"]["coverm"]["genome"][
@@ -59,14 +59,14 @@ rule _dereplicate__coverm__genome:
         """
 
 
-rule _dereplicate__coverm__genome_aggregate:
+rule _quantify__coverm__genome_aggregate:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_genome,
     output:
-        tsv=DREP_COVERM / "genome.{method}.tsv",
+        tsv=COVERM / "genome.{method}.tsv",
     log:
-        DREP_COVERM / "genome.{method}.log",
+        COVERM / "genome.{method}.log",
     conda:
         "_env.yml"
     params:
@@ -82,27 +82,27 @@ rule _dereplicate__coverm__genome_aggregate:
         """
 
 
-rule dereplicate__coverm__genome:
+rule quantify__coverm__genome:
     """Run coverm genome and all methods"""
     input:
         [
-            DREP_COVERM / f"genome.{method}.tsv"
+            COVERM / f"genome.{method}.tsv"
             for method in params["dereplicate"]["coverm"]["genome"]["methods"]
         ],
 
 
 # coverm contig ----
-rule _dereplicate__coverm__contig:
+rule _quantify__coverm__contig:
     """Run coverm contig for one library and one mag catalogue"""
     input:
-        bam=DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam",
-        bai=DREP_COVERM / "bams" / "{sample_id}.{library_id}.bam.bai",
+        bam=COVERM / "bams" / "{sample_id}.{library_id}.bam",
+        bai=COVERM / "bams" / "{sample_id}.{library_id}.bam.bai",
     output:
-        tsv=DREP_COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
+        tsv=COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
         "_env.yml"
     log:
-        DREP_COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
+        COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
     shell:
@@ -115,14 +115,14 @@ rule _dereplicate__coverm__contig:
         """
 
 
-rule _dereplicate__coverm__contig_aggregate:
+rule _quantify__coverm__contig_aggregate:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_contig,
     output:
-        tsv=DREP_COVERM / "contig.{method}.tsv",
+        tsv=COVERM / "contig.{method}.tsv",
     log:
-        DREP_COVERM / "contig.{method}.log",
+        COVERM / "contig.{method}.log",
     conda:
         "_env.yml"
     params:
@@ -138,16 +138,16 @@ rule _dereplicate__coverm__contig_aggregate:
         """
 
 
-rule dereplicate__coverm__contig:
+rule quantify__coverm__contig:
     """Run coverm contig and all methods"""
     input:
         [
-            DREP_COVERM / f"contig.{method}.tsv"
+            COVERM / f"contig.{method}.tsv"
             for method in params["dereplicate"]["coverm"]["contig"]["methods"]
         ],
 
 
-rule dereplicate__coverm:
+rule quantify__coverm:
     input:
-        rules.dereplicate__coverm__contig.input,
-        rules.dereplicate__coverm__genome.input,
+        rules.quantify__coverm__contig.input,
+        rules.quantify__coverm__genome.input,

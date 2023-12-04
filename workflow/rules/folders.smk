@@ -24,29 +24,29 @@ ASSEMBLE_BOWTIE2 = ASSEMBLE / "bowtie2/"
 CONCOCT = ASSEMBLE / "concoct/"
 METABAT2 = ASSEMBLE / "metabat2/"
 MAXBIN2 = ASSEMBLE / "maxbin2/"
+# VAMB = ASSEMBLE / "vamb/"  # This could be a metabinner
 MAGSCOT = ASSEMBLE / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
 DREP = ASSEMBLE / "drep/"
 
-# VAMB = ASSEMBLE / "vamb/"  # This could be a metabinner
 
+# quantify
+QUANT = Path("results/quantify/")
+QUANT_INDEX = QUANT / "index/"
+QUANT_BOWTIE2 = QUANT / "bowtie2/"
+COVERM = QUANT / "coverm/"
+
+
+# dereplicate evaluation
+DEREPLICATE = Path("results/dereplicate/")
+DREP_GTDBTK = DEREPLICATE / "gtdbtk/"
+DREP_QUAST = DEREPLICATE / "quast/"
+DREP_DRAM = DEREPLICATE / "dram/"
+DREP_CHECKM = DEREPLICATE / "checkm2"
 
 # Viral prediction
 VIRIFY = Path("results/virify/")
 
-
-# dereplicate - this is confusing
-DEREPLICATE = Path("results/dereplicate/")
-DREP_INDEX = DEREPLICATE / "index/"
-DREP_BOWTIE2 = DEREPLICATE / "bowtie2/"
-
-
-# dereplicate evaluation
-DREP_GTDBTK = DEREPLICATE / "gtdbtk/"
-DREP_QUAST = DEREPLICATE / "quast/"
-DREP_COVERM = DEREPLICATE / "coverm/"
-DREP_DRAM = DEREPLICATE / "dram/"
-DREP_CHECKM = DEREPLICATE / "checkm2"
 
 # reports
 REPORT = Path("report/")
