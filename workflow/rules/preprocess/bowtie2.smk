@@ -13,8 +13,6 @@ rule _preprocess__bowtie2__build:
         PRE_INDEX / "{genome}.log",
     conda:
         "_env.yml"
-    params:
-        extra=params["preprocess"]["bowtie2-build"]["extra"],
     threads: 24
     resources:
         mem_mb=double_ram(params["preprocess"]["bowtie2-build"]["memory_gb"]),
@@ -24,7 +22,6 @@ rule _preprocess__bowtie2__build:
         """
         bowtie2-build \
             --threads {threads} \
-            {params.extra} \
             {input.reference} \
             {output.mock} \
         2> {log} 1>&2
@@ -47,7 +44,6 @@ rule _preprocess__bowtie2__map:
     log:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.log",
     params:
-        extra=params["preprocess"]["bowtie2"]["extra"],
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
@@ -73,7 +69,6 @@ rule _preprocess__bowtie2__map:
             --threads {threads} \
             --rg-id '{params.rg_id}' \
             --rg '{params.rg_extra}' \
-            {params.extra} \
         | samtools sort \
             -l 9 \
             -M \

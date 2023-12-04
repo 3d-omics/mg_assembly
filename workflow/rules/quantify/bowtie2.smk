@@ -9,16 +9,13 @@ rule _quantify__bowtie2__build:
     conda:
         "_env.yml"
     threads: 24
-    params:
-        extra=params["dereplicate"]["bowtie2-build"]["extra"],
     resources:
-        mem_mb=double_ram(params["dereplicate"]["bowtie2-build"]["memory_gb"]),
+        mem_mb=double_ram(params["quantify"]["bowtie2-build"]["memory_gb"]),
         runtime=24 * 60,
     shell:
         """
         bowtie2-build \
             --threads {threads} \
-            {params.extra} \
             {input.contigs} \
             {output.mock} \
         2> {log} 1>&2
@@ -41,12 +38,11 @@ rule _quantify__bowtie2__map:
         "_env.yml"
     threads: 24
     params:
-        extra=params["dereplicate"]["bowtie2"]["extra"],
-        samtools_mem=params["dereplicate"]["samtools"]["mem"],
+        samtools_mem=params["quantify"]["samtools"]["mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     resources:
-        mem_mb=double_ram(params["dereplicate"]["bowtie2"]["memory_gb"]),
+        mem_mb=double_ram(params["quantify"]["bowtie2"]["memory_gb"]),
         runtime=24 * 60,
     shell:
         """
@@ -63,7 +59,6 @@ rule _quantify__bowtie2__map:
             --threads {threads} \
             --rg-id '{params.rg_id}' \
             --rg '{params.rg_extra}' \
-            {params.extra} \
         | samtools sort \
             -l 9 \
             -M \

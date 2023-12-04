@@ -9,8 +9,6 @@ rule annotate__quast:
     conda:
         "_env.yml"
     threads: 4
-    params:
-        extra=params["dereplicate"]["quast"]["extra"],
     resources:
         mem_mb=8 * 1024,
         runtime=1 * 60,
@@ -19,7 +17,6 @@ rule annotate__quast:
         quast \
             --output-dir {output} \
             --threads {threads} \
-            {params.extra} \
             {input} \
         2> {log} 1>&2
         """

@@ -44,10 +44,10 @@ rule _quantify__coverm__genome:
         COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
-        min_covered_fraction=params["dereplicate"]["coverm"]["genome"][
+        min_covered_fraction=params["quantify"]["coverm"]["genome"][
             "min_covered_fraction"
         ],
-        separator=params["dereplicate"]["coverm"]["genome"]["separator"],
+        separator=params["quantify"]["coverm"]["genome"]["separator"],
     shell:
         """
         coverm genome \
@@ -87,7 +87,7 @@ rule quantify__coverm__genome:
     input:
         [
             COVERM / f"genome.{method}.tsv"
-            for method in params["dereplicate"]["coverm"]["genome"]["methods"]
+            for method in params["quantify"]["coverm"]["genome"]["methods"]
         ],
 
 
@@ -143,7 +143,7 @@ rule quantify__coverm__contig:
     input:
         [
             COVERM / f"contig.{method}.tsv"
-            for method in params["dereplicate"]["coverm"]["contig"]["methods"]
+            for method in params["quantify"]["coverm"]["contig"]["methods"]
         ],
 
 

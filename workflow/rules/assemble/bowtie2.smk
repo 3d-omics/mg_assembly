@@ -9,8 +9,6 @@ rule _assemble__bowtie2__build:
     conda:
         "_env.yml"
     threads: 24
-    params:
-        extra=params["assemble"]["bowtie2-build"]["extra"],
     resources:
         mem_mb=double_ram(params["assemble"]["bowtie2-build"]["memory_gb"]),
         runtime=48 * 60,
@@ -19,7 +17,6 @@ rule _assemble__bowtie2__build:
         """
         bowtie2-build \
             --threads {threads} \
-            {params.extra} \
             {input.contigs} \
             {output.mock} \
         2> {log} 1>&2
@@ -47,7 +44,6 @@ rule _assemble__bowtie2:
         "_env.yml"
     threads: 24
     params:
-        extra=params["assemble"]["bowtie2"]["extra"],
         samtools_mem=params["assemble"]["samtools"]["mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
@@ -70,7 +66,6 @@ rule _assemble__bowtie2:
             --threads {threads} \
             --rg-id '{params.rg_id}' \
             --rg '{params.rg_extra}' \
-            {params.extra} \
         | samtools sort \
             -l 9 \
             -M \

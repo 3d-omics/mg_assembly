@@ -18,7 +18,6 @@ rule _assemble__megahit:
     params:
         out_dir=compose_out_dir_for_assemble_megahit_one,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
-        extra=params["assemble"]["megahit"]["extra"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
     resources:
@@ -36,7 +35,6 @@ rule _assemble__megahit:
             --continue \
             -1 {params.forwards} \
             -2 {params.reverses} \
-            {params.extra} \
         2> {log} 1>&2
 
         cp \

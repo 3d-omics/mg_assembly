@@ -5,11 +5,9 @@ preprocess:
     length_required: 25  # nonpareil requires at least 25bp
     extra: "--trim_poly_g --trim_poly_x"
   bowtie2-build:
-    extra: ""
     memory_gb: 8
   bowtie2:
     memory_gb: 64
-    extra: ""
     samtools:
       mem_per_thread: 1G
   kraken2:
@@ -17,16 +15,19 @@ preprocess:
 
 assemble:
   megahit:
-    extra: ""
     min_contig_len: 1500
     memory_gb: 32
-  quast:
-    extra: ""
   bowtie2-build:
-    extra: ""
     memory_gb: 16
   bowtie2:
-    extra: ""
+    memory_gb: 32
+  samtools:
+    mem: 1G
+
+quantify:
+  bowtie2-build:
+    memory_gb: 32
+  bowtie2:
     memory_gb: 32
   samtools:
     mem: 1G
@@ -37,32 +38,3 @@ assemble:
       separator: "@"
     contig:
       methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
-
-bin:
-  quast:
-    extra: ""
-  bowtie2-build:
-    extra: ""
-  bowtie2:
-    extra: ""
-  samtools:
-    mem: 1G
-
-dereplicate:
-  bowtie2-build:
-    extra: ""
-    memory_gb: 16
-  bowtie2:
-    extra: ""
-    memory_gb: 32
-  samtools:
-    mem: 1G
-  coverm:
-    genome:
-      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
-      min_covered_fraction: 0.0
-      separator: "@"
-    contig:
-      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
-  quast:
-    extra: ""
