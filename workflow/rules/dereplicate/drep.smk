@@ -45,7 +45,7 @@ rule _dereplicate__drep__run:
         mv \
             --force \
             {log} \
-            {out_dir}/drep.$(date -r {log} +%F_%R).log \
+            {params.out_dir}/drep.$(date -r {log} +%F_%R).log \
         2> {log}
 
         rm \
