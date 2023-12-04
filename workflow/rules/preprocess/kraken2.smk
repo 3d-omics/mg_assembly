@@ -26,7 +26,7 @@ rule _preprocess__kraken2__assign:
     threads: 8
     resources:
         mem_mb=params["preprocess"]["kraken2"]["memory_gb"] * 1024,
-        runtime=24 * 60,
+        runtime=48 * 60,
     params:
         in_folder=FASTP,
         out_folder=compose_out_folder_for_eval_kraken2_assign_all,
@@ -35,7 +35,7 @@ rule _preprocess__kraken2__assign:
         "_env.yml"
     shell:
         """
-        mapfile -t sample_ids < <(echo {input.forwards} | tr " " "\\n" | xargs -I {{}} basename {{}} _1.fq.gz)
+        mapfile -t sample_ids < <(echo {input.forwards} | tr " " "\\n" | sort | xargs -I {{}} basename {{}} _1.fq.gz)
 
         {{
             mkdir --parents {params.kraken_db_shm}
