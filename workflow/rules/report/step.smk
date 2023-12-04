@@ -55,33 +55,34 @@ rule report__step__preprocess:
         """
 
 
-rule report__step__assemble:
-    """Collect all reports for the assemble step"""
-    input:
-        rules.assemble__quast.input,
-        rules.assemble__samtools.input,
-    output:
-        html=REPORT_STEP / "assemble.html",
-    log:
-        REPORT_STEP / "assemble.log",
-    conda:
-        "_env.yml"
-    params:
-        dir=REPORT_STEP,
-    resources:
-        mem_mb=8 * 1024,
-    shell:
-        """
-        multiqc \
-            --title assemble \
-            --force \
-            --filename assemble \
-            --outdir {params.dir} \
-            --dirs \
-            --dirs-depth 1 \
-            {input} \
-        2> {log} 1>&2
-        """
+# way too much files
+# rule report__step__assemble:
+#     """Collect all reports for the assemble step"""
+#     input:
+#         rules.assemble__quast.input,
+#         rules.assemble__samtools.input,
+#     output:
+#         html=REPORT_STEP / "assemble.html",
+#     log:
+#         REPORT_STEP / "assemble.log",
+#     conda:
+#         "_env.yml"
+#     params:
+#         dir=REPORT_STEP,
+#     resources:
+#         mem_mb=8 * 1024,
+#     shell:
+#         """
+#         multiqc \
+#             --title assemble \
+#             --force \
+#             --filename assemble \
+#             --outdir {params.dir} \
+#             --dirs \
+#             --dirs-depth 1 \
+#             {input} \
+#         2> {log} 1>&2
+#         """
 
 
 rule report__step__bin:
