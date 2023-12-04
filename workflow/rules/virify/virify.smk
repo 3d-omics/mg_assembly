@@ -74,5 +74,3 @@ rule virify__run:
 
 localrules:
     _virify__download_db,
-    _virify__run,
-    virify__run,
