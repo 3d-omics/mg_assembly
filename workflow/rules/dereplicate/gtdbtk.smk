@@ -53,6 +53,26 @@ rule _dereplicate__gtdbtk__classify:
         runtime=24 * 60,
     shell:
         """
+        mv \
+            --force \
+            {log} \
+            {out_dir}/gtdbtk.$(date -r {log} +%F_%R).log \
+        2> {log}
+
+        rm \
+            --recursive \
+            --force \
+            {params.out_dir}/align \
+            {params.out_dir}/classify \
+            {params.out_dir}/identify \
+            {params.out_dir}/gtdbtk_classify.log \
+            {params.out_dir}/gtdbtk.json \
+            {params.out_dir}/gtdbtk.summary.tsv \
+            {params.out_dir}/gtdbtk.warnings.log \
+            {params.ar53} \
+            {params.bac120} \
+        2>> {log}
+
         export GTDBTK_DATA_PATH="{input.database}"
 
         gtdbtk classify_wf \
@@ -61,7 +81,7 @@ rule _dereplicate__gtdbtk__classify:
             --out_dir {params.out_dir} \
             --cpus {threads} \
             --skip_ani_screen \
-        2> {log} 1>&2
+        2>> {log} 1>&2
 
         if [[ -f {params.ar53} ]] ; then
             ( csvstack \
@@ -70,8 +90,8 @@ rule _dereplicate__gtdbtk__classify:
                 {params.ar53} \
             | csvformat \
                 --out-tabs \
-            > {output.summary} ) \
-            2>> {log}
+            > {output.summary} \
+            ) 2>> {log}
         else
             cat {params.bac120} > {output.summary} 2>> {log}
         fi
