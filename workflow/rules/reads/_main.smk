@@ -13,6 +13,9 @@ rule _reads__link:
         READS / "{sample}.{library}.log",
     conda:
         "_env.yml"
+    resources:  # run it superfast
+        mem_mb=10,
+        runtime=1,
     shell:
         """
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_} 2>  {log} 1>&2
@@ -57,7 +60,3 @@ rule reads:
     input:
         rules.reads__run.input,
         rules.reads__eval.input,
-
-
-localrules:
-    _reads__link,
