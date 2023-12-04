@@ -42,6 +42,12 @@ rule _dereplicate__drep__run:
     retries: 5
     shell:
         """
+        mv \
+            --force \
+            {log} \
+            {out_dir}/drep.$(date -r {log} +%F_%R).log \
+        2> {log}
+
         rm \
             --recursive \
             --force \
