@@ -54,7 +54,7 @@ rule _dereplicate__dram__annotate:
         mv \
             --force \
             {log} \
-            {out_dir}/annotate.$(date -r {log} +%F_%R).log \
+            {params.out_dir}/annotate.$(date -r {log} +%F_%R).log \
         2> {log} 1>&2
 
         rm \

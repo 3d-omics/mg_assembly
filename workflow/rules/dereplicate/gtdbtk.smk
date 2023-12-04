@@ -56,7 +56,7 @@ rule _dereplicate__gtdbtk__classify:
         mv \
             --force \
             {log} \
-            {out_dir}/gtdbtk.$(date -r {log} +%F_%R).log \
+            {params.out_dir}/gtdbtk.$(date -r {log} +%F_%R).log \
         2> {log}
 
         rm \
