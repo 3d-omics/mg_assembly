@@ -1,5 +1,4 @@
 include: "_functions.smk"
-include: "drep.smk"
 include: "bowtie2.smk"
 include: "coverm.smk"
 include: "quast.smk"

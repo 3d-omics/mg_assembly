@@ -26,6 +26,8 @@ METABAT2 = ASSEMBLE / "metabat2/"
 MAXBIN2 = ASSEMBLE / "maxbin2/"
 MAGSCOT = ASSEMBLE / "magscot/"
 PRODIGAL = MAGSCOT / "prodigal/"
+DREP = ASSEMBLE / "drep/"
+
 # VAMB = ASSEMBLE / "vamb/"  # This could be a metabinner
 
 
@@ -35,7 +37,6 @@ VIRIFY = Path("results/virify/")
 
 # dereplicate - this is confusing
 DEREPLICATE = Path("results/dereplicate/")
-DREP = DEREPLICATE / "drep/"
 DREP_INDEX = DEREPLICATE / "index/"
 DREP_BOWTIE2 = DEREPLICATE / "bowtie2/"
 

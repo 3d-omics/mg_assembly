@@ -5,15 +5,16 @@ include: "concoct.smk"
 include: "metabat2.smk"
 include: "maxbin2.smk"
 include: "magscot.smk"
+include: "drep.smk"
 
 
 rule assemble__run:
     """Run all assembly rules (no evaluation)"""
     input:
-        rules.assemble__magscot.input,
+        rules.assemble__drep.input,
 
 
 rule assemble:
     """Run the assemble module"""
     input:
-        rules.assemble__run.input,
+        rules.assemble__drep.input,
