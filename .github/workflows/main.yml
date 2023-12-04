@@ -111,8 +111,8 @@ jobs:
           sudo mkdir --parents results/assemble/drep/dereplicated_genomes
           sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/assemble/drep/dereplicated_genomes/all:bin_00001.fa"
           sudo touch results/assemble/drep/dereplicated_genomes/.snakemake_timestamp
-          touch results/assemble/drep/data.tar.gz
-          touch results/assemble/drep/data_tables.tar.gz
+          sudo touch results/assemble/drep/data.tar.gz
+          sudo touch results/assemble/drep/data_tables.tar.gz
 
       - name: Test workflow - Quantify
         uses: snakemake/snakemake-github-action@v1.24.0
