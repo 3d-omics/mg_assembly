@@ -51,8 +51,22 @@ rule _dereplicate__dram__annotate:
         runtime=48 * 60,
     shell:
         """
-        rm --recursive --force --verbose {params.tmp_dir} 2> {log} 1>&2
-        mkdir --parents {params.tmp_dir} 2>>{log} 1>&2
+        mv \
+            --force \
+            {log} \
+            {out_dir}/annotate.$(date -r {log} +%F_%R).log \
+        2> {log} 1>&2
+
+        rm \
+            --recursive \
+            --force \
+            --verbose {params.tmp_dir} \
+        2>> {log} 1>&2
+
+        mkdir \
+            --parents \
+            {params.tmp_dir} \
+        2>>{log} 1>&2
 
         DRAM-setup.py set_database_locations \
             --amg_database_loc          {input.dram_db}/amg_database.*.tsv \
