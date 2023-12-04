@@ -1,4 +1,4 @@
-# rule _dereplicate__dram__download_db:
+# rule _annotate__dram__download_db:
 #     """Download dram database if it does not exist
 
 #     Will skip UniRef and Kegg.
@@ -25,26 +25,26 @@
 #         """
 
 
-rule _dereplicate__dram__annotate:
+rule _annotate__dram__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes",
-        gtdbtk_summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
+        gtdbtk_summary=GTDBTK / "gtdbtk.summary.tsv",
         dram_db=features["databases"]["dram"],
     output:
-        annotation=DREP_DRAM / "annotations.tsv",
-        trnas=DREP_DRAM / "trnas.tsv",
-        rrnas=DREP_DRAM / "rrnas.tsv",
-        tarball=DREP_DRAM / "annotate.tar.gz",
+        annotation=DRAM / "annotations.tsv",
+        trnas=DRAM / "trnas.tsv",
+        rrnas=DRAM / "rrnas.tsv",
+        tarball=DRAM / "annotate.tar.gz",
     log:
-        DREP_DRAM / "annotate.log",
+        DRAM / "annotate.log",
     conda:
         "dram.yml"
     threads: 24
     params:
         min_contig_size=1500,
-        out_dir=DREP_DRAM,
-        tmp_dir=DREP_DRAM / "annotate",
+        out_dir=DRAM,
+        tmp_dir=DRAM / "annotate",
         parallel_retries=5,
     resources:
         mem_mb=16 * 1024,
@@ -121,28 +121,28 @@ rule _dereplicate__dram__annotate:
         """
 
 
-rule _dereplicate__dram__distill:
+rule _annotate__dram__distill:
     """Distill DRAM annotations."""
     input:
-        annotations=DREP_DRAM / "annotations.tsv",
-        trnas=DREP_DRAM / "trnas.tsv",
-        rrnas=DREP_DRAM / "rrnas.tsv",
+        annotations=DRAM / "annotations.tsv",
+        trnas=DRAM / "trnas.tsv",
+        rrnas=DRAM / "rrnas.tsv",
         dram_db=features["databases"]["dram"],
     output:
-        genome=DREP_DRAM / "genome_stats.tsv",
-        metabolism=DREP_DRAM / "metabolism_summary.xlsx",
-        product_html=DREP_DRAM / "product.html",
-        product_tsv=DREP_DRAM / "product.tsv",
+        genome=DRAM / "genome_stats.tsv",
+        metabolism=DRAM / "metabolism_summary.xlsx",
+        product_html=DRAM / "product.html",
+        product_tsv=DRAM / "product.tsv",
     log:
-        DREP_DRAM / "distill.log2",
+        DRAM / "distill.log2",
     conda:
         "dram.yml"
     resources:
         mem_mb=16 * 1024,
         runtime=24 * 60,
     params:
-        outdir_tmp=DREP_DRAM / "distill",
-        outdir=DREP_DRAM,
+        outdir_tmp=DRAM / "distill",
+        outdir=DRAM,
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -177,11 +177,11 @@ rule _dereplicate__dram__distill:
         """
 
 
-rule dereplicate__dram:
+rule annotate__dram:
     """Run DRAM on dereplicated genomes."""
     input:
-        rules._dereplicate__dram__distill.output,
+        rules._annotate__dram__distill.output,
 
 
 # localrules:
-#     _dereplicate__dram__download_db,
+#     _annotate__dram__download_db,

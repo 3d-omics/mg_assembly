@@ -1,11 +1,11 @@
-rule dereplicate__quast:
+rule annotate__quast:
     """Run quast over one the dereplicated mags"""
     input:
         DREP / "dereplicated_genomes.fa",
     output:
-        directory(DREP_QUAST),
+        directory(QUAST),
     log:
-        DREP_QUAST / "quast.log",
+        QUAST / "quast.log",
     conda:
         "_env.yml"
     threads: 4

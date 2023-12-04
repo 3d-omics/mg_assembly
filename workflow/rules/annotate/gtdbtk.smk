@@ -1,4 +1,4 @@
-rule _dereplicate__gtdbtk__download:
+rule _annotate__gtdbtk__download:
     output:
         directory(features["databases"]["gtdbtk"]),
     log:
@@ -29,24 +29,24 @@ rule _dereplicate__gtdbtk__download:
         """
 
 
-rule _dereplicate__gtdbtk__classify:
+rule _annotate__gtdbtk__classify:
     """Run GTDB-Tk over the dereplicated genomes."""
     input:
         bin_folder=DREP / "dereplicated_genomes",
         database=features["databases"]["gtdbtk"],
     output:
-        summary=DREP_GTDBTK / "gtdbtk.summary.tsv",
-        align=DREP_GTDBTK / "align.tar.gz",
-        classify=DREP_GTDBTK / "classify.tar.gz",
-        identify=DREP_GTDBTK / "identify.tar.gz",
+        summary=GTDBTK / "gtdbtk.summary.tsv",
+        align=GTDBTK / "align.tar.gz",
+        classify=GTDBTK / "classify.tar.gz",
+        identify=GTDBTK / "identify.tar.gz",
     log:
-        DREP_GTDBTK / "gtdbtk_classify.log",
+        GTDBTK / "gtdbtk_classify.log",
     conda:
         "gtdbtk.yml"
     params:
-        out_dir=DREP_GTDBTK,
-        ar53=DREP_GTDBTK / "gtdbtk.ar53.summary.tsv",
-        bac120=DREP_GTDBTK / "gtdbtk.bac120.summary.tsv",
+        out_dir=GTDBTK,
+        ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
+        bac120=GTDBTK / "gtdbtk.bac120.summary.tsv",
     threads: 24
     resources:
         mem_mb=64 * 1024,
@@ -118,7 +118,7 @@ rule _dereplicate__gtdbtk__classify:
         """
 
 
-rule dereplicate__gtdbtk:
+rule annotate__gtdbtk:
     """Run the gtdbtk subworkflow"""
     input:
-        rules._dereplicate__gtdbtk__classify.output,
+        rules._annotate__gtdbtk__classify.output,

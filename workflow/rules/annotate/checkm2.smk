@@ -1,8 +1,8 @@
-rule _dereplicate__checkm2__download:
+rule _annotate__checkm2__download:
     output:
         directory(features["databases"]["checkm2"]),
     log:
-        DREP_CHECKM / "download.log",
+        CHECKM / "download.log",
     conda:
         "checkm2.yml"
     shell:
@@ -19,20 +19,20 @@ rule _dereplicate__checkm2__download:
         """
 
 
-rule _dereplicate__checkm2__predict:
+rule _annotate__checkm2__predict:
     """Run CheckM2 over the dereplicated mags"""
     input:
         mags=DREP / "dereplicated_genomes",
         db=features["databases"]["checkm2"],
     output:
-        DREP_CHECKM / "quality_report.tsv",
+        CHECKM / "quality_report.tsv",
     log:
-        DREP_CHECKM / "quality_report.log",
+        CHECKM / "quality_report.log",
     threads: 24
     conda:
         "checkm2.yml"
     params:
-        out_dir=DREP_CHECKM / "predict",
+        out_dir=CHECKM / "predict",
     resources:
         mem_mb=16 * 1024,
     shell:
@@ -53,7 +53,7 @@ rule _dereplicate__checkm2__predict:
         """
 
 
-rule dereplicate__checkm2:
+rule annotate__checkm2:
     """Run CheckM2"""
     input:
-        rules._dereplicate__checkm2__predict.output,
+        rules._annotate__checkm2__predict.output,

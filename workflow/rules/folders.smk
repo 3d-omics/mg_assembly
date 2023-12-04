@@ -38,11 +38,11 @@ COVERM = QUANT / "coverm/"
 
 
 # dereplicate evaluation
-DEREPLICATE = Path("results/dereplicate/")
-DREP_GTDBTK = DEREPLICATE / "gtdbtk/"
-DREP_QUAST = DEREPLICATE / "quast/"
-DREP_DRAM = DEREPLICATE / "dram/"
-DREP_CHECKM = DEREPLICATE / "checkm2"
+ANN = Path("results/annotate/")
+GTDBTK = ANN / "gtdbtk/"
+QUAST = ANN / "quast/"
+DRAM = ANN / "dram/"
+CHECKM = ANN / "checkm2"
 
 # Viral prediction
 VIRIFY = Path("results/virify/")

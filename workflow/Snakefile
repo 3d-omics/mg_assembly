@@ -42,7 +42,7 @@ include: "rules/reference/_main.smk"
 include: "rules/preprocess/_main.smk"
 include: "rules/assemble/_main.smk"
 include: "rules/quantify/_main.smk"
-include: "rules/dereplicate/_main.smk"
+include: "rules/annotate/_main.smk"
 include: "rules/report/_main.smk"
 include: "rules/virify/_main.smk"
 

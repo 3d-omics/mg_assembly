@@ -23,6 +23,6 @@ touch results/assemble/drep/data_tables.tar.gz
 gzip -dc resources/mock_assembly.fa.gz > results/assemble/drep/dereplicated_genomes.fa
 
 ./run -j8 quantify
-./run -j8 dereplicate --rerun-triggers mtime
+./run -j8 annotate
 
 ./run -j8 report
