@@ -42,6 +42,16 @@ rule _dereplicate__drep__run:
     retries: 5
     shell:
         """
+        rm \
+            --recursive \
+            --force \
+            {params.out_dir}/data_tables \
+            {params.out_dir}/data \
+            {params.out_dir}/dereplicated_genomes \
+            {params.out_dir}/figures \
+            {params.out_dir}/log \
+        2> {log}
+
         dRep dereplicate \
             {params.out_dir} \
             --processors {threads} \
