@@ -1,4 +1,4 @@
-rule _bin__concoct__cut_up_fasta:
+rule _assemble__concoct__cut_up_fasta:
     """Run concoct cut_up_fasta.py on one assembly."""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
@@ -22,7 +22,7 @@ rule _bin__concoct__cut_up_fasta:
         """
 
 
-rule _bin__concoct__coverage_table:
+rule _assemble__concoct__coverage_table:
     """Run concoct concoct_coverage_table.py on one assembly."""
     input:
         bams=get_bams_from_assembly_id,
@@ -46,7 +46,7 @@ rule _bin__concoct__coverage_table:
         """
 
 
-rule _bin__concoct__run:
+rule _assemble__concoct__run:
     """Run concoct on one assembly."""
     input:
         assembly_10k=CONCOCT / "prepare" / "{assembly_id}.cut.fa",
@@ -82,7 +82,7 @@ rule _bin__concoct__run:
         """
 
 
-rule _bin__concoct__merge_cutup_clustering:
+rule _assemble__concoct__merge_cutup_clustering:
     """Run concoct merge_cutup_clustering.py on one assembly."""
     input:
         clustering=CONCOCT / "run" / "{assembly_id}_clustering_gt1000.csv",
@@ -101,7 +101,7 @@ rule _bin__concoct__merge_cutup_clustering:
         """
 
 
-rule _bin__concoct__extract_fasta_bins:
+rule _assemble__concoct__extract_fasta_bins:
     """Run concoct extract_fasta_bins.py on one assembly."""
     input:
         assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
@@ -125,7 +125,7 @@ rule _bin__concoct__extract_fasta_bins:
         """
 
 
-rule bin__concoct:
+rule assemble__concoct:
     """Run concoct on all assemblies."""
     input:
         [CONCOCT / "fasta_bins" / assembly_id for assembly_id in ASSEMBLIES],

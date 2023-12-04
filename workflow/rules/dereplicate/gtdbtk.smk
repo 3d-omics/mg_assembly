@@ -57,7 +57,7 @@ rule _dereplicate__gtdbtk__classify:
             --force \
             {log} \
             {params.out_dir}/gtdbtk.$(date -r {log} +%F_%R).log \
-        2> {log}
+        2> {log} 1>&2
 
         rm \
             --recursive \
@@ -71,7 +71,7 @@ rule _dereplicate__gtdbtk__classify:
             {params.out_dir}/gtdbtk.warnings.log \
             {params.ar53} \
             {params.bac120} \
-        2>> {log}
+        2>> {log} 1>&2
 
         export GTDBTK_DATA_PATH="{input.database}"
 

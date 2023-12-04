@@ -3,11 +3,26 @@ set -euo pipefail
 
 rm -rf results reports
 
-./run -j8 assemble
+./run -j8 assemble__megahit
+
 gzip -dc resources/mock_assembly.fa.gz > results/assemble/renaming/all.fa
-./run -j8 bin
+
+./run -j8 assemble --rerun-triggers mtime
+
+mkdir --parents results/dereplicate/drep/separated_bins
+touch results/dereplicate/drep/separated_bins/.snakemake_timestamp
+gzip -dc resources/mock_assembly.fa.gz > results/dereplicate/drep/separated_bins/all:bin_00001.fa
+
 mkdir --parents results/dereplicate/drep/dereplicated_genomes
-gzip -dc resources/mock_assembly.fa.gz > results/dereplicate/drep/dereplicated_genomes/all:bin_00001.fa
 touch results/dereplicate/drep/dereplicated_genomes/.snakemake_timestamp
-./run -j8 dereplicate
+gzip -dc resources/mock_assembly.fa.gz > results/dereplicate/drep/dereplicated_genomes/all:bin_00001.fa
+
+touch results/dereplicate/drep/data.tar.gz
+touch results/dereplicate/drep/data_tables.tar.gz
+
+gzip -dc resources/mock_assembly.fa.gz > results/dereplicate/drep/dereplicated_genomes.fa
+
+
+./run -j8 dereplicate --rerun-triggers mtime
+
 ./run -j8 report

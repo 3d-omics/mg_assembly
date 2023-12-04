@@ -39,7 +39,10 @@ rule _assemble__megahit:
             {params.extra} \
         2> {log} 1>&2
 
-        cp {params.out_dir}/final.contigs.fa {output.fasta} 2>> {log} 1>&2
+        cp \
+            {params.out_dir}/final.contigs.fa \
+            {output.fasta} \
+        2>> {log} 1>&2
 
         tar \
             --create \

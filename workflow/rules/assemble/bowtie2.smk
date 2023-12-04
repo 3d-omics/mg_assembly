@@ -82,10 +82,39 @@ rule _assemble__bowtie2:
         """
 
 
+rule _assemble__bowtie2__cram_to_bam:
+    input:
+        cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        fai=ASSEMBLE_RENAME / "{assembly_id}.fa.fai",
+    output:
+        bam=temp(ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam"),
+    log:
+        ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram_to_bam.log",
+    conda:
+        "_env.yml"
+    threads: 24
+    resources:
+        mem_mb=8,
+        runtime=24 * 60,
+    shell:
+        """
+        samtools view \
+            --exclude-flags 4 \
+            --fast \
+            --output {output.bam} \
+            --output-fmt BAM \
+            --reference {input.reference} \
+            --threads {threads} \
+            {input.cram} \
+        2> {log} 1>&2
+        """
+
+
 rule assemble__bowtie2:
     """Map all samples to all the assemblies that they belong to"""
     input:
         [
-            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],

@@ -21,24 +21,16 @@ MEGAHIT = ASSEMBLE / "megahit/"
 ASSEMBLE_RENAME = ASSEMBLE / "renaming/"
 ASSEMBLE_INDEX = ASSEMBLE / "index/"
 ASSEMBLE_BOWTIE2 = ASSEMBLE / "bowtie2/"
-
-# Assembly evaluation
-ASSEMBLE_QUAST = ASSEMBLE / "quast/"
-ASSEMBLE_COVERM = ASSEMBLE / "coverm/"
+CONCOCT = ASSEMBLE / "concoct/"
+METABAT2 = ASSEMBLE / "metabat2/"
+MAXBIN2 = ASSEMBLE / "maxbin2/"
+MAGSCOT = ASSEMBLE / "magscot/"
+PRODIGAL = MAGSCOT / "prodigal/"
+# VAMB = ASSEMBLE / "vamb/"  # This could be a metabinner
 
 
 # Viral prediction
 VIRIFY = Path("results/virify/")
-
-# binners
-BIN = Path("results/bin/")
-VAMB = BIN / "vamb/"  # This could be a metabinner
-CONCOCT = BIN / "concoct/"
-METABAT2 = BIN / "metabat2/"
-MAXBIN2 = BIN / "maxbin2/"
-MAGSCOT = BIN / "magscot/"
-PRODIGAL = MAGSCOT / "prodigal/"
-BIN_QUAST = BIN / "quast/"
 
 
 # dereplicate - this is confusing

@@ -41,10 +41,9 @@ include: "rules/reads/_main.smk"
 include: "rules/reference/_main.smk"
 include: "rules/preprocess/_main.smk"
 include: "rules/assemble/_main.smk"
-include: "rules/virify/_main.smk"
-include: "rules/bin/_main.smk"
 include: "rules/dereplicate/_main.smk"
 include: "rules/report/_main.smk"
+include: "rules/virify/_main.smk"
 
 
 rule all:
@@ -53,5 +52,4 @@ rule all:
         rules.reads.input,
         rules.preprocess.input,
         rules.assemble.input,
-        rules.bin.input,
         rules.report.input,
