@@ -147,7 +147,7 @@ rule report__step:
     input:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocess.html",
-        REPORT_STEP / "assemble.html",
+        # REPORT_STEP / "assemble.html",
         REPORT_STEP / "bin.html",
 
 
