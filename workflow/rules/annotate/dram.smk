@@ -9,7 +9,7 @@
 #     log:
 #         features["databases"]["dram"] + ".log",
 #     conda:
-#         "dram.yml"
+#         "_env.yml"
 #     shell:
 #         """
 #         DRAM-setup.py prepare_databases \
@@ -39,7 +39,7 @@ rule _annotate__dram__annotate:
     log:
         DRAM / "annotate.log",
     conda:
-        "dram.yml"
+        "_env.yml"
     threads: 24
     params:
         min_contig_size=1500,
@@ -136,7 +136,7 @@ rule _annotate__dram__distill:
     log:
         DRAM / "distill.log2",
     conda:
-        "dram.yml"
+        "_env.yml"
     resources:
         mem_mb=16 * 1024,
         runtime=24 * 60,
