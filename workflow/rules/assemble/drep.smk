@@ -6,7 +6,7 @@ rule _assemble__drep__separate_bins:
     log:
         DREP / "separate_bins.log",
     conda:
-        "drep.yml"
+        "_env.yml"
     shell:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2
@@ -32,7 +32,7 @@ rule _assemble__drep__run:
     log:
         DREP / "drep.log",
     conda:
-        "drep.yml"
+        "_env.yml"
     threads: 24
     params:
         out_dir=DREP,
@@ -89,7 +89,7 @@ rule _assemble__drep__join_genomes:
     log:
         DREP / "dereplicated_genomes.log",
     conda:
-        "drep.yml"
+        "_env.yml"
     threads: 1
     shell:
         """

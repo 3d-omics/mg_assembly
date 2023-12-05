@@ -7,7 +7,9 @@ channels:
 dependencies:
   - biopython=1.81
   - bowtie2=2.5.1
+  - checkm-genome=1.2.2
   - coreutils=9.4
+  - drep=3.4.3
   - hmmer=3.3.2
   - megahit=1.2.9
   - pandas=2.1.2
