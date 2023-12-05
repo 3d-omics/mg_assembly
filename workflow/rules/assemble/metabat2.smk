@@ -8,7 +8,7 @@ rule _assemble__metabat2__prepare:
     log:
         METABAT2 / "prepare" / "{assembly_id}.log",
     conda:
-        "metabat2.yml"
+        "_env.yml"
     shell:
         """
         jgi_summarize_bam_contig_depths \
@@ -29,7 +29,7 @@ rule _assemble__metabat2__run:
     log:
         METABAT2 / "bins" / "{assembly_id}.log",
     conda:
-        "metabat2.yml"
+        "_env.yml"
     params:
         bins_prefix=compose_bins_prefix_for_metabat2_run_one,
     threads: 24
