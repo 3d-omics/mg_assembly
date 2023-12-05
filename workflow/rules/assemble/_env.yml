@@ -23,3 +23,5 @@ dependencies:
   - r-tidyverse=2.0.0
   - samtools=1.18
   - seqtk=1.4
+  - maxbin2=2.2.7
+  - rename=1.601
