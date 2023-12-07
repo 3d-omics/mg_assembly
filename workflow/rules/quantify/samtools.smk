@@ -21,5 +21,5 @@ rule quantify__samtools:
         [
             QUANT_BOWTIE2 / f"{sample_id}.{library_id}.{extension}"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
+            for extension in ["stats.txt", "flagstats.txt"]
         ],

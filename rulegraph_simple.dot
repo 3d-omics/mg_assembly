@@ -77,7 +77,6 @@ digraph snakemake_dag {
             shape=box; style="rounded,dashed"; fontname=sans; fontsize=10; penwidth=2; margin=10;
             gtdbtk [label = "GTDB-TK", color = "0.34 0.6 0.85", style = "dashed,rounded"];
             dram   [label = "DRAM",    color = "0.01 0.6 0.85", style = "dashed,rounded"];
-            quast  [label = "QUAST",   color = "0.38 0.6 0.85", style = "rounded"];
             checkm [label = "CheckM2", color = "0.35 0.44 0.72", style = "rounded"];
         }
         gtdbtk -> dram
@@ -91,7 +90,6 @@ digraph snakemake_dag {
     drep      -> gtdbtk
     drep      -> bowtie2_drep
     drep      -> checkm
-    drep      -> quast
 
     subgraph cluster_5_space {
         margin = 10;

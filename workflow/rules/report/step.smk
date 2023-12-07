@@ -1,4 +1,4 @@
-rule report__step__reads:
+rule _report__step__reads:
     """Collect all reports for the reads step"""
     input:
         rules.reads__fastqc.input,
@@ -24,7 +24,7 @@ rule report__step__reads:
         """
 
 
-rule report__step__preprocess:
+rule _report__step__preprocess:
     """Collect all reports for the preprocessing step"""
     input:
         rules.preprocess__fastqc.input,
@@ -55,14 +55,16 @@ rule report__step__preprocess:
         """
 
 
-rule report__step__assemble:
-    """Collcect all reports from the assemble step"""
+rule _report__step__assemble:
+    """Collect all reports from the assemble step"""
     input:
         QUAST,
     output:
         REPORT_STEP / "assemble.html",
     log:
-        "_env.yml",
+        REPORT_STEP / "assemble.log",
+    conda:
+        "_env.yml"
     params:
         dir=REPORT_STEP,
     resources:
@@ -79,10 +81,36 @@ rule report__step__assemble:
         """
 
 
+rule _report__step__quantify:
+    """Collect all reports from the quantify step"""
+    input:
+        rules.quantify__samtools.input,
+    output:
+        REPORT_STEP / "quantify.html",
+    log:
+        REPORT_STEP / "quantify.log",
+    conda:
+        "_env.yml"
+    params:
+        dir=REPORT_STEP,
+    resources:
+        mem_mb=8 * 1024,
+    shell:
+        """
+        multiqc \
+            --title quantify \
+            --force \
+            --filename quantify \
+            --outdir {params.dir} \
+            {input} \
+        2> {log} 1>&2
+        """
+
+
 rule report__step:
     """Report for all steps"""
     input:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocess.html",
         REPORT_STEP / "assemble.html",
-        # REPORT_STEP / "quantify.html",
+        REPORT_STEP / "quantify.html",
