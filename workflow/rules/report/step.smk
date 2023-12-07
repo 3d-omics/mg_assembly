@@ -55,15 +55,34 @@ rule report__step__preprocess:
         """
 
 
+rule report__step__assemble:
+    """Collcect all reports from the assemble step"""
+    input:
+        QUAST,
+    output:
+        REPORT_STEP / "assemble.html",
+    log:
+        "_env.yml",
+    params:
+        dir=REPORT_STEP,
+    resources:
+        mem_mb=8 * 1024,
+    shell:
+        """
+        multiqc \
+            --title assemble \
+            --force \
+            --filename assemble \
+            --outdir {params.dir} \
+            {input} \
+        2> {log} 1>&2
+        """
+
+
 rule report__step:
     """Report for all steps"""
     input:
         REPORT_STEP / "reads.html",
         REPORT_STEP / "preprocess.html",
-
-
-rule report__step__with_dereplicate:
-    """Report all steps + dereplicate"""
-    input:
-        rules.report__step.input,
-        REPORT_STEP / "dereplicate.html",
+        REPORT_STEP / "assemble.html",
+        # REPORT_STEP / "quantify.html",
