@@ -9,7 +9,21 @@ rule _helpers__samtools__index_bam:
     log:
         "{prefix}.bam.bai.log",
     shell:
-        "samtools index {input} 2> {log}"
+        "samtools index {input} 2> {log} 1>&2"
+
+
+rule _helpers__samtools__index_cram:
+    """Index a cram file"""
+    input:
+        "{prefix}.cram",
+    output:
+        "{prefix}.cram.crai",
+    conda:
+        "_env.yml"
+    log:
+        "{prefix}.cram.crai.log",
+    shell:
+        "samtools index {input} 2> {log} 1>&2"
 
 
 rule _helpers__samtools__faidx_fa:
