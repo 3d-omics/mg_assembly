@@ -47,7 +47,7 @@ rule _annotate__dram__annotate:
         tmp_dir=DRAM / "annotate",
         parallel_retries=5,
     resources:
-        mem_mb=16 * 1024,
+        mem_mb=32 * 1024,
         runtime=48 * 60,
     shell:
         """
