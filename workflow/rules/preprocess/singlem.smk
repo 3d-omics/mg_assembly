@@ -19,6 +19,7 @@ rule _preprocess__singlem__pipe:
     threads: 24
     resources:
         runtime=4 * 60,
+        mem_mb=8 * 1024,
     shell:
         """
         singlem pipe \
