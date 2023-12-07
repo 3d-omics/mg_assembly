@@ -50,5 +50,5 @@ VIRIFY = Path("results/virify/")
 
 # reports
 REPORT = Path("reports/")
-REPORT_STEP = REPORT / "by_step/"
-REPORT_ASSEMBLY = REPORT / "by_assembly/"
+REPORT_STEP = REPORT / "step/"
+REPORT_SAMPLE = REPORT / "library/"
