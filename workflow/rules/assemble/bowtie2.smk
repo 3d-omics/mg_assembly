@@ -36,6 +36,7 @@ rule _assemble__bowtie2:
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
         reference=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        fai=ASSEMBLE_RENAME / "{assembly_id}.fa.fai",
     output:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
     log:

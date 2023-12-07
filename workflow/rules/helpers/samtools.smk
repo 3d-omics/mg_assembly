@@ -1,17 +1,3 @@
-rule _helpers__samtools__index_cram:
-    """Index a cram file"""
-    input:
-        "{prefix}.cram",
-    output:
-        "{prefix}.cram.crai",
-    conda:
-        "_env.yml"
-    log:
-        "{prefix}.cram.crai.log",
-    shell:
-        "samtools index {input} 2> {log}"
-
-
 rule _helpers__samtools__index_bam:
     """Index a bam file"""
     input:
