@@ -91,7 +91,7 @@ rule _assemble__bowtie2__cram_to_bam:
         "_env.yml"
     threads: 24
     resources:
-        mem_mb=8,
+        mem_mb=8 * 1024,
         runtime=24 * 60,
     shell:
         """
