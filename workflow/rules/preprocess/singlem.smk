@@ -16,10 +16,10 @@ rule _preprocess__singlem__pipe:
         SINGLEM / "{sample_id}.{library_id}.log",
     conda:
         "_env.yml"
-    threads: 24
+    threads: 1
     resources:
         runtime=4 * 60,
-        mem_mb=8 * 1024,
+        mem_mb=16 * 1024,
     shell:
         """
         singlem pipe \
