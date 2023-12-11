@@ -89,7 +89,7 @@ rule _assemble__bowtie2__cram_to_bam:
         ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram_to_bam.log",
     conda:
         "_env.yml"
-    threads: 24
+    threads: 1
     resources:
         mem_mb=8 * 1024,
         runtime=24 * 60,
