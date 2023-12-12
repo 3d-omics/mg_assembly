@@ -9,11 +9,11 @@ rule _preprocess__singlem__pipe:
         reverse_=get_final_reverse_from_pre,
         data=features["databases"]["singlem"],
     output:
-        archive_otu_table=SINGLEM / "{sample_id}.{library_id}.archive.json",
-        otu_table=SINGLEM / "{sample_id}.{library_id}.otu_table.tsv",
-        condense=SINGLEM / "{sample_id}.{library_id}.condense.tsv",
+        archive_otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.archive.json",
+        otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.otu_table.tsv",
+        condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv",
     log:
-        SINGLEM / "{sample_id}.{library_id}.log",
+        SINGLEM / "pipe" / "{sample_id}.{library_id}.log",
     conda:
         "_env.yml"
     threads: 1
@@ -39,7 +39,7 @@ rule _preprocess__singlem__condense:
     """Aggregate all the singlem results into a single table"""
     input:
         archive_otu_tables=[
-            SINGLEM / f"{sample_id}.{library_id}.archive.json"
+            SINGLEM / "pipe" / f"{sample_id}.{library_id}.archive.json"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
         database=features["databases"]["singlem"],
@@ -67,11 +67,13 @@ rule _preprocess__singlem__microbial_fraction:
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
         data=features["databases"]["singlem"],
-        condense=SINGLEM / "{sample_id}.{library_id}.condense.tsv",
+        condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv",
     output:
-        microbial_fraction=SINGLEM / "{sample_id}.{library_id}.microbial_fraction.tsv",
+        microbial_fraction=SINGLEM
+        / "microbial_fraction"
+        / "{sample_id}.{library_id}.tsv",
     log:
-        SINGLEM / "{sample_id}.{library_id}.microbial_fraction.log",
+        SINGLEM / "microbial_fraction" / "{sample_id}.{library_id}.log",
     conda:
         "_env.yml"
     shell:
@@ -90,7 +92,7 @@ rule _preprocess__singlem__aggregate_microbial_fraction:
     """Aggregate all the microbial_fraction files into one tsv"""
     input:
         tsvs=[
-            SINGLEM / "{sample_id}.{library_id}.microbial_fraction.tsv"
+            SINGLEM / "microbial_fraction" / f"{sample_id}.{library_id}.tsv"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
     output:
