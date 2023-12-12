@@ -108,7 +108,7 @@ rule _preprocess__singlem__aggregate_microbial_fraction:
             {input.tsvs} \
         | csvformat \
             --out-tabs \
-        > singlem.microbial_summary.tsv \
+        > {output.tsv} \
         ) 2> {log}
         """
 
