@@ -61,6 +61,57 @@ rule _preprocess__singlem__condense:
         """
 
 
+rule _preprocess__singlem__microbial_fraction:
+    """Run singlem microbial_fraction over one sample"""
+    input:
+        forward_=get_final_forward_from_pre,
+        reverse_=get_final_reverse_from_pre,
+        data=features["databases"]["singlem"],
+        condense=SINGLEM / "{sample_id}.{library_id}.condense.tsv",
+    output:
+        microbial_fraction=SINGLEM / "{sample_id}.{library_id}.microbial_fraction.tsv",
+    log:
+        SINGLEM / "{sample_id}.{library_id}.microbial_fraction.log",
+    conda:
+        "_env.yml"
+    shell:
+        """
+        singlem microbial_fraction \
+            --forward {input.forward_} \
+            --reverse {input.reverse_} \
+            --input-profile {input.condense} \
+            --output-tsv {output.microbial_fraction} \
+            --metapackage {input.data} \
+        2> {log} 1>&2
+        """
+
+
+rule _preprocess__singlem__aggregate_microbial_fraction:
+    """Aggregate all the microbial_fraction files into one tsv"""
+    input:
+        tsvs=[
+            SINGLEM / "{sample_id}.{library_id}.microbial_fraction.tsv"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],
+    output:
+        tsv=SINGLEM / "microbial_fraction.tsv",
+    log:
+        SINGLEM / "microbial_fraction.log",
+    conda:
+        "_env.yml"
+    shell:
+        """
+        ( csvstack \
+            --tabs \
+            {input.tsvs} \
+        | csvformat \
+            --out-tabs \
+        > singlem.microbial_summary.tsv \
+        ) 2> {log}
+        """
+
+
 rule preprocess__singlem:
     input:
         rules._preprocess__singlem__condense.output,
+        rules._preprocess__singlem__aggregate_microbial_fraction.output,
