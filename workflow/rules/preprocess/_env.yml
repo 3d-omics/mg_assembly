@@ -18,4 +18,4 @@ dependencies:
   - r-tidyverse=2.0.0
   - rsync=3.2.7
   - samtools=1.18
-  - singlem=0.15.0
+  - singlem=0.16.0
