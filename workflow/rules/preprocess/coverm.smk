@@ -15,7 +15,7 @@ rule _preprocess__coverm__cram_to_bam:
     log:
         PRE_COVERM / "bams" / "{sample_id}.{library_id}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     threads: 24
     resources:
         runtime=1 * 60,
@@ -41,7 +41,7 @@ rule _preprocess__coverm__genome:
     output:
         tsv=touch(PRE_COVERM / "genome" / "{method}" / "{sample}.{library_id}.tsv"),
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     log:
         PRE_COVERM / "genome" / "{method}" / "{sample}.{library_id}.log",
     params:
@@ -73,7 +73,7 @@ rule _preprocess__coverm__genome_aggregate:
     log:
         PRE_COVERM / "genome.{method}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     params:
         input_dir=PRE_COVERM / "genome" / "{method}",
     shell:

@@ -8,7 +8,7 @@ rule _assemble__magscot__prodigal:
     log:
         MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     threads: 24
     resources:
         runtime=24 * 60,
@@ -45,7 +45,7 @@ rule _assemble__magscot__hmmsearch_pfam:
     log:
         MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     threads: 4
     resources:
         runtime=24 * 60,
@@ -76,7 +76,7 @@ rule _assemble__magscot__hmmsearch_tigr:
     log:
         MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     threads: 4
     resources:
         runtime=24 * 60,
@@ -109,7 +109,7 @@ rule _assemble__magscot__join_hmms:
     log:
         MAGSCOT / "{assembly_id}" / "hmm.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     shell:
         """
         ( (grep -v "^#" {input.tigr_tblout} || true) | awk '{{print $1 "\\t" $3 "\\t" $5}}' ) >  {output.merged} 2>  {log}
@@ -132,7 +132,7 @@ rule _assemble__magscot__merge_contig_to_bin:
     log:
         MAGSCOT / "{assembly_id}" / "contigs_to_bin.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     shell:
         """
         for file in $(find {input.concoct} -name "*.fa" -type f) ; do
@@ -171,7 +171,7 @@ rule _assemble__magscot__run:
     log:
         MAGSCOT / "{assembly_id}/magscot.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     params:
         out_prefix=compose_out_prefix_for_bin_magscot_run_one,
     resources:
@@ -198,7 +198,7 @@ rule _assemble__magscot__reformat:
     log:
         MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     resources:
         mem_mb=8 * 1024,
     shell:
@@ -220,7 +220,7 @@ rule _assemble__magscot__rename:
     log:
         MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     resources:
         mem_mb=8 * 1024,
     shell:
@@ -241,7 +241,7 @@ rule _assemble__magscot__split_into_bins:
     log:
         MAGSCOT / "{assembly_id}" / "bins.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     shell:
         """
         mkdir -p {output.bins} 2> {log}

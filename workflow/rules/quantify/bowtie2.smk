@@ -7,7 +7,7 @@ rule _quantify__bowtie2__build:
     log:
         QUANT_INDEX / "dereplicated_genomes.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     threads: 24
     resources:
         mem_mb=double_ram(params["quantify"]["bowtie2-build"]["memory_gb"]),
@@ -35,7 +35,7 @@ rule _quantify__bowtie2__map:
     log:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     threads: 24
     params:
         samtools_mem=params["quantify"]["samtools"]["mem"],

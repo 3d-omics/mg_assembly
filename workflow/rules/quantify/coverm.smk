@@ -15,7 +15,7 @@ rule _quantify__coverm__cram_to_bam:
     log:
         COVERM / "bams" / "{sample_id}.{library_id}.bam.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     resources:
         runtime=1 * 60,
         mem_mb=4 * 1024,
@@ -39,7 +39,7 @@ rule _quantify__coverm__genome:
     output:
         tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     log:
         COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -68,7 +68,7 @@ rule _quantify__coverm__genome_aggregate:
     log:
         COVERM / "genome.{method}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     params:
         input_dir=compose_input_dir_for_dereplicate_coverm_genome_method,
     resources:
@@ -100,7 +100,7 @@ rule _quantify__coverm__contig:
     output:
         tsv=COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     log:
         COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -124,7 +124,7 @@ rule _quantify__coverm__contig_aggregate:
     log:
         COVERM / "contig.{method}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     params:
         input_dir=compose_input_dir_for_dereplicate_coverm_contig_method,
     resources:

@@ -13,7 +13,7 @@ rule _assemble__megahit:
     log:
         log=MEGAHIT / "{assembly_id}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     threads: 24
     params:
         out_dir=compose_out_dir_for_assemble_megahit_one,
@@ -66,7 +66,7 @@ rule _assemble__megahit__rename:
     log:
         ASSEMBLE_RENAME / "{assembly_id}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     params:
         assembly_id="{assembly_id}",
     shell:

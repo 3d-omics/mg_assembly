@@ -12,7 +12,7 @@ rule _reads__link:
     log:
         READS / "{sample}.{library}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     resources:  # run it superfast
         mem_mb=10,
         runtime=1,

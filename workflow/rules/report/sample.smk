@@ -6,7 +6,7 @@ rule _report__sample__multiqc:
     log:
         REPORT_SAMPLE / "{sample_id}.{library_id}.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     params:
         dir=REPORT_SAMPLE,
         filename=lambda wildcards: f"{wildcards.sample_id}.{wildcards.library_id}",

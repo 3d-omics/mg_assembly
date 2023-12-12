@@ -10,7 +10,7 @@ rule _preprocess__samtools__stats_cram:
     log:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.stats.log",
     conda:
-        "__env__.yml"
+        "__environment__.yml"
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
