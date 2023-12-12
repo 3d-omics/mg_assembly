@@ -92,13 +92,17 @@ def get_input_reverse_for_host_mapping(wildcards):
 
 def get_final_forward_from_pre(wildcards):
     """Get the last host forward file or the result from FASTP"""
-    if len(HOST_NAMES) > 1:
-        return PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_{end}.fq.gz"
-    return FASTP / "{sample_id}.{library_id}_1.fq.gz"
+    sample_id = wildcards.sample_id
+    library_id = wildcards.library_id
+    if len(HOST_NAMES) == 0:
+        return FASTP / f"{sample_id}.{library_id}_1.fq.gz"
+    return PRE_BOWTIE2 / f"non{HOST_NAMES[-1]}" / f"{sample_id}.{library_id}_1.fq.gz"
 
 
 def get_final_reverse_from_pre(wildcards):
     """Get the last host reverse file or the result from FASTP"""
-    if len(HOST_NAMES) > 1:
-        return PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_{end}.fq.gz"
-    return FASTP / "{sample_id}.{library_id}_2.fq.gz"
+    sample_id = wildcards.sample_id
+    library_id = wildcards.library_id
+    if len(HOST_NAMES) == 0:
+        return FASTP / f"{sample_id}.{library_id}_2.fq.gz"
+    return PRE_BOWTIE2 / f"non{HOST_NAMES[-1]}" / f"{sample_id}.{library_id}_2.fq.gz"
