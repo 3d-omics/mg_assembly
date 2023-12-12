@@ -7,7 +7,7 @@ rule _assemble__maxbin2__prepare:
     log:
         MAXBIN2 / "prepare" / "{assembly_id}.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     resources:
         runtime=6 * 60,
         mem_mb=8 * 1024,
@@ -31,7 +31,7 @@ rule _assemble__maxbin2__run:
     log:
         MAXBIN2 / "bins" / "{assembly_id}.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     threads: 4
     params:
         seed=1,

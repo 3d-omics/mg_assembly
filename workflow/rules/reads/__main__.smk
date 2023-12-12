@@ -1,4 +1,4 @@
-include: "_functions.smk"
+include: "__functions__.smk"
 
 
 rule _reads__link:
@@ -12,7 +12,7 @@ rule _reads__link:
     log:
         READS / "{sample}.{library}.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     resources:  # run it superfast
         mem_mb=10,
         runtime=1,

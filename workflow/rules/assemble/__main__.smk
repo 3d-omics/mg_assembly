@@ -1,4 +1,4 @@
-include: "_functions.smk"
+include: "__functions__.smk"
 include: "megahit.smk"
 include: "bowtie2.smk"
 include: "concoct.smk"

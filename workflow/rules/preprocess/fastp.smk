@@ -13,7 +13,7 @@ rule _preprocess__fastp__run:
     log:
         FASTP / "{sample_id}.{library_id}.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     params:
         adapter_forward=get_forward_adapter,
         adapter_reverse=get_reverse_adapter,

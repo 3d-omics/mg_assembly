@@ -10,7 +10,7 @@ rule _quantify__samtools__stats_cram:
     log:
         QUANT_BOWTIE2 / "{sample_id}.{library_id}.stats.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     shell:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 

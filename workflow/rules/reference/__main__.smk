@@ -8,7 +8,7 @@ rule _reference__recompress:
         REFERENCE / "{genome}.log",
     threads: 24
     conda:
-        "_env.yml"
+        "__env__.yml"
     shell:
         """
         (gzip -dc {input.fa_gz} | bgzip -@ {threads} > {output}) 2> {log}

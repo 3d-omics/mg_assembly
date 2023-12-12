@@ -7,7 +7,7 @@ rule _report__step__reads:
     log:
         REPORT_STEP / "reads.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     params:
         dir=REPORT_STEP,
     resources:
@@ -36,7 +36,7 @@ rule _report__step__preprocess:
     log:
         REPORT_STEP / "preprocess.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     params:
         dir=REPORT_STEP,
     resources:
@@ -64,7 +64,7 @@ rule _report__step__assemble:
     log:
         REPORT_STEP / "assemble.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     params:
         dir=REPORT_STEP,
     resources:
@@ -90,7 +90,7 @@ rule _report__step__quantify:
     log:
         REPORT_STEP / "quantify.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     params:
         dir=REPORT_STEP,
     resources:

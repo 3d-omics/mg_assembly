@@ -4,7 +4,7 @@ rule _annotate__gtdbtk__download:
     log:
         features["databases"]["gtdbtk"] + ".log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     shell:
         """
         mkdir --parents {output} 2> {log} 1>&2
@@ -42,7 +42,7 @@ rule _annotate__gtdbtk__classify:
     log:
         GTDBTK / "gtdbtk_classify.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     params:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",

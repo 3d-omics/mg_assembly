@@ -39,7 +39,7 @@ rule _annotate__dram__annotate:
     log:
         DRAM / "annotate.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     threads: 24
     params:
         min_contig_size=1500,

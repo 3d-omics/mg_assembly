@@ -7,7 +7,7 @@ rule annotate__quast:
     log:
         QUAST / "quast.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     threads: 4
     resources:
         mem_mb=8 * 1024,

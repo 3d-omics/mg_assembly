@@ -7,7 +7,7 @@ rule _assemble__bowtie2__build:
     log:
         ASSEMBLE_INDEX / "{assembly_id}.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     threads: 24
     resources:
         mem_mb=double_ram(params["assemble"]["bowtie2-build"]["memory_gb"]),
@@ -42,7 +42,7 @@ rule _assemble__bowtie2:
     log:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     threads: 24
     params:
         samtools_mem=params["assemble"]["samtools"]["mem"],
@@ -88,7 +88,7 @@ rule _assemble__bowtie2__cram_to_bam:
     log:
         ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram_to_bam.log",
     conda:
-        "_env.yml"
+        "__env__.yml"
     threads: 1
     resources:
         mem_mb=8 * 1024,

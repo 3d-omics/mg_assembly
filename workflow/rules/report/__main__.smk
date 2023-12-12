@@ -1,4 +1,4 @@
-include: "_functions.smk"
+include: "__functions__.smk"
 include: "step.smk"
 include: "sample.smk"
 
