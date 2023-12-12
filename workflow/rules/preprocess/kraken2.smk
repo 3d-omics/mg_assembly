@@ -6,20 +6,22 @@ rule _preprocess__kraken2__assign:
     """
     input:
         forwards=[
-            FASTP / f"{sample}.{library}_1.fq.gz" for sample, library in SAMPLE_LIBRARY
+            FASTP / f"{sample_id}.{library_id}_1.fq.gz"
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
         rerverses=[
-            FASTP / f"{sample}.{library}_2.fq.gz" for sample, library in SAMPLE_LIBRARY
+            FASTP / f"{sample_id}.{library_id}_2.fq.gz"
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
         database=get_kraken2_database,
     output:
         out_gzs=[
-            KRAKEN2 / "{kraken_db}" / f"{sample}.{library}.out.gz"
-            for sample, library in SAMPLE_LIBRARY
+            KRAKEN2 / "{kraken_db}" / f"{sample_id}.{library_id}.out.gz"
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
         reports=[
-            KRAKEN2 / "{kraken_db}" / f"{sample}.{library}.report"
-            for sample, library in SAMPLE_LIBRARY
+            KRAKEN2 / "{kraken_db}" / f"{sample_id}.{library_id}.report"
+            for sample_id, library_id in SAMPLE_LIBRARY
         ],
     log:
         KRAKEN2 / "{kraken_db}.log",
@@ -35,19 +37,30 @@ rule _preprocess__kraken2__assign:
         "_env.yml"
     shell:
         """
-        mapfile -t sample_ids < <(echo {input.forwards} | tr " " "\\n" | sort | xargs -I {{}} basename {{}} _1.fq.gz)
-
         {{
+            echo Running kraken2 in $(hostname) 2>> {log} 1>&2
+
             mkdir --parents {params.kraken_db_shm}
             mkdir --parents {params.out_folder}
 
             rsync \
-                -Pravt \
+                --archive \
+                --progress \
+                --recursive \
+                --times \
+                --verbose \
                 {input.database}/*.k2d \
                 {params.kraken_db_shm} \
-            2> {log} 1>&2
+            2>> {log} 1>&2
 
-            for sample_id in ${{sample_ids[@]}} ; do \
+            for file in {input.forwards} ; do \
+
+                sample_id=$(basename $file _1.fq.gz)
+                forward={params.in_folder}/${{sample_id}}_1.fq.gz
+                reverse={params.in_folder}/${{sample_id}}_2.fq.gz
+                output={params.out_folder}/${{sample_id}}.out.gz
+                report={params.out_folder}/${{sample_id}}.report
+                log={params.out_folder}/${{sample_id}}.log
 
                 echo $(date) Processing $sample_id 2>> {log} 1>&2
 
@@ -56,27 +69,24 @@ rule _preprocess__kraken2__assign:
                     --threads {threads} \
                     --gzip-compressed \
                     --paired \
-                    --output >( \
-                        pigz --processes {threads} \
-                        > {params.out_folder}/${{sample_id}}.out.gz
-                    ) \
-                    --report {params.out_folder}/${{sample_id}}.report \
+                    --output >(pigz --processes {threads} > $output) \
+                    --report $report \
                     --memory-mapping \
-                    {params.in_folder}/${{sample_id}}_1.fq.gz \
-                    {params.in_folder}/${{sample_id}}_2.fq.gz \
-                2> {params.out_folder}/${{sample_id}}.log  1>&2
+                    $forward \
+                    $reverse \
+                2> $log 1>&2
 
             done
         }} || {{
             echo "Failed job" 2>> {log} 1>&2
         }}
 
-        rm -rfv {params.kraken_db_shm} 2>>{log} 1>&2
+        rm --force --recursive --verbose {params.kraken_db_shm} 2>>{log} 1>&2
         """
 
 
 rule preprocess__kraken2:
-    """Run kraken2 over all samples"""
+    """Run kraken2 over all samples at once using the /dev/shm/ trick."""
     input:
         [
             KRAKEN2 / kraken_db / f"{sample_id}.{library_id}.report"
