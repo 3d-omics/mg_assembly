@@ -1,6 +1,6 @@
 digraph snakemake_dag {
     rankdir=LR;
-	// newrank=true;
+    // newrank=true;
     graph[bgcolor=white, margin=0, compound=true];
     node[shape=box, style=rounded, fontname=sans, fontsize=10, penwidth=2];
     edge[penwidth=2, color=grey];
