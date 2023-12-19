@@ -2,9 +2,9 @@
 ---
 hosts:  # Add more in case of multi-host, remove entries in case of environmental sample
   chicken: resources/reference/chicken_39_sub.fa.gz
-  # Sscrofa11.1: resources/references/GCF_000003025.6_Sscrofa11.1_genomic.fna.gz
   # GRCh38: resources/references/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.fna.gz
   # GRCg7b: resources/references/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b/GCF_016699485.2_bGalGal1.mat.broiler.GRCg7b_genomic.fna.gz
+  # Sscrofa11.1: resources/references/GCF_000003025.6_Sscrofa11.1_genomic.fna.gz
 
 magscot:
   pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
