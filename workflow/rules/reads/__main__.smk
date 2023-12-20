@@ -14,8 +14,8 @@ rule _reads__link:
     conda:
         "__environment__.yml"
     resources:  # run it superfast
-        mem_mb=10,
-        runtime=1,
+        mem_mb=1024,
+        runtime=60,
     shell:
         """
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_} 2>  {log} 1>&2
