@@ -43,7 +43,7 @@ jobs:
           key: snakemake-conda
 
       - name: Download All Environments
-        uses: snakemake/snakemake-github-action@v1.24.0
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -60,7 +60,7 @@ jobs:
         run: conda clean --all --yes
 
       - name: Preprocess
-        uses: snakemake/snakemake-github-action@v1.24.0
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -74,7 +74,7 @@ jobs:
             --latency-wait 5
 
       - name: Assemble until megahit
-        uses: snakemake/snakemake-github-action@v1.24.0
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -92,7 +92,7 @@ jobs:
           sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/assemble/renaming/all.fa"
 
       - name: Assemble from Megahit to magscot
-        uses: snakemake/snakemake-github-action@v1.24.0
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -115,7 +115,7 @@ jobs:
           sudo touch results/assemble/drep/data_tables.tar.gz
 
       - name: Test workflow - Quantify
-        uses: snakemake/snakemake-github-action@v1.24.0
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -130,7 +130,7 @@ jobs:
             --rerun-triggers mtime
 
       - name: Test workflow - Annotate
-        uses: snakemake/snakemake-github-action@v1.24.0
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -145,7 +145,7 @@ jobs:
             --rerun-triggers mtime
 
       - name: Test workflow - Report
-        uses: snakemake/snakemake-github-action@v1.24.0
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
           snakefile: workflow/Snakefile
