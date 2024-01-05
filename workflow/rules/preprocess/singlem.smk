@@ -18,7 +18,7 @@ rule _preprocess__singlem__pipe:
         "__environment__.yml"
     threads: 1
     resources:
-        runtime=24 * 60,
+        runtime=48 * 60,
         mem_mb=16 * 1024,
     shell:
         """
