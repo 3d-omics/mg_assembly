@@ -42,7 +42,7 @@ rule _annotate__gtdbtk__classify:
     log:
         GTDBTK / "gtdbtk_classify.log",
     conda:
-        "__environment__.yml"
+        "gtdbtk.yml"
     params:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
