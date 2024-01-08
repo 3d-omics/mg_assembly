@@ -1,107 +1,40 @@
 # Execution parameters
 ---
-pre:
+preprocess:
   fastp:
     length_required: 25  # nonpareil requires at least 25bp
     extra: "--trim_poly_g --trim_poly_x"
   bowtie2-build:
-    extra: ""
+    memory_gb: 8
   bowtie2:
-    extra: ""
+    memory_gb: 64
     samtools:
       mem_per_thread: 1G
-  coverm:
-    genome:
-      methods: "count"
-      min_covered_fraction: 0.0
-      separator: "^"
-    contig:
-      methods: "count"
   kraken2:
-    mem_mb: 32000
+    memory_gb: 32
 
 assemble:
   megahit:
-    extra: ""
     min_contig_len: 1500
-  quast:
-    extra: ""
+    memory_gb: 32
   bowtie2-build:
-    extra: ""
+    memory_gb: 16
   bowtie2:
-    extra: ""
+    memory_gb: 32
+  samtools:
+    mem: 1G
+
+quantify:
+  bowtie2-build:
+    memory_gb: 32
+  bowtie2:
+    memory_gb: 32
   samtools:
     mem: 1G
   coverm:
     genome:
-      methods: "count"
+      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
       min_covered_fraction: 0.0
       separator: "@"
     contig:
-      methods: "count"
-
-bin:
-  metawrap:
-    binning:
-      min_length: 1500
-      extra: ""
-    refinement:
-      completeness: 50
-      contamination: 10
-      extra: ""  # Change this!
-  vamb:
-    min_length: 2000
-  quast:
-    extra: ""
-  bowtie2-build:
-    extra: ""
-  bowtie2:
-    extra: ""
-  samtools:
-    mem: 1G
-  coverm:
-    genome:
-      methods: "count"
-      min_covered_fraction: 0.0
-      separator: "@"
-    contig:
-      methods: "count"
-
-
-metabin:
-  bowtie2-build:
-    extra: ""
-  bowtie2:
-    extra: ""
-  samtools:
-    mem: 1G
-  coverm:
-    genome:
-      methods: "count"
-      min_covered_fraction: 0.0
-      separator: "@"
-    contig:
-      methods: "count"
-  quast:
-    extra: ""
-
-
-dereplicate:
-  drep:
-    threads: 1  # Careful with pplacer!
-    mem_mb: 22000  # 22GB * pplacer cores
-  bowtie2-build:
-    extra: ""
-  bowtie2:
-    extra: ""
-  samtools:
-    mem: 1G
-  coverm:
-    genome:
-      methods: "count"
-      min_covered_fraction: 0.0
-      separator: "@"
-    contig:
-      methods: "count"
-  quast:
-    extra: ""
+      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods

@@ -1,8 +1,0 @@
-# metabat2: environment to bin mags
----
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - metabat2=2.15

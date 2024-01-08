@@ -7,6 +7,5 @@ snakemake \
     -j 24 \
     --notemp \
     --conda-frontend mamba \
-    --use-singularity \
     --rerun-incomplete \
     "$@"

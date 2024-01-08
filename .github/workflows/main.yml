@@ -1,0 +1,177 @@
+# Run tests over snakefile workflow
+---
+name: Tests
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches: [main, devel]
+  pull_request:
+    branches: [main, devel]
+
+env:
+  CACHE_NUMBER: 0  # Increment this number to invalidate the cache
+
+jobs:
+
+  Pre-Commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: 'true'
+      - name: Run pre-commit on all files
+        uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: --all-files
+
+  Testing:
+    runs-on: ubuntu-latest
+    needs:
+      - Pre-Commit
+    steps:
+
+      - uses: actions/checkout@v3
+        with:
+          lfs: 'true'
+
+      - name: Set up caches
+        uses: actions/cache@v3
+        with:
+          path: |
+            .snakemake/conda
+            ~/.cache/pre-commit/
+          key: snakemake-conda
+
+      - name: Download All Environments
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            preprocess assemble annotate quantify report
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --conda-create-envs-only
+
+      - name: Clean conda cache
+        run: conda clean --all --yes
+
+      - name: Preprocess
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            preprocess
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+
+      - name: Assemble until megahit
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            assemble__megahit
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+
+      - name: Give to the binning steps an assembly that will work
+        run: >
+          sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/assemble/renaming/all.fa"
+
+      - name: Assemble from Megahit to magscot
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            assemble__magscot
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            --rerun-triggers mtime
+
+      - name: Put the mock assembly as a dereplicated genome
+        run: |
+          sudo mkdir --parents results/assemble/drep/dereplicated_genomes
+          sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/assemble/drep/dereplicated_genomes/all:bin_00001.fa"
+          sudo touch results/assemble/drep/dereplicated_genomes/.snakemake_timestamp
+          sudo touch results/assemble/drep/data.tar.gz
+          sudo touch results/assemble/drep/data_tables.tar.gz
+
+      - name: Test workflow - Quantify
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            quantify
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            --rerun-triggers mtime
+
+      - name: Test workflow - Annotate
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            annotate
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            --rerun-triggers mtime
+
+      - name: Test workflow - Report
+        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            report
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --latency-wait 5
+            --rerun-triggers mtime
+
+      - name: Delete everything
+        run: |
+          sudo find results -not -name "*.log" -type f -delete -print
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: results
+          path: |
+            results/**/*.log
+            # results/
+            # reports/
+            # !**/*.cram
+            # !**/*.fq.gz
+            # !**/*.bam
+            # !**/*.bt2

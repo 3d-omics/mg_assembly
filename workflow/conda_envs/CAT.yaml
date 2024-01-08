@@ -1,7 +1,0 @@
- name: CAT
- channels:
-    - bioconda
-    - defaults
- dependencies:
-    - cat
-    - pigz=2.6

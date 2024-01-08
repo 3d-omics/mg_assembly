@@ -1,9 +1,0 @@
-# maxbin2: environment to bin mags
----
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - maxbin2=2.2.7
-  - samtools=1.17

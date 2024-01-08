@@ -1,9 +1,0 @@
-# metawrap: environment to bin mags with metawrap.
-# Note: the heavy work is done with singularity
----
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - samtools=1.17
