@@ -1,6 +1,6 @@
-![Actions](https://github.com/3d-omics/Bioinfo_Macro_Genome_Resolved_Metagenomics/actions/workflows/devel/badge.svg)
+![Actions](https://github.com/3d-omics/mg_assembly/actions/workflows/devel/badge.svg)
 
-# Snakemake workflow: `Bioinfo_Macro_Genome_Resolved_Metagenomics`
+# Snakemake workflow: `mg_assembly`
 
 A Snakemake workflow for Genome Resolved Metagenomics
 
@@ -14,8 +14,8 @@ A Snakemake workflow for Genome Resolved Metagenomics
 
 2. Clone the git repository in your terminal and get in:
     ```bash
-    git clone git@github.com:3d-omics/Bioinfo_Macro_Genome_Resolved_Metagenomics.git
-    cd Bioinfo_Macro_Genome_Resolved_Metagenomics
+    git clone git@github.com:3d-omics/mg_assembly.git
+    cd mg_assembly
     ```
 
 3. Test your installation by running the test data. It will download all the necesary software through conda / mamba. It should take less than 5 minutes.
@@ -56,7 +56,7 @@ A Snakemake workflow for Genome Resolved Metagenomics
 5. Run the pipeline
      ```
      snakemake --use-conda --jobs 8 all
-     #(slurm users), there is a script called run_slurm in the cloned directory that you can directly use to launch the pipeline on a slurm         cluster, you can modify the parameters or direclty execute it as it is
+     #(slurm users), there is a script called run_slurm in the cloned directory that you can directly use to launch the pipeline on a slurm cluster, you can modify the parameters or direclty execute it as it is
      ./run_slurm
      ```
 
@@ -65,32 +65,17 @@ A Snakemake workflow for Genome Resolved Metagenomics
 
 ![rulegraph_simple](rulegraph_simple.svg)
 
+
 ## Features
 - FASTQ processing with `fastp`.
-- mapping of preprocessed reads against the host with `bowtie2`.
-- assembly of non-host reads with `megahit`.
-- binning with CONCOCT, Maxbin2, MetaBAT2, and aggregated with MAGScoT.
-- coverage evaluation with `coverm`.
-
-
-
-## Optional steps
-
-The latest stages of the pipeline are CPU and RAM intensive, so not all steps are run by default. To access them, you have to "add phrases" to snakemake:
-- Preprocessing:
-  - Nonpareil: `pre_eval_with_nonpareil`
-  - SingleM: `pre_eval_with_singlem`
-- Dereplication:
-  - dRep + CoverM: `dereplicate_eval`
-  - dRep + DRAM + GTDB-Tk: `dereplicate_eval_with_dram`
-
-Example:
-
-```bash
-snakemake --jobs 40 --use-conda all pre_eval_with_non_pareil
-# (same for ./run and ./run_slurm ; all stands for the core pipeline)
-```
-
+- Mapping of preprocessed reads against the host(s) with `bowtie2`. Skip if no host is provided.
+- Assembly-free statistics with `kraken2`, `nonpareil` and `singlem`.
+- Assembly of non-host reads with `megahit`.
+- Binning with CONCOCT, Maxbin2, MetaBAT2, and aggregated with MAGScoT.
+- Dereplication with `dRep`
+- Quantification with `bowtie2` and `coverm`
+- Annotation with `quast`, `gtdbtk` and `dram`
+- Reporting with `samtools`, `fastqc` and `multiqc`
 
 
 ## References
@@ -108,7 +93,7 @@ snakemake --jobs 40 --use-conda all pre_eval_with_non_pareil
 - [`MAGScoT`](https://github.com/ikmb/MAGScoT)
 - [`dRep`](https://github.com/MrOlm/drep)
 - [`QUAST`](https://github.com/ablab/quast)
-- [`GTDB-Tk`](https://github.com/Ecogenomics/GTDBTk)
+- [`GTDB-TK`](https://github.com/Ecogenomics/GTDBTk)
 - [`DRAM`](https://github.com/WrightonLabCSU/DRAM)
 - [`CoverM`](https://github.com/wwood/CoverM)
 - [`FastQC`](https://github.com/s-andrews/FastQC)
