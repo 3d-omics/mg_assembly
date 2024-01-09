@@ -51,6 +51,8 @@ rule _preprocess__singlem__condense:
         "__environment__.yml"
     params:
         input_dir=SINGLEM,
+    resources:
+        runtime=6 * 60,
     shell:
         """
         singlem condense \
