@@ -40,7 +40,7 @@ rule _report__step__preprocess:
     params:
         dir=REPORT_STEP,
     resources:
-        mem_mb=8 * 1024,
+        mem_mb=16 * 1024,
         runtime=6 * 60,
     shell:
         """
