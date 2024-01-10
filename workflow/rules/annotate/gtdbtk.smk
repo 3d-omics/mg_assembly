@@ -93,7 +93,7 @@ rule _annotate__gtdbtk__classify:
             > {output.summary} \
             ) 2>> {log}
         else
-            cat {params.bac120} > {output.summary} 2>> {log}
+            cp {params.bac120} > {output.summary} 2>> {log}
         fi
 
         for folder in align classify identify ; do
@@ -107,14 +107,6 @@ rule _annotate__gtdbtk__classify:
                 ${{folder}} \
             2>> {log} 1>&2
         done
-
-        rm \
-            --recursive \
-            --force \
-            --verbose \
-            {params.ar53} \
-            {params.bac120} \
-        2>> {log} 1>&2
         """
 
 
