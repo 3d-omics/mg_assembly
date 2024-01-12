@@ -93,7 +93,7 @@ rule _annotate__gtdbtk__classify:
             > {output.summary} \
             ) 2>> {log}
         else
-            cp {params.bac120} > {output.summary} 2>> {log}
+            cp {params.bac120} {output.summary} 2>> {log}
         fi
 
         for folder in align classify identify ; do
