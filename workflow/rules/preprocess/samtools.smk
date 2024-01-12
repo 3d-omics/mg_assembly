@@ -21,6 +21,6 @@ rule preprocess__samtools:
         [
             PRE_BOWTIE2 / genome / f"{sample_id}.{library_id}.{extension}"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for extension in ["stats.txt", "flagstats.txt", "idxstats.tsv"]
+            for extension in ["stats.tsv", "flagstats.txt"]
             for genome in HOST_NAMES
         ],
