@@ -49,8 +49,9 @@ rule _annotate__gtdbtk__classify:
         bac120=GTDBTK / "gtdbtk.bac120.summary.tsv",
     threads: 24
     resources:
-        mem_mb=128 * 1024,
+        mem_mb=double_ram(32),
         runtime=24 * 60,
+    retries: 5
     shell:
         """
         mv \

@@ -11,7 +11,8 @@ rule _report__step__reads:
     params:
         dir=REPORT_STEP,
     resources:
-        mem_mb=8 * 1024,
+        mem_mb=double_ram(8),
+    retries: 5
     shell:
         """
         multiqc \
