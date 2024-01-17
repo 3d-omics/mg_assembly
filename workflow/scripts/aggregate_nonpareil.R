@@ -10,7 +10,7 @@ parser$add_argument(
   "-i", "--input-folder",
   type = "character",
   dest = "input_folder",
-  help="Folder containing the *.npo files"
+  help = "Folder containing the *.npo files"
 )
 
 parser$add_argument(
@@ -35,7 +35,7 @@ nonempty_files <-
   pull(file)
 
 nonempty_files %>%
-  Nonpareil.set(plot = F) %>%
+  Nonpareil.set(plot = FALSE) %>%
   summary() %>%
   as.data.frame() %>%
   rownames_to_column("sample_id") %>%

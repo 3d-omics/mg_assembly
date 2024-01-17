@@ -25,14 +25,15 @@ print(args)
 
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 
-# input_file <- "results/metabin/magscot/all/magscot.refined.contig_to_bin.out"
-
 raw_magscot <- read_tsv(input_file)
 
 
 # can't use map_chr(-1) so we have to find the position
 bin_location <-
-  raw_magscot$binnew[1] %>% str_split("/") %>% .[[1]] %>% length()
+  raw_magscot$binnew[1] %>%
+  str_split("/") %>%
+  .[[1]] %>%
+  length()
 
 raw_magscot %>%
   mutate(

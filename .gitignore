@@ -11,3 +11,4 @@ reports
 resources/virify/
 *.fai
 *.gzi
+mg_assembly.Rproj
