@@ -9,7 +9,6 @@ rule _preprocess__nonpareil__run:
     input:
         forward_=get_final_forward_from_pre,
     output:
-        forward_fq=temp(NONPAREIL / "{sample_id}.{library_id}_1.fq"),
         npa=touch(NONPAREIL / "{sample_id}.{library_id}.npa"),
         npc=touch(NONPAREIL / "{sample_id}.{library_id}.npc"),
         npl=touch(NONPAREIL / "{sample_id}.{library_id}.npl"),
@@ -20,19 +19,28 @@ rule _preprocess__nonpareil__run:
         "__environment__.yml"
     params:
         prefix=compose_prefix_for_nonpareil,
+        forward_fq=lambda wildcards: NONPAREIL
+        / "run"
+        / f"{wildcards.sample_id}.{wildcards.library_id}_1.fq",
     resources:
         runtime=24 * 60,
     shell:
         """
-        gzip -dc {input.forward_} > {output.forward_fq} 2> {log}
+        gzip \
+            --decompress \
+            --stdout \
+            {input.forward_} \
+        > {params.forward_fq} 2> {log}
 
         nonpareil \
-            -s {output.forward_fq} \
+            -s {params.forward_fq} \
             -T kmer \
             -b {params.prefix} \
             -f fastq \
             -t {threads} \
         2>> {log} 1>&2
+
+        rm --force {params.forward_fq} 2>> {log} 1>&2
         """
 
 
