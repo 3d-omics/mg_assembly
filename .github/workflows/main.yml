@@ -65,7 +65,10 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            preprocess
+            preprocess__bowtie2
+            preprocess__fastp
+            preprocess__kraken2
+            preprocess__samtools
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
