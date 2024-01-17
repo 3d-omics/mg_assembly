@@ -2,14 +2,14 @@ rule _preprocess__coverm__cram_to_bam:
     """Convert cram to bam
 
     Note: this step is needed because coverm probably does not support cram. The
-    log from coverm shows failures to get the reference online, but nonetheless
+    log from coverm shows failures to get the HOSTS online, but nonetheless
     it works.
     """
     input:
         cram=get_cram_for_preprocess_eval_cram_to_mapped_bam,
         crai=get_crai_for_preprocess_eval_cram_to_mapped_bam,
-        reference=REFERENCE / f"{LAST_HOST}.fa.gz",
-        fai=REFERENCE / f"{LAST_HOST}.fa.gz.fai",
+        HOSTS=HOSTS / f"{LAST_HOST}.fa.gz",
+        fai=HOSTS / f"{LAST_HOST}.fa.gz.fai",
     output:
         bam=temp(PRE_COVERM / "bams" / "{sample_id}.{library_id}.bam"),
     log:
@@ -25,7 +25,7 @@ rule _preprocess__coverm__cram_to_bam:
         samtools view \
             -F 4 \
             --threads {threads} \
-            --reference {input.reference} \
+            --HOSTS {input.HOSTS} \
             --output {output.bam} \
             --fast \
             {input.cram} \
