@@ -14,7 +14,7 @@ rule _assemble__maxbin2__prepare:
     shell:
         """
         ( samtools coverage {input.bams} \
-        | awk '{{print $1"\t"$5}}' \
+        | awk '{{print $1"\\t"$5}}' \
         | grep -v '^#' \
         > {output.coverage} \
         ) 2> {log}
@@ -50,7 +50,7 @@ rule _assemble__maxbin2__run:
             -abund {input.coverage} \
         2> {log} 1>&2
 
-        rename 's/\.fasta$/.fa/' {output.outdir}/*.fasta 2>> {log}
+        rename 's/\\.fasta$/.fa/' {output.outdir}/*.fasta 2>> {log}
         """
 
 
