@@ -39,6 +39,7 @@ rule _assemble__bowtie2:
         fai=ASSEMBLE_RENAME / "{assembly_id}.fa.fai",
     output:
         cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        crai=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram.crai",
     log:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
@@ -69,11 +70,11 @@ rule _assemble__bowtie2:
             --rg '{params.rg_extra}' \
         | samtools sort \
             -l 9 \
-            -M \
             -m {params.samtools_mem} \
             -o {output.cram} \
             --reference {input.reference} \
             --threads {threads} \
+            --write-index \
         ) 2>> {log} 1>&2
         """
 
