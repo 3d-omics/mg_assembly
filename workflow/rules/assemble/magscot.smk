@@ -235,29 +235,7 @@ rule _assemble__magscot__rename:
         """
 
 
-rule _assemble__magscot__split_into_bins:
-    """Split the magscot fasta into bins"""
-    input:
-        fasta=MAGSCOT / "{assembly_id}.fa",
-    output:
-        bins=directory(MAGSCOT / "{assembly_id}/bins"),
-    log:
-        MAGSCOT / "{assembly_id}" / "bins.log",
-    conda:
-        "__environment__.yml"
-    shell:
-        """
-        mkdir -p {output.bins} 2> {log}
-
-        ( seqtk seq {input.fasta} \
-        | paste - -  \
-        | tr "@:" "\\t" \
-        | awk '{{print $1":"$2"@"$3"\\n"$4 > "{output.bins}/"$2".fa"}}'
-        ) 2> {log}
-        """
-
-
 rule assemble__magscot:
     """Run MAGSCOT over all assemblies"""
     input:
-        [MAGSCOT / assembly_id / "bins" for assembly_id in ASSEMBLIES],
+        [MAGSCOT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
