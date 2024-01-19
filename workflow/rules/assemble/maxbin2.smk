@@ -4,7 +4,7 @@ rule _assemble__maxbin2__run:
         assembly=MEGAHIT / "{assembly_id}.fa.gz",
         crams=get_crams_from_assembly_id,
     output:
-        outdir=directory(MAXBIN2 / "{assembly_id}"),
+        workdir=directory(MAXBIN2 / "{assembly_id}"),
     log:
         MAXBIN2 / "{assembly_id}.log",
     conda:
@@ -12,14 +12,13 @@ rule _assemble__maxbin2__run:
     threads: 4
     params:
         seed=1,
-        out_prefix=lambda w: MAXBIN2 / f"{w.assembly_id}",
         coverage=lambda w: MAXBIN2 / f"{w.assembly_id}/maxbin2.coverage",
     resources:
         runtime=24 * 60,
         mem_mb=8 * 1024,
     shell:
         """
-        mkdir --parents {output.outdir}
+        mkdir --parents {output.workdir}
 
         ( samtools coverage {input.crams} \
         | awk '{{print $1"\\t"$5}}' \
@@ -30,19 +29,26 @@ rule _assemble__maxbin2__run:
         run_MaxBin.pl \
             -thread {threads} \
             -contig {input.assembly} \
-            -out {output.outdir}/maxbin2 \
+            -out {output.workdir}/maxbin2 \
             -abund {params.coverage} \
         2> {log} 1>&2
 
         rename \
             's/\\.fasta$/.fa/' \
-            {output.outdir}/*.fasta \
+            {output.workdir}/*.fasta \
         2>> {log}
 
         find \
-            {output.outdir} \
+            {output.workdir} \
             -name "*.fa" \
             -exec pigz --best --verbose {{}} \; \
+        2>> {log} 1>&2
+
+        rm \
+            --recursive \
+            --force \
+            {output.workdir}/maxbin.{{coverage,log,marker,noclass,summary,tooshort}} \
+            {output.workdir}/maxbin2.marker_of_each_bin.tar.gz \
         2>> {log} 1>&2
         """
 
