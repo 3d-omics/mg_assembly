@@ -1,54 +1,72 @@
-rule _assemble__metabat2__prepare:
-    """Compute coverages for metabat2"""
-    input:
-        bams=get_bams_from_assembly_id,
-    output:
-        depth=METABAT2 / "prepare" / "{assembly_id}.depth",
-        paired_contigs=METABAT2 / "prepare" / "{assembly_id}.paired",
-    log:
-        METABAT2 / "prepare" / "{assembly_id}.log",
-    conda:
-        "__environment__.yml"
-    shell:
-        """
-        jgi_summarize_bam_contig_depths \
-            --outputDepth {output.depth} \
-            --pairedContigs {output.paired_contigs} \
-            {input.bams} \
-        2> {log} 1>&2
-        """
-
-
 rule _assemble__metabat2__run:
-    """Run metabat2 over a single assembly"""
+    """Run metabat2 end-to-end on a single assembly"""
     input:
-        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
-        depth=METABAT2 / "prepare" / "{assembly_id}.depth",
+        crams=get_crams_from_assembly_id,
+        crais=get_crais_from_assembly_id,
+        assembly=MEGAHIT / "{assembly_id}.fa.gz",
     output:
-        bins=directory(METABAT2 / "bins" / "{assembly_id}"),
+        bins=directory(METABAT2 / "{assembly_id}"),
     log:
-        METABAT2 / "bins" / "{assembly_id}.log",
+        METABAT2 / "{assembly_id}.log",
     conda:
         "__environment__.yml"
     params:
-        bins_prefix=compose_bins_prefix_for_metabat2_run_one,
+        bins_prefix=compose_bins_prefix_for_metabat2_run,
+        bams=compose_bams_for_metabat2_run,
+        depth=lambda w: METABAT2 / f"{w.assembly_id}.depth",
+        paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
     threads: 24
     resources:
         runtime=24 * 60,
         mem_mb=8 * 1024,
     shell:
         """
+        for cram in {input.crams} ; do
+
+            bam={METABAT2}/$(basename $cram .cram).bam
+
+            samtools view \
+                --exclude-flags 4 \
+                --fast \
+                --output $bam \
+                --output-fmt BAM \
+                --reference {input.assembly} \
+                --threads {threads} \
+                $cram
+
+        done 2> {log} 1>&2
+
+        jgi_summarize_bam_contig_depths \
+            --outputDepth {params.depth} \
+            --pairedContigs {params.paired} \
+            {params.bams} \
+        2>> {log} 1>&2
+
         metabat2 \
             --inFile {input.assembly} \
-            --abdFile {input.depth} \
+            --abdFile {params.depth} \
             --outFile {params.bins_prefix} \
             --numThreads {threads} \
             --verbose \
         2> {log} 1>&2
+
+        rm \
+            --force \
+            --verbose \
+            {params.bams} \
+            {params.depth} \
+            {params.paired} \
+        2>> {log} 1>&2
+
+        find \
+            {output.bins} \
+            -name "*.fa" \
+            -exec pigz --best --verbose {{}} \; \
+        2>> {log} 1>&2
         """
 
 
 rule assemble__metabat2:
     """Run metabat2 over all assemblies"""
     input:
-        [METABAT2 / "bins" / assembly_id for assembly_id in ASSEMBLIES],
+        [METABAT2 / assembly_id for assembly_id in ASSEMBLIES],

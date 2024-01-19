@@ -60,6 +60,51 @@ def get_bams_from_assembly_id(wildcards):
     return bam_files
 
 
+def get_crams_from_assembly_id(wildcards):
+    """Given an assembly_id, get all the cram files for that assembly."""
+    assembly_id = wildcards.assembly_id
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+    bam_files = [
+        ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+        for sample_id, library_id in samples_in_assembly
+    ]
+    return bam_files
+
+
+def get_crais_from_assembly_id(wildcards):
+    """Given an assembly_id, get all the cram files for that assembly."""
+    return [f"{cram}.crai" for cram in get_crams_from_assembly_id(wildcards)]
+
+
+def compose_bams_for_metabat2_run(wildcards):
+    """Given an assemblu_id, get all the bam files that will be generated in metabat2"""
+    assembly_id = wildcards.assembly_id
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+    bam_files = [
+        METABAT2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
+        for sample_id, library_id in samples_in_assembly
+    ]
+    return bam_files
+
+
+def compose_bams_for_concoct_coverage_table(wildcards):
+    """Given an assemblu_id, get all the bam files that will be generated in metabat2"""
+    assembly_id = wildcards.assembly_id
+    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+    bam_files = [
+        CONCOCT / f"{assembly_id}.{sample_id}.{library_id}.bam"
+        for sample_id, library_id in samples_in_assembly
+    ]
+    return bam_files
+
+
+def compose_bais_for_concoct_coverage_table(wildcards):
+    """Given an assemblu_id, get all the bam files that will be generated in metabat2"""
+    return [
+        f"{file}.bai" for file in compose_bams_for_concoct_coverage_table(wildcards)
+    ]
+
+
 def get_bais_from_assembly_id(wildcards):
     """Given an assembly_id, get all the bai files for that assembly."""
     bams = get_bams_from_assembly_id(wildcards)
@@ -68,7 +113,7 @@ def get_bais_from_assembly_id(wildcards):
 
 def compose_basename_for_concoct_run_one(wildcards):
     """Compose the basename for the concoct run"""
-    return CONCOCT / "run" / wildcards.assembly_id
+    return CONCOCT / wildcards.assembly_id / "run"
 
 
 def compose_out_prefix_for_maxbin2_run_one(wildcards):
@@ -76,9 +121,9 @@ def compose_out_prefix_for_maxbin2_run_one(wildcards):
     return MAXBIN2 / "bins" / wildcards.assembly_id
 
 
-def compose_bins_prefix_for_metabat2_run_one(wildcards):
+def compose_bins_prefix_for_metabat2_run(wildcards):
     """Compose the output folder for metabat2"""
-    return METABAT2 / "bins" / wildcards.assembly_id / wildcards.assembly_id
+    return METABAT2 / wildcards.assembly_id / "bin"
 
 
 # Magscot ----

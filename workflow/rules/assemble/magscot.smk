@@ -1,7 +1,7 @@
 rule _assemble__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
-        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        assembly=MEGAHIT / "{assembly_id}.fa.gz",
     output:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
         genes=MAGSCOT / "{assembly_id}" / "prodigal.ffn",
@@ -16,7 +16,10 @@ rule _assemble__magscot__prodigal:
     retries: 5
     shell:
         """
-        ( cat {input.assembly} \
+        ( gzip \
+            --decompress \
+            --stdout \
+            {input.assembly} \
         | parallel \
             --jobs {threads} \
             --block 1M \
@@ -124,9 +127,9 @@ rule _assemble__magscot__merge_contig_to_bin:
     BIN_ID <TAB> CONTIG_ID <TAB> METHOD
     """
     input:
-        concoct=CONCOCT / "fasta_bins" / "{assembly_id}",
-        maxbin2=MAXBIN2 / "bins" / "{assembly_id}",
-        metabat2=METABAT2 / "bins" / "{assembly_id}",
+        concoct=CONCOCT / "{assembly_id}",
+        maxbin2=MAXBIN2 / "{assembly_id}",
+        metabat2=METABAT2 / "{assembly_id}",
     output:
         MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
     log:
@@ -135,21 +138,21 @@ rule _assemble__magscot__merge_contig_to_bin:
         "__environment__.yml"
     shell:
         """
-        for file in $(find {input.concoct} -name "*.fa" -type f) ; do
+        for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
             bin_id=$(basename $file .fa)
-            grep ^">" $file | tr -d ">" \
+            zgrep ^">" $file | tr -d ">" \
             | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tconcoct"}}'
         done > {output} 2> {log}
 
-        for file in $(find {input.maxbin2} -name "*.fa" -type f) ; do
+        for file in $(find {input.maxbin2} -name "*.fa.gz" -type f) ; do
             bin_id=$(basename $file .fa)
-            grep ^">" $file | tr -d ">" \
+            zgrep ^">" $file | tr -d ">" \
             | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmaxbin2"}}'
         done >> {output} 2>> {log}
 
-        for file in $(find {input.metabat2} -name "*.fa" -type f) ; do
+        for file in $(find {input.metabat2} -name "*.fa.gz" -type f) ; do
             bin_id=$(basename $file .fa)
-            grep ^">" $file | tr -d ">" \
+            zgrep ^">" $file | tr -d ">" \
             | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmetabat2"}}'
         done >> {output} 2>> {log}
         """
@@ -213,7 +216,7 @@ rule _assemble__magscot__reformat:
 rule _assemble__magscot__rename:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
-        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        assembly=MEGAHIT / "{assembly_id}.fa.gz",
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     output:
         fasta=MAGSCOT / "{assembly_id}.fa",
@@ -226,7 +229,7 @@ rule _assemble__magscot__rename:
     shell:
         """
         python workflow/scripts/reformat_fasta_magscot.py \
-            {input.assembly} \
+            <(gzip -dc {input.assembly}) \
             {input.clean} \
         > {output.fasta} 2> {log}
         """
