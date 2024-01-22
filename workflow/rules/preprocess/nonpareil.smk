@@ -18,10 +18,8 @@ rule _preprocess__nonpareil__run:
     conda:
         "__environment__.yml"
     params:
-        prefix=compose_prefix_for_nonpareil,
-        forward_fq=lambda wildcards: NONPAREIL
-        / "run"
-        / f"{wildcards.sample_id}.{wildcards.library_id}_1.fq",
+        prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
+        reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
     resources:
         runtime=24 * 60,
     shell:
@@ -33,14 +31,14 @@ rule _preprocess__nonpareil__run:
         > {params.forward_fq} 2> {log}
 
         nonpareil \
-            -s {params.forward_fq} \
+            -s {params.reads} \
             -T kmer \
             -b {params.prefix} \
             -f fastq \
             -t {threads} \
         2>> {log} 1>&2
 
-        rm --force {params.forward_fq} 2>> {log} 1>&2
+        rm --force {params.reads} 2>> {log} 1>&2
         """
 
 

@@ -60,12 +60,7 @@ def get_input_reverse_for_host_mapping(wildcards):
     return get_input_file_for_host_mapping(wildcards, end = "reverse")
 
 
-# nonpareil
-def compose_prefix_for_nonpareil(wildcards):
-    """Compose prefix for nonpareil output files"""
-    return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"
-
-
+# coverm
 def get_cram_for_preprocess_eval_cram_to_mapped_bam(wildcards):
     """Get the cram file of the last host"""
     genome = LAST_HOST
