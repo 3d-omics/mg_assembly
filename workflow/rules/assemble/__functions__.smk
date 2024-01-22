@@ -7,28 +7,31 @@ def get_sample_and_library_from_assembly_id(assembly_id):
 
 
 # Megahit
-def get_forwards_from_assembly_id(wildcards):
-    """Get the forward files for megahit"""
+def get_reads_from_assembly_id(wildcards, end):
+    """Get the file_end for megahit"""
+    assert end in ["forward", "reverse"]
+    end = 1 if end == "forward" else 2
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
+    if len(HOST_NAMES) == 0:
+        return [
+            FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
+            for sample_id, library_id in samples_in_assembly
+        ]
     return [
-        FASTP / f"{sample_id}.{library_id}_1.fq.gz"
-        if len(HOST_NAMES) == 0
-        else PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_1.fq.gz"
+        PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_{end}.fq.gz"
         for sample_id, library_id in samples_in_assembly
     ]
+
+
+def get_forwards_from_assembly_id(wildcards):
+    """Get the forward files for megahit"""
+    return get_reads_from_assembly_id(wildcards, end="forward")
 
 
 def get_reverses_from_assembly_id(wildcards):
-    """Get the reverse files for megahit"""
-    assembly_id = wildcards.assembly_id
-    samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
-    return [
-        FASTP / f"{sample_id}.{library_id}_2.fq.gz"
-        if len(HOST_NAMES) == 0
-        else PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_1.fq.gz"
-        for sample_id, library_id in samples_in_assembly
-    ]
+    """Get the forward files for megahit"""
+    return get_reads_from_assembly_id(wildcards, end="reverse")
 
 
 def aggregate_forwards_for_megahit(wildcards):
