@@ -35,30 +35,30 @@ def compose_rg_extra(wildcards):
     return f"{lb_field}\t{pl_field}\t{sm_field}"
 
 
-def get_input_forward_for_host_mapping(wildcards):
-    """Compose the forward input file"""
+def get_input_file_for_host_mapping(wildcards, end):
+    """Compose the input file for host mapping"""
+    assert end in ["forward", "reverse"]
+    end = 1 if end == "forward" else 2
     if wildcards.genome == HOST_NAMES[0]:
-        return FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_1.fq.gz"
+        return FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_{end}.fq.gz"
     genome_index = HOST_NAMES.index(wildcards.genome)
     prev_genome = HOST_NAMES[genome_index - 1]
     return (
         PRE_BOWTIE2
         / f"non{prev_genome}"
-        / f"{wildcards.sample_id}.{wildcards.library_id}_1.fq.gz"
+        / f"{wildcards.sample_id}.{wildcards.library_id}_{end}.fq.gz"
     )
+
+
+def get_input_forward_for_host_mapping(wildcards):
+    """Compose the forward input file"""
+   return get_input_file_for_host_mapping(wildcards, end = "forward")
 
 
 def get_input_reverse_for_host_mapping(wildcards):
-    """Get the reverse input file"""
-    if wildcards.genome == HOST_NAMES[0]:
-        return FASTP / f"{wildcards.sample_id}.{wildcards.library_id}_2.fq.gz"
-    genome_index = HOST_NAMES.index(wildcards.genome)
-    prev_genome = HOST_NAMES[genome_index - 1]
-    return (
-        PRE_BOWTIE2
-        / f"non{prev_genome}"
-        / f"{wildcards.sample_id}.{wildcards.library_id}_2.fq.gz"
-    )
+    """Compose the forward input file"""
+   return get_input_file_for_host_mapping(wildcards, end = "reverse")
+
 
 # nonpareil
 def compose_prefix_for_nonpareil(wildcards):
