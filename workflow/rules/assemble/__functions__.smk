@@ -79,11 +79,6 @@ def compose_bams_for_metabat2_run(wildcards):
     return bam_files
 
 
-def compose_bins_prefix_for_metabat2_run(wildcards):
-    """Compose the output folder for metabat2"""
-    return METABAT2 / wildcards.assembly_id / "bin"
-
-
 # Magscot ----
 def compose_out_prefix_for_bin_magscot_run_one(wildcards):
     """Compose the output folder for magscot"""

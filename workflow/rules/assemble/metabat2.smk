@@ -11,7 +11,7 @@ rule _assemble__metabat2__run:
     conda:
         "__environment__.yml"
     params:
-        bins_prefix=compose_bins_prefix_for_metabat2_run,
+        bins_prefix=lambda w: METABAT2 / f"{w.assembly_id}/bin",
         bams=compose_bams_for_metabat2_run,
         depth=lambda w: METABAT2 / f"{w.assembly_id}.depth",
         paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
