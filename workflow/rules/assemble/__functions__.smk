@@ -36,13 +36,19 @@ def get_reverses_from_assembly_id(wildcards):
 
 def aggregate_forwards_for_megahit(wildcards):
     """Put all the forwards together separated by a comma"""
-    forwards = [str(forward_) for forward_ in get_reads_from_assembly_id(wildcards, end="forward")]
+    forwards = [
+        str(forward_)
+        for forward_ in get_reads_from_assembly_id(wildcards, end="forward")
+    ]
     return ",".join(forwards)
 
 
 def aggregate_reverses_for_megahit(wildcards):
     """Put all the reverses together separated by a comma"""
-    reverses = [str(reverse_) for reverse_ in get_reads_from_assembly_id(wildcards, end="reverse")]
+    reverses = [
+        str(reverse_)
+        for reverse_ in get_reads_from_assembly_id(wildcards, end="reverse")
+    ]
     return ",".join(reverses)
 
 
