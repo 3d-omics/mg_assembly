@@ -59,7 +59,7 @@ jobs:
       - name: Clean conda cache
         run: conda clean --all --yes
 
-      - name: Preprocess
+      - name: Test workflow - Preprocess
         uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
@@ -76,7 +76,7 @@ jobs:
             --conda-cleanup-pkgs cache
             --latency-wait 5
 
-      - name: Assemble until megahit
+      - name: Test workflow - Assemble (until megahit)
         uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
@@ -90,11 +90,11 @@ jobs:
             --conda-cleanup-pkgs cache
             --latency-wait 5
 
-      - name: Give to the binning steps an assembly that will work
+      - name: Test workflow - Assemble (replace mock assembly for something more meaty)
         run: >
-          sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/assemble/renaming/all.fa"
+          sudo bash -c "cp resources/mock_assembly.fa.gz results/assemble/megahit/all.fa.gz"
 
-      - name: Assemble from Megahit to magscot
+      - name: Test workflow - Assemble (from megahit to magscot)
         uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
@@ -109,15 +109,13 @@ jobs:
             --latency-wait 5
             --rerun-triggers mtime
 
-      - name: Put the mock assembly as a dereplicated genome
+      - name: Test workflow - Assemble (skip drep)
         run: |
           sudo mkdir --parents results/assemble/drep/dereplicated_genomes
+          touch results/assemble/drep/dereplicated_genomes/.snakemake_timestamp
           sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/assemble/drep/dereplicated_genomes/all:bin_00001.fa"
-          sudo touch results/assemble/drep/dereplicated_genomes/.snakemake_timestamp
-          sudo touch results/assemble/drep/data.tar.gz
-          sudo touch results/assemble/drep/data_tables.tar.gz
 
-      - name: Test workflow - Quantify
+      - name: Test workflow - Quantify (skip drep)
         uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
