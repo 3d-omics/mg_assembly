@@ -136,7 +136,8 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            annotate
+            annotate__quast
+            annotate__checkm2
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
