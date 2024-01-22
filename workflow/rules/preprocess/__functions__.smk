@@ -52,12 +52,12 @@ def get_input_file_for_host_mapping(wildcards, end):
 
 def get_input_forward_for_host_mapping(wildcards):
     """Compose the forward input file"""
-   return get_input_file_for_host_mapping(wildcards, end = "forward")
+    return get_input_file_for_host_mapping(wildcards, end = "forward")
 
 
 def get_input_reverse_for_host_mapping(wildcards):
     """Compose the forward input file"""
-   return get_input_file_for_host_mapping(wildcards, end = "reverse")
+    return get_input_file_for_host_mapping(wildcards, end = "reverse")
 
 
 # nonpareil
