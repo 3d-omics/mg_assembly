@@ -1,34 +1,3 @@
-rule _annotate__gtdbtk__download:
-    output:
-        directory(features["databases"]["gtdbtk"]),
-    log:
-        features["databases"]["gtdbtk"] + ".log",
-    conda:
-        "__environment__.yml"
-    shell:
-        """
-        mkdir --parents {output} 2> {log} 1>&2
-
-        wget \
-            --continue \
-            --directory {output} \
-            https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz \
-        2>> {log} 1>&2
-
-        tar \
-            --extract \
-            --verbose \
-            --file {output}/gtdbtk_data.tar.gz \
-            --directory {output} \
-        2>> {log} 1>&2
-
-        mv \
-            {output}/release*/* \
-            {output}/ \
-        2>> {log} 1>&2
-        """
-
-
 rule _annotate__gtdbtk__classify:
     """Run GTDB-Tk over the dereplicated genomes."""
     input:

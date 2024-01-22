@@ -1,24 +1,3 @@
-rule _annotate__checkm2__download:
-    output:
-        directory(features["databases"]["checkm2"]),
-    log:
-        CHECKM / "download.log",
-    conda:
-        "checkm2.yml"
-    shell:
-        """
-        mkdir --parents {output} 2> {log} 1>&2
-
-        checkm2 database \
-            --download \
-            --path $(dirname {output}) \
-        2>> {log} 1>&2
-
-        mv $(dirname {output})/CheckM2_database/* {output}/ 2>> {log} 1>&2
-        rmdir $(dirname {output})/CheckM2_database 2>>{log} 1>&2
-        """
-
-
 rule _annotate__checkm2__predict:
     """Run CheckM2 over the dereplicated mags"""
     input:
