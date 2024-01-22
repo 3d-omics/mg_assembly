@@ -112,7 +112,7 @@ jobs:
       - name: Test workflow - Assemble (skip drep)
         run: |
           sudo mkdir --parents results/assemble/drep/dereplicated_genomes
-          touch results/assemble/drep/dereplicated_genomes/.snakemake_timestamp
+          sudo touch results/assemble/drep/dereplicated_genomes/.snakemake_timestamp
           sudo bash -c "gzip -dc resources/mock_assembly.fa.gz > results/assemble/drep/dereplicated_genomes/all:bin_00001.fa"
 
       - name: Test workflow - Quantify (skip drep)
