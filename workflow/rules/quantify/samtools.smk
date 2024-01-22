@@ -3,8 +3,8 @@ rule _quantify__samtools__stats_cram:
     input:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=DREP / "dereplicated_genomes.fa",
-        fai=DREP / "dereplicated_genomes.fa.fai",
+        reference=DREP / "dereplicated_genomes.fa.gz",
+        fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
         txt=QUANT_BOWTIE2 / "{sample_id}.{library_id}.stats.txt",
     log:

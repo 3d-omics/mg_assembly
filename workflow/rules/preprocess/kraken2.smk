@@ -13,7 +13,7 @@ rule _preprocess__kraken2__assign:
             FASTP / f"{sample_id}.{library_id}_2.fq.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
-        database=get_kraken2_database,
+        database=lambda w: features["databases"]["kraken2"][w.kraken_db],
     output:
         out_gzs=[
             KRAKEN2 / "{kraken_db}" / f"{sample_id}.{library_id}.out.gz"
@@ -31,7 +31,7 @@ rule _preprocess__kraken2__assign:
         runtime=48 * 60,
     params:
         in_folder=FASTP,
-        out_folder=compose_out_folder_for_eval_kraken2_assign_all,
+        out_folder=lambda w: KRAKEN2 / w.kraken_db,
         kraken_db_shm="/dev/shm/{kraken_db}",
     conda:
         "__environment__.yml"

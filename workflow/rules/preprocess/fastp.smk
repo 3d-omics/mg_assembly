@@ -28,10 +28,10 @@ rule _preprocess__fastp__run:
         fastp \
             --in1 {input.forward_} \
             --in2 {input.reverse_} \
-            --out1 >(pigz --fast > {output.forward_}) \
-            --out2 >(pigz --fast > {output.reverse_}) \
-            --unpaired1 >(pigz --fast > {output.unpaired1}) \
-            --unpaired2 >(pigz --fast > {output.unpaired2}) \
+            --out1 >(bgzip -l 9 -@ {threads} > {output.forward_}) \
+            --out2 >(bgzip -l 9 -@ {threads} > {output.reverse_}) \
+            --unpaired1 >(bgzip -l 9 -@ {threads} > {output.unpaired1}) \
+            --unpaired2 >(bgzip -l 9 -@ {threads} > {output.unpaired2}) \
             --html {output.html} \
             --json {output.json} \
             --verbose \
@@ -44,27 +44,15 @@ rule _preprocess__fastp__run:
         """
 
 
-rule preprocess__fastp__run:
-    """Run fastp over all libraries"""
+rule preprocess__fastp:
+    """Get all files from fastp"""
     input:
-        [
+        reads=[
             FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
             for end in "1 2 u1 u2".split(" ")
         ],
-
-
-rule preprocess__fastp__json:
-    """Get report from fastp + fastqc"""
-    input:
-        [
+        json=[
             FASTP / f"{sample_id}.{library_id}_fastp.json"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
-
-
-rule preprocess__fastp:
-    """Get all files from fastp"""
-    input:
-        rules.preprocess__fastp__run.input,
-        rules.preprocess__fastp__json.input,

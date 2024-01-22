@@ -1,6 +1,6 @@
 rule _assemble__drep__separate_bins:
     input:
-        assemblies=[MAGSCOT / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
+        assemblies=[MAGSCOT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],
     output:
         out_dir=directory(DREP / "separated_bins"),
     log:
@@ -11,7 +11,10 @@ rule _assemble__drep__separate_bins:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2
 
-        ( cat {input.assemblies} \
+        ( gzip \
+            --decompress \
+            --stdout \
+            {input.assemblies} \
         | paste - - \
         | tr -d ">" \
         | tr "@" "\t" \
@@ -42,8 +45,7 @@ rule _assemble__drep__run:
     retries: 5
     shell:
         """
-        mv \
-            --force \
+        cp \
             {log} \
             {params.out_dir}/drep.$(date -r {log} +%F_%R).log \
         2> {log} 1>&2
@@ -85,18 +87,24 @@ rule _assemble__drep__join_genomes:
     input:
         DREP / "dereplicated_genomes",
     output:
-        DREP / "dereplicated_genomes.fa",
+        DREP / "dereplicated_genomes.fa.gz",
     log:
         DREP / "dereplicated_genomes.log",
     conda:
         "__environment__.yml"
-    threads: 1
+    threads: 8
     shell:
         """
-        cat {input}/*.fa > {output} 2> {log}
+        ( zcat \
+            {input}/*.fa.gz \
+        | bgzip \
+            --compress-level 9 \
+            --threads {threads} \
+        > {output} \
+        ) 2> {log}
         """
 
 
 rule assemble__drep:
     input:
-        DREP / "dereplicated_genomes.fa",
+        DREP / "dereplicated_genomes.fa.gz",

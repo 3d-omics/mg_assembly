@@ -1,10 +1,9 @@
 rule _assemble__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
-        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        assembly=MEGAHIT / "{assembly_id}.fa.gz",
     output:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
-        genes=MAGSCOT / "{assembly_id}" / "prodigal.ffn",
     log:
         MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
@@ -16,22 +15,23 @@ rule _assemble__magscot__prodigal:
     retries: 5
     shell:
         """
-        ( cat {input.assembly} \
+        ( gzip \
+            --decompress \
+            --stdout \
+            {input.assembly} \
         | parallel \
             --jobs {threads} \
             --block 1M \
             --recstart '>' \
             --pipe \
+            --keep-order \
             prodigal \
                 -p meta \
-                -a {output.proteins}.{{#}}.faa \
-                -d {output.genes}.{{#}}.ffn \
+                -a /dev/stdout \
+                -d /dev/null  \
                 -o /dev/null \
-        ) 2> {log} 1>&2
-
-        cat {output.proteins}.*.faa > {output.proteins} 2>> {log}
-        cat {output.genes}.*.ffn > {output.genes} 2>> {log}
-        rm -f {output.proteins}.*.faa {output.genes}.*.ffn 2>> {log} 2>&1
+        > {output.proteins}
+        ) 2> {log}
         """
 
 
@@ -41,7 +41,7 @@ rule _assemble__magscot__hmmsearch_pfam:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
         hmm=features["magscot"]["pfam_hmm"],
     output:
-        tblout=MAGSCOT / "{assembly_id}" / "pfam.tblout",
+        tblout=MAGSCOT / "{assembly_id}" / "pfam.tblout.gz",
     log:
         MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
@@ -55,7 +55,7 @@ rule _assemble__magscot__hmmsearch_pfam:
         """
         hmmsearch \
             -o /dev/null \
-            --tblout {output.tblout} \
+            --tblout >(pigz --best --processes {threads} > {output.tblout}) \
             --noali \
             --notextw \
             --cut_nc \
@@ -72,7 +72,7 @@ rule _assemble__magscot__hmmsearch_tigr:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
         hmm=features["magscot"]["tigr_hmm"],
     output:
-        tblout=MAGSCOT / "{assembly_id}" / "tigr.tblout",
+        tblout=MAGSCOT / "{assembly_id}" / "tigr.tblout.gz",
     log:
         MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
@@ -85,7 +85,7 @@ rule _assemble__magscot__hmmsearch_tigr:
         """
         hmmsearch \
             -o /dev/null \
-            --tblout {output.tblout} \
+            --tblout >(pigz --best --processes {threads} > {output.tblout}) \
             --noali \
             --notextw \
             --cut_nc \
@@ -102,8 +102,8 @@ rule _assemble__magscot__join_hmms:
     Note: "|| true" is used to avoid grep returning an error code when no lines are found
     """
     input:
-        tigr_tblout=MAGSCOT / "{assembly_id}" / "tigr.tblout",
-        pfam_tblout=MAGSCOT / "{assembly_id}" / "pfam.tblout",
+        tigr_tblout=MAGSCOT / "{assembly_id}" / "tigr.tblout.gz",
+        pfam_tblout=MAGSCOT / "{assembly_id}" / "pfam.tblout.gz",
     output:
         merged=MAGSCOT / "{assembly_id}" / "hmm.tblout",
     log:
@@ -112,8 +112,13 @@ rule _assemble__magscot__join_hmms:
         "__environment__.yml"
     shell:
         """
-        ( (grep -v "^#" {input.tigr_tblout} || true) | awk '{{print $1 "\\t" $3 "\\t" $5}}' ) >  {output.merged} 2>  {log}
-        ( (grep -v "^#" {input.pfam_tblout} || true) | awk '{{print $1 "\\t" $4 "\\t" $5}}' ) >> {output.merged} 2>> {log}
+        ( (zgrep -v "^#" {input.tigr_tblout} || true) \
+        | awk '{{print $1 "\\t" $3 "\\t" $5}}' ) \
+        >  {output.merged} 2>  {log}
+
+        ( (zgrep -v "^#" {input.pfam_tblout} || true) \
+        | awk '{{print $1 "\\t" $4 "\\t" $5}}' ) \
+        >> {output.merged} 2>> {log}
         """
 
 
@@ -124,9 +129,9 @@ rule _assemble__magscot__merge_contig_to_bin:
     BIN_ID <TAB> CONTIG_ID <TAB> METHOD
     """
     input:
-        concoct=CONCOCT / "fasta_bins" / "{assembly_id}",
-        maxbin2=MAXBIN2 / "bins" / "{assembly_id}",
-        metabat2=METABAT2 / "bins" / "{assembly_id}",
+        concoct=CONCOCT / "{assembly_id}",
+        maxbin2=MAXBIN2 / "{assembly_id}",
+        metabat2=METABAT2 / "{assembly_id}",
     output:
         MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
     log:
@@ -135,21 +140,21 @@ rule _assemble__magscot__merge_contig_to_bin:
         "__environment__.yml"
     shell:
         """
-        for file in $(find {input.concoct} -name "*.fa" -type f) ; do
+        for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
             bin_id=$(basename $file .fa)
-            grep ^">" $file | tr -d ">" \
+            zgrep ^">" $file | tr -d ">" \
             | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tconcoct"}}'
         done > {output} 2> {log}
 
-        for file in $(find {input.maxbin2} -name "*.fa" -type f) ; do
+        for file in $(find {input.maxbin2} -name "*.fa.gz" -type f) ; do
             bin_id=$(basename $file .fa)
-            grep ^">" $file | tr -d ">" \
+            zgrep ^">" $file | tr -d ">" \
             | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmaxbin2"}}'
         done >> {output} 2>> {log}
 
-        for file in $(find {input.metabat2} -name "*.fa" -type f) ; do
+        for file in $(find {input.metabat2} -name "*.fa.gz" -type f) ; do
             bin_id=$(basename $file .fa)
-            grep ^">" $file | tr -d ">" \
+            zgrep ^">" $file | tr -d ">" \
             | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmetabat2"}}'
         done >> {output} 2>> {log}
         """
@@ -173,7 +178,7 @@ rule _assemble__magscot__run:
     conda:
         "__environment__.yml"
     params:
-        out_prefix=compose_out_prefix_for_bin_magscot_run_one,
+        out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
     resources:
         runtime=8 * 60,
         mem_mb=8 * 1024,
@@ -213,10 +218,10 @@ rule _assemble__magscot__reformat:
 rule _assemble__magscot__rename:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
-        assembly=ASSEMBLE_RENAME / "{assembly_id}.fa",
+        assembly=MEGAHIT / "{assembly_id}.fa.gz",
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     output:
-        fasta=MAGSCOT / "{assembly_id}.fa",
+        fasta=MAGSCOT / "{assembly_id}.fa.gz",
     log:
         MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
@@ -225,31 +230,12 @@ rule _assemble__magscot__rename:
         mem_mb=8 * 1024,
     shell:
         """
-        python workflow/scripts/reformat_fasta_magscot.py \
-            {input.assembly} \
+        ( python workflow/scripts/reformat_fasta_magscot.py \
+            <(gzip -dc {input.assembly}) \
             {input.clean} \
-        > {output.fasta} 2> {log}
-        """
-
-
-rule _assemble__magscot__split_into_bins:
-    """Split the magscot fasta into bins"""
-    input:
-        fasta=MAGSCOT / "{assembly_id}.fa",
-    output:
-        bins=directory(MAGSCOT / "{assembly_id}/bins"),
-    log:
-        MAGSCOT / "{assembly_id}" / "bins.log",
-    conda:
-        "__environment__.yml"
-    shell:
-        """
-        mkdir -p {output.bins} 2> {log}
-
-        ( seqtk seq {input.fasta} \
-        | paste - -  \
-        | tr "@:" "\\t" \
-        | awk '{{print $1":"$2"@"$3"\\n"$4 > "{output.bins}/"$2".fa"}}'
+        | pigz \
+            --best \
+        > {output.fasta} \
         ) 2> {log}
         """
 
@@ -257,4 +243,4 @@ rule _assemble__magscot__split_into_bins:
 rule assemble__magscot:
     """Run MAGSCOT over all assemblies"""
     input:
-        [MAGSCOT / assembly_id / "bins" for assembly_id in ASSEMBLIES],
+        [MAGSCOT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],

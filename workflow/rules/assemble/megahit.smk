@@ -8,7 +8,7 @@ rule _assemble__megahit:
         forwards=get_forwards_from_assembly_id,
         reverses=get_reverses_from_assembly_id,
     output:
-        fasta=MEGAHIT / "{assembly_id}.fa",
+        fasta=MEGAHIT / "{assembly_id}.fa.gz",
         tarball=MEGAHIT / "{assembly_id}.tar.gz",
     log:
         log=MEGAHIT / "{assembly_id}.log",
@@ -16,10 +16,11 @@ rule _assemble__megahit:
         "__environment__.yml"
     threads: 24
     params:
-        out_dir=compose_out_dir_for_assemble_megahit_one,
+        out_dir=lambda w: MEGAHIT / w.assembly_id,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
+        assembly_id=lambda w: w.assembly_id,
     resources:
         mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
         runtime=7 * 24 * 60,
@@ -37,50 +38,30 @@ rule _assemble__megahit:
             -2 {params.reverses} \
         2> {log} 1>&2
 
-        cp \
+        ( seqtk seq \
             {params.out_dir}/final.contigs.fa \
-            {output.fasta} \
-        2>> {log} 1>&2
+        | cut -f 1 -d " " \
+        | paste - - \
+        | awk \
+            '{{printf(">{params.assembly_id}:bin_NA@contig_%08d\\n%s\\n", NR, $2)}}' \
+        | bgzip \
+            -l9 \
+            -@ {threads} \
+        > {output.fasta} \
+        ) 2>> {log}
 
         tar \
             --create \
             --file {output.tarball} \
             --remove-files \
-            --use-compress-program="pigz --processes {threads}" \
+            --use-compress-program="pigz --best --processes {threads}" \
             --verbose \
             {params.out_dir} \
         2>> {log} 1>&2
         """
 
 
-rule _assemble__megahit__rename:
-    """Rename contigs to avoid future collisions
-
-    Contigs are renamed to `megahit_{assembly_id}.{contig_number}`.
-    Also, secondary info in the header is removed.
-    """
-    input:
-        MEGAHIT / "{assembly_id}.fa",
-    output:
-        ASSEMBLE_RENAME / "{assembly_id}.fa",
-    log:
-        ASSEMBLE_RENAME / "{assembly_id}.log",
-    conda:
-        "__environment__.yml"
-    params:
-        assembly_id="{assembly_id}",
-    shell:
-        """
-        ( seqtk seq {input} \
-        | cut -f 1 -d " " \
-        | paste - - \
-        | awk '{{printf(">{params.assembly_id}:bin_NA@contig_%08d\\n%s\\n", NR, $2)}}' \
-        > {output} \
-        ) 2> {log}
-        """
-
-
 rule assemble__megahit:
     """Rename all assemblies contigs to avoid future collisions"""
     input:
-        [ASSEMBLE_RENAME / f"{assembly_id}.fa" for assembly_id in ASSEMBLIES],
+        [MEGAHIT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],

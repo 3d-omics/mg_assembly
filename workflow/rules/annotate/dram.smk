@@ -1,30 +1,3 @@
-# rule _annotate__dram__download_db:
-#     """Download dram database if it does not exist
-
-#     Will skip UniRef and Kegg.
-#     """
-#     output:
-#         db=directory(features["databases"]["dram"]),
-#         config=features["databases"]["dram"] + ".config",
-#     log:
-#         features["databases"]["dram"] + ".log",
-#     conda:
-#         "__environment__.yml"
-#     shell:
-#         """
-#         DRAM-setup.py prepare_databases \
-#             --skip_uniref \
-#             --output_dir {output} \
-#             --threads 10 \
-#             --verbose \
-#         2> {log} 1>&2
-
-#         DRAM-setup.py export_config \
-#         > {output.config} \
-#         2>> {log}
-#         """
-
-
 rule _annotate__dram__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
@@ -96,7 +69,7 @@ rule _annotate__dram__annotate:
                 --output_dir {params.tmp_dir}/{{/.}} \
                 --threads 1 \
                 --gtdb_taxonomy {input.gtdbtk_summary} \
-        ::: {input.dereplicated_genomes}/*.fa \
+        ::: {input.dereplicated_genomes}/*.fa.gz \
         2>> {log} 1>&2
 
         for file in annotations trnas rrnas ; do
@@ -181,7 +154,3 @@ rule annotate__dram:
     """Run DRAM on dereplicated genomes."""
     input:
         rules._annotate__dram__distill.output,
-
-
-# localrules:
-#     _annotate__dram__download_db,

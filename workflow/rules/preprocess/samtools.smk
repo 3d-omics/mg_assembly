@@ -3,8 +3,8 @@ rule _preprocess__samtools__stats_cram:
     input:
         cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
         crai=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram.crai",
-        reference=REFERENCE / "{genome}.fa.gz",
-        fai=REFERENCE / "{genome}.fa.gz.fai",
+        reference=HOSTS / "{genome}.fa.gz",
+        fai=HOSTS / "{genome}.fa.gz.fai",
     output:
         txt=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.stats.txt",
     log:

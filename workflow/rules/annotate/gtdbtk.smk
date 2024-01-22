@@ -1,38 +1,7 @@
-rule _annotate__gtdbtk__download:
-    output:
-        directory(features["databases"]["gtdbtk"]),
-    log:
-        features["databases"]["gtdbtk"] + ".log",
-    conda:
-        "__environment__.yml"
-    shell:
-        """
-        mkdir --parents {output} 2> {log} 1>&2
-
-        wget \
-            --continue \
-            --directory {output} \
-            https://data.gtdb.ecogenomic.org/releases/latest/auxillary_files/gtdbtk_data.tar.gz \
-        2>> {log} 1>&2
-
-        tar \
-            --extract \
-            --verbose \
-            --file {output}/gtdbtk_data.tar.gz \
-            --directory {output} \
-        2>> {log} 1>&2
-
-        mv \
-            {output}/release*/* \
-            {output}/ \
-        2>> {log} 1>&2
-        """
-
-
 rule _annotate__gtdbtk__classify:
     """Run GTDB-Tk over the dereplicated genomes."""
     input:
-        bin_folder=DREP / "dereplicated_genomes",
+        fasta_folder=DREP / "dereplicated_genomes",
         database=features["databases"]["gtdbtk"],
     output:
         summary=GTDBTK / "gtdbtk.summary.tsv",
@@ -77,8 +46,8 @@ rule _annotate__gtdbtk__classify:
         export GTDBTK_DATA_PATH="{input.database}"
 
         gtdbtk classify_wf \
-            --genome_dir {input.bin_folder} \
-            --extension fa \
+            --genome_dir {input.fasta_folder} \
+            --extension fa.gz \
             --out_dir {params.out_dir} \
             --cpus {threads} \
             --skip_ani_screen \

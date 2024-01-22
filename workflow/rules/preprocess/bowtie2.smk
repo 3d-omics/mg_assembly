@@ -5,8 +5,8 @@ rule _preprocess__bowtie2__build:
     the reference genome.
     """
     input:
-        reference=REFERENCE / "{genome}.fa.gz",
-        faidx=REFERENCE / "{genome}.fa.gz.fai",
+        reference=HOSTS / "{genome}.fa.gz",
+        faidx=HOSTS / "{genome}.fa.gz.fai",
     output:
         mock=touch(PRE_INDEX / "{genome}"),
     log:
@@ -37,8 +37,8 @@ rule _preprocess__bowtie2__map:
         forward_=get_input_forward_for_host_mapping,
         reverse_=get_input_reverse_for_host_mapping,
         mock=PRE_INDEX / "{genome}",
-        reference=REFERENCE / "{genome}.fa.gz",
-        faidx=REFERENCE / "{genome}.fa.gz.fai",
+        reference=HOSTS / "{genome}.fa.gz",
+        faidx=HOSTS / "{genome}.fa.gz.fai",
     output:
         cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
     log:
@@ -87,8 +87,8 @@ rule _preprocess__bowtie2__extract_nonhost:
     """
     input:
         cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
-        reference=REFERENCE / "{genome}.fa.gz",
-        fai=REFERENCE / "{genome}.fa.gz.fai",
+        reference=HOSTS / "{genome}.fa.gz",
+        fai=HOSTS / "{genome}.fa.gz.fai",
     output:
         forward_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_2.fq.gz",
