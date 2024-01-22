@@ -1,7 +1,7 @@
 rule _quantify__bowtie2__build:
     """Index dereplicader"""
     input:
-        contigs=DREP / "dereplicated_genomes.fa",
+        contigs=DREP / "dereplicated_genomes.fa.gz",
     output:
         mock=touch(QUANT_INDEX / "dereplicated_genomes"),
     log:
@@ -28,8 +28,8 @@ rule _quantify__bowtie2__map:
         mock=QUANT_INDEX / "dereplicated_genomes",
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
-        reference=DREP / "dereplicated_genomes.fa",
-        fai=DREP / "dereplicated_genomes.fa.fai",
+        reference=DREP / "dereplicated_genomes.fa.gz",
+        fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
     log:

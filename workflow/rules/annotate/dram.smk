@@ -96,7 +96,7 @@ rule _annotate__dram__annotate:
                 --output_dir {params.tmp_dir}/{{/.}} \
                 --threads 1 \
                 --gtdb_taxonomy {input.gtdbtk_summary} \
-        ::: {input.dereplicated_genomes}/*.fa \
+        ::: {input.dereplicated_genomes}/*.fa.gz \
         2>> {log} 1>&2
 
         for file in annotations trnas rrnas ; do

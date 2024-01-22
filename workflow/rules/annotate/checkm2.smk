@@ -42,7 +42,7 @@ rule _annotate__checkm2__predict:
         checkm2 predict \
             --threads {threads} \
             --input {input.mags} \
-            --extension .fa \
+            --extension .fa.gz \
             --output-directory {params.out_dir} \
             --database_path {input.db}/uniref100.KO.1.dmnd \
             --remove_intermediates \

@@ -8,8 +8,8 @@ rule _quantify__coverm__cram_to_bam:
     input:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=DREP / "dereplicated_genomes.fa",
-        fai=DREP / "dereplicated_genomes.fa.fai",
+        reference=DREP / "dereplicated_genomes.fa.gz",
+        fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
         bam=temp(COVERM / "bams" / "{sample_id}.{library_id}.bam"),
     log:

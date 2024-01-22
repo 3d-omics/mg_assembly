@@ -1,7 +1,7 @@
 rule annotate__quast:
     """Run quast over one the dereplicated mags"""
     input:
-        DREP / "dereplicated_genomes.fa",
+        DREP / "dereplicated_genomes.fa.gz",
     output:
         directory(QUAST),
     log:
