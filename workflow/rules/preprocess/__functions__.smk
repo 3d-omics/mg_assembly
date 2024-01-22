@@ -1,3 +1,4 @@
+# fastp
 def get_adapter(wildcards, end):
     """Get the adapter of the en from a file"""
     assert end in ["forward", "reverse"]
@@ -18,6 +19,7 @@ def get_reverse_adapter(wildcards):
     return get_adapter(wildcards, end="reverse")
 
 
+# bowtie2
 def compose_rg_id(wildcards):
     """Compose read group ID for bowtie2"""
     return f"{wildcards.sample_id}_{wildcards.library_id}"
@@ -31,35 +33,6 @@ def compose_rg_extra(wildcards):
     pl_field = "PL:Illumina"
     sm_field = f"SM:{sample_id}"
     return f"{lb_field}\t" + f"PL:Illumina\t" + f"{sm_field}"
-
-
-def compose_prefix_for_nonpareil(wildcards):
-    """Compose prefix for nonpareil output files"""
-    return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"
-
-
-def get_cram_for_preprocess_eval_cram_to_mapped_bam(wildcards):
-    """Get the cram file of the last host"""
-    genome = LAST_HOST
-    sample_id = wildcards.sample_id
-    library_id = wildcards.library_id
-    return PRE_BOWTIE2 / genome / f"{sample_id}.{library_id}.cram"
-
-
-def get_crai_for_preprocess_eval_cram_to_mapped_bam(wildcards):
-    """Get the crai file of the last host"""
-    bam = get_cram_for_pre_eval_cram_to_mapped_bam(wildcards)
-    return f"{bam}.bai"
-
-
-def get_kraken2_database(wildcards):
-    """Get kraken2 database path from the name"""
-    return features["databases"]["kraken2"][wildcards.kraken_db]
-
-
-def compose_out_folder_for_eval_kraken2_assign_all(wildcards):
-    """Just compose the output folder"""
-    return KRAKEN2 / wildcards.kraken_db
 
 
 def get_input_forward_for_host_mapping(wildcards):
@@ -87,7 +60,37 @@ def get_input_reverse_for_host_mapping(wildcards):
         / f"{wildcards.sample_id}.{wildcards.library_id}_2.fq.gz"
     )
 
+# nonpareil
+def compose_prefix_for_nonpareil(wildcards):
+    """Compose prefix for nonpareil output files"""
+    return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"
 
+
+def get_cram_for_preprocess_eval_cram_to_mapped_bam(wildcards):
+    """Get the cram file of the last host"""
+    genome = LAST_HOST
+    sample_id = wildcards.sample_id
+    library_id = wildcards.library_id
+    return PRE_BOWTIE2 / genome / f"{sample_id}.{library_id}.cram"
+
+
+def get_crai_for_preprocess_eval_cram_to_mapped_bam(wildcards):
+    """Get the crai file of the last host"""
+    bam = get_cram_for_pre_eval_cram_to_mapped_bam(wildcards)
+    return f"{bam}.bai"
+
+# kraken2
+def get_kraken2_database(wildcards):
+    """Get kraken2 database path from the name"""
+    return features["databases"]["kraken2"][wildcards.kraken_db]
+
+
+def compose_out_folder_for_eval_kraken2_assign_all(wildcards):
+    """Just compose the output folder"""
+    return KRAKEN2 / wildcards.kraken_db
+
+
+# finals
 def get_final_forward_from_pre(wildcards):
     """Get the last host forward file or the result from FASTP"""
     sample_id = wildcards.sample_id
