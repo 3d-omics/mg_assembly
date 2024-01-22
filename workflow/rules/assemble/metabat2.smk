@@ -15,7 +15,7 @@ rule _assemble__metabat2__run:
         bams=compose_bams_for_metabat2_run,
         depth=lambda w: METABAT2 / f"{w.assembly_id}.depth",
         paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
-        workdir=METABAT2
+        workdir=METABAT2,
     threads: 24
     resources:
         runtime=24 * 60,
