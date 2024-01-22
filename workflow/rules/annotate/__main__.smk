@@ -1,4 +1,3 @@
-include: "__functions__.smk"
 include: "quast.smk"
 include: "gtdbtk.smk"
 include: "dram.smk"
