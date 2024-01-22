@@ -46,11 +46,6 @@ def aggregate_reverses_for_megahit(wildcards):
     return ",".join(reverses)
 
 
-def compose_out_dir_for_assemble_megahit_one(wildcards):
-    """Compose output folder"""
-    return MEGAHIT / wildcards.assembly_id
-
-
 # Concoct, metabat2 and maxbin2
 def get_crams_from_assembly_id(wildcards):
     """Given an assembly_id, get all the cram files for that assembly."""

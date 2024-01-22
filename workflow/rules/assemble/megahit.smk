@@ -16,7 +16,7 @@ rule _assemble__megahit:
         "__environment__.yml"
     threads: 24
     params:
-        out_dir=compose_out_dir_for_assemble_megahit_one,
+        out_dir=lambda w: MEGAHIT / w.assembly_id,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
