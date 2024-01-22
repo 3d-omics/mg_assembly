@@ -98,7 +98,7 @@ rule _assemble__drep__join_genomes:
         ( zcat \
             {input}/*.fa.gz \
         | bgzip \
-            --level 9 \
+            --compress-level 9 \
             --threads {threads} \
         > {output} \
         ) 2> {log}
