@@ -25,12 +25,13 @@ A Snakemake workflow for Genome Resolved Metagenomics
 
 4. Run it with your own data:
 
-   1. Edit `config/samples.tsv` and add your samples names, a library identifier to differentiate them, where are they located, the adapters used, and the coassemblies each sample will belong to. If no adapters are specified, they are asumed to be the current Nextera ones: `AGATCGGAAGAGCACACGTCTGAACTCCAGTCA` and `AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT` for forward and reverse, respectively.
+   1. Edit `config/samples.tsv` and add your samples names, a library identifier to differentiate them, where are they located, the adapters used, and the coassemblies each sample will belong to.
 
     ```tsv
     sample_id	library_id	forward_filename	reverse_filename	forward_adapter	reverse_adapter	assembly_ids
-    sample1	lib1	resources/reads/sample1_1.fq.gz	resources/reads/sample1_2.fq.gz			sample1, all
-    sample2	lib1	resources/reads/sample1_2.fq.gz	resources/reads/sample1_1.fq.gz			all
+    sample1	lib1	resources/reads/sample1_1.fq.gz	resources/reads/sample1_2.fq.gz	AGATCGGAAGAGCACACGTCTGAACTCCAGTCA	AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT	sample, all
+    sample2	lib1	resources/reads/sample2_1.fq.gz	resources/reads/sample2_2.fq.gz	AGATCGGAAGAGCACACGTCTGAACTCCAGTCA	AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT	all
+
     ```
 
     2. Edit `config/features.yml` with reference databases:
