@@ -1,5 +1,5 @@
 # fastp
-def get_adapter(wildcards, end):
+def _get_adapter(wildcards, end):
     """Get the adapter of the en from a file"""
     assert end in ["forward", "reverse"]
     end = "forward_adapter" if end == "forward" else "reverse_adapter"
@@ -12,12 +12,12 @@ def get_adapter(wildcards, end):
 
 def get_forward_adapter(wildcards):
     """Get forward adapter for a sample and library."""
-    return get_adapter(wildcards, end="forward")
+    return _get_adapter(wildcards, end="forward")
 
 
 def get_reverse_adapter(wildcards):
     """Get reverse adapter for a sample and library."""
-    return get_adapter(wildcards, end="reverse")
+    return _get_adapter(wildcards, end="reverse")
 
 
 # bowtie2
@@ -36,7 +36,7 @@ def compose_rg_extra(wildcards):
     return f"{lb_field}\t{pl_field}\t{sm_field}"
 
 
-def get_input_file_for_host_mapping(wildcards, end):
+def _get_input_file_for_host_mapping(wildcards, end):
     """Compose the input file for host mapping"""
     assert end in ["forward", "reverse"]
     end = 1 if end == "forward" else 2
@@ -53,30 +53,31 @@ def get_input_file_for_host_mapping(wildcards, end):
 
 def get_input_forward_for_host_mapping(wildcards):
     """Compose the forward input file"""
-    return get_input_file_for_host_mapping(wildcards, end="forward")
+    return _get_input_file_for_host_mapping(wildcards, end="forward")
 
 
 def get_input_reverse_for_host_mapping(wildcards):
     """Compose the forward input file"""
-    return get_input_file_for_host_mapping(wildcards, end="reverse")
+    return _get_input_file_for_host_mapping(wildcards, end="reverse")
 
 
 # finals
-def get_final_forward_from_pre(wildcards):
-    """Get the last host forward file or the result from FASTP"""
+def _get_final_file_from_pre(wildcards, end):
+    """Get the last host or FASTP forward or reverse"""
+    assert end in ["forward", "reverse"]
+    end = 1 if end == "forward" else 2
     sample_id = wildcards.sample_id
     library_id = wildcards.library_id
     last_host = HOST_NAMES[-1]
     if len(HOST_NAMES) == 0:
-        return FASTP / f"{sample_id}.{library_id}_1.fq.gz"
-    return PRE_BOWTIE2 / f"non{last_host}" / f"{sample_id}.{library_id}_1.fq.gz"
+        return FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
+    return PRE_BOWTIE2 / f"non{last_host}" / f"{sample_id}.{library_id}_{end}.fq.gz"
+
+def get_final_forward_from_pre(wildcards):
+    """Get the last host forward file or the result from FASTP"""
+    return _get_final_file_from_pre(wildcards, end="forward")
 
 
 def get_final_reverse_from_pre(wildcards):
     """Get the last host reverse file or the result from FASTP"""
-    sample_id = wildcards.sample_id
-    library_id = wildcards.library_id
-    last_host = HOST_NAMES[-1]
-    if len(HOST_NAMES) == 0:
-        return FASTP / f"{sample_id}.{library_id}_2.fq.gz"
-    return PRE_BOWTIE2 / f"non{last_host}" / f"{sample_id}.{library_id}_2.fq.gz"
+    return _get_final_file_from_pre(wildcards, end="reverse")
