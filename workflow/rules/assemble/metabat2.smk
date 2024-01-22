@@ -15,6 +15,7 @@ rule _assemble__metabat2__run:
         bams=compose_bams_for_metabat2_run,
         depth=lambda w: METABAT2 / f"{w.assembly_id}.depth",
         paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
+        workdir=METABAT2
     threads: 24
     resources:
         runtime=24 * 60,
@@ -23,7 +24,7 @@ rule _assemble__metabat2__run:
         """
         for cram in {input.crams} ; do
 
-            bam={METABAT2}/$(basename $cram .cram).bam
+            bam={params.workdir}/$(basename $cram .cram).bam
 
             samtools view \
                 --exclude-flags 4 \
