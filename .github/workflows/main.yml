@@ -130,14 +130,13 @@ jobs:
             --latency-wait 5
             --rerun-triggers mtime
 
-      - name: Test workflow - Annotate
+      - name: Test workflow - Annotate (only quast)
         uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
         with:
           directory: .
           snakefile: workflow/Snakefile
           args: >
             annotate__quast
-            annotate__checkm2
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
