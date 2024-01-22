@@ -60,17 +60,6 @@ def get_input_reverse_for_host_mapping(wildcards):
     return get_input_file_for_host_mapping(wildcards, end = "reverse")
 
 
-# kraken2
-def get_kraken2_database(wildcards):
-    """Get kraken2 database path from the name"""
-    return features["databases"]["kraken2"][wildcards.kraken_db]
-
-
-def compose_out_folder_for_eval_kraken2_assign_all(wildcards):
-    """Just compose the output folder"""
-    return KRAKEN2 / wildcards.kraken_db
-
-
 # finals
 def get_final_forward_from_pre(wildcards):
     """Get the last host forward file or the result from FASTP"""
