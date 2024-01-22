@@ -178,7 +178,7 @@ rule _assemble__magscot__run:
     conda:
         "__environment__.yml"
     params:
-        out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot" ,
+        out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
     resources:
         runtime=8 * 60,
         mem_mb=8 * 1024,

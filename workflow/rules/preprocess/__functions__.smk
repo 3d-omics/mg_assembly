@@ -73,6 +73,7 @@ def _get_final_file_from_pre(wildcards, end):
         return FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
     return PRE_BOWTIE2 / f"non{last_host}" / f"{sample_id}.{library_id}_{end}.fq.gz"
 
+
 def get_final_forward_from_pre(wildcards):
     """Get the last host forward file or the result from FASTP"""
     return _get_final_file_from_pre(wildcards, end="forward")
