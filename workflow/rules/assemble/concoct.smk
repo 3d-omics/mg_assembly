@@ -3,17 +3,16 @@ rule _assemble__concoct:
         assembly=MEGAHIT / "{assembly_id}.fa.gz",
         crams=get_crams_from_assembly_id,
     output:
-        directory(CONCOCT / "{assembly_id}")
+        directory(CONCOCT / "{assembly_id}"),
     log:
-        CONCOCT / "{assembly_id}.log"
+        CONCOCT / "{assembly_id}.log",
     conda:
         "concoct.yml"
     resources:
-        mem_mb=double_ram(8)
-    retries:
-        5
+        mem_mb=double_ram(8),
+    retries: 5
     params:
-        workdir=lambda w: CONCOCT / w.assembly_id
+        workdir=lambda w: CONCOCT / w.assembly_id,
     shell:
         """
         mkdir --parents --verbose {params.workdir} 2> {log} 1>&2

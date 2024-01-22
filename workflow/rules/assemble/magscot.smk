@@ -2,7 +2,7 @@ rule _assemble__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
         assembly=MEGAHIT / "{assembly_id}.fa.gz",
-    output: 
+    output:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
     log:
         MAGSCOT / "{assembly_id}" / "prodigal.log",
@@ -115,7 +115,7 @@ rule _assemble__magscot__join_hmms:
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
         | awk '{{print $1 "\\t" $3 "\\t" $5}}' ) \
         >  {output.merged} 2>  {log}
-        
+
         ( (zgrep -v "^#" {input.pfam_tblout} || true) \
         | awk '{{print $1 "\\t" $4 "\\t" $5}}' ) \
         >> {output.merged} 2>> {log}
