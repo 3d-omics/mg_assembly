@@ -32,19 +32,6 @@ rule _assemble__magscot__prodigal:
                 -o /dev/null \
         > {output.proteins}
         ) 2> {log}
-
-        # pigz \
-        #     --best \
-        #     --processes {threads} \
-        #     --stdout \
-        #     {output.proteins}.*.faa \
-        # > {output.proteins} 2>> {log}
-        
-        # rm \
-        #     --force \
-        #     --verbose \
-        #     {output.proteins}.*.faa \
-        # 2>> {log} 1>&2
         """
 
 
