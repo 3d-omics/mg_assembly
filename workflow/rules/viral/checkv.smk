@@ -6,13 +6,12 @@ rule _checkv_run:
         fna=CHECKV / "{assembly_id}" / "combined.fna",
         summary=CHECKV / "{assembly_id}" / "quality_summary.tsv",
     log:
-        CHECKV / "{assembly_id}/run.log"
+        CHECKV / "{assembly_id}/run.log",
     conda:
         "__environment__.yml"
     params:
         workdir=lambda w: CHECKV / f"{w.assembly_id}",
-    threads:
-        8
+    threads: 8
     shell:
         """
         checkv end_to_end \
@@ -39,7 +38,7 @@ rule _checkv_filter:
     output:
         fna=CHECKV / "{assembly_id}" / "filtered.fna",
     log:
-        CHECKV / "{assembly_id}" / "filter.log"
+        CHECKV / "{assembly_id}" / "filter.log",
     params:
         min_quality=params["viral"]["checkv"]["min_quality"],
     conda:
@@ -49,7 +48,7 @@ rule _checkv_filter:
         medium='--regexp="Medium-quality"'
         high='--regexp="High-quality"'
         complete='--regexp="Complete"'
-        
+
         if [[ "{params.min_quality}" == "Medium-quality" ]] ; then
             eval grep $medium $high $complete {input.summary}
         elif [[ "{params.min_quality}" == "High-quality" ]] ; then
@@ -68,6 +67,4 @@ rule _checkv_filter:
 
 rule viral__checkv:
     input:
-        [CHECKV / f"{assembly_id}" / "filtered.fna" for assembly_id in ASSEMBLIES]
-
-
+        [CHECKV / f"{assembly_id}" / "filtered.fna" for assembly_id in ASSEMBLIES],
