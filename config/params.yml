@@ -38,3 +38,15 @@ quantify:
       separator: "@"
     contig:
       methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
+
+viral:
+  genomad:
+    filtering: ""  # nothing, --conservative, or --relaxed
+    splits: 16  # raise in case of too much ram usage
+    extra: ""  # other flags
+  diamond:
+  verse:
+  checkv:
+  votu:
+  virsorter:
+  dramv:

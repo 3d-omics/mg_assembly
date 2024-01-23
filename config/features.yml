@@ -18,3 +18,4 @@ databases:
     refseq500: resources/databases/kraken2/kraken2_RefSeqV205_Complete_500GB
   virify: resources/databases/virify
   checkm2: resources/databases/checkm2/uniref100.KO.1.dmnd
+  genomad: resources/databases/genomad_db

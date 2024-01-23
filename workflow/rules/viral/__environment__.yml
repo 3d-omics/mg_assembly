@@ -1,0 +1,8 @@
+# assembly: environment to assemble mags
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - genomad=1.7.4-0

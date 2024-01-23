@@ -48,8 +48,8 @@ DRAM = ANN / "dram/"
 CHECKM = ANN / "checkm2"
 
 # Viral prediction
-VIRIFY = Path("results/virify/")
-
+VIRAL = Path("results/viral/")
+GENOMAD = VIRAL / "genomad"
 
 # reports
 REPORT = Path("reports/")
