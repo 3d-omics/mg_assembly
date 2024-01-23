@@ -12,7 +12,7 @@ rule _assemble__magscot__prodigal:
     resources:
         runtime=24 * 60,
         mem_mb=double_ram(8),
-        attempt=lambda w, attempt: attempt,
+        attempt=get_attempt,
     retries: 5
     shell:
         """
@@ -52,7 +52,7 @@ rule _assemble__magscot__hmmsearch_pfam:
     threads: 4
     resources:
         runtime=24 * 60,
-        mem_mb=double_ram(8),
+        mem_mb=8 * 1024,
     shell:
         """
         hmmsearch \

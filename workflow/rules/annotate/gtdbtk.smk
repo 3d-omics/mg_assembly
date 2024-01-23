@@ -20,7 +20,7 @@ rule _annotate__gtdbtk__classify:
     resources:
         mem_mb=double_ram(32),
         runtime=24 * 60,
-        attempt=lambda w, attempt: attempt,
+        attempt=get_attempt,
     retries: 5
     shell:
         """

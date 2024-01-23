@@ -24,7 +24,7 @@ rule _assemble__megahit:
     resources:
         mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
         runtime=7 * 24 * 60,
-        attempt=lambda w, attempt: attempt,
+        attempt=get_attempt,
     retries: 5
     shell:
         """

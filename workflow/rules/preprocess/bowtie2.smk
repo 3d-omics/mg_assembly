@@ -17,7 +17,7 @@ rule _preprocess__bowtie2__build:
     resources:
         mem_mb=double_ram(params["preprocess"]["bowtie2-build"]["memory_gb"]),
         runtime=24 * 60,
-        attempt=lambda w, attempt: attempt,
+        attempt=get_attempt,
     retries: 5
     shell:
         """
@@ -58,7 +58,7 @@ rule _preprocess__bowtie2__map:
     resources:
         mem_mb=double_ram(params["preprocess"]["bowtie2"]["memory_gb"]),
         runtime=24 * 60,
-        attempt=lambda w, attempt: attempt,
+        attempt=get_attempt,
     retries: 5
     shell:
         """
