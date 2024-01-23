@@ -12,6 +12,7 @@ rule _assemble__magscot__prodigal:
     resources:
         runtime=24 * 60,
         mem_mb=double_ram(8),
+        attempt=lambda w, attempt: attempt,
     retries: 5
     shell:
         """
@@ -30,8 +31,10 @@ rule _assemble__magscot__prodigal:
                 -a /dev/stdout \
                 -d /dev/null  \
                 -o /dev/null \
-        > {output.proteins}
-        ) 2> {log}
+        > {output.proteins} \
+        ) 2> {log}.{resources.attempt}
+
+        mv {log}.{resources.attempt} {log}
         """
 
 
@@ -50,7 +53,6 @@ rule _assemble__magscot__hmmsearch_pfam:
     resources:
         runtime=24 * 60,
         mem_mb=double_ram(8),
-    retries: 5
     shell:
         """
         hmmsearch \
