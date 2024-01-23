@@ -11,8 +11,8 @@ rule _report__step__reads:
     params:
         dir=REPORT_STEP,
     resources:
-        mem_mb=double_ram(8),
-    retries: 5
+        mem_mb=8 * 1024,
+        attempt=get_attempt,
     shell:
         """
         multiqc \
@@ -41,8 +41,10 @@ rule _report__step__preprocess:
     params:
         dir=REPORT_STEP,
     resources:
-        mem_mb=16 * 1024,
+        mem_mb=double_ram(4),
         runtime=6 * 60,
+        attempt=get_attempt,
+    retries: 5
     shell:
         """
         multiqc \
@@ -53,7 +55,9 @@ rule _report__step__preprocess:
             --dirs \
             --dirs-depth 1 \
             {input} \
-        2> {log} 1>&2
+        2> {log}.{resources.attempt} 1>&2
+
+        mv {log}.{resources.attempt} {log}
         """
 
 
