@@ -1,4 +1,5 @@
-![Actions](https://github.com/3d-omics/mg_assembly/actions/workflows/devel/badge.svg)
+[![GitHub actions status](https://github.com/3d-omics/mg_assembly/workflows/Tests/badge.svg)](https://github.com/3d-omics/mg_assembly/actions)
+
 
 # Snakemake workflow: `mg_assembly`
 
