@@ -3,7 +3,7 @@ rule _viral__genomad:
         fasta=MEGAHIT / "{assembly_id}.fa.gz",
         database=features["databases"]["genomad"],
     output:
-        fasta=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
+        fna=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
         genes=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.tsv",
         proteins=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_proteins.faa",
         summary=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_summary.tsv",

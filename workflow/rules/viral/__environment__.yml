@@ -6,3 +6,11 @@ channels:
   - defaults
 dependencies:
   - genomad=1.7.4-0
+  - checkv=1.0.1
+  - bbmap=39.01
+  - mmseqs2=14.7e284
+  - verse=0.1.5
+  - virsorter=2.2.4
+  - dram=1.4.6
+  - diamond=2.1.8
+  - seqtk=1.4

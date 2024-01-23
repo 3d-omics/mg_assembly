@@ -50,6 +50,8 @@ CHECKM = ANN / "checkm2"
 # Viral prediction
 VIRAL = Path("results/viral/")
 GENOMAD = VIRAL / "genomad"
+CHECKV = VIRAL / "checkv"
+
 
 # reports
 REPORT = Path("reports/")
