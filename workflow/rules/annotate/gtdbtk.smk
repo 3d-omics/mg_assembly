@@ -24,12 +24,6 @@ rule _annotate__gtdbtk__classify:
     retries: 5
     shell:
         """
-        mv \
-            --force \
-            {log} \
-            {params.out_dir}/gtdbtk.$(date -r {log} +%F_%R).log \
-        2> {log}.{resources.attempt} 1>&2
-
         rm \
             --recursive \
             --force \
