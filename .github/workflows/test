@@ -14,6 +14,7 @@ rm -rf results reports
     --jobs 8 \
     assemble__megahit
 
+# generate mock assembly
 cp \
     resources/mock_assembly.fa.gz \
     results/assemble/megahit/all.fa.gz
