@@ -17,6 +17,7 @@ rule _preprocess__bowtie2__build:
     resources:
         mem_mb=double_ram(params["preprocess"]["bowtie2-build"]["memory_gb"]),
         runtime=24 * 60,
+        attempt=get_attempt,
     retries: 5
     shell:
         """
@@ -24,7 +25,11 @@ rule _preprocess__bowtie2__build:
             --threads {threads} \
             {input.reference} \
             {output.mock} \
-        2> {log} 1>&2
+        2> {log}.{resources.attempt} 1>&2
+
+        mv \
+            {log}.{resources.attempt} \
+            {log}
         """
 
 
@@ -53,6 +58,7 @@ rule _preprocess__bowtie2__map:
     resources:
         mem_mb=double_ram(params["preprocess"]["bowtie2"]["memory_gb"]),
         runtime=24 * 60,
+        attempt=get_attempt,
     retries: 5
     shell:
         """
@@ -60,7 +66,7 @@ rule _preprocess__bowtie2__map:
             $(dirname {output.cram}) \
             -name "$(basename {output.cram}).tmp.*.bam" \
             -delete \
-        2> {log} 1>&2
+        2> {log}.{resources.attempt} 1>&2
 
         ( bowtie2 \
             -x {input.mock} \
@@ -76,7 +82,11 @@ rule _preprocess__bowtie2__map:
             -o {output.cram} \
             --reference {input.reference} \
             --threads {threads} \
-        ) 2>> {log} 1>&2
+        ) 2>> {log}.{resources.attempt} 1>&2
+
+        mv \
+            {log}.{resources.attempt} \
+            {log}
         """
 
 

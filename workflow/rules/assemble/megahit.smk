@@ -24,6 +24,7 @@ rule _assemble__megahit:
     resources:
         mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
         runtime=7 * 24 * 60,
+        attempt=get_attempt,
     retries: 5
     shell:
         """
@@ -36,7 +37,7 @@ rule _assemble__megahit:
             --continue \
             -1 {params.forwards} \
             -2 {params.reverses} \
-        2> {log} 1>&2
+        2> {log}.{resources.attempt} 1>&2
 
         ( seqtk seq \
             {params.out_dir}/final.contigs.fa \
@@ -48,7 +49,7 @@ rule _assemble__megahit:
             -l9 \
             -@ {threads} \
         > {output.fasta} \
-        ) 2>> {log}
+        ) 2>> {log}.{resources.attempt}
 
         tar \
             --create \
@@ -57,7 +58,9 @@ rule _assemble__megahit:
             --use-compress-program="pigz --best --processes {threads}" \
             --verbose \
             {params.out_dir} \
-        2>> {log} 1>&2
+        2>> {log}.{resources.attempt} 1>&2
+
+        mv {log}.{resources.attempt} {log}
         """
 
 

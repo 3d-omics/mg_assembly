@@ -24,12 +24,6 @@ rule _annotate__dram__annotate:
         runtime=48 * 60,
     shell:
         """
-        mv \
-            --force \
-            {log} \
-            {params.out_dir}/annotate.$(date -r {log} +%F_%R).log \
-        2> {log} 1>&2
-
         rm \
             --recursive \
             --force \
