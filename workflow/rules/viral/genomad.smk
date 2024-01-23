@@ -8,16 +8,15 @@ rule _viral__genomad:
         proteins=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_proteins.faa",
         summary=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_summary.tsv",
     log:
-        GENOMAD / "{assembly_id}.log"
+        GENOMAD / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    threads:
-        8
+    threads: 8
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         splits=params["viral"]["genomad"]["splits"],
         workdir=GENOMAD,
-        extra=params["viral"]["genomad"]["extra"]
+        extra=params["viral"]["genomad"]["extra"],
     resources:
         mem_mb=32 * 1024,
     shell:
@@ -37,9 +36,10 @@ rule _viral__genomad:
         2> {log} 1>&2
         """
 
+
 rule viral__genomad:
     input:
         [
             GENOMAD / f"{assembly_id}_summary" / f"{assembly_id}_virus.fna"
             for assembly_id in ASSEMBLIES
-        ]
+        ],
