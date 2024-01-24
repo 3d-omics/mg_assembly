@@ -10,9 +10,7 @@ rule _viral__genomad:
         / "{assembly_id}_summary"
         / "{assembly_id}_virus_summary.tsv",
         genes_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.gff",
-        contig_gff=GENOMAD
-        / "{assembly_id}_summary"
-        / "{assembly_id}_virus_contigs.gff",
+        contig_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_contigs.gff",
     log:
         GENOMAD / "{assembly_id}.log",
     conda:

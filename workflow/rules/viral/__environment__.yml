@@ -16,4 +16,3 @@ dependencies:
   - virsorter=2.2.4
   - pigz=2.6
   - samtools=1.19
-  
