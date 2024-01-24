@@ -1,6 +1,6 @@
 digraph snakemake_dag {
     rankdir=LR;
-    // newrank=true;
+    newrank=true;
     graph[bgcolor=white, margin=0, compound=true];
     node[shape=box, style=rounded, fontname=sans, fontsize=10, penwidth=2];
     edge[penwidth=2, color=grey];
@@ -22,9 +22,9 @@ digraph snakemake_dag {
         fastp     [label = "fastp",                color = "0.41 0.6 0.85"];
         {
             rankdir=LR;
-            nonpareil [label = "Nonpareil",            color = "0.23 0.6 0.85", style = "dashed,rounded"];
-            singlem   [label = "SingleM",              color = "0.11 0.6 0.85", style = "dashed,rounded"];
-            kraken2   [label = "kraken2",              color = "0.32 0.6 0.85"];
+            nonpareil [label = "Nonpareil", color = "0.23 0.6 0.85", style = "dashed,rounded"];
+            singlem   [label = "SingleM",   color = "0.11 0.6 0.85", style = "dashed,rounded"];
+            kraken2   [label = "kraken2",   color = "0.32 0.6 0.85"];
         }
         fastp   -> bowtie2
         fastp   -> nonpareil
@@ -38,12 +38,12 @@ digraph snakemake_dag {
     subgraph cluster_2 {
         label = "Assemble";
         shape=box; style=rounded; fontname=sans; fontsize=10; penwidth=2; margin=10;
-        megahit [label = "MEGAHIT", color = "0.11 0.6 0.85"];
+        megahit  [label = "MEGAHIT",  color = "0.11 0.6 0.85"];
         concoct  [label = "CONCOCT",  color = "0.36 0.6 0.85"];
         maxbin2  [label = "MaxBin2",  color = "0.52 0.6 0.85"];
         metabat2 [label = "MetaBAT2", color = "0.02 0.6 0.85"];
         magscot  [label = "MAGScoT",  color = "0.23 0.6 0.85"];
-        drep   [label = "dRep",    color = "0.32 0.6 0.85", style = "dashed,rounded"];
+        drep     [label = "dRep",     color = "0.32 0.6 0.85", style = "dashed,rounded"];
 
         megahit -> concoct
         megahit -> maxbin2
@@ -62,9 +62,9 @@ digraph snakemake_dag {
         style = invis;
         subgraph cluster_6 {
             label = "Quantify";
-            shape=box; style="rounded,dashed"; fontname=sans; fontsize=10; penwidth=2; margin=10;
-            bowtie2_drep [label = "bowtie2\nMAGs", color = "0.22 0.86 0.33", style = "dashed,rounded"];
-            coverm       [label = "CoverM",  color = "0.44 0.6 0.85", style = "dashed,rounded"];
+            shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin=10;
+            bowtie2_drep [label = "bowtie2\nMAGs", color = "0.22 0.86 0.33"];
+            coverm       [label = "CoverM",        color = "0.44 0.60 0.85"];
         }
         bowtie2_drep -> coverm
     }
@@ -77,7 +77,8 @@ digraph snakemake_dag {
             shape=box; style="rounded,dashed"; fontname=sans; fontsize=10; penwidth=2; margin=10;
             gtdbtk [label = "GTDB-TK", color = "0.34 0.6 0.85", style = "dashed,rounded"];
             dram   [label = "DRAM",    color = "0.01 0.6 0.85", style = "dashed,rounded"];
-            checkm [label = "CheckM2", color = "0.35 0.44 0.72", style = "rounded"];
+            checkm [label = "CheckM2", color = "0.35 0.44 0.72"];
+            quast  [label = "QUAST",   color = "0.76  0.55 0.22"];
         }
         gtdbtk -> dram
 
@@ -86,20 +87,43 @@ digraph snakemake_dag {
     reference -> bowtie2
     fastq     -> fastp
     extract   -> megahit
-    megahit   -> virify
     drep      -> gtdbtk
     drep      -> bowtie2_drep
     drep      -> checkm
+    drep      -> quast
 
     subgraph cluster_5_space {
         margin = 10;
         style = invis;
         subgraph cluster_5 {
-            label = "Virify";
+            label = "Viral";
             shape=box; style="rounded,dashed"; fontname=sans; fontsize=10; penwidth=2; margin="10,10";
-            virify [label = "virify", color = "0.35 0.22 0.86", style = "dashed,rounded"]
 
+            genomad     [label = "geNomad",     color = "0.35 0.22 0.86", style = "dashed,rounded"];
+            checkv      [label = "CheckV",      color = "0.33 0.20 0.45", style = "dashed,rounded"];
+            bbmap       [label = "BBMap",       color = red,              style = "dashed,rounded"];
+            mmseqs2     [label = "MMseqs2",     color = red,              style = "dashed,rounded"];
+            iphop       [label = "iPHoP",       color = red,              style = "dashed,rounded"];
+            diamond     [label = "DIAMOND",     color = red,              style = "dashed,rounded"];
+            verse       [label = "verse",       color = red,              style = "dashed,rounded"];
+            votu        [label = "vOTU",        color = red];
+            virsorter   [label = "VirSorter",   color = red];
+            dramv       [label = "DRAM-V",      color = red];
         }
+
+        megahit -> genomad
+        genomad -> checkv
+        checkv -> bbmap
+        bbmap -> mmseqs2
+        mmseqs2 -> iphop
+        genomad -> diamond
+        genomad -> verse
+        verse -> votu
+        iphop -> votu
+        checkv -> virsorter
+        checkv -> dramv
+        virsorter -> dramv
+
     }
 
 

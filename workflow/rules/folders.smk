@@ -47,10 +47,12 @@ QUAST = ANN / "quast/"
 DRAM = ANN / "dram/"
 CHECKM = ANN / "checkm2"
 
+
 # Viral prediction
 VIRAL = Path("results/viral/")
 GENOMAD = VIRAL / "genomad"
 CHECKV = VIRAL / "checkv"
+DIAMOND = VIRAL / "diamond"
 
 
 # reports
