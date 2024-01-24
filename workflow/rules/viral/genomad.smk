@@ -6,9 +6,13 @@ rule _viral__genomad:
         fna=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
         genes_tsv=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.tsv",
         proteins=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_proteins.faa",
-        summary_tsv=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_summary.tsv",
+        summary_tsv=GENOMAD
+        / "{assembly_id}_summary"
+        / "{assembly_id}_virus_summary.tsv",
         genes_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.gff",
-        summary_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_summary.gff",
+        summary_gff=GENOMAD
+        / "{assembly_id}_summary"
+        / "{assembly_id}_virus_summary.gff",
     log:
         GENOMAD / "{assembly_id}.log",
     conda:
