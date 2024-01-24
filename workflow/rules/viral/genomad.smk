@@ -4,9 +4,11 @@ rule _viral__genomad:
         database=features["databases"]["genomad"],
     output:
         fna=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
-        genes=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.tsv",
+        genes_tsv=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.tsv",
         proteins=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_proteins.faa",
-        summary=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_summary.tsv",
+        summary_tsv=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_summary.tsv",
+        genes_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.gff",
+        summary_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_summary.gff",
     log:
         GENOMAD / "{assembly_id}.log",
     conda:
@@ -34,6 +36,16 @@ rule _viral__genomad:
             {params.workdir} \
             {input.database} \
         2> {log} 1>&2
+
+        python workflow/scripts/genomad_genes_to_gff.py \
+            --input-genes {output.genes_tsv} \
+            --output-gff {output.genes_gff} \
+        2>> {log} 1>&2
+
+        python workflow/scripts/genomad_summary_to_gff.py \
+            --input-summary {output.summary_tsv} \
+            --output-gff {output.summary_gff} \
+        2>> {log} 1>&2
         """
 
 
