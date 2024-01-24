@@ -5,12 +5,15 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - genomad=1.7.4-0
-  - checkv=1.0.1
   - bbmap=39.01
-  - mmseqs2=14.7e284
-  - verse=0.1.5
-  - virsorter=2.2.4
-  - dram=1.4.6
+  - checkv=1.0.1
   - diamond=2.1.8
+  - dram=1.4.6
+  - genomad=1.7.4
+  - htseq=2.0.5
+  - mmseqs2=14.7e284
   - seqtk=1.4
+  - virsorter=2.2.4
+  - pigz=2.6
+  - samtools=1.19
+  

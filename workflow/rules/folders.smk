@@ -53,6 +53,7 @@ VIRAL = Path("results/viral/")
 GENOMAD = VIRAL / "genomad"
 CHECKV = VIRAL / "checkv"
 DIAMOND = VIRAL / "diamond"
+HTSEQ = VIRAL / "htseq"
 
 
 # reports

@@ -10,9 +10,9 @@ rule _viral__genomad:
         / "{assembly_id}_summary"
         / "{assembly_id}_virus_summary.tsv",
         genes_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.gff",
-        summary_gff=GENOMAD
+        contig_gff=GENOMAD
         / "{assembly_id}_summary"
-        / "{assembly_id}_virus_summary.gff",
+        / "{assembly_id}_virus_contigs.gff",
     log:
         GENOMAD / "{assembly_id}.log",
     conda:
@@ -48,7 +48,7 @@ rule _viral__genomad:
 
         python workflow/scripts/genomad_summary_to_gff.py \
             --input-summary {output.summary_tsv} \
-            --output-gff {output.summary_gff} \
+            --output-gff {output.contig_gff} \
         2>> {log} 1>&2
         """
 
