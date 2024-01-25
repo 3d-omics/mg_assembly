@@ -1,4 +1,4 @@
-rule _viral__htseq__count_genes:
+rule _viral__htseq__genes:
     input:
         crams=get_crams_from_assembly_id,
         genes_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.gff",
