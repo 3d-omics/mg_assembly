@@ -20,3 +20,4 @@ databases:
   genomad: resources/databases/genomad_db
   checkv: resources/databases/checkv-db-v1.5
   diamond: resources/databases/diamond/nr-2022-08-18.dmnd
+  virsorter2: resources/databases/virsorter2

@@ -3,7 +3,7 @@ rule _checkv_run:
         fna=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
         database=features["databases"]["checkv"],
     output:
-        fna=CHECKV / "{assembly_id}" / "combined.fna",
+        fna=CHECKV / "{assembly_id}" / "all.fna",
         summary=CHECKV / "{assembly_id}" / "quality_summary.tsv",
     log:
         CHECKV / "{assembly_id}/run.log",
@@ -33,7 +33,7 @@ rule _checkv_run:
 
 rule _checkv_filter:
     input:
-        fna=CHECKV / "{assembly_id}" / "combined.fna",
+        fna=CHECKV / "{assembly_id}" / "all.fna",
         summary=CHECKV / "{assembly_id}" / "quality_summary.tsv",
     output:
         fna=CHECKV / "{assembly_id}" / "filtered.fna",
