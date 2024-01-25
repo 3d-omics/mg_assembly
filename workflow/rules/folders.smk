@@ -55,6 +55,7 @@ CHECKV = VIRAL / "checkv"
 DIAMOND = VIRAL / "diamond"
 HTSEQ = VIRAL / "htseq"
 VIRSORTER2 = VIRAL / "virsorter2"
+DRAMV = VIRAL / "dramv"
 
 # reports
 REPORT = Path("reports/")

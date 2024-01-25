@@ -45,7 +45,7 @@ rule _viral__dramv__virsorter:
             --output_dir {params.workdir} \
             --skip_trnascan \
             --threads {threads} \
-            --virsorter_affi_contigs {params.tsv} \
+            --virsorter_affi_contigs {input.tsv} \
         2>> {log}
 
         DRAM-v.py distill \
