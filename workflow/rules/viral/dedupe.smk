@@ -2,7 +2,7 @@ rule _viral__dedupe__unique_seqs:
     input:
         fastas = [CHECKV / f"{assembly_id}" / "all.fna" for assembly_id in ASSEMBLIES],
     output:
-        fasta=DEDUPE / "unique_seqs.fa",
+        fasta=DEDUPE / "dedupe.fa",
         stats=DEDUPE / "stats.tsv"
     log:
         DEDUPE / "unique_seqs.log",
@@ -12,15 +12,14 @@ rule _viral__dedupe__unique_seqs:
         24
     params:
         fastas=",".join([str(CHECKV / f"{assembly_id}" / "all.fna") for assembly_id in ASSEMBLIES]),
-        workdir=DEDUPE,
-        min_scaf=500,
+        minimum_length=500,
     shell:
         """
         dedupe.sh \
             in={params.fastas} \
-            out={params.workdir} \
+            out={output.fasta} \
             csf={output.stats} \
-            minscaf={params.min_scaf} \
+            minscaf={params.minimum_length} \
             mergenames=t \
             exact=f \
             threads={threads} \
