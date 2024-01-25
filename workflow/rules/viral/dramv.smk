@@ -15,7 +15,7 @@ rule _viral__dramv__virsorter:
         product_html=DRAMV / "{assembly_id}" / "product.html",
         product_tsv=DRAMV / "{assembly_id}" / "product.tsv",
     params:
-        workdir=DRAMV / "{assembly_id}",
+        workdir=lambda w: DRAMV / f"{w.assembly_id}",
     log:
         DRAMV / "{assembly_id}.log",
     shell:
