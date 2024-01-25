@@ -1,13 +1,13 @@
 rule _viral__dramv__virsorter:
     input:
         fa=VIRSORTER2
-            / "{assembly_id}"
-            / "for-dramv"
-            / "final-viral-combined-for-dramv.fa",
+        / "{assembly_id}"
+        / "for-dramv"
+        / "final-viral-combined-for-dramv.fa",
         tsv=VIRSORTER2
-            / "{assembly_id}"
-            / "for-dramv"
-            / "viral-affi-contigs-for-dramv.tab",
+        / "{assembly_id}"
+        / "for-dramv"
+        / "viral-affi-contigs-for-dramv.tab",
         dram_db=features["databases"]["dram"],
     output:
         genome=DRAMV / "{assembly_id}" / "genome_stats.tsv",
@@ -15,7 +15,7 @@ rule _viral__dramv__virsorter:
         product_html=DRAMV / "{assembly_id}" / "product.html",
         product_tsv=DRAMV / "{assembly_id}" / "product.tsv",
     params:
-        workdir = DRAMV / "{assembly_id}",
+        workdir=DRAMV / "{assembly_id}",
     log:
         DRAMV / "{assembly_id}.log",
     shell:
@@ -57,6 +57,4 @@ rule _viral__dramv__virsorter:
 
 rule viral__dramv:
     input:
-        [
-            DRAMV / f"{assembly_id}" / "product.tsv" for assembly_id in ASSEMBLIES
-        ]
+        [DRAMV / f"{assembly_id}" / "product.tsv" for assembly_id in ASSEMBLIES],
