@@ -31,40 +31,6 @@ rule _checkv_run:
         """
 
 
-rule _checkv_filter:
-    input:
-        fna=CHECKV / "{assembly_id}" / "all.fna",
-        summary=CHECKV / "{assembly_id}" / "quality_summary.tsv",
-    output:
-        fna=CHECKV / "{assembly_id}" / "filtered.fna",
-    log:
-        CHECKV / "{assembly_id}" / "filter.log",
-    params:
-        min_quality=params["viral"]["checkv"]["min_quality"],
-    conda:
-        "__environment__.yml"
-    shell:
-        """
-        medium='--regexp="Medium-quality"'
-        high='--regexp="High-quality"'
-        complete='--regexp="Complete"'
-
-        if [[ "{params.min_quality}" == "Medium-quality" ]] ; then
-            eval grep $medium $high $complete {input.summary}
-        elif [[ "{params.min_quality}" == "High-quality" ]] ; then
-            eval grep $high $complete {input.summary}
-        else
-            eval grep $complete {input.summary}
-        fi \
-        | cut \
-            --fields 1 \
-        | seqtk subseq \
-            {input.fna} \
-            /dev/stdin \
-        > {output.fna}
-        """
-
-
 rule viral__checkv:
     input:
-        [CHECKV / f"{assembly_id}" / "filtered.fna" for assembly_id in ASSEMBLIES],
+        [CHECKV / f"{assembly_id}" / "all.fna" for assembly_id in ASSEMBLIES],

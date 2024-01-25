@@ -44,5 +44,3 @@ viral:
     filtering: ""  # nothing, --conservative, or --relaxed
     splits: 16  # raise in case of too much ram usage
     extra: ""  # other flags
-  checkv:
-    min_quality: "Medium-quality"  # ["Medium-quality", "High-quality", "Complete"]
