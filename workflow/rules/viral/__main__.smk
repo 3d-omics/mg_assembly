@@ -6,6 +6,7 @@ include: "htseq.smk"
 include: "virsorter.smk"
 include: "dramv.smk"
 include: "dedupe.smk"
+include: "mmseqs.smk"
 
 
 rule viral:
@@ -16,3 +17,4 @@ rule viral:
         rules.viral__virsorter.input,
         rules.viral__dramv.input,
         rules.viral__dedupe.input,
+        rules.viral__mmseqs.input,

@@ -57,7 +57,7 @@ HTSEQ = VIRAL / "htseq"
 VIRSORTER2 = VIRAL / "virsorter2"
 DRAMV = VIRAL / "dramv"
 DEDUPE = VIRAL / "dedupe"
-BBMAP = VIRAL / "bbmap"
+MMSEQS = VIRAL / "mmseqs"
 
 # reports
 REPORT = Path("reports/")

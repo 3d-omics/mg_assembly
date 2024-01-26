@@ -1,4 +1,4 @@
-rule _viral__dramv__virsorter:
+rule _viral__dramv:
     input:
         fa=VIRSORTER2
         / "{assembly_id}"
@@ -14,10 +14,12 @@ rule _viral__dramv__virsorter:
         metabolism=DRAMV / "{assembly_id}" / "metabolism_summary.xlsx",
         product_html=DRAMV / "{assembly_id}" / "product.html",
         product_tsv=DRAMV / "{assembly_id}" / "product.tsv",
-    params:
-        workdir=lambda w: DRAMV / f"{w.assembly_id}",
     log:
         DRAMV / "{assembly_id}.log",
+    conda:
+        "__environment__.yml"
+    params:
+        workdir=lambda w: DRAMV / f"{w.assembly_id}",
     shell:
         """
         DRAM-setup.py set_database_locations \

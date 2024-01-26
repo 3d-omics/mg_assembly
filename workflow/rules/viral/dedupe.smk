@@ -3,24 +3,21 @@ rule _viral__dedupe__unique_seqs:
         fastas=[CHECKV / f"{assembly_id}" / "all.fna" for assembly_id in ASSEMBLIES],
     output:
         fasta=DEDUPE / "dedupe.fa",
-        stats=DEDUPE / "stats.tsv",
     log:
-        DEDUPE / "unique_seqs.log",
+        DEDUPE / "dedupe.log",
     conda:
         "__environment__.yml"
     threads: 24
     params:
-        fastas=",".join(
-            [str(CHECKV / f"{assembly_id}" / "all.fna") for assembly_id in ASSEMBLIES]
-        ),
+        fastas_comma=lambda w, input: ",".join(input),
         minimum_length=500,
     shell:
         """
         dedupe.sh \
-            in={params.fastas} \
+            in={params.fastas_comma} \
             out={output.fasta} \
-            csf={output.stats} \
             minscaf={params.minimum_length} \
+            overwrite=true \
             mergenames=t \
             exact=f \
             threads={threads} \
@@ -31,4 +28,4 @@ rule _viral__dedupe__unique_seqs:
 
 rule viral__dedupe:
     input:
-        DEDUPE / "unique_seqs.fa",
+        DEDUPE / "dedupe.fa",

@@ -1,4 +1,4 @@
-rule _viral__virsorer__run:
+rule _viral__virsorer:
     input:
         fna=CHECKV / "{assembly_id}" / "all.fna",
         database=features["databases"]["virsorter2"],
