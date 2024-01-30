@@ -8,7 +8,7 @@ rule _viral__annotate__virsorter2:
     log:
         VIRSORTER2 / "virsorter2.log",
     conda:
-        "__environment__.yml",
+        "__environment__.yml"
     threads: 24
     params:
         workdir=VIRSORTER2,
@@ -29,4 +29,4 @@ rule _viral__annotate__virsorter2:
 
 rule viral__annotate__virsorter2:
     input:
-        VIRSORTER2 / "for-dramv" / "final-viral-combined-for-dramv.fa"
+        VIRSORTER2 / "for-dramv" / "final-viral-combined-for-dramv.fa",
