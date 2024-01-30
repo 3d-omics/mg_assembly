@@ -53,4 +53,4 @@ rule _viral__annotate__dramv:
 
 rule viral__annotate__dramv:
     input:
-        rules._viral__annotate__dramv.input,
+        rules._viral__annotate__dramv.output,

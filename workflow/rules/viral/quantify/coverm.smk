@@ -37,7 +37,7 @@ rule _viral__quantify__coverm__genome:
 rule _viral__quantify__coverm__genome_aggregate:
     """Run coverm genome and a single method"""
     input:
-        get_tsvs_for_dereplicate_coverm_genome,
+        get_tsvs_for_dereplicate_vcoverm_genome,
     output:
         tsv=VCOVERM / "genome.{method}.tsv",
     log:
@@ -45,7 +45,7 @@ rule _viral__quantify__coverm__genome_aggregate:
     conda:
         "__environment__.yml"
     params:
-        input_dir=lambda w: COVERM / "genome" / w.method,
+        input_dir=lambda w: VCOVERM / "genome" / w.method,
     resources:
         mem_mb=8 * 1024,
     shell:
@@ -101,7 +101,7 @@ rule _viral__quantify__coverm__contig:
 rule _viral__quantify__coverm__contig_aggregate:
     """Run coverm contig and a single method"""
     input:
-        get_tsvs_for_dereplicate_coverm_contig,
+        get_tsvs_for_dereplicate_vcoverm_contig,
     output:
         tsv=VCOVERM / "contig.{method}.tsv",
     log:
@@ -109,7 +109,7 @@ rule _viral__quantify__coverm__contig_aggregate:
     conda:
         "__environment__.yml"
     params:
-        input_dir=lambda w: COVERM / "contig" / w.method,
+        input_dir=lambda w: VCOVERM / "contig" / w.method,
     resources:
         mem_mb=8 * 1024,
     shell:
