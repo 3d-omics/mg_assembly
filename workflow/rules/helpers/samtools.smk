@@ -26,6 +26,20 @@ rule _helpers__samtools__index_cram:
         "samtools index {input} 2> {log} 1>&2"
 
 
+rule _helpers__samtools__faidx_fasta:
+    """Index a fasta file"""
+    input:
+        "{prefix}.fasta",
+    output:
+        "{prefix}.fasta.fai",
+    conda:
+        "__environment__.yml"
+    log:
+        "{prefix}.fa.fai.log",
+    shell:
+        "samtools faidx {input} 2> {log} 1>&2"
+
+
 rule _helpers__samtools__faidx_fa:
     """Index a fasta file"""
     input:

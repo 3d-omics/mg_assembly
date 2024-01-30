@@ -3,14 +3,14 @@ rule _viral__quantify__coverm__genome:
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=DREP / "dereplicated_genomes.fa.gz",
-        fai=DREP / "dereplicated_genomes.fa.gz.fai",
+        reference=MMSEQS / "results_all_seqs.fasta",
+        fai=MMSEQS / "results_all_seqs.fasta.fai",
     output:
-        tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
+        tsv=VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
         "__environment__.yml"
     log:
-        COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
+        VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
         min_covered_fraction=params["quantify"]["coverm"]["genome"][
@@ -72,8 +72,8 @@ rule _viral__quantify__coverm__contig:
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=DREP / "dereplicated_genomes.fa.gz",
-        fai=DREP / "dereplicated_genomes.fa.gz.fai",
+        reference=MMSEQS / "results_all_seqs.fasta",
+        fai=MMSEQS / "results_all_seqs.fasta.fai",
     output:
         tsv=VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
