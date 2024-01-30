@@ -68,9 +68,9 @@ def _get_final_file_from_pre(wildcards, end):
     end = 1 if end == "forward" else 2
     sample_id = wildcards.sample_id
     library_id = wildcards.library_id
-    last_host = HOST_NAMES[-1]
     if len(HOST_NAMES) == 0:
         return FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
+    last_host = HOST_NAMES[-1]
     return PRE_BOWTIE2 / f"non{last_host}" / f"{sample_id}.{library_id}_{end}.fq.gz"
 
 
