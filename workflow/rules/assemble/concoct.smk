@@ -13,8 +13,7 @@ rule _assemble__concoct:
     retries: 5
     params:
         workdir=lambda w: CONCOCT / w.assembly_id,
-    threads:
-        24
+    threads: 24
     shell:
         """
         mkdir --parents --verbose {params.workdir} 2> {log} 1>&2
