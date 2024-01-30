@@ -1,16 +1,16 @@
-rule _checkv_run:
+rule _viral__cluster__checkv:
     input:
         fna=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
         database=features["databases"]["checkv"],
     output:
-        fna=CHECKV / "{assembly_id}" / "all.fna",
-        summary=CHECKV / "{assembly_id}" / "quality_summary.tsv",
+        fna=CHECKVC / "{assembly_id}" / "all.fna",
+        summary=CHECKVC / "{assembly_id}" / "quality_summary.tsv",
     log:
-        CHECKV / "{assembly_id}/run.log",
+        CHECKVC / "{assembly_id}/run.log",
     conda:
         "__environment__.yml"
     params:
-        workdir=lambda w: CHECKV / f"{w.assembly_id}",
+        workdir=lambda w: CHECKVC / f"{w.assembly_id}",
     threads: 8
     shell:
         """
@@ -31,6 +31,6 @@ rule _checkv_run:
         """
 
 
-rule viral__checkv:
+rule viral__cluster__checkv:
     input:
-        [CHECKV / f"{assembly_id}" / "all.fna" for assembly_id in ASSEMBLIES],
+        [CHECKVC / f"{assembly_id}" / "all.fna" for assembly_id in ASSEMBLIES],

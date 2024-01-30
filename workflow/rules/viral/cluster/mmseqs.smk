@@ -1,4 +1,4 @@
-rule _viral__mmseqs__easy_cluster:
+rule _viral__cluster__mmseqs__easy_cluster:
     input:
         fasta=DEDUPE / "dedupe.fa",
     output:
@@ -22,6 +22,6 @@ rule _viral__mmseqs__easy_cluster:
         """
 
 
-rule viral__mmseqs:
+rule viral__cluster__mmseqs:
     input:
-        rules._viral__mmseqs__easy_cluster.output,
+        rules._viral__cluster__mmseqs__easy_cluster.output,

@@ -1,6 +1,6 @@
-rule _viral__dedupe__unique_seqs:
+rule _viral__cluster__dedupe__unique_seqs:
     input:
-        fastas=[CHECKV / f"{assembly_id}" / "all.fna" for assembly_id in ASSEMBLIES],
+        fastas=[CHECKVC / f"{assembly_id}" / "all.fna" for assembly_id in ASSEMBLIES],
     output:
         fasta=DEDUPE / "dedupe.fa",
     log:
@@ -26,6 +26,6 @@ rule _viral__dedupe__unique_seqs:
         """
 
 
-rule viral__dedupe:
+rule viral__cluster__dedupe:
     input:
         DEDUPE / "dedupe.fa",

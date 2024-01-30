@@ -1,4 +1,4 @@
-rule _viral__genomad:
+rule _viral__cluster__genomad:
     input:
         fasta=MEGAHIT / "{assembly_id}.fa.gz",
         database=features["databases"]["genomad"],
@@ -51,7 +51,7 @@ rule _viral__genomad:
         """
 
 
-rule viral__genomad:
+rule viral__cluster__genomad:
     input:
         [
             GENOMAD / f"{assembly_id}_summary" / f"{assembly_id}_virus.fna"

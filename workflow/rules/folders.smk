@@ -50,14 +50,25 @@ CHECKM = ANN / "checkm2"
 
 # Viral prediction
 VIRAL = Path("results/viral/")
-GENOMAD = VIRAL / "genomad"
-CHECKV = VIRAL / "checkv"
-DIAMOND = VIRAL / "diamond"
-HTSEQ = VIRAL / "htseq"
-VIRSORTER2 = VIRAL / "virsorter2"
-DRAMV = VIRAL / "dramv"
-DEDUPE = VIRAL / "dedupe"
-MMSEQS = VIRAL / "mmseqs"
+
+CLUSTER = VIRAL / "cluster"
+GENOMAD = CLUSTER / "genomad"
+CHECKVC = CLUSTER / "checkv"
+DEDUPE = CLUSTER / "dedupe"
+MMSEQS = CLUSTER / "mmseqs"
+
+VANN = VIRAL / "annotate"
+VIRSORTER2 = VANN / "virsorter2"
+DRAMV = VANN / "dramv"
+QUASTV = VANN / "quast"
+CHECKVA = VANN / "checkv"
+
+VQUANT = VIRAL / "quantify"
+VINDEX = VQUANT / "index"
+VBOWTIE2 = VQUANT / "bowtie2"
+
+VCOVERM = VQUANT / "coverm"
+
 
 # reports
 REPORT = Path("reports/")

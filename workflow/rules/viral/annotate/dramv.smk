@@ -1,25 +1,19 @@
-rule _viral__dramv:
+rule _viral__annotate__dramv:
     input:
-        fa=VIRSORTER2
-        / "{assembly_id}"
-        / "for-dramv"
-        / "final-viral-combined-for-dramv.fa",
-        tsv=VIRSORTER2
-        / "{assembly_id}"
-        / "for-dramv"
-        / "viral-affi-contigs-for-dramv.tab",
+        fa=VIRSORTER2 / "for-dramv" / "final-viral-combined-for-dramv.fa",
+        tsv=VIRSORTER2 / "for-dramv" / "viral-affi-contigs-for-dramv.tab",
         dram_db=features["databases"]["dram"],
     output:
-        genome=DRAMV / "{assembly_id}" / "genome_stats.tsv",
-        metabolism=DRAMV / "{assembly_id}" / "metabolism_summary.xlsx",
-        product_html=DRAMV / "{assembly_id}" / "product.html",
-        product_tsv=DRAMV / "{assembly_id}" / "product.tsv",
+        genome=DRAMV / "genome_stats.tsv",
+        metabolism=DRAMV / "metabolism_summary.xlsx",
+        product_html=DRAMV / "product.html",
+        product_tsv=DRAMV / "product.tsv",
     log:
-        DRAMV / "{assembly_id}.log",
+        DRAMV / "dramv.log",
     conda:
         "__environment__.yml"
     params:
-        workdir=lambda w: DRAMV / f"{w.assembly_id}",
+        workdir=DRAMV,
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -57,6 +51,6 @@ rule _viral__dramv:
         """
 
 
-rule viral__dramv:
+rule viral__annotate__dramv:
     input:
-        [DRAMV / f"{assembly_id}" / "product.tsv" for assembly_id in ASSEMBLIES],
+        rules._viral__annotate__dramv.input,
