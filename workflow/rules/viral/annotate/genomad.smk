@@ -11,7 +11,7 @@ rule _viral__annotate__genomad:
         GENOMADA / "all.log",
     conda:
         "__environment__.yml"
-    threads: 8
+    threads: 24
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=GENOMADA,

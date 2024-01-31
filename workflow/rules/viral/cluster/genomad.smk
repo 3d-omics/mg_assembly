@@ -13,7 +13,7 @@ rule _viral__cluster__genomad:
         GENOMADC / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    threads: 8
+    threads: 24
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=GENOMADC,
