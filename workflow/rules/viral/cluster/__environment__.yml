@@ -6,6 +6,5 @@ channels:
   - defaults
 dependencies:
   - bbmap=39.01
-  - checkv=1.0.1
   - genomad=1.7.4
   - mmseqs2=14.7e284
