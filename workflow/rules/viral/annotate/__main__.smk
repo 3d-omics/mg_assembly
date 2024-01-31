@@ -3,7 +3,7 @@ include: "genomad.smk"
 include: "quast.smk"
 include: "virsorter2.smk"
 
-    
+
 rule viral__annotate:
     input:
         rules.viral__annotate__genomad.input,

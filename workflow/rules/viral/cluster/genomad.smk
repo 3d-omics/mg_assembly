@@ -6,7 +6,7 @@ rule _viral__cluster__genomad:
         fna=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
         genes_tsv=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_genes.tsv",
         proteins=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_proteins.faa",
-        summary_tsv=GENOMADC 
+        summary_tsv=GENOMADC
         / "{assembly_id}_summary"
         / "{assembly_id}_virus_summary.tsv",
     log:
