@@ -28,7 +28,6 @@ rule _viral__cluster__genomad:
             --restart \
             --verbose \
             --threads {threads} \
-            --disable-nn-classification \
             {params.extra} \
             {input.fasta} \
             {params.workdir} \

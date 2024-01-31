@@ -26,7 +26,6 @@ rule _viral__annotate__genomad:
             --restart \
             --verbose \
             --threads {threads} \
-            --disable-nn-classification \
             {params.extra} \
             {input.fasta} \
             {params.workdir} \
