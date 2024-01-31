@@ -1,22 +1,20 @@
-rule _viral__cluster__genomad:
+rule _viral__annotate__genomad:
     input:
-        fasta=MEGAHIT / "{assembly_id}.fa.gz",
+        fasta=MMSEQS / "results_all_seqs.fasta",
         database=features["databases"]["genomad"],
     output:
-        fna=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
-        genes_tsv=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_genes.tsv",
-        proteins=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_proteins.faa",
-        summary_tsv=GENOMADC 
-        / "{assembly_id}_summary"
-        / "{assembly_id}_virus_summary.tsv",
+        fna=GENOMADA / "all_summary" / "all_virus.fna",
+        genes_tsv=GENOMADA / "all_summary" / "all_virus_genes.tsv",
+        proteins=GENOMADA / "all_summary" / "all_virus_proteins.faa",
+        summary_tsv=GENOMADA / "all_summary" / "all_virus_summary.tsv",
     log:
-        GENOMADC / "{assembly_id}.log",
+        GENOMADA / "all.log",
     conda:
         "__environment__.yml"
     threads: 8
     params:
         filtering=params["viral"]["genomad"]["filtering"],
-        workdir=GENOMADC,
+        workdir=GENOMADA,
         extra=params["viral"]["genomad"]["extra"],
     resources:
         mem_mb=32 * 1024,
@@ -37,9 +35,6 @@ rule _viral__cluster__genomad:
         """
 
 
-rule viral__cluster__genomad:
+rule viral__annotate__genomad:
     input:
-        [
-            GENOMADC / f"{assembly_id}_summary" / f"{assembly_id}_virus.fna"
-            for assembly_id in ASSEMBLIES
-        ],
+        rules._viral__annotate__genomad.output,

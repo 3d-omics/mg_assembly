@@ -52,21 +52,20 @@ CHECKM = ANN / "checkm2"
 VIRAL = Path("results/viral/")
 
 CLUSTER = VIRAL / "cluster"
-GENOMAD = CLUSTER / "genomad"
+GENOMADC = CLUSTER / "genomad"
 CHECKVC = CLUSTER / "checkv"
 DEDUPE = CLUSTER / "dedupe"
 MMSEQS = CLUSTER / "mmseqs"
 
 VANN = VIRAL / "annotate"
 VIRSORTER2 = VANN / "virsorter2"
+GENOMADA = VANN / "genomad"
 DRAMV = VANN / "dramv"
 QUASTV = VANN / "quast"
-CHECKVA = VANN / "checkv"
 
 VQUANT = VIRAL / "quantify"
 VINDEX = VQUANT / "index"
 VBOWTIE2 = VQUANT / "bowtie2"
-
 VCOVERM = VQUANT / "coverm"
 
 

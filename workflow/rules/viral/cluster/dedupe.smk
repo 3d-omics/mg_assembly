@@ -1,7 +1,7 @@
 rule _viral__cluster__dedupe__unique_seqs:
     input:
         fastas=[
-            GENOMAD / f"{assembly_id}_summary" / f"{assembly_id}_virus.fna"
+            GENOMADC / f"{assembly_id}_summary" / f"{assembly_id}_virus.fna"
             for assembly_id in ASSEMBLIES
         ],
     output:

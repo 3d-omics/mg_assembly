@@ -5,7 +5,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - checkv=1.0.1
   - dram=1.4.6
-  - quast
+  - genomad=1.7.4
+  - quast=5.2.0
   - virsorter=2.2.4
