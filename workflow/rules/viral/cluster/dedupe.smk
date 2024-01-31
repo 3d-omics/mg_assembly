@@ -1,6 +1,9 @@
 rule _viral__cluster__dedupe__unique_seqs:
     input:
-        fastas=[CHECKVC / f"{assembly_id}" / "all.fna" for assembly_id in ASSEMBLIES],
+        fastas=[
+            GENOMAD / f"{assembly_id}_summary" / f"{assembly_id}_virus.fna"
+            for assembly_id in ASSEMBLIES
+        ],
     output:
         fasta=DEDUPE / "dedupe.fa",
     log:
