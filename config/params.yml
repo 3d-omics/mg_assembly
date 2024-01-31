@@ -42,5 +42,5 @@ quantify:
 viral:
   genomad:
     filtering: ""  # nothing, --conservative, or --relaxed
-    splits: 16  # raise in case of too much ram usage
+    splits: 1  # raise in case of too much ram usage
     extra: ""  # other flags
