@@ -9,8 +9,6 @@ rule _viral__cluster__genomad:
         summary_tsv=GENOMAD
         / "{assembly_id}_summary"
         / "{assembly_id}_virus_summary.tsv",
-        genes_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_genes.gff",
-        contig_gff=GENOMAD / "{assembly_id}_summary" / "{assembly_id}_virus_contigs.gff",
     log:
         GENOMAD / "{assembly_id}.log",
     conda:
@@ -38,16 +36,6 @@ rule _viral__cluster__genomad:
             {params.workdir} \
             {input.database} \
         2> {log} 1>&2
-
-        python workflow/scripts/genomad_genes_to_gff.py \
-            --input-genes {output.genes_tsv} \
-            --output-gff {output.genes_gff} \
-        2>> {log} 1>&2
-
-        python workflow/scripts/genomad_summary_to_gff.py \
-            --input-summary {output.summary_tsv} \
-            --output-gff {output.contig_gff} \
-        2>> {log} 1>&2
         """
 
 
