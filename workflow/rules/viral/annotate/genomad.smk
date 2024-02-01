@@ -16,7 +16,7 @@ rule _viral__annotate__genomad:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=GENOMADA,
         extra=params["viral"]["genomad"]["extra"],
-        tmp_prefix=GENOMADA / "results_genomad_summary"
+        tmp_prefix=GENOMADA / "results_genomad_summary",
     resources:
         mem_mb=32 * 1024,
     shell:

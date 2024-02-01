@@ -10,7 +10,7 @@ rule _viral__cluster__mmseqs__easy_cluster:
     params:
         prefix=MMSEQS / "results",
         tmpdir=MMSEQS,
-        tmp_fasta=MMSEQS / "results_all_seqs.fasta"
+        tmp_fasta=MMSEQS / "results_all_seqs.fasta",
     threads: 24
     shell:
         """
