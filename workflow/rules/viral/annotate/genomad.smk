@@ -3,16 +3,10 @@ rule _viral__annotate__genomad:
         fasta=MMSEQS / "results_all_seqs.fasta",
         database=features["databases"]["genomad"],
     output:
-        fna=GENOMADA / "results_all_seqs_summary" / "all_virus.fna",
-        genes_tsv=GENOMADA
-        / "results_all_seqs_all_summary"
-        / "results_all_seqs_virus_genes.tsv",
-        proteins=GENOMADA
-        / "results_all_seqs_all_summary"
-        / "results_all_seqs_virus_proteins.faa",
-        summary_tsv=GENOMADA
-        / "results_all_seqs_all_summary"
-        / "results_all_seqs_virus_summary.tsv",
+        fna=GENOMADA / "all_virus.fna",
+        genes_tsv=GENOMADA / "results_all_seqs_virus_genes.tsv",
+        proteins=GENOMADA / "results_all_seqs_virus_proteins.faa",
+        summary_tsv=GENOMADA / "results_all_seqs_virus_summary.tsv",
     log:
         GENOMADA / "all.log",
     conda:
@@ -22,6 +16,7 @@ rule _viral__annotate__genomad:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=GENOMADA,
         extra=params["viral"]["genomad"]["extra"],
+        tmp_prefix=GENOMADA / "results_all_seqs_summary"
     resources:
         mem_mb=32 * 1024,
     shell:
@@ -37,6 +32,8 @@ rule _viral__annotate__genomad:
             {params.workdir} \
             {input.database} \
         2> {log} 1>&2
+
+        mv {params.tmp_prefix}/* {params.workdir}
         """
 
 
