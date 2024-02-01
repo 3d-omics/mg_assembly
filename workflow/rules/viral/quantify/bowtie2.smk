@@ -28,8 +28,8 @@ rule _viral__quantify__bowtie2__map:
         mock=VINDEX / "viruses",
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
-        reference=MMSEQS / "results_all_seqs.fasta",
-        fai=MMSEQS / "results_all_seqs.fasta",
+        reference=MMSEQS / "cluster.fa",
+        fai=MMSEQS / "cluster.fa.fai",
     output:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
     log:
