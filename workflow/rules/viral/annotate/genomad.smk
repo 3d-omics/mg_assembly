@@ -3,10 +3,10 @@ rule _viral__annotate__genomad:
         fasta=MMSEQS / "cluster.fa",
         database=features["databases"]["genomad"],
     output:
-        fna=GENOMADA / "genomad_virus.fna",
-        genes_tsv=GENOMADA / "genomad_virus_genes.tsv",
-        proteins=GENOMADA / "genomad_virus_proteins.faa",
-        summary_tsv=GENOMADA / "genomad_virus_summary.tsv",
+        fna=GENOMADA / "cluster_virus.fna",
+        genes_tsv=GENOMADA / "cluster_virus_genes.tsv",
+        proteins=GENOMADA / "cluster_virus_proteins.faa",
+        summary_tsv=GENOMADA / "cluster_virus_summary.tsv",
     log:
         GENOMADA / "genomad.log",
     conda:
@@ -17,10 +17,13 @@ rule _viral__annotate__genomad:
         workdir=GENOMADA,
         extra=params["viral"]["genomad"]["extra"],
         tmp_prefix=GENOMADA / "cluster_summary",
+        use_cuda=params["viral"]["genomad"]["use_cuda"],
     resources:
         mem_mb=32 * 1024,
     shell:
         """
+        {params.use_cuda}
+
         genomad end-to-end \
             {params.filtering} \
             --cleanup \

@@ -18,10 +18,13 @@ rule _viral__cluster__genomad:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=GENOMADC,
         extra=params["viral"]["genomad"]["extra"],
+        use_cuda=params["viral"]["genomad"]["use_cuda"],
     resources:
         mem_mb=32 * 1024,
     shell:
         """
+        {params.use_cuda}
+
         genomad end-to-end \
             {params.filtering} \
             --cleanup \
