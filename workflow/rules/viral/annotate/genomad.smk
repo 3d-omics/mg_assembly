@@ -4,9 +4,15 @@ rule _viral__annotate__genomad:
         database=features["databases"]["genomad"],
     output:
         fna=GENOMADA / "results_all_seqs_summary" / "all_virus.fna",
-        genes_tsv=GENOMADA / "results_all_seqs_all_summary" / "results_all_seqs_virus_genes.tsv",
-        proteins=GENOMADA / "results_all_seqs_all_summary" / "results_all_seqs_virus_proteins.faa",
-        summary_tsv=GENOMADA / "results_all_seqs_all_summary" / "results_all_seqs_virus_summary.tsv",
+        genes_tsv=GENOMADA
+        / "results_all_seqs_all_summary"
+        / "results_all_seqs_virus_genes.tsv",
+        proteins=GENOMADA
+        / "results_all_seqs_all_summary"
+        / "results_all_seqs_virus_proteins.faa",
+        summary_tsv=GENOMADA
+        / "results_all_seqs_all_summary"
+        / "results_all_seqs_virus_summary.tsv",
     log:
         GENOMADA / "all.log",
     conda:
