@@ -3,10 +3,10 @@ rule _viral__annotate__genomad:
         fasta=MMSEQS / "results_all_seqs.fasta",
         database=features["databases"]["genomad"],
     output:
-        fna=GENOMADA / "all_summary" / "all_virus.fna",
-        genes_tsv=GENOMADA / "all_summary" / "all_virus_genes.tsv",
-        proteins=GENOMADA / "all_summary" / "all_virus_proteins.faa",
-        summary_tsv=GENOMADA / "all_summary" / "all_virus_summary.tsv",
+        fna=GENOMADA / "results_all_seqs_summary" / "all_virus.fna",
+        genes_tsv=GENOMADA / "results_all_seqs_all_summary" / "results_all_seqs_virus_genes.tsv",
+        proteins=GENOMADA / "results_all_seqs_all_summary" / "results_all_seqs_virus_proteins.faa",
+        summary_tsv=GENOMADA / "results_all_seqs_all_summary" / "results_all_seqs_virus_summary.tsv",
     log:
         GENOMADA / "all.log",
     conda:
