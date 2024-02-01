@@ -1,6 +1,6 @@
 rule _viral__annotate__virsorter2:
     input:
-        fna=GENOMADA / "all_virus.fna",
+        fna=GENOMADA / "genomad_virus.fna",
         database=features["databases"]["virsorter2"],
     output:
         fa=VIRSORTER2 / "for-dramv" / "final-viral-combined-for-dramv.fa",
