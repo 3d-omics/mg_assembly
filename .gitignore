@@ -12,3 +12,4 @@ resources/virify/
 *.fai
 *.gzi
 mg_assembly.Rproj
+resources/databases/genomad/genomad_db_v1.7/*
