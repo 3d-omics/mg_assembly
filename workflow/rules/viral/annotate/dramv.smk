@@ -4,10 +4,12 @@ rule _viral__annotate__dramv:
         tsv=VIRSORTER2 / "for-dramv" / "viral-affi-contigs-for-dramv.tab",
         dram_db=features["databases"]["dram"],
     output:
-        genome=DRAMV / "genome_stats.tsv",
-        metabolism=DRAMV / "metabolism_summary.xlsx",
-        product_html=DRAMV / "product.html",
-        product_tsv=DRAMV / "product.tsv",
+        amg_summary=DRAMV / "distill" / "amg_summary.tsv",
+        vmag_stats=DRAMV / "distill" / "vMAG_stats.tsv"
+        # genome=DRAMV / "distill" / "amg_stats.tsv",
+        # metabolism=DRAMV / "distill" / "metabolism_summary.xlsx",
+        # product_html=DRAMV / "distill" / "product.html",
+        # product_tsv=DRAMV / "distill" / "product.tsv",
     log:
         DRAMV / "dramv.log",
     conda:
@@ -36,17 +38,19 @@ rule _viral__annotate__dramv:
             --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
         2>> {log} 1>&2
 
+        rm --recursive --verbose --force {params.workdir}/{{annotate,distill}} 2>> {log} 1>&2
+
         DRAM-v.py annotate \
             --input_fasta {input.fa} \
-            --output_dir {params.workdir} \
+            --output_dir {params.workdir}/annotate \
             --skip_trnascan \
             --threads {threads} \
             --virsorter_affi_contigs {input.tsv} \
         2>> {log}
 
         DRAM-v.py distill \
-            --input_file {params.workdir}/annotations.tsv \
-            --output_dir {params.workdir} \
+            --input_file {params.workdir}/annotate/annotations.tsv \
+            --output_dir {params.workdir}/distill \
         2>> {log}
         """
 
