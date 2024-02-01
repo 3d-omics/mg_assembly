@@ -1,7 +1,7 @@
 rule _viral__quantify__bowtie2__build:
     """Index dereplicader"""
     input:
-        contigs=MMSEQS / "results_all_seqs.fasta",
+        contigs=MMSEQS / "cluster.fa",
     output:
         mock=touch(VINDEX / "viruses"),
     log:

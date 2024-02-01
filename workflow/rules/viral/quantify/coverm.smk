@@ -3,8 +3,8 @@ rule _viral__quantify__coverm__genome:
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "results_all_seqs.fasta",
-        fai=MMSEQS / "results_all_seqs.fasta.fai",
+        reference=MMSEQS / "cluster.fa",
+        fai=MMSEQS / "cluster.fa.fai",
     output:
         tsv=VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
@@ -72,8 +72,8 @@ rule _viral__quantify__coverm__contig:
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "results_all_seqs.fasta",
-        fai=MMSEQS / "results_all_seqs.fasta.fai",
+        reference=MMSEQS / "cluster.fa",
+        fai=MMSEQS / "cluster.fa.fai",
     output:
         tsv=VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
     conda:
