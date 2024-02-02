@@ -39,7 +39,13 @@ rule _viral__annotate__dramv:
             --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
         2>> {log} 1>&2
 
-        rm --recursive --verbose --force {params.workdir}/{{annotate,distill}} 2>> {log} 1>&2
+        rm \
+            --recursive \
+            --verbose \
+            --force \
+            {params.workdir}/annotate \
+            {params.workdir}/distill \
+        2>> {log} 1>&2
 
         DRAM-v.py annotate \
             --input_fasta {input.fa} \
