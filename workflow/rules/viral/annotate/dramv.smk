@@ -5,11 +5,8 @@ rule _viral__annotate__dramv:
         dram_db=features["databases"]["dram"],
     output:
         amg_summary=DRAMV / "distill" / "amg_summary.tsv",
-        vmag_stats=DRAMV / "distill" / "vMAG_stats.tsv"
-        # genome=DRAMV / "distill" / "amg_stats.tsv",
-        # metabolism=DRAMV / "distill" / "metabolism_summary.xlsx",
-        # product_html=DRAMV / "distill" / "product.html",
-        # product_tsv=DRAMV / "distill" / "product.tsv",
+        vmag_stats=DRAMV / "distill" / "vMAG_stats.tsv",
+        product=DRAMV / "distill" / "product.html",
     log:
         DRAMV / "dramv.log",
     conda:
