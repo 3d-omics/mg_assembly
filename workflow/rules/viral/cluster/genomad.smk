@@ -3,12 +3,15 @@ rule _viral__cluster__genomad:
         fasta=MEGAHIT / "{assembly_id}.fa.gz",
         database=features["databases"]["genomad"],
     output:
-        fna=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
-        genes_tsv=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_genes.tsv",
-        proteins=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_proteins.faa",
-        summary_tsv=GENOMADC
-        / "{assembly_id}_summary"
-        / "{assembly_id}_virus_summary.tsv",
+        plasmid=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_plasmid.fna",
+        plasmid_genes=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_plasmid_genes.tsv",
+        plasmid_proteins=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_plasmid_proteins.faa",
+        plasmid_summary=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_plasmid_summary.tsv",
+        json=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_summary.json",
+        virus=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus.fna",
+        virus_genes=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_genes.tsv",
+        virus_proteins=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_proteins.faa",
+        virus_summary_tsv=GENOMADC / "{assembly_id}_summary" / "{assembly_id}_virus_summary.tsv",
     log:
         GENOMADC / "{assembly_id}.log",
     conda:
@@ -21,6 +24,7 @@ rule _viral__cluster__genomad:
         use_cuda=params["viral"]["genomad"]["use_cuda"],
     resources:
         mem_mb=32 * 1024,
+    shadow: "minimal"
     shell:
         """
         {params.use_cuda}
