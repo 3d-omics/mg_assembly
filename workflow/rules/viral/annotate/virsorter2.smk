@@ -15,7 +15,8 @@ rule _viral__annotate__virsorter2:
     threads: 24
     params:
         workdir=VIRSORTER2,
-    # shadow: "minimal"
+    shadow:
+        "minimal"
     shell:
         """
         virsorter run \

@@ -12,7 +12,8 @@ rule _viral__annotate__dramv__annotate:
     params:
         workdir=DRAMV,
     threads: 24
-    # shadow: "minimal"
+    shadow:
+        "minimal"
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -35,8 +36,6 @@ rule _viral__annotate__dramv__annotate:
             --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
         2> {log} 1>&2
 
-        rm -rfv {params.workdir}/splits* 2>> {log} 1>&2
-
         seqtk split \
             -n {threads} \
             {params.workdir}/splits \
@@ -57,8 +56,6 @@ rule _viral__annotate__dramv__annotate:
             --output-file {output.annotations} \
             {params.workdir}/splits.*/annotations.tsv \
         2>> {log} 1>&2
-
-        rm -rfv {params.workdir}/splits* 2>> {log}
         """
 
 
@@ -75,6 +72,8 @@ rule _viral__annotate__dramv__distill:
         "__environment__.yml"
     params:
         workdir=DRAMV / "tmp",
+    shadow:
+        "minimal"
     shell:
         """
         DRAM-v.py distill \
