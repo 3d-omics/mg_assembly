@@ -2,16 +2,18 @@ rule _viral__cluster__mmseqs__easy_cluster:
     input:
         fasta=DEDUPE / "dedupe.fa",
     output:
-        fasta=MMSEQS / "cluster.fa",
+        all_seq=MMSEQS / "all_seqs.fasta",
+        cluster=MMSEQS / "cluster.tsv",
+        rep_seq=MMSEQS / "rep_seq.fasta",
     log:
         MMSEQS / "easy_cluster.log",
     conda:
         "__environment__.yml"
     params:
-        prefix=MMSEQS / "results",
+        prefix=MMSEQS / "tmp",
         tmpdir=MMSEQS,
-        tmp_fasta=MMSEQS / "results_all_seqs.fasta",
     threads: 24
+    shadow: "minimal",
     shell:
         """
         mmseqs easy-cluster \
@@ -21,7 +23,9 @@ rule _viral__cluster__mmseqs__easy_cluster:
             --threads {threads} \
         2> {log} 1>&2
 
-        mv {params.tmp_fasta} {output.fasta} 2>> {log} 1>&2
+        mv {params.tmpdir}/tmp_all_seqs.fasta {output.all_seq} 2>> {log} 1>&2
+        mv {params.tmpdir}/tmp_cluster.tsv {output.cluster} 2>> {log} 1>&2
+        mv {params.tmpdir}/tmp_rep_seq.fasta {output.rep_seq} 2>> {log} 1>&2
         """
 
 

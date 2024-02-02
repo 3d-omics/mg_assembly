@@ -1,17 +1,17 @@
 rule _viral__annotate__genomad:
     input:
-        fasta=MMSEQS / "cluster.fa",
+        fasta=MMSEQS / "rep_seq.fasta",
         database=features["databases"]["genomad"],
     output:
-        plasmid=GENOMADA  / "cluster_plasmid.fna",
-        plasmid_genes=GENOMADA / "cluster_plasmid_genes.tsv",
-        plasmid_proteins=GENOMADA / "cluster_plasmid_proteins.faa",
-        plasmid_summary=GENOMADA / "cluster_plasmid_summary.tsv",
-        json=GENOMADA / "cluster_summary.json",
-        virus=GENOMADA / "cluster_virus.fna",
-        virus_genes=GENOMADA / "cluster_virus_genes.tsv",
-        virus_proteins=GENOMADA / "cluster_virus_proteins.faa",
-        virus_summary=GENOMADA / "cluster_virus_summary.tsv",
+        plasmid=GENOMADA  / "rep_seq_plasmid.fna",
+        plasmid_genes=GENOMADA / "rep_seq_plasmid_genes.tsv",
+        plasmid_proteins=GENOMADA / "rep_seq_plasmid_proteins.faa",
+        plasmid_summary=GENOMADA / "rep_seq_plasmid_summary.tsv",
+        json=GENOMADA / "rep_seq_summary.json",
+        virus=GENOMADA / "rep_seq_virus.fna",
+        virus_genes=GENOMADA / "rep_seq_virus_genes.tsv",
+        virus_proteins=GENOMADA / "rep_seq_virus_proteins.faa",
+        virus_summary=GENOMADA / "rep_seq_virus_summary.tsv",
     log:
         GENOMADA / "genomad.log",
     conda:
@@ -21,7 +21,7 @@ rule _viral__annotate__genomad:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=GENOMADA,
         extra=params["viral"]["genomad"]["extra"],
-        tmp_prefix=GENOMADA / "cluster_summary",
+        tmp_prefix=GENOMADA / "rep_seq_summary",
         use_cuda=params["viral"]["genomad"]["use_cuda"],
     resources:
         mem_mb=32 * 1024,

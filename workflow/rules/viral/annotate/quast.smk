@@ -1,7 +1,7 @@
 rule _viral__annotate__quast:
     """Run quast over one the dereplicated mags"""
     input:
-        MMSEQS / "cluster.fa",
+        MMSEQS / "rep_seq.fasta",
     output:
         directory(QUASTV),
     log:

@@ -1,7 +1,7 @@
 rule _viral__annotate__dramv:
     input:
-        fa=VIRSORTER2 / "for-dramv" / "final-viral-combined-for-dramv.fa",
-        tsv=VIRSORTER2 / "for-dramv" / "viral-affi-contigs-for-dramv.tab",
+        fa=VIRSORTER2 / "final-viral-combined-for-dramv.fa",
+        tsv=VIRSORTER2 / "viral-affi-contigs-for-dramv.tab",
         dram_db=features["databases"]["dram"],
     output:
         amg_summary=DRAMV / "distill" / "amg_summary.tsv",

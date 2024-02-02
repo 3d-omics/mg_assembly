@@ -1,7 +1,7 @@
 rule _viral__quantify__bowtie2__build:
     """Index dereplicader"""
     input:
-        contigs=MMSEQS / "cluster.fa",
+        contigs=MMSEQS / "rep_seq.fasta",
     output:
         mock=touch(VINDEX / "viruses"),
     log:
@@ -28,8 +28,8 @@ rule _viral__quantify__bowtie2__map:
         mock=VINDEX / "viruses",
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
-        reference=MMSEQS / "cluster.fa",
-        fai=MMSEQS / "cluster.fa.fai",
+        reference=MMSEQS / "rep_seq.fasta",
+        fai=MMSEQS / "rep_seq.fasta.fai",
     output:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
     log:

@@ -3,8 +3,8 @@ rule _viral__quantify__samtools__stats_cram:
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "cluster.fa",
-        fai=MMSEQS / "cluster.fa.fai",
+        reference=MMSEQS / "rep_seq.fasta",
+        fai=MMSEQS / "rep_seq.fasta.fai",
     output:
         txt=VBOWTIE2 / "{sample_id}.{library_id}.stats.txt",
     log:
