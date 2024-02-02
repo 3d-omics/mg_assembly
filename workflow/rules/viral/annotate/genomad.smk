@@ -3,7 +3,7 @@ rule _viral__annotate__genomad:
         fasta=MMSEQS / "rep_seq.fasta",
         database=features["databases"]["genomad"],
     output:
-        plasmid=GENOMADA  / "rep_seq_plasmid.fna",
+        plasmid=GENOMADA / "rep_seq_plasmid.fna",
         plasmid_genes=GENOMADA / "rep_seq_plasmid_genes.tsv",
         plasmid_proteins=GENOMADA / "rep_seq_plasmid_proteins.faa",
         plasmid_summary=GENOMADA / "rep_seq_plasmid_summary.tsv",
@@ -25,7 +25,8 @@ rule _viral__annotate__genomad:
         use_cuda=params["viral"]["genomad"]["use_cuda"],
     resources:
         mem_mb=32 * 1024,
-    shadow: "minimal",
+    shadow:
+        "minimal"
     shell:
         """
         {params.use_cuda}

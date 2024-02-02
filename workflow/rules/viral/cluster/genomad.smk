@@ -5,7 +5,9 @@ rule _viral__cluster__genomad:
     output:
         plasmid=GENOMADC / "{assembly_id}" / "{assembly_id}_plasmid.fna",
         plasmid_genes=GENOMADC / "{assembly_id}" / "{assembly_id}_plasmid_genes.tsv",
-        plasmid_proteins=GENOMADC / "{assembly_id}" / "{assembly_id}_plasmid_proteins.faa",
+        plasmid_proteins=GENOMADC
+        / "{assembly_id}"
+        / "{assembly_id}_plasmid_proteins.faa",
         plasmid_summary=GENOMADC / "{assembly_id}" / "{assembly_id}_plasmid_summary.tsv",
         json=GENOMADC / "{assembly_id}" / "{assembly_id}_summary.json",
         virus=GENOMADC / "{assembly_id}" / "{assembly_id}_virus.fna",
@@ -26,7 +28,8 @@ rule _viral__cluster__genomad:
         use_cuda=params["viral"]["genomad"]["use_cuda"],
     resources:
         mem_mb=32 * 1024,
-    shadow: "minimal"
+    shadow:
+        "minimal"
     shell:
         """
         {params.use_cuda}

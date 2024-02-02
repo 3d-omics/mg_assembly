@@ -70,11 +70,11 @@ rule _viral__annotate__dramv__distill:
         vmag_stats=DRAMV / "vMAG_stats.tsv",
         product=DRAMV / "product.html",
     log:
-        DRAMV / "distill.log"
+        DRAMV / "distill.log",
     conda:
         "__environment__.yml"
     params:
-        workdir=DRAMV / "tmp"
+        workdir=DRAMV / "tmp",
     shell:
         """
         DRAM-v.py distill \
@@ -84,8 +84,6 @@ rule _viral__annotate__dramv__distill:
 
         mv {params.workdir}/* {DRAMV}/
         """
-
-
 
 
 rule viral__annotate__dramv:

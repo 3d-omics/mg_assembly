@@ -13,7 +13,8 @@ rule _viral__cluster__mmseqs__easy_cluster:
         prefix=MMSEQS / "tmp",
         tmpdir=MMSEQS,
     threads: 24
-    shadow: "minimal",
+    shadow:
+        "minimal"
     shell:
         """
         mmseqs easy-cluster \

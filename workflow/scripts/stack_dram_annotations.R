@@ -36,4 +36,3 @@ map(
 ) %>%
 bind_rows() %>%
 write_tsv(output_file)
-
