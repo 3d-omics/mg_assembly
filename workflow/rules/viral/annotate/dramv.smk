@@ -1,19 +1,18 @@
-rule _viral__annotate__dramv:
+rule _viral__annotate__dramv__annotate:
     input:
         fa=VIRSORTER2 / "final-viral-combined-for-dramv.fa",
         tsv=VIRSORTER2 / "viral-affi-contigs-for-dramv.tab",
         dram_db=features["databases"]["dram"],
     output:
-        amg_summary=DRAMV / "distill" / "amg_summary.tsv",
-        vmag_stats=DRAMV / "distill" / "vMAG_stats.tsv",
-        product=DRAMV / "distill" / "product.html",
+        annotations=DRAMV / "annotations.tsv",
     log:
-        DRAMV / "dramv.log",
+        DRAMV / "annotate.log",
     conda:
         "__environment__.yml"
     params:
         workdir=DRAMV,
     threads: 24
+    # shadow: "minimal"
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -34,31 +33,61 @@ rule _viral__annotate__dramv:
             --viral_loc                 {input.dram_db}/refseq_viral.*.mmsdb \
             --vog_annotations_loc       {input.dram_db}/vog_annotations_latest.tsv.gz \
             --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
+        2> {log} 1>&2
+
+        rm -rfv {params.workdir}/splits* 2>> {log} 1>&2
+
+        seqtk split \
+            -n {threads} \
+            {params.workdir}/splits \
+            {input.fa} \
         2>> {log} 1>&2
 
-        rm \
-            --recursive \
-            --verbose \
-            --force \
-            {params.workdir}/annotate \
-            {params.workdir}/distill \
+        parallel \
+            --jobs {threads} \
+            DRAM-v.py annotate \
+                --input_fasta {{.}}.fa \
+                --output_dir {params.workdir}/{{/.}} \
+                --skip_trnascan \
+                --virsorter_affi_contigs {input.tsv} \
+        ::: {params.workdir}/splits.*.fa \
         2>> {log} 1>&2
 
-        DRAM-v.py annotate \
-            --input_fasta {input.fa} \
-            --output_dir {params.workdir}/annotate \
-            --skip_trnascan \
-            --threads {threads} \
-            --virsorter_affi_contigs {input.tsv} \
-        2>> {log}
+        Rscript --vanilla workflow/scripts/stack_dram_annotations.R \
+            --output-file {output.annotations} \
+            {params.workdir}/splits.*/annotations.tsv \
+        2>> {log} 1>&2
 
-        DRAM-v.py distill \
-            --input_file {params.workdir}/annotate/annotations.tsv \
-            --output_dir {params.workdir}/distill \
-        2>> {log}
+        rm -rfv {params.workdir}/splits* 2>> {log}
         """
+
+
+rule _viral__annotate__dramv__distill:
+    input:
+        annotations=DRAMV / "annotations.tsv",
+    output:
+        amg_summary=DRAMV / "amg_summary.tsv",
+        vmag_stats=DRAMV / "vMAG_stats.tsv",
+        product=DRAMV / "product.html",
+    log:
+        DRAMV / "distill.log"
+    conda:
+        "__environment__.yml"
+    params:
+        workdir=DRAMV / "tmp"
+    shell:
+        """
+        DRAM-v.py distill \
+            --input_file {input.annotations} \
+            --output_dir {params.workdir} \
+        2> {log}
+
+        mv {params.workdir}/* {DRAMV}/
+        """
+
+
 
 
 rule viral__annotate__dramv:
     input:
-        rules._viral__annotate__dramv.output,
+        rules._viral__annotate__dramv__distill.output,
