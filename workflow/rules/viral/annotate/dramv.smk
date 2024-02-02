@@ -16,6 +16,7 @@ rule _viral__annotate__dramv:
         "__environment__.yml"
     params:
         workdir=DRAMV,
+    threads: 24
     shell:
         """
         DRAM-setup.py set_database_locations \
