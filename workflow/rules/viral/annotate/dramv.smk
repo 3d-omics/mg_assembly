@@ -12,8 +12,8 @@ rule _viral__annotate__dramv__annotate:
     params:
         workdir=DRAMV,
     threads: 24
-    shadow:
-        "minimal"
+    # shadow:
+    #     "minimal"
     shell:
         """
         DRAM-setup.py set_database_locations \

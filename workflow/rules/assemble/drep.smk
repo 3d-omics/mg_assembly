@@ -85,7 +85,7 @@ rule _assemble__drep__run:
         pigz \
             --verbose \
             --best \
-            --processes {threads \
+            --processes {threads} \
             {params.out_dir} \
         2>> {log} 1>&2
 
