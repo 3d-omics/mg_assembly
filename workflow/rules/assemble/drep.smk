@@ -7,6 +7,7 @@ rule _assemble__drep__separate_bins:
         DREP / "separate_bins.log",
     conda:
         "__environment__.yml"
+    threads: 24
     shell:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2
@@ -21,6 +22,13 @@ rule _assemble__drep__separate_bins:
         | awk \
             '{{print ">" $1 "@" $2 "\\n" $3 > "{output.out_dir}/" $1 ".fa" }}' \
         ) >> {log} 2>&1
+
+        pigz \
+            --best \
+            --processes {threads} \
+            --verbose \
+            {output.out_dir}/*.fa \
+        2>> {log} 1>&2
         """
 
 
@@ -56,6 +64,12 @@ rule _assemble__drep__run:
             {params.out_dir}/log \
         2> {log}.{resources.attempt} 1>&2
 
+        pigz \
+            --decompress \
+            --keep \
+            {input.genomes}/*.fa.gz \
+        2>> {log}.{resources.attempt} 1>&2
+
         dRep dereplicate \
             {params.out_dir} \
             --processors {threads} \
@@ -63,6 +77,12 @@ rule _assemble__drep__run:
             --S_ani 0.9 \
             --genomes {input.genomes}/*.fa \
         2>> {log}.{resources.attempt} 1>&2
+
+        rm \
+            --force \
+            --verbose \
+            {input.genomes}/*.fa \
+        2>> {log}.{resources.attempt}
 
         for folder in data data_tables ; do
             tar \
@@ -73,14 +93,14 @@ rule _assemble__drep__run:
                 --use-compress-program="pigz --processes {threads}" \
                 --verbose \
                 ${{folder}} \
-            2>> {log} 1>&2
+            2>> {log}.{resources.attempt} 1>&2
         done
 
         pigz \
             --verbose \
             --best \
             --processes {threads} \
-            {params.out_dir} \
+            {output.dereplicated_genomes}/*.fa \
         2>> {log} 1>&2
 
         mv {log}.{resources.attempt} {log}
