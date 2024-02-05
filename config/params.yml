@@ -44,4 +44,3 @@ viral:
     filtering: ""  # nothing, --conservative, or --relaxed
     use_cuda: "export CUDA_VISIBLE_DEVICES=-1"  # in case you have problems with cuda and tensorflow
     extra: ""
-    
