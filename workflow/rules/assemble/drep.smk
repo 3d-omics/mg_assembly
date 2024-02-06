@@ -82,7 +82,7 @@ rule _assemble__drep__run:
             --force \
             --verbose \
             {input.genomes}/*.fa \
-        2>> {log}.{resources.attempt}
+        2>> {log}.{resources.attempt} 1>&2
 
         for folder in data data_tables ; do
             tar \
@@ -101,7 +101,7 @@ rule _assemble__drep__run:
             --best \
             --processes {threads} \
             {output.dereplicated_genomes}/*.fa \
-        2>> {log} 1>&2
+        2>> {log}.{resources.attempt} 1>&2
 
         mv {log}.{resources.attempt} {log}
         """
