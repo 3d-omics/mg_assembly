@@ -1,4 +1,4 @@
-rule _helpers__samtools__index_bam:
+rule index_bam:
     """Index a bam file"""
     input:
         "{prefix}.bam",
@@ -12,7 +12,7 @@ rule _helpers__samtools__index_bam:
         "samtools index {input} 2> {log} 1>&2"
 
 
-rule _helpers__samtools__index_cram:
+rule index_cram:
     """Index a cram file"""
     input:
         "{prefix}.cram",
@@ -26,7 +26,7 @@ rule _helpers__samtools__index_cram:
         "samtools index {input} 2> {log} 1>&2"
 
 
-rule _helpers__samtools__faidx_fasta:
+rule faidx_fasta:
     """Index a fasta file"""
     input:
         "{prefix}.fasta",
@@ -40,7 +40,7 @@ rule _helpers__samtools__faidx_fasta:
         "samtools faidx {input} 2> {log} 1>&2"
 
 
-rule _helpers__samtools__faidx_fa:
+rule faidx_fa:
     """Index a fasta file"""
     input:
         "{prefix}.fa",
@@ -54,7 +54,7 @@ rule _helpers__samtools__faidx_fa:
         "samtools faidx {input} 2> {log} 1>&2"
 
 
-rule _helpers__samtools__faidx_fagz:
+rule faidx_fagz:
     """Index a gzipped fasta file"""
     input:
         "{prefix}.fa.gz",
@@ -69,7 +69,7 @@ rule _helpers__samtools__faidx_fagz:
         "samtools faidx {input} 2> {log} 1>&2"
 
 
-rule _helpers__samtools__idxstats_cram:
+rule idxstats_cram:
     """Compute idxstats for a cram"""
     input:
         cram="{prefix}.cram",
@@ -84,7 +84,7 @@ rule _helpers__samtools__idxstats_cram:
         "samtools idxstats {input.cram} > {output.tsv} 2> {log}"
 
 
-rule _helpers__samtools__flagstats_cram:
+rule flagstats_cram:
     """Compute flagstats for a cram"""
     input:
         cram="{prefix}.cram",

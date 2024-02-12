@@ -1,0 +1,8 @@
+module fastqc:
+    snakefile: "fastqc.smk"
+
+module samtools:
+    snakefile: "samtools.smk"
+
+use rule * from fastqc as fastqc_*
+use rule * from samtools as samtools_*
