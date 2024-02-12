@@ -1,15 +1,13 @@
-# assembly: environment to assemble mags
----
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - dram=1.4.6
-  - genomad=1.7.4
+  - dram =1.4.6
+  - genomad =1.7.4
   - parallel
-  - quast=5.2.0
-  - r-argparse=2.2.2
-  - r-tidyverse=2.0.0
-  - seqtk=1.4
-  - virsorter=2.2.4
+  - quast =5.2.0
+  - r-argparse =2.2.2
+  - r-tidyverse =2.0.0
+  - seqtk =1.4
+  - virsorter =2.2.4
