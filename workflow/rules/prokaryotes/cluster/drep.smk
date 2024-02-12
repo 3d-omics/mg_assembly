@@ -38,7 +38,7 @@ rule _assemble__drep__run:
         genomes=DREP / "separated_bins",
     output:
         fasta=DREP / "dereplicated_genomes.fa.gz",
-        dereplicated_genomes=directory(DREP / "dereplicated_genomes"),
+        dereplicated_genomes=DREP / "dereplicated_genomes.tar.gz",
         data=DREP / "data.tar.gz",
         data_tables=DREP / "data_tables.tar.gz",
     log:
@@ -85,7 +85,7 @@ rule _assemble__drep__run:
             --compress-level 9 \
             --threads {threads} \
         > {output.fasta} \
-        ) 2> {log}
+        ) 2>> {log}.{resources.attempt} 1>&2
 
         rm \
             --force \
@@ -93,7 +93,7 @@ rule _assemble__drep__run:
             {input.genomes}/*.fa \
         2>> {log}.{resources.attempt} 1>&2
 
-        for folder in data data_tables ; do
+        for folder in data data_tables dereplicated_genomes ; do
             tar \
                 --create \
                 --directory {params.out_dir} \
@@ -104,13 +104,6 @@ rule _assemble__drep__run:
                 ${{folder}} \
             2>> {log}.{resources.attempt} 1>&2
         done
-
-        pigz \
-            --verbose \
-            --best \
-            --processes {threads} \
-            {output.dereplicated_genomes}/*.fa \
-        2>> {log}.{resources.attempt} 1>&2
 
         mv {log}.{resources.attempt} {log}
         """
