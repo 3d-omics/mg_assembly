@@ -37,6 +37,7 @@ rule _assemble__drep__run:
     input:
         genomes=DREP / "separated_bins",
     output:
+        fasta=DREP / "dereplicated_genomes.fa.gz",
         dereplicated_genomes=directory(DREP / "dereplicated_genomes"),
         data=DREP / "data.tar.gz",
         data_tables=DREP / "data_tables.tar.gz",
@@ -78,6 +79,14 @@ rule _assemble__drep__run:
             --genomes {input.genomes}/*.fa \
         2>> {log}.{resources.attempt} 1>&2
 
+        ( cat \
+            {params.out_dir}/dereplicated_genomes/*.fa \
+        | bgzip \
+            --compress-level 9 \
+            --threads {threads} \
+        > {output.fasta} \
+        ) 2> {log}
+
         rm \
             --force \
             --verbose \
@@ -104,29 +113,6 @@ rule _assemble__drep__run:
         2>> {log}.{resources.attempt} 1>&2
 
         mv {log}.{resources.attempt} {log}
-        """
-
-
-rule _assemble__drep__join_genomes:
-    """Join all the dereplicated genomes into a single file."""
-    input:
-        DREP / "dereplicated_genomes",
-    output:
-        DREP / "dereplicated_genomes.fa.gz",
-    log:
-        DREP / "dereplicated_genomes.log",
-    conda:
-        "__environment__.yml"
-    threads: 8
-    shell:
-        """
-        ( zcat \
-            {input}/*.fa.gz \
-        | bgzip \
-            --compress-level 9 \
-            --threads {threads} \
-        > {output} \
-        ) 2> {log}
         """
 
 
