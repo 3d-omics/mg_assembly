@@ -39,6 +39,11 @@ cp resources/mock_assembly.fa.gz results/assemble/drep/dereplicated_genomes/all:
     --rerun-triggers mtime
 
 ./run \
+    --jobs 4 \
+    viral \
+    --rerun-triggers mtime
+
+./run \
     --jobs 8 \
     report \
     --rerun-triggers mtime
