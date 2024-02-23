@@ -1,6 +1,6 @@
-include: "hosts.smk"
+include: "recompress.smk"
 
 
 rule reference:
     input:
-        rules.reference__hosts.input,
+        rules.reference__recompress.input,
