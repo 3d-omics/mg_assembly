@@ -1,4 +1,4 @@
-rule _viral__cluster__dedupe__unique_seqs:
+rule viruses__cluster__dedupe:
     input:
         fastas=[
             GENOMADC / f"{assembly_id}" / f"{assembly_id}_virus.fna"
@@ -27,8 +27,3 @@ rule _viral__cluster__dedupe__unique_seqs:
             usejni=t \
         2> {log} 1>&2
         """
-
-
-rule viral__cluster__dedupe:
-    input:
-        DEDUPE / "dedupe.fa",

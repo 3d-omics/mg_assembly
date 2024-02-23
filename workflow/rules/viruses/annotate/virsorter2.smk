@@ -1,13 +1,13 @@
-rule _viral__annotate__virsorter2:
+rule viruses__annotate__virsorter2:
     input:
         fna=GENOMADA / "rep_seq_virus.fna",
         database=features["databases"]["virsorter2"],
     output:
-        viral_boundary=VIRSORTER2 / "final-viral-boundary.tsv",
-        combined=VIRSORTER2 / "final-viral-combined.fa",
-        score=VIRSORTER2 / "final-viral-score.tsv",
-        fa=VIRSORTER2 / "final-viral-combined-for-dramv.fa",
-        tsv=VIRSORTER2 / "viral-affi-contigs-for-dramv.tab",
+        viruses_boundary=VIRSORTER2 / "final-viruses-boundary.tsv",
+        combined=VIRSORTER2 / "final-viruses-combined.fa",
+        score=VIRSORTER2 / "final-viruses-score.tsv",
+        fa=VIRSORTER2 / "final-viruses-combined-for-dramv.fa",
+        tsv=VIRSORTER2 / "viruses-affi-contigs-for-dramv.tab",
     log:
         VIRSORTER2 / "virsorter2.log",
     conda:
@@ -34,8 +34,3 @@ rule _viral__annotate__virsorter2:
             {params.workdir}/for-dramv/* \
             {params.workdir}/
         """
-
-
-rule viral__annotate__virsorter2:
-    input:
-        VIRSORTER2 / "for-dramv" / "final-viral-combined-for-dramv.fa",

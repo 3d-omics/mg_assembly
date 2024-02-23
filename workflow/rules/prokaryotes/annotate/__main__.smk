@@ -4,7 +4,7 @@ include: "dram.smk"
 include: "checkm2.smk"
 
 
-rule annotate:
+rule prokaryotes__annotate:
     """Evaluate the dereplication steps"""
     input:
         rules.prokaryotes__annotate__quast.output,

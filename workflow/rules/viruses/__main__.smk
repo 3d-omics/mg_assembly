@@ -3,8 +3,8 @@ include: "annotate/__main__.smk"
 include: "quantify/__main__.smk"
 
 
-rule viral:
+rule viruses:
     input:
-        rules.viral__cluster.input,
-        rules.viral__annotate.input,
-        rules.viral__quantify.input,
+        rules.viruses__cluster.input,
+        rules.viruses__annotate.input,
+        rules.viruses__quantify.input,

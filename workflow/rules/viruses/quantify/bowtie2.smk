@@ -1,28 +1,5 @@
-rule _viral__quantify__bowtie2__build:
-    """Index dereplicader"""
-    input:
-        contigs=MMSEQS / "rep_seq.fasta",
-    output:
-        mock=touch(VINDEX / "viruses"),
-    log:
-        VINDEX / "virues.log",
-    conda:
-        "__environment__.yml"
-    threads: 24
-    resources:
-        mem_mb=double_ram(params["quantify"]["bowtie2-build"]["memory_gb"]),
-        runtime=24 * 60,
-    shell:
-        """
-        bowtie2-build \
-            --threads {threads} \
-            {input.contigs} \
-            {output.mock} \
-        2> {log} 1>&2
-        """
 
-
-rule _viral__quantify__bowtie2__map:
+rule viruses__quantify__bowtie2__:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=VINDEX / "viruses",
@@ -70,7 +47,7 @@ rule _viral__quantify__bowtie2__map:
         """
 
 
-rule viral__quantify__bowtie2:
+rule viruses__quantify__bowtie2:
     """Align all samples to the dereplicated genomes"""
     input:
         [

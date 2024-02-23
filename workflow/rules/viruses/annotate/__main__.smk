@@ -4,8 +4,8 @@ include: "quast.smk"
 include: "virsorter2.smk"
 
 
-rule viral__annotate:
+rule viruses__annotate:
     input:
-        rules.viral__annotate__genomad.input,
-        rules.viral__annotate__dramv.input,
-        rules.viral__annotate__quast.input,
+        rules.viruses__annotate__genomad.output,
+        rules.viruses__annotate__dramv.output,
+        rules.viruses__annotate__quast.output,

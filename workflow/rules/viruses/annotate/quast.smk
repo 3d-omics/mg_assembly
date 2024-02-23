@@ -1,4 +1,4 @@
-rule _viral__annotate__quast:
+rule viruses__annotate__quast:
     """Run quast over one the dereplicated mags"""
     input:
         MMSEQS / "rep_seq.fasta",
@@ -20,8 +20,3 @@ rule _viral__annotate__quast:
             {input} \
         2> {log} 1>&2
         """
-
-
-rule viral__annotate__quast:
-    input:
-        rules._viral__annotate__quast.output,

@@ -1,10 +1,11 @@
 include: "__functions__.smk"
+include: "index.smk"
 include: "bowtie2.smk"
 include: "coverm.smk"
 include: "samtools.smk"
 
 
-rule viral__quantify:
+rule viruses__quantify:
     input:
-        rules.viral__quantify__coverm.input,
-        rules.viral__quantify__samtools.input,
+        rules.viruses__quantify__coverm.input,
+        rules.viruses__quantify__samtools.input,

@@ -1,4 +1,4 @@
-rule _viral__annotate__genomad:
+rule viruses__annotate__genomad:
     input:
         fasta=MMSEQS / "rep_seq.fasta",
         database=features["databases"]["genomad"],
@@ -48,8 +48,3 @@ rule _viral__annotate__genomad:
             {params.workdir} \
         2>> {log} 1>&2
         """
-
-
-rule viral__annotate__genomad:
-    input:
-        rules._viral__annotate__genomad.output,

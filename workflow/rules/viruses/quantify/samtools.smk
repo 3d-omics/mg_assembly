@@ -1,4 +1,4 @@
-rule _viral__quantify__samtools__stats_cram:
+rule viruses__quantify__samtools__stats_cram__:
     """Get stats from CRAM files using samtools stats."""
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -15,7 +15,7 @@ rule _viral__quantify__samtools__stats_cram:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
 
-rule viral__quantify__samtools:
+rule viruses__quantify__samtools:
     """Get stats from CRAM files using samtools stats."""
     input:
         [

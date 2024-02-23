@@ -1,4 +1,4 @@
-rule _viral__annotate__dramv__annotate:
+rule viruses__annotate__dramv__annotate:
     input:
         fa=VIRSORTER2 / "final-viral-combined-for-dramv.fa",
         tsv=VIRSORTER2 / "viral-affi-contigs-for-dramv.tab",
@@ -59,7 +59,7 @@ rule _viral__annotate__dramv__annotate:
         """
 
 
-rule _viral__annotate__dramv__distill:
+rule viruses__annotate__dramv__distill:
     input:
         annotations=DRAMV / "annotations.tsv",
     output:
@@ -85,6 +85,6 @@ rule _viral__annotate__dramv__distill:
         """
 
 
-rule viral__annotate__dramv:
+rule viruses__annotate__dramv:
     input:
-        rules._viral__annotate__dramv__distill.output,
+        rules.viruses__annotate__dramv__distill.output,

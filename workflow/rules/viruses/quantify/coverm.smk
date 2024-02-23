@@ -1,4 +1,4 @@
-rule _viral__quantify__coverm__genome:
+rule viruses__quantify__coverm__genome__:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -20,7 +20,6 @@ rule _viral__quantify__coverm__genome:
     shell:
         """
         ( samtools view \
-            --exclude-flags 4 \
             --reference {input.reference} \
             --fast \
             {input.cram} \
@@ -34,7 +33,7 @@ rule _viral__quantify__coverm__genome:
         """
 
 
-rule _viral__quantify__coverm__genome_aggregate:
+rule viruses__quantify__coverm__genome_aggregate__:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_vcoverm_genome,
@@ -57,7 +56,7 @@ rule _viral__quantify__coverm__genome_aggregate:
         """
 
 
-rule viral__quantify__coverm__genome:
+rule viruses__quantify__coverm__genome:
     """Run coverm genome and all methods"""
     input:
         [
@@ -67,7 +66,7 @@ rule viral__quantify__coverm__genome:
 
 
 # coverm contig ----
-rule _viral__quantify__coverm__contig:
+rule viruses__quantify__coverm__contig__:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -85,7 +84,6 @@ rule _viral__quantify__coverm__contig:
     shell:
         """
         ( samtools view \
-            --exclude-flags 4 \
             --reference {input.reference} \
             --fast \
             {input.cram} \
@@ -98,7 +96,7 @@ rule _viral__quantify__coverm__contig:
         """
 
 
-rule _viral__quantify__coverm__contig_aggregate:
+rule viruses__quantify__coverm__contig_aggregate__:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_vcoverm_contig,
@@ -121,7 +119,7 @@ rule _viral__quantify__coverm__contig_aggregate:
         """
 
 
-rule viral__quantify__coverm__contig:
+rule viruses__quantify__coverm__contig:
     """Run coverm contig and all methods"""
     input:
         [
@@ -130,7 +128,7 @@ rule viral__quantify__coverm__contig:
         ],
 
 
-rule viral__quantify__coverm:
+rule viruses__quantify__coverm:
     input:
-        rules.viral__quantify__coverm__contig.input,
-        rules.viral__quantify__coverm__genome.input,
+        rules.viruses__quantify__coverm__contig.input,
+        rules.viruses__quantify__coverm__genome.input,

@@ -1,4 +1,4 @@
-rule _viral__cluster__mmseqs__easy_cluster:
+rule viruses__cluster__mmseqs:
     input:
         fasta=DEDUPE / "dedupe.fa",
     output:
@@ -28,8 +28,3 @@ rule _viral__cluster__mmseqs__easy_cluster:
         mv {params.tmpdir}/tmp_cluster.tsv {output.cluster} 2>> {log} 1>&2
         mv {params.tmpdir}/tmp_rep_seq.fasta {output.rep_seq} 2>> {log} 1>&2
         """
-
-
-rule viral__cluster__mmseqs:
-    input:
-        rules._viral__cluster__mmseqs__easy_cluster.output,
