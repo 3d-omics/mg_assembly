@@ -5,7 +5,7 @@ include: "reference/__main__.smk"
 include: "preprocess/__main__.smk"
 include: "assemble/__main__.smk"
 include: "prokaryotes/__main__.smk"
-include: "viral/__main__.smk"
+include: "viruses/__main__.smk"
 include: "report/__main__.smk"
 
 module helpers:
