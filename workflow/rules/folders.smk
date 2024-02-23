@@ -53,21 +53,21 @@ CHECKM = PROK_ANN / "checkm2"
 
 
 # Viral prediction
-VIRAL = Path("results/viral/")
+VIR = Path("results/viruses/")
 
-VIR_CLUSTER = VIRAL / "cluster"
+VIR_CLUSTER = VIR / "cluster"
 GENOMADC = VIR_CLUSTER / "genomad"
 CHECKVC = VIR_CLUSTER / "checkv"
 DEDUPE = VIR_CLUSTER / "dedupe"
 MMSEQS = VIR_CLUSTER / "mmseqs"
 
-VIR_ANN = VIRAL / "annotate"
+VIR_ANN = VIR / "annotate"
 VIRSORTER2 = VIR_ANN / "virsorter2"
 GENOMADA = VIR_ANN / "genomad"
 DRAMV = VIR_ANN / "dramv"
 QUASTV = VIR_ANN / "quast"
 
-VIR_QUANT = VIRAL / "quantify"
+VIR_QUANT = VIR / "quantify"
 VINDEX = VIR_QUANT / "index"
 VBOWTIE2 = VIR_QUANT / "bowtie2"
 VCOVERM = VIR_QUANT / "coverm"
