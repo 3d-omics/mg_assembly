@@ -1,4 +1,4 @@
-rule _annotate__dram__annotate:
+rule prokaryotes__annotate__dram__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes",
@@ -88,7 +88,7 @@ rule _annotate__dram__annotate:
         """
 
 
-rule _annotate__dram__distill:
+rule prokaryotes__annotate__dram__distill:
     """Distill DRAM annotations."""
     input:
         annotations=DRAM / "annotations.tsv",
@@ -144,7 +144,7 @@ rule _annotate__dram__distill:
         """
 
 
-rule annotate__dram:
+rule prokaryotes__annotate__dram:
     """Run DRAM on dereplicated genomes."""
     input:
-        rules._annotate__dram__distill.output,
+        rules.prokaryotes__annotate__dram__distill.output,

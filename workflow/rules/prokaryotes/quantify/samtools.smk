@@ -1,4 +1,4 @@
-rule _quantify__samtools__stats_cram:
+rule prokaryotes__quantify__samtools__stats_cram__:
     """Get stats from CRAM files using samtools stats."""
     input:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -15,7 +15,7 @@ rule _quantify__samtools__stats_cram:
         "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
 
 
-rule quantify__samtools:
+rule prokaryotes__quantify__samtools:
     """Get stats from CRAM files using samtools stats."""
     input:
         [

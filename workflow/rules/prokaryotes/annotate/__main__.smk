@@ -7,6 +7,6 @@ include: "checkm2.smk"
 rule annotate:
     """Evaluate the dereplication steps"""
     input:
-        rules.annotate__quast.output,
-        rules.annotate__checkm2.output,
-        rules.annotate__dram.input,
+        rules.prokaryotes__annotate__quast.output,
+        rules.prokaryotes__annotate__checkm2.output,
+        rules.prokaryotes__annotate__dram.input,

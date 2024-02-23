@@ -1,4 +1,4 @@
-rule _annotate__checkm2__predict:
+rule prokaryotes__annotate__checkm2:
     """Run CheckM2 over the dereplicated mags"""
     input:
         mags=DREP / "dereplicated_genomes",
@@ -30,9 +30,3 @@ rule _annotate__checkm2__predict:
         mv {params.out_dir}/quality_report.tsv {output} 2>> {log} 1>&2
         rm --recursive --verbose --force {params.out_dir} 2>> {log} 1>&2
         """
-
-
-rule annotate__checkm2:
-    """Run CheckM2"""
-    input:
-        rules._annotate__checkm2__predict.output,

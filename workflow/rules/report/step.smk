@@ -90,7 +90,7 @@ rule _report__step__assemble:
 rule _report__step__quantify:
     """Collect all reports from the quantify step"""
     input:
-        rules.quantify__samtools.input,
+        rules.prokaryotes__quantify__samtools.input,
     output:
         REPORT_STEP / "quantify.html",
     log:

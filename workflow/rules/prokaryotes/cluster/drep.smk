@@ -1,4 +1,4 @@
-rule _assemble__drep__separate_bins:
+rule prokaryotes__cluster__drep__separate_bins__:
     input:
         assemblies=[MAGSCOT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],
     output:
@@ -32,7 +32,7 @@ rule _assemble__drep__separate_bins:
         """
 
 
-rule _assemble__drep__run:
+rule prokaryotes__cluster__drep__run__:
     """Dereplicate all the bins using dRep."""
     input:
         genomes=DREP / "separated_bins",
@@ -109,6 +109,6 @@ rule _assemble__drep__run:
         """
 
 
-rule assemble__drep:
+rule prokaryotes__cluster__drep:
     input:
         DREP / "dereplicated_genomes.fa.gz",

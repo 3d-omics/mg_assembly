@@ -1,4 +1,4 @@
-rule _assemble__magscot__prodigal:
+rule prokaryotes__cluster__magscot__prodigal__:
     """Run prodigal over a single assembly"""
     input:
         assembly=MEGAHIT / "{assembly_id}.fa.gz",
@@ -38,7 +38,7 @@ rule _assemble__magscot__prodigal:
         """
 
 
-rule _assemble__magscot__hmmsearch_pfam:
+rule prokaryotes__cluster__magscot__hmmsearch_pfam__:
     """Run hmmsearch over the predicted proteins of an assembly using Pfam as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
@@ -68,7 +68,7 @@ rule _assemble__magscot__hmmsearch_pfam:
         """
 
 
-rule _assemble__magscot__hmmsearch_tigr:
+rule prokaryotes__cluster__magscot__hmmsearch_tigr__:
     """Run hmmsearch over the predicted proteins of an assembly using TIGR as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
@@ -98,7 +98,7 @@ rule _assemble__magscot__hmmsearch_tigr:
         """
 
 
-rule _assemble__magscot__join_hmms:
+rule prokaryotes__cluster__magscot__join_hmms__:
     """Join the results of hmmsearch over TIGR and Pfam
 
     Note: "|| true" is used to avoid grep returning an error code when no lines are found
@@ -124,7 +124,7 @@ rule _assemble__magscot__join_hmms:
         """
 
 
-rule _assemble__magscot__merge_contig_to_bin:
+rule prokaryotes__cluster__magscot__merge_contig_to_bin__:
     """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2
 
     The output file should have the following format:
@@ -162,7 +162,7 @@ rule _assemble__magscot__merge_contig_to_bin:
         """
 
 
-rule _assemble__magscot__run:
+rule prokaryotes__cluster__magscot__run__:
     """Run MAGSCOT over one assembly"""
     input:
         contigs_to_bin=MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
@@ -194,7 +194,7 @@ rule _assemble__magscot__run:
         """
 
 
-rule _assemble__magscot__reformat:
+rule prokaryotes__cluster__magscot__reformat__:
     """Reformat the results from MAGSCOT"""
     input:
         refined_contig_to_bin=MAGSCOT
@@ -217,7 +217,7 @@ rule _assemble__magscot__reformat:
         """
 
 
-rule _assemble__magscot__rename:
+rule prokaryotes__cluster__magscot__rename__:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
         assembly=MEGAHIT / "{assembly_id}.fa.gz",
@@ -242,7 +242,7 @@ rule _assemble__magscot__rename:
         """
 
 
-rule assemble__magscot:
+rule prokaryotes__cluster__magscot:
     """Run MAGSCOT over all assemblies"""
     input:
         [MAGSCOT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],

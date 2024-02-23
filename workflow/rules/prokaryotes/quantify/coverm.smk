@@ -1,37 +1,4 @@
-# rule _quantify__coverm__cram_to_bam:
-#     """Convert cram to bam
-
-#     Note: this step is needed because coverm probably does not support cram. The
-#     log from coverm shows failures to get the reference online, but nonetheless
-#     it works.
-#     """
-#     input:
-#         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
-#         crai=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-#         reference=DREP / "dereplicated_genomes.fa.gz",
-#         fai=DREP / "dereplicated_genomes.fa.gz.fai",
-#     output:
-#         bam=temp(COVERM / "bams" / "{sample_id}.{library_id}.bam"),
-#     log:
-#         COVERM / "bams" / "{sample_id}.{library_id}.bam.log",
-#     conda:
-#         "__environment__.yml"
-#     resources:
-#         runtime=1 * 60,
-#         mem_mb=4 * 1024,
-#     shell:
-#         """
-#         samtools view \
-#             --exclude-flags 4 \
-#             --reference {input.reference} \
-#             --output {output.bam} \
-#             --fast \
-#             {input.cram} \
-#         2> {log}
-#         """
-
-
-rule _quantify__coverm__genome:
+rule prokaryotes__quantify__coverm__genome__:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -67,7 +34,7 @@ rule _quantify__coverm__genome:
         """
 
 
-rule _quantify__coverm__genome_aggregate:
+rule prokaryotes__quantify__coverm__genome__aggregate__:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_genome,
@@ -90,7 +57,7 @@ rule _quantify__coverm__genome_aggregate:
         """
 
 
-rule quantify__coverm__genome:
+rule prokaryotes__quantify__coverm__genome:
     """Run coverm genome and all methods"""
     input:
         [
@@ -100,7 +67,7 @@ rule quantify__coverm__genome:
 
 
 # coverm contig ----
-rule _quantify__coverm__contig:
+rule prokaryotes__quantify__coverm__contig__:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
@@ -131,7 +98,7 @@ rule _quantify__coverm__contig:
         """
 
 
-rule _quantify__coverm__contig_aggregate:
+rule prokaryotes__quantify__coverm__contig__aggregate__:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_contig,
@@ -154,7 +121,7 @@ rule _quantify__coverm__contig_aggregate:
         """
 
 
-rule quantify__coverm__contig:
+rule prokaryotes__quantify__coverm__contig:
     """Run coverm contig and all methods"""
     input:
         [
@@ -163,7 +130,7 @@ rule quantify__coverm__contig:
         ],
 
 
-rule quantify__coverm:
+rule prokaryotes__quantify__coverm:
     input:
-        rules.quantify__coverm__contig.input,
-        rules.quantify__coverm__genome.input,
+        rules.prokaryotes__quantify__coverm__genome.input,
+        rules.prokaryotes__quantify__coverm__contig.input,

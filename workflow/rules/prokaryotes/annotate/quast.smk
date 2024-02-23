@@ -1,4 +1,4 @@
-rule annotate__quast:
+rule prokaryotes__annotate__quast:
     """Run quast over one the dereplicated mags"""
     input:
         DREP / "dereplicated_genomes.fa.gz",
