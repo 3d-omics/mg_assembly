@@ -38,7 +38,7 @@ rule prokaryotes__cluster__drep__run__:
         genomes=DREP / "separated_bins",
     output:
         fasta=DREP / "dereplicated_genomes.fa.gz",
-        dereplicated_genomes=DREP / "dereplicated_genomes.tar.gz",
+        dereplicated_genomes=directory(DREP / "dereplicated_genomes"),
         data=DREP / "data.tar.gz",
         data_tables=DREP / "data_tables.tar.gz",
     log:
@@ -93,7 +93,7 @@ rule prokaryotes__cluster__drep__run__:
             {input.genomes}/*.fa \
         2>> {log}.{resources.attempt} 1>&2
 
-        for folder in data data_tables dereplicated_genomes ; do
+        for folder in data data_tables ; do
             tar \
                 --create \
                 --directory {params.out_dir} \
