@@ -1,39 +1,6 @@
-rule _preprocess__bowtie2__build:
-    """Build PRE_BOWTIE2 index for the host reference
-
-    Let the script decide to use a small or a large index based on the size of
-    the reference genome.
-    """
-    input:
-        reference=HOSTS / "{genome}.fa.gz",
-        faidx=HOSTS / "{genome}.fa.gz.fai",
-    output:
-        mock=touch(PRE_INDEX / "{genome}"),
-    log:
-        PRE_INDEX / "{genome}.log",
-    conda:
-        "__environment__.yml"
-    threads: 24
-    resources:
-        mem_mb=double_ram(params["preprocess"]["bowtie2-build"]["memory_gb"]),
-        runtime=24 * 60,
-        attempt=get_attempt,
-    retries: 5
-    shell:
-        """
-        bowtie2-build \
-            --threads {threads} \
-            {input.reference} \
-            {output.mock} \
-        2> {log}.{resources.attempt} 1>&2
-
-        mv \
-            {log}.{resources.attempt} \
-            {log}
-        """
 
 
-rule _preprocess__bowtie2__map:
+rule preprocess__bowtie2__:
     """Map one library to reference genome using bowtie2
 
     Output SAM file is piped to samtools sort to generate a CRAM file.
@@ -90,7 +57,7 @@ rule _preprocess__bowtie2__map:
         """
 
 
-rule _preprocess__bowtie2__extract_nonhost:
+rule preprocess__bowtie2__extract_nonhost__:
     """
     Keep only pairs unmapped to the human reference genome, sort by name rather
     than by coordinate, and convert to FASTQ.
@@ -138,8 +105,8 @@ rule _preprocess__bowtie2__extract_nonhost:
         """
 
 
-rule preprocess__bowtie2__extract_nonhost:
-    """Run bowtie2_extract_nonchicken_one for all PE libraries"""
+rule preprocess__bowtie2:
+    """Run all the preprocessing steps for bowtie2"""
     input:
         [
             PRE_BOWTIE2 / f"non{genome}" / f"{sample_id}.{library_id}_{end}.fq.gz"
@@ -148,9 +115,3 @@ rule preprocess__bowtie2__extract_nonhost:
             for sample_id, library_id in SAMPLE_LIBRARY
             for end in ["1", "2"]
         ],
-
-
-rule preprocess__bowtie2:
-    """Run all the preprocessing steps for bowtie2"""
-    input:
-        rules.preprocess__bowtie2__extract_nonhost.input,

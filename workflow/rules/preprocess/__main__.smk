@@ -1,4 +1,5 @@
 include: "__functions__.smk"
+include: "index.smk"
 include: "bowtie2.smk"
 include: "fastp.smk"
 include: "fastqc.smk"
