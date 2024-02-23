@@ -1,4 +1,4 @@
-rule _assemble__megahit:
+rule assemble__megahit__:
     """Run megahit over one sample, merging all libraries in the process
 
     Note: the initial rm -rf is to delete the folder that snakemake creates.
