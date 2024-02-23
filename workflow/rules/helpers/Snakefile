@@ -4,5 +4,5 @@ module fastqc:
 module samtools:
     snakefile: "samtools.smk"
 
-use rule * from fastqc as fastqc_*
-use rule * from samtools as samtools_*
+use rule * from fastqc as fastqc__*
+use rule * from samtools as samtools__*
