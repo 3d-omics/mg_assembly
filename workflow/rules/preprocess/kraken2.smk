@@ -49,6 +49,8 @@ rule _preprocess__kraken2__assign:
                 --recursive \
                 --times \
                 --verbose \
+                --chmod u+rw \
+                --chown $(id --user):$(id --group) \
                 {input.database}/*.k2d \
                 {params.kraken_db_shm} \
             2>> {log} 1>&2
