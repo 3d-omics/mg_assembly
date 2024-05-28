@@ -59,10 +59,10 @@ rule prokaryotes__cluster__metabat2__:
             {params.paired} \
         2>> {log} 1>&2
 
-        find \
-            {output.bins} \
-            -name "*.fa" \
-            -exec pigz --best --verbose {{}} \; \
+        pigz \
+            --best \
+            --verbose \
+            {output.bins}/*.fa \
         2>> {log} 1>&2
         """
 

@@ -38,10 +38,10 @@ rule prokaryotes__cluster__maxbin2__:
             {output.workdir}/*.fasta \
         2>> {log}
 
-        find \
-            {output.workdir} \
-            -name "*.fa" \
-            -exec pigz --best --verbose {{}} \; \
+        pigz \
+            --best \
+            --verbose \
+            {output.workdir}/*.fa \
         2>> {log} 1>&2
 
         rm \
