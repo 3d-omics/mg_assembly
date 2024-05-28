@@ -87,6 +87,13 @@ rule prokaryotes__cluster__drep__run__:
         > {output.fasta} \
         ) 2>> {log}.{resources.attempt} 1>&2
 
+        bgzip \
+            --level 9 \
+            --processes {threads} \
+            --verbose \
+            {params.out_dir}/dereplicated_genomes/*.fa \
+        2>> {log}.{resources.attempt} 1>&2
+
         rm \
             --force \
             --verbose \
