@@ -1,0 +1,30 @@
+# Default resources for snakemake
+---
+__use_yte__: true
+
+
+default-resources:
+    runtime: 1h
+    mem_mb: 1G
+
+
+set-threads:
+    reference__recompress__: 8
+    preprocess__fastp__: 24
+    preprocess__index__: 24
+    preprocess__bowtie2__: 24
+    preprocess__kraken2__: 8
+
+set-resources:
+    preprocess__fastp__:
+        mem_mb: 8G
+        runtime: 4h
+    preprocess__index__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    preprocess__bowtie2__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    preprocess__kraken2__:
+        mem_mb: 500G
+        runtime: 1d

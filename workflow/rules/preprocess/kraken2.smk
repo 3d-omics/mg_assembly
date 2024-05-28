@@ -25,10 +25,6 @@ rule preprocess__kraken2__:
         ],
     log:
         KRAKEN2 / "{kraken_db}.log",
-    threads: 8
-    resources:
-        mem_mb=params["preprocess"]["kraken2"]["memory_gb"] * 1024,
-        runtime=48 * 60,
     params:
         in_folder=FASTP,
         out_folder=lambda w: KRAKEN2 / w.kraken_db,

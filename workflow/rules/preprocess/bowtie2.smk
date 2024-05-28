@@ -15,16 +15,13 @@ rule preprocess__bowtie2__:
         cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
     log:
         PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.log",
+    conda:
+        "__environment__.yml"
     params:
         samtools_mem=params["preprocess"]["bowtie2"]["samtools"]["mem_per_thread"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    threads: 24
-    conda:
-        "__environment__.yml"
     resources:
-        mem_mb=double_ram(params["preprocess"]["bowtie2"]["memory_gb"]),
-        runtime=24 * 60,
         attempt=get_attempt,
     retries: 5
     shell:

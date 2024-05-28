@@ -6,7 +6,6 @@ rule reference__recompress__:
         HOSTS / "{genome}.fa.gz",
     log:
         HOSTS / "{genome}.log",
-    threads: 24
     conda:
         "__environment__.yml"
     shell:

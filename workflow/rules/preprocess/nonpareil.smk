@@ -20,8 +20,6 @@ rule preprocess__nonpareil__:
     params:
         prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
         reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
-    resources:
-        runtime=24 * 60,
     shell:
         """
         gzip \

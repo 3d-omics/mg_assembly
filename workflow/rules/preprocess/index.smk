@@ -13,10 +13,7 @@ rule preprocess__index__:
         PRE_INDEX / "{genome}.log",
     conda:
         "__environment__.yml"
-    threads: 24
     resources:
-        mem_mb=double_ram(params["preprocess"]["bowtie2-build"]["memory_gb"]),
-        runtime=24 * 60,
         attempt=get_attempt,
     retries: 5
     shell:

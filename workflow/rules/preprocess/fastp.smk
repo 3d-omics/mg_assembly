@@ -19,10 +19,6 @@ rule preprocess__fastp__:
         adapter_reverse=get_reverse_adapter,
         extra=params["preprocess"]["fastp"]["extra"],
         length_required=params["preprocess"]["fastp"]["length_required"],
-    threads: 24
-    resources:
-        mem_mb=8 * 1024,
-        runtime=240,
     shell:
         """
         fastp \
