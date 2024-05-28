@@ -30,4 +30,3 @@ rule prokaryotes__cluster__index:
     """Index all megahit assemblies"""
     input:
         [ASSEMBLE_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],
-

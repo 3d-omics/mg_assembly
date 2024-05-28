@@ -8,7 +8,10 @@ include: "prokaryotes/__main__.smk"
 include: "viruses/__main__.smk"
 include: "report/__main__.smk"
 
+
 module helpers:
-    snakefile: "helpers/Snakefile"
+    snakefile:
+        "helpers/Snakefile"
+
 
 use rule * from helpers as helpers__*

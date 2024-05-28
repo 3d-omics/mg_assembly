@@ -20,4 +20,3 @@ rule prokaryotes__quantify__index:
             {output.mock} \
         2> {log} 1>&2
         """
-
