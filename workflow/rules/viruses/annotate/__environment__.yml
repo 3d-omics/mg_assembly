@@ -11,3 +11,5 @@ dependencies:
   - r-tidyverse =2.0.0
   - seqtk =1.4
   - virsorter =2.2.4
+  - pip:
+    - keras ==3
