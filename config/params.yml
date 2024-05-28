@@ -43,4 +43,4 @@ viral:
   genomad:
     filtering: ""  # nothing, --conservative, or --relaxed
     use_cuda: "export CUDA_VISIBLE_DEVICES=-1"  # in case you have problems with cuda and tensorflow
-    extra: ""
+    extra: "--disable-nn-classification"  # leave empty if you want to use. it is here to disable it for testing
