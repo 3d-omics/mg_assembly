@@ -64,7 +64,7 @@ touch results/prokaryotes/cluster/drep/data.tar.gz results/prokaryotes/cluster/d
 
 ./run \
     --jobs 4 \
-    viral \
+    viruses \
     --rerun-triggers mtime
 
 ./run \
