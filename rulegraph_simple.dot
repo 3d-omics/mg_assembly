@@ -63,7 +63,7 @@ digraph snakemake_dag {
             maxbin2     ->  magscot
             magscot     ->  drep
         }
-        
+
         subgraph cluster_3_2 {
             label = "Quantify";
             shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin=10;
@@ -76,7 +76,7 @@ digraph snakemake_dag {
         subgraph cluster_3_3 {
             label = "Annotate";
             shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin=10;
-            
+
             gtdbtk  [label = "GTDB-TK",  color = "0.34 0.6 0.85",    style = "rounded"];
             dram    [label = "DRAM",     color = "0.01 0.6 0.85",    style = "rounded"];
             checkm  [label = "CheckM2",  color = "0.35 0.44 0.72"];
@@ -101,15 +101,15 @@ digraph snakemake_dag {
         shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin="10,10";
 
         subgraph cluster_4_1 {
-            label = "Cluster"; 
+            label = "Cluster";
             shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin="10,10";
-    
+
             genomad     [label = "geNomad",     color = green,              style = "rounded"];
-            dedupe      [label = "Dedupe",      color = green,              style = "rounded"]; 
+            dedupe      [label = "Dedupe",      color = green,              style = "rounded"];
             mmseqs2     [label = "MMseqs2",     color = red,                style = "rounded"];
-        
+
             genomad -> dedupe -> mmseqs2
-        
+
         }
 
         megahit -> genomad
