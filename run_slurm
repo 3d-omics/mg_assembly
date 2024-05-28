@@ -13,23 +13,23 @@ snakemake \
     --slurm \
     --latency-wait 60 \
     --groups \
-        preprocess__fastp__={sample_id} \
-        preprocess__bowtie2__={sample_id} \
-        preprocess__bowtie2__extract_nonhost__={sample_id} \
-        prokaryotes__cluster__bowtie2__={assembly_id} \
-        prokaryotes__cluster__concoct__={assembly_id} \
-        prokaryotes__cluster__metabat2__={assembly_id} \
-        prokaryotes__cluster__maxbin2__={assembly_id} \
-        prokaryotes__cluster__magscot__prodigal__={assembly_id} \
-        prokaryotes__cluster__magscot__hmmsearch_pfam__={assembly_id} \
-        prokaryotes__cluster__magscot__hmmsearch_tigr__={assembly_id} \
-        prokaryotes__cluster__magscot__join_hmms__={assembly_id} \
-        prokaryotes__cluster__magscot__merge_contig_to_bin__={assembly_id} \
-        prokaryotes__cluster__magscot__run__={assembly_id} \
-        prokaryotes__cluster__magscot__reformat__={assembly_id} \
-        prokaryotes__cluster__magscot__rename__={assembly_id} \
-        prokaryotes__cluster__drep__separate_bins__={assembly_id} \
-        prokaryotes__cluster__drep__run__={assembly_id} \
-        prokaryotes__quantify__bowtie2__={assembly_id} \
-        viruses__quantify__bowtie2__={sample_id} \
+        preprocess__fastp__="{sample_id}" \
+        preprocess__bowtie2__="{sample_id}" \
+        preprocess__bowtie2__extract_nonhost__="{sample_id}" \
+        prokaryotes__cluster__bowtie2__="{assembly_id}" \
+        prokaryotes__cluster__concoct__="{assembly_id}" \
+        prokaryotes__cluster__metabat2__="{assembly_id}" \
+        prokaryotes__cluster__maxbin2__="{assembly_id}" \
+        prokaryotes__cluster__magscot__prodigal__="{assembly_id}" \
+        prokaryotes__cluster__magscot__hmmsearch_pfam__="{assembly_id}" \
+        prokaryotes__cluster__magscot__hmmsearch_tigr__="{assembly_id}" \
+        prokaryotes__cluster__magscot__join_hmms__="{assembly_id}" \
+        prokaryotes__cluster__magscot__merge_contig_to_bin__="{assembly_id}" \
+        prokaryotes__cluster__magscot__run__="{assembly_id}" \
+        prokaryotes__cluster__magscot__reformat__="{assembly_id}" \
+        prokaryotes__cluster__magscot__rename__="{assembly_id}" \
+        prokaryotes__cluster__drep__separate_bins__="{assembly_id}" \
+        prokaryotes__cluster__drep__run__="{assembly_id}" \
+        prokaryotes__quantify__bowtie2__="{assembly_id}" \
+        viruses__quantify__bowtie2__="{sample_id}" \
     "$@"
