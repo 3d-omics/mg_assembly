@@ -45,8 +45,6 @@ rule viruses__quantify__coverm__genome_aggregate__:
         "__environment__.yml"
     params:
         input_dir=lambda w: VCOVERM / "genome" / w.method,
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
@@ -108,8 +106,6 @@ rule viruses__quantify__coverm__contig_aggregate__:
         "__environment__.yml"
     params:
         input_dir=lambda w: VCOVERM / "contig" / w.method,
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \

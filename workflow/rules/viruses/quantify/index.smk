@@ -1,4 +1,4 @@
-rule viruses__quantify__index:
+rule viruses__quantify__index__:
     """Index dereplicader"""
     input:
         contigs=MMSEQS / "rep_seq.fasta",
@@ -8,10 +8,6 @@ rule viruses__quantify__index:
         VINDEX / "virues.log",
     conda:
         "__environment__.yml"
-    threads: 24
-    resources:
-        mem_mb=double_ram(params["quantify"]["bowtie2-build"]["memory_gb"]),
-        runtime=24 * 60,
     shell:
         """
         bowtie2-build \
@@ -20,3 +16,8 @@ rule viruses__quantify__index:
             {output.mock} \
         2> {log} 1>&2
         """
+
+
+rule viruses__quantify__index:
+    input:
+        rules.viruses__quantify__index__.output

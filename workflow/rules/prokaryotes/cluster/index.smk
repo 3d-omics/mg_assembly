@@ -8,10 +8,7 @@ rule prokaryotes__cluster__index__:
         ASSEMBLE_INDEX / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    threads: 24
     resources:
-        mem_mb=double_ram(params["assemble"]["bowtie2-build"]["memory_gb"]),
-        runtime=48 * 60,
         attempt=get_attempt,
     retries: 5
     shell:

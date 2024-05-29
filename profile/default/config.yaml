@@ -14,6 +14,33 @@ set-threads:
     preprocess__index__: 24
     preprocess__bowtie2__: 24
     preprocess__kraken2__: 8
+    assemble__megahit__: 24
+    prokaryotes__cluster__index__: 24
+    prokaryotes__cluster__bowtie2__: 24
+    prokaryotes__cluster__concoct__: 24
+    prokaryotes__cluster__maxbin2__: 4
+    prokaryotes__cluster__metabat2__: 24
+    prokaryotes__cluster__magscot__prodigal__: 24
+    prokaryotes__cluster__magscot__hmmsearch_pfam__: 4
+    prokaryotes__cluster__magscot__hmmsearch_tigr__: 4
+    prokaryotes__cluster__drep__separate_bins__: 24
+    prokaryotes__cluster__drep__run__: 24
+    prokaryotes__annotate__checkm2__: 24
+    prokaryotes__annotate__dram__annotate__: 24
+    prokaryotes__annotate__gtdbtk__: 24
+    prokaryotes__annotate__quast__: 4
+    prokaryotes__quantify__index__: 24
+    prokaryotes__quantify__bowtie2__: 24
+    viruses__cluster__genomad__: 24
+    viruses__cluster__dedupe__: 24
+    viruses__cluster__mmseqs__: 24
+    viruses__annotate__genomad__: 24
+    viruses__annotate__virsorter2__: 24
+    viruses__annotate__dramv__annotate__: 24
+    viruses__annotate__quast__: 4
+    viruses__quantify__index__: 24
+    viruses__quantify__bowtie2__: 24
+
 
 set-resources:
     preprocess__fastp__:
@@ -28,3 +55,97 @@ set-resources:
     preprocess__kraken2__:
         mem_mb: 500G
         runtime: 1d
+    preprocess__nonpareil__:
+        runtime: 1d
+    preprocess__singlem__pipe__:
+        runtime: 2d
+        mem_mb: 16G
+    preprocess__singlem__condense:
+        runtime: 6h
+    assemble__megahit__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1w
+    prokaryotes__cluster__index__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 2d
+    prokaryotes__cluster__bowtie2__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    prokaryotes__cluster__concoct__:
+        mem_mb: 8 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    prokaryotes__cluster__maxbin2__:
+        mem_mb: 8G
+        runtime: 1d
+    prokaryotes__cluster__metabat2__:
+        mem_mb: 8G
+        runtime: 1d
+    prokaryotes__cluster__magscot__prodigal__:
+        mem_mb: 8 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    prokaryotes__cluster__magscot__hmmsearch_pfam__:
+        mem_mb: 8G
+        runtime: 1d
+    prokaryotes__cluster__magscot__hmmsearch_tigr__:
+        mem_mb: 8G
+        runtime: 1d
+    prokaryotes__cluster__magscot__run__:
+        mem_mb: 8G
+        runtime: 12h
+    prokaryotes__cluster__magscot__reformat__:
+        mem_mb: 8G
+    prokaryotes__cluster__magscot__rename__:
+        mem_mb: 8G
+    prokaryotes__cluster__drep__run__:
+        mem_mb: 64G
+        runtime: 7d
+    prokaryotes__annotate__checkm2__: 
+        mem_mb: 16G
+    prokaryotes__annotate__dram__annotate__:
+        mem_mb: 32G
+        runtime: 1d
+    prokaryotes__annotate__dram__distill__:
+        mem_mb: 16G
+        runtime: 1d
+    prokaryotes__annotate__gtdbtk__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    prokaryotes__annotate__quast__:
+        mem_mb: 8G
+    prokaryotes__quantify__index__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    prokaryotes__quantify__bowtie2__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    prokaryotes__quantify__coverm__genome__aggregate__:
+        mem_mb: 8G
+    prokaryotes__quantify__coverm__contig__aggregate__:
+        mem_mb: 8G
+    viruses__cluster__genomad__:
+        mem_mb: 32G
+    viruses__annotate__genomad__:
+        mem_mb: 32G
+    viruses__annotate__quast__:
+        mem_mb: 8G
+    viruses__quantify__index__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    viruses__quantify__bowtie2__:
+        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        runtime: 1d
+    viruses__quantify__coverm__genome__aggregate__:
+        mem_mb: 8G
+    viruses__quantify__coverm__contig_aggregate__:
+        mem_mb: 8G
+    report__sample__multiqc__:
+        mem_mb: 8G
+    report__step__reads__:
+        mem_mb: 8G
+    report__step__preprocess__:
+        mem_mb: 4 * 1024 * 2 ** (attempt - 1)
+        runtime: 6h
+    report__step__assemble__:
+        mem_mb: 8G
+    report__step__quantify__:
+        mem_mb: 8G

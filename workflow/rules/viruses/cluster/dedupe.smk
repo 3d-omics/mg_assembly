@@ -1,4 +1,4 @@
-rule viruses__cluster__dedupe:
+rule viruses__cluster__dedupe__:
     input:
         fastas=[
             GENOMADC / f"{assembly_id}" / f"{assembly_id}_virus.fna"
@@ -10,7 +10,6 @@ rule viruses__cluster__dedupe:
         DEDUPE / "dedupe.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         fastas_comma=lambda w, input: ",".join(input),
         minimum_length=500,
@@ -27,3 +26,8 @@ rule viruses__cluster__dedupe:
             usejni=t \
         2> {log} 1>&2
         """
+
+
+rule viruses__cluster__dedupe:
+    input:
+        rules.viruses__cluster__dedupe__.output,

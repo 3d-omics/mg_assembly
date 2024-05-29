@@ -1,4 +1,4 @@
-rule prokaryotes__annotate__dram__annotate:
+rule prokaryotes__annotate__dram__annotate__:
     """Annotate dereplicate genomes with DRAM"""
     input:
         dereplicated_genomes=DREP / "dereplicated_genomes",
@@ -13,15 +13,11 @@ rule prokaryotes__annotate__dram__annotate:
         DRAM / "annotate.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         min_contig_size=1500,
         out_dir=DRAM,
         tmp_dir=DRAM / "annotate",
         parallel_retries=5,
-    resources:
-        mem_mb=32 * 1024,
-        runtime=48 * 60,
     shell:
         """
         rm \
@@ -88,7 +84,7 @@ rule prokaryotes__annotate__dram__annotate:
         """
 
 
-rule prokaryotes__annotate__dram__distill:
+rule prokaryotes__annotate__dram__distill__:
     """Distill DRAM annotations."""
     input:
         annotations=DRAM / "annotations.tsv",
@@ -101,12 +97,9 @@ rule prokaryotes__annotate__dram__distill:
         product_html=DRAM / "product.html",
         product_tsv=DRAM / "product.tsv",
     log:
-        DRAM / "distill.log2",
+        DRAM / "distill.log",
     conda:
         "__environment__.yml"
-    resources:
-        mem_mb=16 * 1024,
-        runtime=24 * 60,
     params:
         outdir_tmp=DRAM / "distill",
         outdir=DRAM,
@@ -147,4 +140,4 @@ rule prokaryotes__annotate__dram__distill:
 rule prokaryotes__annotate__dram:
     """Run DRAM on dereplicated genomes."""
     input:
-        rules.prokaryotes__annotate__dram__distill.output,
+        rules.prokaryotes__annotate__dram__distill__.output,

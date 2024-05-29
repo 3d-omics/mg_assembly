@@ -8,12 +8,9 @@ rule prokaryotes__cluster__concoct__:
         CONCOCT / "{assembly_id}.log",
     conda:
         "concoct.yml"
-    resources:
-        mem_mb=double_ram(8),
     retries: 5
     params:
         workdir=lambda w: CONCOCT / w.assembly_id,
-    threads: 24
     shell:
         """
         mkdir --parents --verbose {params.workdir} 2> {log} 1>&2

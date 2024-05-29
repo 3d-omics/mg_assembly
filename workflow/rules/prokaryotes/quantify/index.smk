@@ -1,4 +1,4 @@
-rule prokaryotes__quantify__index:
+rule prokaryotes__quantify__index__:
     """Index dereplicader"""
     input:
         contigs=DREP / "dereplicated_genomes.fa.gz",
@@ -8,10 +8,6 @@ rule prokaryotes__quantify__index:
         QUANT_INDEX / "dereplicated_genomes.log",
     conda:
         "__environment__.yml"
-    threads: 24
-    resources:
-        mem_mb=double_ram(params["quantify"]["bowtie2-build"]["memory_gb"]),
-        runtime=24 * 60,
     shell:
         """
         bowtie2-build \
@@ -20,3 +16,8 @@ rule prokaryotes__quantify__index:
             {output.mock} \
         2> {log} 1>&2
         """
+
+
+rule prokaryotes__quantify__index:
+    input:
+        rules.prokaryotes__quantify__index__.output

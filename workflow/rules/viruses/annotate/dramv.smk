@@ -1,4 +1,4 @@
-rule viruses__annotate__dramv__annotate:
+rule viruses__annotate__dramv__annotate__:
     input:
         fa=VIRSORTER2 / "final-viral-combined-for-dramv.fa",
         tsv=VIRSORTER2 / "viral-affi-contigs-for-dramv.tab",
@@ -11,9 +11,6 @@ rule viruses__annotate__dramv__annotate:
         "__environment__.yml"
     params:
         workdir=DRAMV,
-    threads: 24
-    # shadow:
-    #     "minimal"
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -59,7 +56,7 @@ rule viruses__annotate__dramv__annotate:
         """
 
 
-rule viruses__annotate__dramv__distill:
+rule viruses__annotate__dramv__distill__:
     input:
         annotations=DRAMV / "annotations.tsv",
     output:
@@ -87,4 +84,4 @@ rule viruses__annotate__dramv__distill:
 
 rule viruses__annotate__dramv:
     input:
-        rules.viruses__annotate__dramv__distill.output,
+        rules.viruses__annotate__dramv__distill__.output,

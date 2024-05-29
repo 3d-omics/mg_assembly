@@ -8,10 +8,7 @@ rule prokaryotes__cluster__magscot__prodigal__:
         MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
         "__environment__.yml"
-    threads: 24
     resources:
-        runtime=24 * 60,
-        mem_mb=double_ram(8),
         attempt=get_attempt,
     retries: 5
     shell:
@@ -49,10 +46,6 @@ rule prokaryotes__cluster__magscot__hmmsearch_pfam__:
         MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
         "__environment__.yml"
-    threads: 4
-    resources:
-        runtime=24 * 60,
-        mem_mb=8 * 1024,
     shell:
         """
         hmmsearch \
@@ -79,10 +72,6 @@ rule prokaryotes__cluster__magscot__hmmsearch_tigr__:
         MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
         "__environment__.yml"
-    threads: 4
-    resources:
-        runtime=24 * 60,
-        mem_mb=8 * 1024,
     shell:
         """
         hmmsearch \
@@ -181,9 +170,6 @@ rule prokaryotes__cluster__magscot__run__:
         "__environment__.yml"
     params:
         out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
-    resources:
-        runtime=8 * 60,
-        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \
@@ -206,8 +192,6 @@ rule prokaryotes__cluster__magscot__reformat__:
         MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
         "__environment__.yml"
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
@@ -228,8 +212,6 @@ rule prokaryotes__cluster__magscot__rename__:
         MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
         "__environment__.yml"
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         ( python workflow/scripts/reformat_fasta_magscot.py \

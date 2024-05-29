@@ -9,13 +9,9 @@ rule prokaryotes__cluster__maxbin2__:
         MAXBIN2 / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    threads: 4
     params:
         seed=1,
         coverage=lambda w: MAXBIN2 / f"{w.assembly_id}/maxbin2.coverage",
-    resources:
-        runtime=24 * 60,
-        mem_mb=8 * 1024,
     shell:
         """
         mkdir --parents {output.workdir}

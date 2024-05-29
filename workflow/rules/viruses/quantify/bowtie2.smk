@@ -13,14 +13,10 @@ rule viruses__quantify__bowtie2__:
         VBOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         samtools_mem=params["quantify"]["samtools"]["mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    resources:
-        mem_mb=double_ram(params["quantify"]["bowtie2"]["memory_gb"]),
-        runtime=24 * 60,
     shell:
         """
         find \

@@ -1,4 +1,4 @@
-rule viruses__cluster__mmseqs:
+rule viruses__cluster__mmseqs__:
     input:
         fasta=DEDUPE / "dedupe.fa",
     output:
@@ -12,7 +12,6 @@ rule viruses__cluster__mmseqs:
     params:
         prefix=MMSEQS / "tmp",
         tmpdir=MMSEQS,
-    threads: 24
     shadow:
         "minimal"
     shell:
@@ -28,3 +27,8 @@ rule viruses__cluster__mmseqs:
         mv {params.tmpdir}/tmp_cluster.tsv {output.cluster} 2>> {log} 1>&2
         mv {params.tmpdir}/tmp_rep_seq.fasta {output.rep_seq} 2>> {log} 1>&2
         """
+
+
+rule viruses__cluster__mmseqs:
+    input:
+        rules.viruses__cluster__mmseqs__.output,

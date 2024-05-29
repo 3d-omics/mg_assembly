@@ -12,14 +12,11 @@ rule prokaryotes__cluster__bowtie2__:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         samtools_mem=params["assemble"]["samtools"]["mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     resources:
-        mem_mb=double_ram(params["assemble"]["bowtie2"]["memory_gb"]),
-        runtime=24 * 60,
         attempt=get_attempt,
     retries: 5
     shell:

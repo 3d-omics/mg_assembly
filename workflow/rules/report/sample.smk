@@ -1,4 +1,4 @@
-rule _report__sample__multiqc:
+rule report__sample__multiqc__:
     input:
         get_stats_files_from_sample_and_library_ids,
     output:
@@ -10,8 +10,6 @@ rule _report__sample__multiqc:
     params:
         dir=REPORT_SAMPLE,
         filename=lambda wildcards: f"{wildcards.sample_id}.{wildcards.library_id}",
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         multiqc \

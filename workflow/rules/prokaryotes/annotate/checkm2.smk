@@ -1,4 +1,4 @@
-rule prokaryotes__annotate__checkm2:
+rule prokaryotes__annotate__checkm2__:
     """Run CheckM2 over the dereplicated mags"""
     input:
         mags=DREP / "dereplicated_genomes",
@@ -7,13 +7,10 @@ rule prokaryotes__annotate__checkm2:
         CHECKM / "quality_report.tsv",
     log:
         CHECKM / "quality_report.log",
-    threads: 24
     conda:
         "checkm2.yml"
     params:
         out_dir=CHECKM / "predict",
-    resources:
-        mem_mb=16 * 1024,
     shell:
         """
         rm -rfv {params.out_dir} 2> {log} 1>&2
@@ -30,3 +27,8 @@ rule prokaryotes__annotate__checkm2:
         mv {params.out_dir}/quality_report.tsv {output} 2>> {log} 1>&2
         rm --recursive --verbose --force {params.out_dir} 2>> {log} 1>&2
         """
+
+
+rule prokaryotes__annotate__checkm2:
+    input:
+        rules.prokaryotes__annotate__checkm2__.output,

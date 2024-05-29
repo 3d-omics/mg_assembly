@@ -1,4 +1,4 @@
-rule viruses__annotate__genomad:
+rule viruses__annotate__genomad__:
     input:
         fasta=MMSEQS / "rep_seq.fasta",
         database=features["databases"]["genomad"],
@@ -16,15 +16,12 @@ rule viruses__annotate__genomad:
         GENOMADA / "genomad.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=GENOMADA,
         extra=params["viral"]["genomad"]["extra"],
         tmp_prefix=GENOMADA / "rep_seq_summary",
         use_cuda=params["viral"]["genomad"]["use_cuda"],
-    resources:
-        mem_mb=32 * 1024,
     shadow:
         "minimal"
     shell:
@@ -48,3 +45,8 @@ rule viruses__annotate__genomad:
             {params.workdir} \
         2>> {log} 1>&2
         """
+
+
+rule viruses__annotate__genomad:
+    input:
+        rules.viruses__annotate__genomad__.output

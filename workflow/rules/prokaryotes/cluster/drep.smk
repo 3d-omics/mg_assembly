@@ -7,7 +7,6 @@ rule prokaryotes__cluster__drep__separate_bins__:
         DREP / "separate_bins.log",
     conda:
         "__environment__.yml"
-    threads: 24
     shell:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2
@@ -45,12 +44,9 @@ rule prokaryotes__cluster__drep__run__:
         DREP / "drep.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         out_dir=DREP,
     resources:
-        mem_mb=64 * 1024,
-        runtime=7 * 24 * 60,
         attempt=get_attempt,
     retries: 5
     shell:

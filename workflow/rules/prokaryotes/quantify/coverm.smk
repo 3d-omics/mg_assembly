@@ -46,8 +46,6 @@ rule prokaryotes__quantify__coverm__genome__aggregate__:
         "__environment__.yml"
     params:
         input_dir=lambda w: COVERM / "genome" / w.method,
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
@@ -110,8 +108,6 @@ rule prokaryotes__quantify__coverm__contig__aggregate__:
         "__environment__.yml"
     params:
         input_dir=lambda w: COVERM / "contig" / w.method,
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \

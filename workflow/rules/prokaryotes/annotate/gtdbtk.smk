@@ -1,4 +1,4 @@
-rule prokaryotes__annotate__gtdbtk:
+rule prokaryotes__annotate__gtdbtk__:
     """Run GTDB-Tk over the dereplicated genomes."""
     input:
         fasta_folder=DREP / "dereplicated_genomes",
@@ -16,10 +16,7 @@ rule prokaryotes__annotate__gtdbtk:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
         bac120=GTDBTK / "gtdbtk.bac120.summary.tsv",
-    threads: 24
     resources:
-        mem_mb=double_ram(32),
-        runtime=24 * 60,
         attempt=get_attempt,
     retries: 5
     shell:

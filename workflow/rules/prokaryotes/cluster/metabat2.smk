@@ -16,10 +16,6 @@ rule prokaryotes__cluster__metabat2__:
         depth=lambda w: METABAT2 / f"{w.assembly_id}.depth",
         paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
         workdir=METABAT2,
-    threads: 24
-    resources:
-        runtime=24 * 60,
-        mem_mb=8 * 1024,
     shell:
         """
         for cram in {input.crams} ; do

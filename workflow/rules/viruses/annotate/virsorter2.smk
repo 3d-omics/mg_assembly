@@ -1,4 +1,4 @@
-rule viruses__annotate__virsorter2:
+rule viruses__annotate__virsorter2__:
     input:
         fna=GENOMADA / "rep_seq_virus.fna",
         database=features["databases"]["virsorter2"],
@@ -12,7 +12,6 @@ rule viruses__annotate__virsorter2:
         VIRSORTER2 / "virsorter2.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         workdir=VIRSORTER2,
     shadow:
@@ -34,3 +33,8 @@ rule viruses__annotate__virsorter2:
             {params.workdir}/for-dramv/* \
             {params.workdir}/
         """
+
+
+rule viruses__annotate__virsorter2:
+    input:
+        rules.viruses__annotate__virsorter2__.output

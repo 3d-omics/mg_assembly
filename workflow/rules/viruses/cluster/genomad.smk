@@ -18,7 +18,6 @@ rule viruses__cluster__genomad__:
         GENOMADC / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         genomad_workdir=GENOMADC,
@@ -26,8 +25,6 @@ rule viruses__cluster__genomad__:
         true_output_dir=lambda w: GENOMADC / f"{w.assembly_id}",
         extra=params["viral"]["genomad"]["extra"],
         use_cuda=params["viral"]["genomad"]["use_cuda"],
-    resources:
-        mem_mb=32 * 1024,
     shadow:
         "minimal"
     shell:
