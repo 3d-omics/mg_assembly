@@ -37,4 +37,4 @@ rule viruses__annotate__virsorter2__:
 
 rule viruses__annotate__virsorter2:
     input:
-        rules.viruses__annotate__virsorter2__.output
+        rules.viruses__annotate__virsorter2__.output,

@@ -49,4 +49,4 @@ rule viruses__annotate__genomad__:
 
 rule viruses__annotate__genomad:
     input:
-        rules.viruses__annotate__genomad__.output
+        rules.viruses__annotate__genomad__.output,

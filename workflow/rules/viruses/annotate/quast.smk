@@ -20,4 +20,4 @@ rule viruses__annotate__quast__:
 
 rule viruses__annotate__quast:
     input:
-        rules.viruses__annotate__quast__.output
+        rules.viruses__annotate__quast__.output,

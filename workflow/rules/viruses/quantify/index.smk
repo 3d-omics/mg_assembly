@@ -20,4 +20,4 @@ rule viruses__quantify__index__:
 
 rule viruses__quantify__index:
     input:
-        rules.viruses__quantify__index__.output
+        rules.viruses__quantify__index__.output,

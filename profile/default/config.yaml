@@ -99,7 +99,7 @@ set-resources:
     prokaryotes__cluster__drep__run__:
         mem_mb: 64G
         runtime: 7d
-    prokaryotes__annotate__checkm2__: 
+    prokaryotes__annotate__checkm2__:
         mem_mb: 16G
     prokaryotes__annotate__dram__annotate__:
         mem_mb: 32G

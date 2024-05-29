@@ -20,4 +20,4 @@ rule prokaryotes__quantify__index__:
 
 rule prokaryotes__quantify__index:
     input:
-        rules.prokaryotes__quantify__index__.output
+        rules.prokaryotes__quantify__index__.output,
