@@ -48,7 +48,7 @@ rule prokaryotes__cluster__drep__run__:
         out_dir=DREP,
     resources:
         attempt=get_attempt,
-    retries: 5
+    #retries: 5
     shell:
         """
         rm \
@@ -59,7 +59,7 @@ rule prokaryotes__cluster__drep__run__:
             {params.out_dir}/dereplicated_genomes \
             {params.out_dir}/figures \
             {params.out_dir}/log \
-        2> {log}.{resources.attempt} 1>&2
+        2>> {log}.{resources.attempt} 1>&2
 
         pigz \
             --decompress \
@@ -84,8 +84,8 @@ rule prokaryotes__cluster__drep__run__:
         ) 2>> {log}.{resources.attempt} 1>&2
 
         bgzip \
-            --level 9 \
-            --processes {threads} \
+            --compress-level 9 \
+            --threads {threads} \
             --verbose \
             {params.out_dir}/dereplicated_genomes/*.fa \
         2>> {log}.{resources.attempt} 1>&2
@@ -108,7 +108,7 @@ rule prokaryotes__cluster__drep__run__:
             2>> {log}.{resources.attempt} 1>&2
         done
 
-        mv {log}.{resources.attempt} {log}
+        cp --force {log}.{resources.attempt} {log}
         """
 
 
