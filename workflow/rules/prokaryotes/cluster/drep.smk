@@ -64,6 +64,7 @@ rule prokaryotes__cluster__drep__run__:
         pigz \
             --decompress \
             --keep \
+            --force \
             {input.genomes}/*.fa.gz \
         2>> {log}.{resources.attempt} 1>&2
 
@@ -86,7 +87,6 @@ rule prokaryotes__cluster__drep__run__:
         bgzip \
             --compress-level 9 \
             --threads {threads} \
-            --verbose \
             {params.out_dir}/dereplicated_genomes/*.fa \
         2>> {log}.{resources.attempt} 1>&2
 
