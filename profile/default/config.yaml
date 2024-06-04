@@ -108,7 +108,7 @@ set-resources:
         mem_mb: 16G
         runtime: 1d
     prokaryotes__annotate__gtdbtk__:
-        mem_mb: 32 * 1024 * 2 ** (attempt - 1)
+        mem_mb: 64 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
     prokaryotes__annotate__quast__:
         mem_mb: 8G
