@@ -82,7 +82,7 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            prokaryotes__assemble__megahit
+            assemble__megahit
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
