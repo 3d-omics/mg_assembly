@@ -45,7 +45,7 @@ COVERM = PROK_QUANT / "coverm/"
 
 
 # dereplicate evaluation
-PROK_ANN = Path("results/annotate/")
+PROK_ANN = PROK / "annotate"
 GTDBTK = PROK_ANN / "gtdbtk/"
 QUAST = PROK_ANN / "quast/"
 DRAM = PROK_ANN / "dram/"
