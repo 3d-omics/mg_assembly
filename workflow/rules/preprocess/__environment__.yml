@@ -19,3 +19,4 @@ dependencies:
   - rsync=3.2.7
   - samtools=1.18
   - singlem=0.16.0
+  - smafa =0.7.0
