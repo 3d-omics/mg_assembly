@@ -16,11 +16,11 @@ jobs:
   Pre-Commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.0.1
+      - uses: actions/checkout@v3
         with:
           lfs: 'true'
       - name: Run pre-commit on all files
-        uses: pre-commit/action@v3
+        uses: pre-commit/action@v3.0.1
         with:
           extra_args: --all-files
 
