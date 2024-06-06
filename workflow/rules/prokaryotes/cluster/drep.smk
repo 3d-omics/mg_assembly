@@ -48,7 +48,7 @@ rule prokaryotes__cluster__drep__run__:
         out_dir=DREP,
     resources:
         attempt=get_attempt,
-    #retries: 5
+    # retries: 5
     shell:
         """
         rm \
