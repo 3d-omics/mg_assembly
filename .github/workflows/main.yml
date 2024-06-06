@@ -48,7 +48,7 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            preprocess assemble annotate quantify report
+            preprocess prokaryotes report
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
@@ -82,7 +82,7 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            assemble__megahit
+            prokaryotes__assemble__megahit
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
@@ -100,7 +100,7 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            assemble__magscot
+            prokaryotes__assemble__magscot
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
@@ -121,7 +121,7 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            quantify
+            prokaryotes__quantify
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
@@ -136,7 +136,7 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            annotate__quast
+            prokaryotes__annotate__quast
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
