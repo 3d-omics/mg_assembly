@@ -19,12 +19,13 @@ rule preprocess__nonpareil__:
         "__environment__.yml"
     params:
         prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
-        reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
+        reads=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}_1.fq",
     shell:
         """
         gzip \
             --decompress \
             --stdout \
+            --verbose \
             {input.forward_} \
         > {params.reads} 2> {log}
 
@@ -36,7 +37,11 @@ rule preprocess__nonpareil__:
             -t {threads} \
         2>> {log} 1>&2
 
-        rm --force {params.reads} 2>> {log} 1>&2
+        rm \
+            --force \
+            --verbose \
+            {params.reads} \
+        2>> {log} 1>&2
         """
 
 
