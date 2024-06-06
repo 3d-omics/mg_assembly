@@ -8,9 +8,17 @@ rule reference__recompress__:
         HOSTS / "{genome}.log",
     conda:
         "__environment__.yml"
+    cache: True
     shell:
         """
-        (gzip -dc {input.fa_gz} | bgzip -@ {threads} > {output}) 2> {log}
+        ( gzip \
+            --decompress \
+            --stdout \
+            {input.fa_gz} \
+        | bgzip \
+            --threads {threads} \
+        > {output} \
+        ) 2> {log}
         """
 
 

@@ -16,6 +16,7 @@ rule preprocess__index__:
     resources:
         attempt=get_attempt,
     retries: 5
+    cache: True
     shell:
         """
         bowtie2-build \
