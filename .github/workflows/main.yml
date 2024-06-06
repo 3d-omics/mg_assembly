@@ -100,7 +100,7 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            prokaryotes__assemble__magscot
+            prokaryotes__cluster__magscot
             --use-conda
             --conda-frontend mamba
             --show-failed-logs
