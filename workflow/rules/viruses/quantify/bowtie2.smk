@@ -5,8 +5,8 @@ rule viruses__quantify__bowtie2__:
         mock=VINDEX / "viruses",
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
-        reference=MMSEQS / "rep_seq.fasta",
-        fai=MMSEQS / "rep_seq.fasta.fai",
+        reference=MMSEQS / "rep_seq.fasta.gz",
+        fai=MMSEQS / "rep_seq.fasta.gz.fai",
     output:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
     log:

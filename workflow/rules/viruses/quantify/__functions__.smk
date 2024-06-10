@@ -3,7 +3,7 @@ def _compose_tsv_for_vcoverm(wildcards, mode):
     assert mode in ["contig", "genome"]
     method = wildcards.method
     return [
-        VCOVERM / mode / method / f"{sample_id}.{library_id}.tsv"
+        VCOVERM / mode / method / f"{sample_id}.{library_id}.tsv.gz"
         for sample_id, library_id in SAMPLE_LIBRARY
     ]
 

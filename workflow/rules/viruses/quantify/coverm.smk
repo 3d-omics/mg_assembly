@@ -3,10 +3,10 @@ rule viruses__quantify__coverm__genome__:
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "rep_seq.fasta",
-        fai=MMSEQS / "rep_seq.fasta.fai",
+        reference=MMSEQS / "rep_seq.fasta.gz",
+        fai=MMSEQS / "rep_seq.fasta.gz.fai",
     output:
-        tsv=VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
+        tsv=VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
         "__environment__.yml"
     log:
@@ -28,6 +28,7 @@ rule viruses__quantify__coverm__genome__:
             --methods {params.method} \
             --separator {params.separator} \
             --min-covered-fraction {params.min_covered_fraction} \
+        | bgzip \
         > {output.tsv} \
         ) 2> {log}
         """
@@ -38,7 +39,7 @@ rule viruses__quantify__coverm__genome_aggregate__:
     input:
         get_tsvs_for_dereplicate_vcoverm_genome,
     output:
-        tsv=VCOVERM / "genome.{method}.tsv",
+        tsv=VCOVERM / "genome.{method}.tsv.gz",
     log:
         VCOVERM / "genome.{method}.log",
     conda:
@@ -58,7 +59,7 @@ rule viruses__quantify__coverm__genome:
     """Run coverm genome and all methods"""
     input:
         [
-            VCOVERM / f"genome.{method}.tsv"
+            VCOVERM / f"genome.{method}.tsv.gz"
             for method in params["quantify"]["coverm"]["genome"]["methods"]
         ],
 
@@ -69,10 +70,10 @@ rule viruses__quantify__coverm__contig__:
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "rep_seq.fasta",
-        fai=MMSEQS / "rep_seq.fasta.fai",
+        reference=MMSEQS / "rep_seq.fasta.gz",
+        fai=MMSEQS / "rep_seq.fasta.gz.fai",
     output:
-        tsv=VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
+        tsv=VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
         "__environment__.yml"
     log:
@@ -89,6 +90,7 @@ rule viruses__quantify__coverm__contig__:
             --bam-files /dev/stdin \
             --methods {params.method} \
             --proper-pairs-only \
+        | bgzip \
         > {output.tsv} \
         ) 2> {log}
         """
@@ -99,7 +101,7 @@ rule viruses__quantify__coverm__contig_aggregate__:
     input:
         get_tsvs_for_dereplicate_vcoverm_contig,
     output:
-        tsv=VCOVERM / "contig.{method}.tsv",
+        tsv=VCOVERM / "contig.{method}.tsv.gz",
     log:
         VCOVERM / "contig.{method}.log",
     conda:
@@ -119,7 +121,7 @@ rule viruses__quantify__coverm__contig:
     """Run coverm contig and all methods"""
     input:
         [
-            VCOVERM / f"contig.{method}.tsv"
+            VCOVERM / f"contig.{method}.tsv.gz"
             for method in params["quantify"]["coverm"]["contig"]["methods"]
         ],
 

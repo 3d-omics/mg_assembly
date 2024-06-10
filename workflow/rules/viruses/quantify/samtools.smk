@@ -3,8 +3,8 @@ rule viruses__quantify__samtools__stats_cram__:
     input:
         cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
         crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "rep_seq.fasta",
-        fai=MMSEQS / "rep_seq.fasta.fai",
+        reference=MMSEQS / "rep_seq.fasta.gz",
+        fai=MMSEQS / "rep_seq.fasta.gz.fai",
     output:
         txt=VBOWTIE2 / "{sample_id}.{library_id}.stats.txt",
     log:

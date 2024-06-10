@@ -54,6 +54,20 @@ rule faidx_fa:
         "samtools faidx {input} 2> {log} 1>&2"
 
 
+rule faidx_fasta_gz:
+    """Index a fasta file"""
+    input:
+        "{prefix}.fasta.gz",
+    output:
+        "{prefix}.fasta.gz.fai",
+    conda:
+        "__environment__.yml"
+    log:
+        "{prefix}.fa.fai.log",
+    shell:
+        "samtools faidx {input} 2> {log} 1>&2"
+
+
 rule faidx_fagz:
     """Index a gzipped fasta file"""
     input:
