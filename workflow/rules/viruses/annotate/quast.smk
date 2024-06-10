@@ -1,7 +1,7 @@
 rule viruses__annotate__quast__:
     """Run quast over one the dereplicated mags"""
     input:
-        MMSEQS / "rep_seq.fasta",
+        MMSEQS / "rep_seq.fasta.gz",
     output:
         directory(QUASTV),
     log:

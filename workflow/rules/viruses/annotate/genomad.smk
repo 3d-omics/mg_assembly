@@ -1,17 +1,17 @@
 rule viruses__annotate__genomad__:
     input:
-        fasta=MMSEQS / "rep_seq.fasta",
+        fasta=MMSEQS / "rep_seq.fasta.gz",
         database=features["databases"]["genomad"],
     output:
-        plasmid=GENOMADA / "rep_seq_plasmid.fna",
-        plasmid_genes=GENOMADA / "rep_seq_plasmid_genes.tsv",
-        plasmid_proteins=GENOMADA / "rep_seq_plasmid_proteins.faa",
-        plasmid_summary=GENOMADA / "rep_seq_plasmid_summary.tsv",
-        json=GENOMADA / "rep_seq_summary.json",
-        virus=GENOMADA / "rep_seq_virus.fna",
-        virus_genes=GENOMADA / "rep_seq_virus_genes.tsv",
-        virus_proteins=GENOMADA / "rep_seq_virus_proteins.faa",
-        virus_summary=GENOMADA / "rep_seq_virus_summary.tsv",
+        plasmid=GENOMADA / "rep_seq_plasmid.fna.gz",
+        plasmid_genes=GENOMADA / "rep_seq_plasmid_genes.tsv.gz",
+        plasmid_proteins=GENOMADA / "rep_seq_plasmid_proteins.faa.gz",
+        plasmid_summary=GENOMADA / "rep_seq_plasmid_summary.tsv.gz",
+        json=GENOMADA / "rep_seq_summary.json.gz",
+        virus=GENOMADA / "rep_seq_virus.fna.gz",
+        virus_genes=GENOMADA / "rep_seq_virus_genes.tsv.gz",
+        virus_proteins=GENOMADA / "rep_seq_virus_proteins.faa.gz",
+        virus_summary=GENOMADA / "rep_seq_virus_summary.tsv.gz",
     log:
         GENOMADA / "genomad.log",
     conda:
@@ -39,6 +39,11 @@ rule viruses__annotate__genomad__:
             {params.workdir} \
             {input.database} \
         2> {log} 1>&2
+
+        bgzip \
+            --threads {threads} \
+            {params.tmp_prefix}/* \
+        2>> {log} 1>&2
 
         mv \
             {params.tmp_prefix}/* \

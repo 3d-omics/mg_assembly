@@ -1,10 +1,10 @@
 rule viruses__annotate__dramv__annotate__:
     input:
-        fa=VIRSORTER2 / "final-viral-combined-for-dramv.fa",
-        tsv=VIRSORTER2 / "viral-affi-contigs-for-dramv.tab",
+        fa=VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
+        tsv=VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
         dram_db=features["databases"]["dram"],
     output:
-        annotations=DRAMV / "annotations.tsv",
+        annotations=DRAMV / "annotations.tsv.gz",
     log:
         DRAMV / "annotate.log",
     conda:
@@ -45,7 +45,7 @@ rule viruses__annotate__dramv__annotate__:
                 --input_fasta {{.}}.fa \
                 --output_dir {params.workdir}/{{/.}} \
                 --skip_trnascan \
-                --virsorter_affi_contigs {input.tsv} \
+                --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
         ::: {params.workdir}/splits.*.fa \
         2>> {log} 1>&2
 
@@ -53,15 +53,17 @@ rule viruses__annotate__dramv__annotate__:
             --output-file {output.annotations} \
             {params.workdir}/splits.*/annotations.tsv \
         2>> {log} 1>&2
+
+        rm --recursive --force {params.workdir}/splits*
         """
 
 
 rule viruses__annotate__dramv__distill__:
     input:
-        annotations=DRAMV / "annotations.tsv",
+        annotations=DRAMV / "annotations.tsv.gz",
     output:
-        amg_summary=DRAMV / "amg_summary.tsv",
-        vmag_stats=DRAMV / "vMAG_stats.tsv",
+        amg_summary=DRAMV / "amg_summary.tsv.gz",
+        vmag_stats=DRAMV / "vMAG_stats.tsv.gz",
         product=DRAMV / "product.html",
     log:
         DRAMV / "distill.log",
@@ -76,9 +78,18 @@ rule viruses__annotate__dramv__distill__:
         DRAM-v.py distill \
             --input_file {input.annotations} \
             --output_dir {params.workdir} \
-        2> {log}
+        2> {log} 1>&2
 
-        mv {params.workdir}/* {DRAMV}/
+        mv \
+            {params.workdir}/* \
+            {DRAMV}/ \
+        2>> {log} 1>&2
+
+        bgzip \
+            --threads {threads} \
+            {DRAMV}/amg_summary.tsv \
+            {DRAMV}/vMAG_stats.tsv \
+        2>> {log} 1>&2
         """
 
 
