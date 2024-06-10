@@ -55,7 +55,4 @@ rule viruses__cluster__genomad__:
 
 rule viruses__cluster__genomad:
     input:
-        [
-            GENOMADC / f"{assembly_id}_virus.fna.gz"
-            for assembly_id in ASSEMBLIES
-        ],
+        [GENOMADC / f"{assembly_id}_virus.fna.gz" for assembly_id in ASSEMBLIES],

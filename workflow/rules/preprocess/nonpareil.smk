@@ -18,7 +18,7 @@ rule preprocess__nonpareil__run__:
     conda:
         "__environment__.yml"
     params:
-        prefix=lambda w: NONPAREIL / "run" /  f"{w.sample_id}.{w.library_id}",
+        prefix=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}",
         reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
     shell:
         """
@@ -67,7 +67,6 @@ rule preprocess__nonpareil__aggregate__:
             --output-file {output} \
         2> {log} 1>&2
         """
-
 
 
 rule preprocess__nonpareil:

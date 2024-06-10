@@ -29,14 +29,14 @@ rule viruses__cluster__mmseqs__:
             {params.tmpdir}/tmp_all_seqs.fasta \
         > {output.all_seq} \
         2>> {log}
-        
+
         bgzip \
             --threads {threads} \
             --stdout \
             {params.tmpdir}/tmp_cluster.tsv \
         > {output.cluster} \
         2>> {log}
-        
+
         bgzip \
             --threads {threads} \
             --stdout \

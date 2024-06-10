@@ -37,7 +37,7 @@ rule prokaryotes__cluster__magscot__prodigal__:
 
 rule prokaryotes__cluster__magscot__hmmsearch_pfam__:
     """Run hmmsearch over the predicted proteins of an assembly using Pfam as database
-    
+
     Note: hmmsearch must be decompressed
     """
     input:

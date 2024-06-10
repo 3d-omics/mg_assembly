@@ -18,10 +18,12 @@ rule preprocess__singlem__pipe__:
         "__environment__.yml"
     params:
         prefix=lambda w: SINGLEM / "pipe" / f"{w.sample_id}.{w.library_id}.condense.tsv",
-        otu_table=lambda w: SINGLEM / "pipe" / f"{w.sample_id}.{w.library_id}.otu_table.tsv",
+        otu_table=lambda w: SINGLEM
+        / "pipe"
+        / f"{w.sample_id}.{w.library_id}.otu_table.tsv",
     shell:
         """
-        {{  
+        {{
             singlem pipe \
                 --forward {input.forward_} \
                 --reverse {input.reverse_} \
@@ -31,12 +33,12 @@ rule preprocess__singlem__pipe__:
                 --metapackage {input.metapackage} \
                 --threads {threads} \
                 --assignment-threads {threads} \
-            
+
             gzip \
                 --verbose \
                 {params.prefix} \
-                {params.otu_table} 
-            
+                {params.otu_table}
+
         }} 2> {log} 1>&2 || true
         """
 
