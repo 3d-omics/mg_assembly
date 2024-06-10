@@ -9,7 +9,7 @@ rule preprocess__singlem__pipe__:
         reverse_=get_final_reverse_from_pre,
         metapackage=features["databases"]["singlem"],
     output:
-        archive_otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.archive.json",
+        archive_otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.archive.json",  # don't compress
         otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.otu_table.tsv.gz",
         condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv.gz",
     log:
@@ -60,9 +60,9 @@ rule preprocess__singlem__condense:
     shell:
         """
         singlem condense \
-            --input-archive-otu-tables {input.archive_otu_tables} \
             --taxonomic-profile >(gzip > {output.condense}) \
             --metapackage {input.database} \
+            --input-archive-otu-tables {input.archive_otu_tables} \
         2> {log} 1>&2
         """
 
@@ -73,11 +73,11 @@ rule preprocess__singlem__microbial_fraction__:
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
         data=features["databases"]["singlem"],
-        condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv",
+        condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv.gz",
     output:
         microbial_fraction=SINGLEM
         / "microbial_fraction"
-        / "{sample_id}.{library_id}.tsv",
+        / "{sample_id}.{library_id}.tsv.gz",
     log:
         SINGLEM / "microbial_fraction" / "{sample_id}.{library_id}.log",
     conda:
@@ -88,7 +88,7 @@ rule preprocess__singlem__microbial_fraction__:
             --forward {input.forward_} \
             --reverse {input.reverse_} \
             --input-profile {input.condense} \
-            --output-tsv {output.microbial_fraction} \
+            --output-tsv >(gzip > {output.microbial_fraction}) \
             --metapackage {input.data} \
         2> {log} 1>&2
         """
@@ -98,7 +98,7 @@ rule preprocess__singlem__aggregate_microbial_fraction:
     """Aggregate all the microbial_fraction files into one tsv"""
     input:
         tsvs=[
-            SINGLEM / "microbial_fraction" / f"{sample_id}.{library_id}.tsv"
+            SINGLEM / "microbial_fraction" / f"{sample_id}.{library_id}.tsv.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
     output:
