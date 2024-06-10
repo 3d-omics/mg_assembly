@@ -92,7 +92,7 @@ rule preprocess__singlem__aggregate_microbial_fraction:
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
     output:
-        tsv=SINGLEM / "microbial_fraction.tsv",
+        tsv=SINGLEM / "microbial_fraction.tsv.gz",
     log:
         SINGLEM / "microbial_fraction.log",
     conda:
@@ -104,6 +104,7 @@ rule preprocess__singlem__aggregate_microbial_fraction:
             {input.tsvs} \
         | csvformat \
             --out-tabs \
+        | gzip --verbose \
         > {output.tsv} \
         ) 2> {log}
         """
