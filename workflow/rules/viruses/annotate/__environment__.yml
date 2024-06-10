@@ -3,6 +3,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - checkv=1.0.3
   - dram =1.4.6
   - genomad =1.7.4
   - parallel

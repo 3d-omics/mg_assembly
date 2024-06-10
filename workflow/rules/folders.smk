@@ -66,6 +66,7 @@ VIRSORTER2 = VIR_ANN / "virsorter2"
 GENOMADA = VIR_ANN / "genomad"
 DRAMV = VIR_ANN / "dramv"
 QUASTV = VIR_ANN / "quast"
+CHECKV = VIR_ANN / "checkv"
 
 VIR_QUANT = VIR / "quantify"
 VINDEX = VIR_QUANT / "index"
