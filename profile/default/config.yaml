@@ -102,7 +102,7 @@ set-resources:
     prokaryotes__annotate__checkm2__:
         mem_mb: 16G
     prokaryotes__annotate__dram__annotate__:
-        mem_mb: 32G
+        mem_mb: 64G
         runtime: 1d
     prokaryotes__annotate__dram__distill__:
         mem_mb: 16G
