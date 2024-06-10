@@ -7,27 +7,37 @@ rule preprocess__singlem__pipe__:
     input:
         forward_=get_final_forward_from_pre,
         reverse_=get_final_reverse_from_pre,
-        data=features["databases"]["singlem"],
+        metapackage=features["databases"]["singlem"],
     output:
         archive_otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.archive.json",
-        otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.otu_table.tsv",
-        condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv",
+        otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.otu_table.tsv.gz",
+        condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv.gz",
     log:
         SINGLEM / "pipe" / "{sample_id}.{library_id}.log",
     conda:
         "__environment__.yml"
+    params:
+        prefix=lambda w: SINGLEM / "pipe" / f"{w.sample_id}.{w.library_id}.condense.tsv",
+        otu_table=lambda w: SINGLEM / "pipe" / f"{w.sample_id}.{w.library_id}.otu_table.tsv",
     shell:
         """
-        singlem pipe \
-            --forward {input.forward_} \
-            --reverse {input.reverse_} \
-            --otu-table {output.otu_table} \
-            --archive-otu-table {output.archive_otu_table} \
-            --taxonomic-profile {output.condense} \
-            --metapackage {input.data} \
-            --threads {threads} \
-            --assignment-threads {threads} \
-        2> {log} 1>&2 || true
+        {{  
+            singlem pipe \
+                --forward {input.forward_} \
+                --reverse {input.reverse_} \
+                --otu-table {output.otu_table} \
+                --archive-otu-table {output.archive_otu_table} \
+                --taxonomic-profile {output.condense} \
+                --metapackage {input.metapackage} \
+                --threads {threads} \
+                --assignment-threads {threads} \
+            
+            gzip \
+                --verbose \
+                {params.prefix} \
+                {params.otu_table} 
+            
+        }} 2> {log} 1>&2 || true
         """
 
 
@@ -40,7 +50,7 @@ rule preprocess__singlem__condense:
         ],
         database=features["databases"]["singlem"],
     output:
-        condense=SINGLEM / "singlem.tsv",
+        condense=SINGLEM / "singlem.tsv.gz",
     log:
         SINGLEM / "singlem.log",
     conda:
@@ -51,7 +61,7 @@ rule preprocess__singlem__condense:
         """
         singlem condense \
             --input-archive-otu-tables {input.archive_otu_tables} \
-            --taxonomic-profile {output.condense} \
+            --taxonomic-profile >(gzip > {output.condense}) \
             --metapackage {input.database} \
         2> {log} 1>&2
         """
