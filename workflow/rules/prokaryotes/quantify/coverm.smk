@@ -6,7 +6,7 @@ rule prokaryotes__quantify__coverm__genome__:
         reference=DREP / "dereplicated_genomes.fa.gz",
         fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
-        tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv",
+        tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
         "__environment__.yml"
     log:
@@ -29,6 +29,7 @@ rule prokaryotes__quantify__coverm__genome__:
             --methods {params.method} \
             --separator {params.separator} \
             --min-covered-fraction {params.min_covered_fraction} \
+        | gzip \
         > {output.tsv} \
         ) 2> {log}
         """
@@ -39,7 +40,7 @@ rule prokaryotes__quantify__coverm__genome__aggregate__:
     input:
         get_tsvs_for_dereplicate_coverm_genome,
     output:
-        tsv=COVERM / "genome.{method}.tsv",
+        tsv=COVERM / "genome.{method}.tsv.gz",
     log:
         COVERM / "genome.{method}.log",
     conda:
@@ -59,7 +60,7 @@ rule prokaryotes__quantify__coverm__genome:
     """Run coverm genome and all methods"""
     input:
         [
-            COVERM / f"genome.{method}.tsv"
+            COVERM / f"genome.{method}.tsv.gz"
             for method in params["quantify"]["coverm"]["genome"]["methods"]
         ],
 
@@ -73,7 +74,7 @@ rule prokaryotes__quantify__coverm__contig__:
         reference=DREP / "dereplicated_genomes.fa.gz",
         fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
-        tsv=COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv",
+        tsv=COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
         "__environment__.yml"
     log:
@@ -91,6 +92,7 @@ rule prokaryotes__quantify__coverm__contig__:
             --bam-files /dev/stdin \
             --methods {params.method} \
             --proper-pairs-only \
+        | gzip \
         > {output.tsv} \
         ) 2> {log}
         """
@@ -101,7 +103,7 @@ rule prokaryotes__quantify__coverm__contig__aggregate__:
     input:
         get_tsvs_for_dereplicate_coverm_contig,
     output:
-        tsv=COVERM / "contig.{method}.tsv",
+        tsv=COVERM / "contig.{method}.tsv.gz",
     log:
         COVERM / "contig.{method}.log",
     conda:
@@ -121,7 +123,7 @@ rule prokaryotes__quantify__coverm__contig:
     """Run coverm contig and all methods"""
     input:
         [
-            COVERM / f"contig.{method}.tsv"
+            COVERM / f"contig.{method}.tsv.gz"
             for method in params["quantify"]["coverm"]["contig"]["methods"]
         ],
 

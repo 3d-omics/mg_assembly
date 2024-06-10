@@ -26,7 +26,7 @@ output_folder <- dirname(output_file)
 
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 
-files <- list.files(args$input_folder, pattern = "*.tsv", full.names = TRUE)
+files <- list.files(args$input_folder, pattern = "*.tsv.gz", full.names = TRUE)
 
 sample_names <-
   files %>%
