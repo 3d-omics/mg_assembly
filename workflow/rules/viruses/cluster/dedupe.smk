@@ -1,11 +1,11 @@
 rule viruses__cluster__dedupe__:
     input:
         fastas=[
-            GENOMADC / f"{assembly_id}" / f"{assembly_id}_virus.fna"
+            GENOMADC / f"{assembly_id}_virus.fna.gz"
             for assembly_id in ASSEMBLIES
         ],
     output:
-        fasta=DEDUPE / "dedupe.fa",
+        fasta=DEDUPE / "dedupe.fa.gz",
     log:
         DEDUPE / "dedupe.log",
     conda:
