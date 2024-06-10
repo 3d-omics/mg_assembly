@@ -53,7 +53,7 @@ rule preprocess__nonpareil__aggregate__:
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
     output:
-        NONPAREIL / "nonpareil.tsv",
+        NONPAREIL / "nonpareil.tsv.gz",
     log:
         NONPAREIL / "nonpareil.log",
     conda:
