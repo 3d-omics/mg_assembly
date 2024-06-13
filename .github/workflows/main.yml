@@ -16,11 +16,11 @@ jobs:
   Pre-Commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: 'true'
       - name: Run pre-commit on all files
-        uses: pre-commit/action@v3.0.0
+        uses: pre-commit/action@v3.0.1
         with:
           extra_args: --all-files
 
@@ -30,37 +30,37 @@ jobs:
       - Pre-Commit
     steps:
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: 'true'
 
-      - name: Set up caches
-        uses: actions/cache@v3
-        with:
-          path: |
-            .snakemake/conda
-            ~/.cache/pre-commit/
-          key: snakemake-conda
+      # - name: Set up caches
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       .snakemake/conda
+      #       ~/.cache/pre-commit/
+      #     key: snakemake-conda
 
-      - name: Download All Environments
-        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            preprocess assemble annotate quantify report
-            --use-conda
-            --conda-frontend mamba
-            --show-failed-logs
-            --cores 3
-            --conda-cleanup-pkgs cache
-            --conda-create-envs-only
+      # - name: Download All Environments
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       preprocess prokaryotes report
+      #       --use-conda
+      #       --conda-frontend mamba
+      #       --show-failed-logs
+      #       --cores 3
+      #       --conda-cleanup-pkgs cache
+      #       --conda-create-envs-only
 
       - name: Clean conda cache
         run: conda clean --all --yes
 
       - name: Test workflow - Preprocess
-        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        uses: snakemake/snakemake-github-action@v1
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -70,44 +70,76 @@ jobs:
             preprocess__kraken2
             preprocess__samtools
             --use-conda
-            --conda-frontend mamba
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
 
+      - name: Clean after preprocess
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
+            --cores 1
+
       - name: Test workflow - Assemble (until megahit)
-        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        uses: snakemake/snakemake-github-action@v1
         with:
           directory: .
           snakefile: workflow/Snakefile
           args: >
             assemble__megahit
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
 
-      - name: Test workflow - Assemble (replace mock assembly for something more meaty)
-        run: >
-          sudo bash -c "cp resources/mock_assembly.fa.gz results/assemble/megahit/all.fa.gz"
-
-      - name: Test workflow - Assemble (from megahit to magscot)
-        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+      - name: Clean after assemble
+        uses: snakemake/snakemake-github-action@v1
         with:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            assemble__magscot
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
+            --cores 1
+
+      - name: Test workflow - Assemble (replace mock assembly for something more meaty)
+        run: >
+          sudo mkdir --parents results/assemble/megahit &&
+          sudo bash -c "cp resources/mock_assembly.fa.gz results/assemble/megahit/all.fa.gz"
+
+      - name: Test workflow - Assemble (from megahit to magscot)
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            prokaryotes__cluster__magscot
+            --use-conda
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
+
+      - name: Clean after magscot
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
+            --cores 1
 
       - name: Test workflow - Assemble (skip drep)
         run: |
@@ -116,55 +148,88 @@ jobs:
           sudo bash -c "cp resources/mock_assembly.fa.gz results/assemble/drep/dereplicated_genomes/all:bin_00001.fa.gz"
 
       - name: Test workflow - Quantify (skip drep)
-        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        uses: snakemake/snakemake-github-action@v1
         with:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            quantify
+            prokaryotes__quantify
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
+
+      - name: Clean after quantify
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
+            --cores 1
 
       - name: Test workflow - Annotate (only quast)
-        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        uses: snakemake/snakemake-github-action@v1
         with:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            annotate__quast
+            prokaryotes__annotate__quast
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
 
+      - name: Clean after annotate
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
+            --cores 1
+
       - name: Test workflow - Report
-        uses: ezherman/snakemake-github-action@5027c0e706ada924ab91e0501bd92185fc98de3c
+        uses: snakemake/snakemake-github-action@v1
         with:
           directory: .
           snakefile: workflow/Snakefile
           args: >
             report
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
+
+      - name: Clean after report
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
+            --cores 1
 
       - name: Delete everything
         run: |
           sudo find results -not -name "*.log" -type f -delete -print
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: results

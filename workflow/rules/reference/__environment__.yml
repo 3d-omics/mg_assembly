@@ -1,8 +1,6 @@
-# reads: environment to recompress the host reference
----
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - samtools=1.18
+  - samtools =1.19.2

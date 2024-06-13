@@ -1,4 +1,4 @@
-rule _report__step__reads:
+rule report__step__reads__:
     """Collect all reports for the reads step"""
     input:
         rules.reads__fastqc.input,
@@ -10,9 +10,6 @@ rule _report__step__reads:
         "__environment__.yml"
     params:
         dir=REPORT_STEP,
-    resources:
-        mem_mb=8 * 1024,
-        attempt=get_attempt,
     shell:
         """
         multiqc \
@@ -25,7 +22,7 @@ rule _report__step__reads:
         """
 
 
-rule _report__step__preprocess:
+rule report__step__preprocess__:
     """Collect all reports for the preprocessing step"""
     input:
         rules.preprocess__fastp.input.json,
@@ -41,8 +38,6 @@ rule _report__step__preprocess:
     params:
         dir=REPORT_STEP,
     resources:
-        mem_mb=double_ram(4),
-        runtime=6 * 60,
         attempt=get_attempt,
     retries: 5
     shell:
@@ -61,7 +56,7 @@ rule _report__step__preprocess:
         """
 
 
-rule _report__step__assemble:
+rule report__step__assemble__:
     """Collect all reports from the assemble step"""
     input:
         QUAST,
@@ -73,8 +68,6 @@ rule _report__step__assemble:
         "__environment__.yml"
     params:
         dir=REPORT_STEP,
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         multiqc \
@@ -87,10 +80,10 @@ rule _report__step__assemble:
         """
 
 
-rule _report__step__quantify:
+rule report__step__quantify__:
     """Collect all reports from the quantify step"""
     input:
-        rules.quantify__samtools.input,
+        rules.prokaryotes__quantify__samtools.input,
     output:
         REPORT_STEP / "quantify.html",
     log:
@@ -99,8 +92,6 @@ rule _report__step__quantify:
         "__environment__.yml"
     params:
         dir=REPORT_STEP,
-    resources:
-        mem_mb=8 * 1024,
     shell:
         """
         multiqc \

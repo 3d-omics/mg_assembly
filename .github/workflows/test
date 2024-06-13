@@ -21,21 +21,52 @@ cp \
 
 ./run \
     --jobs 8 \
-    assemble__magscot \
+    prokaryotes__cluster__magscot \
     --rerun-triggers mtime
 
-# generate mock magscot results
-mkdir --parents results/assemble/drep/dereplicated_genomes
-touch results/assemble/drep/dereplicated_genomes/.snakemake_timestamp
-cp resources/mock_assembly.fa.gz results/assemble/drep/dereplicated_genomes/all:bin_00001.fa.gz
+# Run drep
+mkdir --parents results/prokaryotes/cluster/drep/separated_bins
+touch results/prokaryotes/cluster/drep/separated_bins/.snakemake_timestamp
+cp \
+    resources/mock_assembly.fa.gz \
+    results/prokaryotes/cluster/drep/separated_bins/bin1.fa.gz
+cp \
+    resources/mock_assembly.fa.gz \
+    results/prokaryotes/cluster/drep/separated_bins/bin2.fa.gz
+
+
+# Skip drep-related results
+cp \
+    resources/mock_assembly.fa.gz \
+    results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
+touch results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
+mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
+touch results/prokaryotes/cluster/drep/dereplicated_genomes/.snakemake_timestamp
+cp \
+    resources/mock_assembly.fa.gz \
+    results/prokaryotes/cluster/drep/dereplicated_genomes/bin1.fa.gz
+cp \
+    resources/mock_assembly.fa.gz \
+    results/prokaryotes/cluster/drep/dereplicated_genomes/bin2.fa.gz
+touch \
+    results/prokaryotes/cluster/drep/data.tar.gz \
+    results/prokaryotes/cluster/drep/data_tables.tar.gz
+
+
 
 ./run \
     --jobs 8 \
-    quantify \
+    prokaryotes__quantify \
     --rerun-triggers mtime
+
 ./run \
     --jobs 8 \
-    annotate__quast \
+    prokaryotes__annotate__quast \
+    --rerun-triggers mtime
+
+./run \
+    --jobs 4 \
+    viruses \
     --rerun-triggers mtime
 
 ./run \

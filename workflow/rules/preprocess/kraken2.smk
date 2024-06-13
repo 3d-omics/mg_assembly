@@ -1,4 +1,4 @@
-rule _preprocess__kraken2__assign:
+rule preprocess__kraken2__:
     """
     Run kraken2 over all samples at once using the /dev/shm/ trick.
 
@@ -25,10 +25,6 @@ rule _preprocess__kraken2__assign:
         ],
     log:
         KRAKEN2 / "{kraken_db}.log",
-    threads: 8
-    resources:
-        mem_mb=params["preprocess"]["kraken2"]["memory_gb"] * 1024,
-        runtime=48 * 60,
     params:
         in_folder=FASTP,
         out_folder=lambda w: KRAKEN2 / w.kraken_db,
@@ -49,6 +45,8 @@ rule _preprocess__kraken2__assign:
                 --recursive \
                 --times \
                 --verbose \
+                --chmod u+rw \
+                --chown $(id --user):$(id --group) \
                 {input.database}/*.k2d \
                 {params.kraken_db_shm} \
             2>> {log} 1>&2

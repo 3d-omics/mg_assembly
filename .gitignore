@@ -12,3 +12,6 @@ resources/virify/
 *.fai
 *.gzi
 mg_assembly.Rproj
+resources/databases/genomad/genomad_db_v1.7/*
+resources/databases/dram/20230811/*
+resources/databases/virsorter2/*

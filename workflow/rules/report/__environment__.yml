@@ -1,8 +1,6 @@
-# reads: environment to link and fastqc reads
----
 channels:
   - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - multiqc=1.18
+  - multiqc =1.19

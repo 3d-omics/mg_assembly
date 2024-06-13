@@ -1,4 +1,4 @@
-rule _assemble__megahit:
+rule assemble__megahit__:
     """Run megahit over one sample, merging all libraries in the process
 
     Note: the initial rm -rf is to delete the folder that snakemake creates.
@@ -14,7 +14,6 @@ rule _assemble__megahit:
         log=MEGAHIT / "{assembly_id}.log",
     conda:
         "__environment__.yml"
-    threads: 24
     params:
         out_dir=lambda w: MEGAHIT / w.assembly_id,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
@@ -22,8 +21,6 @@ rule _assemble__megahit:
         reverses=aggregate_reverses_for_megahit,
         assembly_id=lambda w: w.assembly_id,
     resources:
-        mem_mb=double_ram(params["assemble"]["megahit"]["memory_gb"]),
-        runtime=7 * 24 * 60,
         attempt=get_attempt,
     retries: 5
     shell:

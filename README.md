@@ -1,4 +1,5 @@
-![Actions](https://github.com/3d-omics/mg_assembly/actions/workflows/devel/badge.svg)
+[![GitHub actions status](https://github.com/3d-omics/mg_assembly/workflows/Tests/badge.svg)](https://github.com/3d-omics/mg_assembly/actions)
+
 
 # Snakemake workflow: `mg_assembly`
 
@@ -44,10 +45,12 @@ A Snakemake workflow for Genome Resolved Metagenomics
       pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
       tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
 
-    dram_database: "resources/mock_dram_db"
-    gtdbtk_database: "resources/mock_gtdbtk_db"
-    singlem_database: "resources/mock_singlem_db"
-    kraken2_database: "resources/kraken2_mock"
+    databases:
+      dram: "resources/mock_dram_db"
+      gtdbtk: "resources/mock_gtdbtk_db"
+      singlem: "resources/mock_singlem_db"
+      kraken2:
+        mock: "resources/kraken2_mock"
     ```
 
     3. Edit `config/params.yml` with execution parameters. The defaults are reasonable.

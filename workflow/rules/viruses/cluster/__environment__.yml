@@ -1,0 +1,12 @@
+# assembly: environment to assemble mags
+---
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bbmap=39.01
+  - genomad=1.7.4
+  - mmseqs2=14.7e284
+  - pip:
+    - keras==3
