@@ -8,6 +8,8 @@ rule prokaryotes__annotate__gtdbtk__:
         align=GTDBTK / "align.tar.gz",
         classify=GTDBTK / "classify.tar.gz",
         identify=GTDBTK / "identify.tar.gz",
+        bac_tree=GTDBTK / "gtdbtk.backbone.bac120.classify.tree",
+        ar_tree=touch(GTDBTK / "gtdbtk.ar53.tree"),
     log:
         GTDBTK / "gtdbtk_classify.log",
     conda:
@@ -16,6 +18,8 @@ rule prokaryotes__annotate__gtdbtk__:
         out_dir=GTDBTK,
         ar53=GTDBTK / "gtdbtk.ar53.summary.tsv",
         bac120=GTDBTK / "gtdbtk.bac120.summary.tsv",
+        ar_tree=GTDBTK / "classify" / "",
+        bac_tree=GTDBTK / "classify" / "gtdbtk.backbone.bac120.classify.tree",
     resources:
         attempt=get_attempt,
     retries: 5
@@ -58,6 +62,15 @@ rule prokaryotes__annotate__gtdbtk__:
             cp {params.bac120} {output.summary} 2>> {log}.{resources.attempt}
         fi
 
+        cp --verbose {params.bac_tree} {output.bac_tree} 2>> {log}
+
+
+        if [[ -f {params.ar_tree} ]] ; then
+            cp --verbose {params.ar_tree} {output.ar_tree} 2>> {log} 1>&2
+        else
+            touch {output.ar_tree} 2>> {log} 1>&2
+        fi
+
         for folder in align classify identify ; do
             tar \
                 --create \
@@ -72,3 +85,8 @@ rule prokaryotes__annotate__gtdbtk__:
 
         mv {log}.{resources.attempt} {log}
         """
+
+
+rule prokaryotes__annotate__gtdbtk:
+    input:
+        rules.prokaryotes__annotate__gtdbtk__.output,
