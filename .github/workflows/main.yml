@@ -144,7 +144,7 @@ jobs:
         run: |
           sudo mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
           sudo touch results/prokaryotes/cluster/drep/dereplicated_genomes/.snakemake_timestamp
-          sudo cp resources/mock_assembly.fa.gz results/prokaryotes/cluster/drep/dereplicated_genomes/all:bin_00001.fa.gz"
+          sudo cp resources/mock_assembly.fa.gz results/prokaryotes/cluster/drep/dereplicated_genomes/all:bin_00001.fa.gz
 
       - name: Test workflow - Quantify (skip drep)
         uses: snakemake/snakemake-github-action@v1
