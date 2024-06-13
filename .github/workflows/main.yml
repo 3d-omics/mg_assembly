@@ -65,14 +65,14 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            preprocess__bowtie2
-            preprocess__fastp
-            preprocess__kraken2
-            preprocess__samtools
             --use-conda
             --show-failed-logs
             --cores 3
             --latency-wait 5
+            preprocess__bowtie2
+            preprocess__fastp
+            preprocess__kraken2
+            preprocess__samtools
 
       - name: Clean after preprocess
         uses: snakemake/snakemake-github-action@v1
