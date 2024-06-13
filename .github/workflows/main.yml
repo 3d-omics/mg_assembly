@@ -125,10 +125,10 @@ jobs:
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
+            --rerun-triggers mtime
             --show-failed-logs
             --cores 3
             --latency-wait 5
-            --rerun-triggers mtime
             prokaryotes__cluster__magscot
 
 
@@ -159,10 +159,10 @@ jobs:
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
+            --rerun-triggers mtime
             --show-failed-logs
             --cores 3
             --latency-wait 5
-            --rerun-triggers mtime
             prokaryotes__quantify
 
 
@@ -187,10 +187,10 @@ jobs:
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
+            --rerun-triggers mtime
             --show-failed-logs
             --cores 3
             --latency-wait 5
-            --rerun-triggers mtime
             prokaryotes__annotate__quast
 
       - name: Clean after annotate
@@ -214,10 +214,10 @@ jobs:
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
+            --rerun-triggers mtime
             --show-failed-logs
             --cores 3
             --latency-wait 5
-            --rerun-triggers mtime
             report
 
       - name: Clean after report
