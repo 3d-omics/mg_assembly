@@ -112,7 +112,7 @@ jobs:
 
       - name: Test workflow - Assemble (replace mock assembly for something more meaty)
         run: >
-          sudo mkdir --parents results/assemble/megahit
+          sudo mkdir --parents results/assemble/megahit &&
           sudo bash -c "cp resources/mock_assembly.fa.gz results/assemble/megahit/all.fa.gz"
 
       - name: Test workflow - Assemble (from megahit to magscot)
