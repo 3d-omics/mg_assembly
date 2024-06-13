@@ -91,13 +91,13 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            assemble__megahit
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
             --latency-wait 5
+            assemble__megahit
 
       - name: Clean after assemble
         uses: snakemake/snakemake-github-action@v1
@@ -109,10 +109,11 @@ jobs:
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
             --cores 1
+            --verbose
 
       - name: Test workflow - Assemble (replace mock assembly for something more meaty)
-        run: >
-          sudo mkdir --parents results/assemble/megahit &&
+        run: |
+          sudo mkdir --parents results/assemble/megahit
           sudo bash -c "cp resources/mock_assembly.fa.gz results/assemble/megahit/all.fa.gz"
 
       - name: Test workflow - Assemble (from megahit to magscot)
@@ -121,7 +122,6 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            prokaryotes__cluster__magscot
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
@@ -129,6 +129,8 @@ jobs:
             --cores 3
             --latency-wait 5
             --rerun-triggers mtime
+            prokaryotes__cluster__magscot
+
 
       - name: Clean after magscot
         uses: snakemake/snakemake-github-action@v1
@@ -140,10 +142,11 @@ jobs:
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
             --cores 1
+            --verbose
 
       - name: Test workflow - Assemble (skip drep)
         run: |
-          sudo mkdir --parents results/assemble/drep/dereplicated_genomes
+          sudo mkdir --parents results/assemble/drep/dereplicated_genomes 
           sudo touch results/assemble/drep/dereplicated_genomes/.snakemake_timestamp
           sudo bash -c "cp resources/mock_assembly.fa.gz results/assemble/drep/dereplicated_genomes/all:bin_00001.fa.gz"
 
@@ -153,7 +156,6 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            prokaryotes__quantify
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
@@ -161,6 +163,8 @@ jobs:
             --cores 3
             --latency-wait 5
             --rerun-triggers mtime
+            prokaryotes__quantify
+
 
       - name: Clean after quantify
         uses: snakemake/snakemake-github-action@v1
@@ -172,6 +176,7 @@ jobs:
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
             --cores 1
+            --verbose
 
       - name: Test workflow - Annotate (only quast)
         uses: snakemake/snakemake-github-action@v1
@@ -179,7 +184,6 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            prokaryotes__annotate__quast
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
@@ -187,6 +191,7 @@ jobs:
             --cores 3
             --latency-wait 5
             --rerun-triggers mtime
+            prokaryotes__annotate__quast
 
       - name: Clean after annotate
         uses: snakemake/snakemake-github-action@v1
@@ -198,6 +203,7 @@ jobs:
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
             --cores 1
+            --verbose
 
       - name: Test workflow - Report
         uses: snakemake/snakemake-github-action@v1
@@ -205,7 +211,6 @@ jobs:
           directory: .
           snakefile: workflow/Snakefile
           args: >
-            report
             --use-conda
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
@@ -213,6 +218,7 @@ jobs:
             --cores 3
             --latency-wait 5
             --rerun-triggers mtime
+            report
 
       - name: Clean after report
         uses: snakemake/snakemake-github-action@v1
@@ -224,6 +230,7 @@ jobs:
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
             --cores 1
+            --verbose
 
       - name: Delete everything
         run: |
