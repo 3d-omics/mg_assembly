@@ -52,12 +52,11 @@ rule prokaryotes__annotate__dram__annotate__:
         2>> {log} 1>&2
 
         parallel \
-            --jobs {threads} \
-            --retries {params.parallel_retries} \
+            --jobs $(( {threads} / 2 )) \
             DRAM.py annotate \
                 --input_fasta {{}} \
                 --output_dir {params.tmp_dir}/{{/.}} \
-                --threads 1 \
+                --threads 2 \
                 --gtdb_taxonomy {input.gtdbtk_summary} \
         ::: {input.dereplicated_genomes}/*.fa.gz \
         2>> {log} 1>&2
