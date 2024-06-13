@@ -10,11 +10,11 @@ rule viruses__annotate__checkv__:
         summary=CHECKV / "quality_summary.tsv",
         viruses=CHECKV / "viruses.fna",
     log:
-        CHECKV / "checkv.log"
+        CHECKV / "checkv.log",
     conda:
         "__environment__.yml"
     params:
-        workdir=CHECKV
+        workdir=CHECKV,
     shell:
         """
         checkv end_to_end \
