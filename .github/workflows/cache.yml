@@ -32,5 +32,6 @@ jobs:
           args: >
             --use-conda
             --conda-create-envs-only
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --cores 1

@@ -34,27 +34,27 @@ jobs:
         with:
           lfs: 'true'
 
-      - name: Set up caches
-        uses: actions/cache@v4
-        with:
-          path: |
-            .snakemake/conda
-            ~/.cache/pre-commit/
-          key: snakemake-conda
+      # - name: Set up caches
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       .snakemake/conda
+      #       ~/.cache/pre-commit/
+      #     key: snakemake-conda
 
-      - name: Download All Environments
-        uses: snakemake/snakemake-github-action@v1
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            preprocess prokaryotes report
-            --use-conda
-            --conda-frontend mamba
-            --show-failed-logs
-            --cores 3
-            --conda-cleanup-pkgs cache
-            --conda-create-envs-only
+      # - name: Download All Environments
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       preprocess prokaryotes report
+      #       --use-conda
+      #       --conda-frontend mamba
+      #       --show-failed-logs
+      #       --cores 3
+      #       --conda-cleanup-pkgs cache
+      #       --conda-create-envs-only
 
       - name: Clean conda cache
         run: conda clean --all --yes
@@ -70,10 +70,10 @@ jobs:
             preprocess__kraken2
             preprocess__samtools
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
 
       - name: Test workflow - Assemble (until megahit)
@@ -84,10 +84,10 @@ jobs:
           args: >
             assemble__megahit
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
 
       - name: Test workflow - Assemble (replace mock assembly for something more meaty)
@@ -102,10 +102,10 @@ jobs:
           args: >
             prokaryotes__cluster__magscot
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
 
@@ -123,10 +123,10 @@ jobs:
           args: >
             prokaryotes__quantify
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
 
@@ -138,10 +138,10 @@ jobs:
           args: >
             prokaryotes__annotate__quast
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
 
@@ -153,10 +153,10 @@ jobs:
           args: >
             report
             --use-conda
-            --conda-frontend mamba
+            --conda-cleanup-envs
+            --conda-cleanup-pkgs cache
             --show-failed-logs
             --cores 3
-            --conda-cleanup-pkgs cache
             --latency-wait 5
             --rerun-triggers mtime
 
