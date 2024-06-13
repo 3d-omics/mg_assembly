@@ -64,7 +64,6 @@ rule prokaryotes__annotate__gtdbtk__:
 
         cp --verbose {params.bac_tree} {output.bac_tree} 2>> {log}
 
-
         if [[ -f {params.ar_tree} ]] ; then
             cp --verbose {params.ar_tree} {output.ar_tree} 2>> {log} 1>&2
         else
