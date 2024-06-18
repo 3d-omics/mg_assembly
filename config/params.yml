@@ -2,7 +2,7 @@
 ---
 preprocess:
   fastp:
-    length_required: 75  # nonpareil requires at least 25bp
+    length_required: 25  # nonpareil requires at least 25bp
   bowtie2:  # mem_gb >= mem_host + threads * samtools_mem
     samtools_mem: 1G
 
