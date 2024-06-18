@@ -18,3 +18,13 @@ rule preprocess__samtools__stats_cram_host:
         > {output.tsv} \
         2> {log}
         """
+
+
+rule preprocess__samtools:
+    input:
+        [
+            PRE_BOWTIE2 / genome / f"{sample_id}.{library_id}.{report}"
+            for genome in HOST_NAMES
+            for sample_id, library_id in SAMPLE_LIBRARY
+            for report in BAM_REPORTS
+        ],
