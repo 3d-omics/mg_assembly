@@ -9,6 +9,7 @@ function run() {
         --profile profile/default \
         --rerun-triggers mtime \
         --cache \
+        --cores 8 \
         "$@"
 }
 
@@ -27,9 +28,11 @@ cp \
     results/assemble/megahit/all.fa.gz
 
 run \
-    --jobs 8 \
-    prokaryotes__cluster__magscot
+    prokaryotes__cluster__concoct \
+    prokaryotes__cluster__metabat2 \
+    prokaryotes__cluster__maxbin2
 
+# skip magscot 
 
 # Skip drep-related results
 mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
@@ -44,17 +47,13 @@ cp \
     results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
 
 run \
-    --jobs 8 \
     prokaryotes__quantify
 
 run \
-    --jobs 8 \
     prokaryotes__annotate__quast
 
 run \
-    --jobs 4 \
     viruses
 
 run \
-    --jobs 8 \
     report
