@@ -18,7 +18,7 @@ rule preprocess__nonpareil__:
     conda:
         "__environment__.yml"
     params:
-        prefix=compose_prefix_for_nonpareil,
+        prefix=lambda w: NONPAREIL / f"{w.sample_id}.{w.library_id}",
         forward_fq=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
     shell:
         """

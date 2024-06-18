@@ -41,24 +41,7 @@ def get_input_cram_for_host_mapping(wildcards):
     return PRE_BOWTIE2 / f"{previous_genome}" / f"{sample_id}.{library_id}.cram"
 
 
-# Kraken2 ----
-def get_kraken2_database(wildcards):
-    """Get the path to the kraken2 database to be used"""
-    return features["databases"]["kraken2"][wildcards.kraken2_db]
-
-
-def compose_out_folder_for_eval_kraken2_assign_all(wildcards):
-    """Just compose the output folder"""
-    return KRAKEN2 / wildcards.kraken2_db
-
-
-# Nonpareil ----
-def compose_prefix_for_nonpareil(wildcards):
-    """Compose prefix for nonpareil output files"""
-    return NONPAREIL / f"{wildcards.sample_id}.{wildcards.library_id}"
-
-
-# last cram files ----
+# clean ----
 def get_host_clean_cram(wildcards):
     """Get the input file that is clean from hosts"""
     last_genome = HOST_NAMES[-1]
@@ -67,22 +50,3 @@ def get_host_clean_cram(wildcards):
     if len(HOST_NAMES) == 0:
         return FASTP / f"{sample_id}.{library_id}.cram"
     return PRE_BOWTIE2 / last_genome / f"{sample_id}.{library_id}.cram"
-
-
-def get_host_clean_fastq(wildcards, forward_or_reverse):
-    """Get the input file that is clean from hosts"""
-    last_genome = HOST_NAMES[-1]
-    sample_id = wildcards.sample_id
-    library_id = wildcards.library_id
-    end = "1" if forward_or_reverse == "forward" else "2"
-    if len(HOST_NAMES) == 0:
-        return FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
-    return PRE_BOWTIE2 / last_genome / f"{sample_id}.{library_id}_{end}.fq.gz"
-
-
-def get_host_clean_fastq_forward(wildcards):
-    return get_host_clean_fastq(wildcards, "forward")
-
-
-def get_host_clean_fastq_reverse(wildcards):
-    return get_host_clean_fastq(wildcards, "reverse")
