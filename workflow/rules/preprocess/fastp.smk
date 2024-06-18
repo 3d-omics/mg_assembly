@@ -6,8 +6,6 @@ rule preprocess__fastp__:
     output:
         forward_=FASTP / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=FASTP / "{sample_id}.{library_id}_2.fq.gz",
-        unpaired1=FASTP / "{sample_id}.{library_id}_u1.fq.gz",
-        unpaired2=FASTP / "{sample_id}.{library_id}_u2.fq.gz",
         html=FASTP / "{sample_id}.{library_id}_fastp.html",
         json=FASTP / "{sample_id}.{library_id}_fastp.json",
     log:
@@ -26,8 +24,6 @@ rule preprocess__fastp__:
             --in2 {input.reverse_} \
             --out1 >(bgzip -l 9 -@ {threads} > {output.forward_}) \
             --out2 >(bgzip -l 9 -@ {threads} > {output.reverse_}) \
-            --unpaired1 >(bgzip -l 9 -@ {threads} > {output.unpaired1}) \
-            --unpaired2 >(bgzip -l 9 -@ {threads} > {output.unpaired2}) \
             --html {output.html} \
             --json {output.json} \
             --verbose \
@@ -40,13 +36,16 @@ rule preprocess__fastp__:
         """
 
 
+
+
+
 rule preprocess__fastp:
     """Get all files from fastp"""
     input:
         reads=[
             FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for end in "1 2 u1 u2".split(" ")
+            for end in "1 2".split(" ")
         ],
         json=[
             FASTP / f"{sample_id}.{library_id}_fastp.json"
