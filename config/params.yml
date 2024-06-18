@@ -14,6 +14,7 @@ assemble:
   samtools:
     mem: 1G
 
+# common both to prokaryotes and viruses
 quantify:
   samtools:
     mem: 1G
@@ -30,3 +31,7 @@ viral:
     filtering: ""  # nothing, --conservative, or --relaxed
     use_cuda: "export CUDA_VISIBLE_DEVICES=-1"  # in case you have problems with cuda and tensorflow
     extra: "--disable-nn-classification"  # leave empty if you want to use. it is here to disable it for testing
+
+prokaryotes:
+  cluster:
+    drep: "--completeness 75 --contamination --25 --P_ani 0.9 --S_ani 0.95"

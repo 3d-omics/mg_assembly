@@ -46,6 +46,7 @@ rule prokaryotes__cluster__drep__run__:
         "__environment__.yml"
     params:
         out_dir=DREP,
+        extra=params["prokaryotes"]["cluster"]["drep"],
     resources:
         attempt=get_attempt,
     # retries: 5
@@ -70,9 +71,8 @@ rule prokaryotes__cluster__drep__run__:
 
         dRep dereplicate \
             {params.out_dir} \
+            {params.extra} \
             --processors {threads} \
-            --completeness 50 \
-            --S_ani 0.9 \
             --genomes {input.genomes}/*.fa \
         2>> {log}.{resources.attempt} 1>&2
 
