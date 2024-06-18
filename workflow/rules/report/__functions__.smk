@@ -29,7 +29,7 @@ def get_stats_files_from_sample_and_library_ids(wildcards):
 
     pre_nonhost_fastqc = (
         [
-            PRE_BOWTIE2 / f"non{genome}" / f"{sample_id}.{library_id}_{end}_fastqc.zip"
+            PRE_BOWTIE2 / f"{genome}" / f"{sample_id}.{library_id}_{end}_fastqc.zip"
             for end in ["1", "2"]
             for genome in HOST_NAMES
         ]

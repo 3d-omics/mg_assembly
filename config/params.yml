@@ -26,7 +26,7 @@ quantify:
 
 prokaryotes:
   cluster:
-    drep: "--completeness 75 --contamination --25 --P_ani 0.9 --S_ani 0.95"
+    drep: "--completeness 75 --contamination 25 --P_ani 0.9 --S_ani 0.95"
 
 viral:
   genomad:

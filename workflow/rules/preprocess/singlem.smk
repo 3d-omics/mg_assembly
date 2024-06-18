@@ -1,37 +1,3 @@
-rule preprocess__singlem__fastq:
-    input:
-        cram=get_host_clean_cram,
-    output:
-        forward_=temp(SINGLEM / "fastq" / "{sample_id}.{library_id}_1.fq.gz"),
-        reverse_=temp(SINGLEM / "fastq" / "{sample_id}.{library_id}_2.fq.gz"),
-    log:
-        SINGLEM / "fastq" / "{sample_id}.{library_id}.log",
-    conda:
-        "__environment__.yml"
-    shell:
-        """
-        ( samtools view \
-            --threads {threads} \
-            -u \
-            -o /dev/stdout \
-            -f 12 \
-            {input.cram} \
-        | samtools collate \
-            -O \
-            -u \
-            -f \
-            --threads {threads} \
-            - \
-        | samtools fastq \
-            -1 {output.forward_} \
-            -2 {output.reverse_} \
-            -0 /dev/null \
-            -c 1 \
-            --threads {threads} \
-        ) 2> {log} 1>&2
-        """
-
-
 rule preprocess__singlem__pipe:
     """Run singlem over one sample
 
@@ -39,8 +5,8 @@ rule preprocess__singlem__pipe:
     passing it the non-host and trimmed ones.
     """
     input:
-        forward_=SINGLEM / "fastq" / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=SINGLEM / "fastq" / "{sample_id}.{library_id}_2.fq.gz",
+        forward_=CLEAN / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=CLEAN / "{sample_id}.{library_id}_2.fq.gz",
         data=features["databases"]["singlem"],
     output:
         archive_otu_table=SINGLEM / "pipe" / "{sample_id}.{library_id}.archive.json",
@@ -93,8 +59,8 @@ rule preprocess__singlem__condense:
 rule preprocess__singlem__microbial_fraction:
     """Run singlem microbial_fraction over one sample"""
     input:
-        forward_=SINGLEM / "fastq" / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=SINGLEM / "fastq" / "{sample_id}.{library_id}_2.fq.gz",
+        forward_=CLEAN / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=CLEAN / "{sample_id}.{library_id}_2.fq.gz",
         data=features["databases"]["singlem"],
         condense=SINGLEM / "pipe" / "{sample_id}.{library_id}.condense.tsv",
     output:

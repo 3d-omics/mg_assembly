@@ -2,8 +2,8 @@ rule prokaryotes__quantify__bowtie2__:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=QUANT_INDEX / "dereplicated_genomes",
-        forward_=get_host_clean_fastq_forward,
-        reverse_=get_host_clean_fastq_reverse,
+        forward_=CLEAN / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=CLEAN / "{sample_id}.{library_id}_2.fq.gz",
         reference=DREP / "dereplicated_genomes.fa.gz",
         fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:

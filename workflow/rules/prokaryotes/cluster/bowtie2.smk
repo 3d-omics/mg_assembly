@@ -2,8 +2,8 @@ rule prokaryotes__cluster__bowtie2__:
     """Map one sample to one megahit assembly"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
-        forward_=get_host_clean_fastq_forward,
-        reverse_=get_host_clean_fastq_reverse,
+        forward_=CLEAN / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=CLEAN / "{sample_id}.{library_id}_2.fq.gz",
         reference=MEGAHIT / "{assembly_id}.fa.gz",
         fai=MEGAHIT / "{assembly_id}.fa.gz.fai",
     output:

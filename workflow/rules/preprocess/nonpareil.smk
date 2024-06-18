@@ -7,7 +7,7 @@ rule preprocess__nonpareil__:
     empty files
     """
     input:
-        cram=get_host_clean_cram,
+        CLEAN / "{sample_id}.{library_id}_1.fq.gz",
     output:
         npa=touch(NONPAREIL / "run" / "{sample_id}.{library_id}.npa"),
         npc=touch(NONPAREIL / "run" / "{sample_id}.{library_id}.npc"),
@@ -22,14 +22,7 @@ rule preprocess__nonpareil__:
         forward_fq=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
     shell:
         """
-        samtools fastq \
-            --threads {threads} \
-            -1 {params.forward_fq} \
-            -2 /dev/null \
-            -0 /dev/null \
-            -f 12 \
-            {input.cram} \
-        2> {log} 1>&2
+        gzip --decompress --stdout {input} > {params.forward_fq} 2>> {log} 1>&2
 
         nonpareil \
             -s {params.forward_fq} \

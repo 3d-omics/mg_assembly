@@ -6,6 +6,7 @@ include: "kraken2.smk"
 include: "nonpareil.smk"
 include: "samtools.smk"
 include: "singlem.smk"
+include: "clean.smk"
 
 
 rule preprocess:
@@ -15,3 +16,4 @@ rule preprocess:
         rules.preprocess__kraken2.input,
         rules.preprocess__nonpareil.output,
         rules.preprocess__singlem.input,
+        rules.preprocess__clean.input,

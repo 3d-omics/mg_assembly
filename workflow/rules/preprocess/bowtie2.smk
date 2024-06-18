@@ -42,7 +42,6 @@ rule preprocess__bowtie2__:
     Output SAM file is piped to samtools sort to generate a CRAM file.
     """
     input:
-        # bam=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.bam",
         forward_=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}_2.fq.gz",
         mock=multiext(
@@ -84,54 +83,6 @@ rule preprocess__bowtie2__:
             -T {output.cram} \
             -m {params.samtools_mem} \
             -o {output.cram} \
-        ) 2> {log} 1>&2
-        """
-
-
-rule preprocess__bowtie2__extract_nonhost__:
-    """
-    Keep only pairs unmapped to the human reference genome, sort by name rather
-    than by coordinate, and convert to FASTQ.
-    """
-    input:
-        cram=PRE_BOWTIE2 / "{genome}" / "{sample_id}.{library_id}.cram",
-        reference=HOSTS / "{genome}.fa.gz",
-        fai=HOSTS / "{genome}.fa.gz.fai",
-    output:
-        forward_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}_2.fq.gz",
-    log:
-        PRE_BOWTIE2 / "non{genome}" / "{sample_id}.{library_id}.log",
-    conda:
-        "__environment__.yml"
-    params:
-        samtools_mem=params["preprocess"]["bowtie2"]["samtools_mem"],
-    threads: 24
-    resources:
-        runtime=1 * 60,
-        mem_mb=32 * 1024,
-    shell:
-        """
-        ( samtools view \
-            --reference {input.reference} \
-            --threads {threads} \
-            -u \
-            -o /dev/stdout \
-            -f 12 \
-            {input.cram} \
-        | samtools collate \
-            -O \
-            -u \
-            -f \
-            --reference {input.reference} \
-            -@ {threads} \
-            - \
-        | samtools fastq \
-            -1 >(pigz > {output.forward_}) \
-            -2 >(pigz > {output.reverse_}) \
-            -0 /dev/null \
-            -c 9 \
-            --threads {threads} \
         ) 2> {log} 1>&2
         """
 
