@@ -1,4 +1,4 @@
-rule preprocess__nonpareil__run__:
+rule preprocess__nonpareil__:
     """Run nonpareil over one sample
 
     Note: Nonpareil only ask for one of the pair-end reads
@@ -7,7 +7,7 @@ rule preprocess__nonpareil__run__:
     empty files
     """
     input:
-        forward_=get_final_forward_from_pre,
+        cram=get_host_clean_cram,
     output:
         npa=touch(NONPAREIL / "run" / "{sample_id}.{library_id}.npa"),
         npc=touch(NONPAREIL / "run" / "{sample_id}.{library_id}.npc"),
@@ -18,42 +18,42 @@ rule preprocess__nonpareil__run__:
     conda:
         "__environment__.yml"
     params:
-        prefix=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}",
-        reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
+        prefix=compose_prefix_for_nonpareil,
+        forward_fq=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
     shell:
         """
-        gzip \
-            --decompress \
-            --stdout \
-            --verbose \
-            {input.forward_} \
-        > {params.reads} 2> {log}
+        samtools fastq \
+            --threads {threads} \
+            -1 {params.forward_fq} \
+            -2 /dev/null \
+            -0 /dev/null \
+            -f 12 \
+            {input.cram} \
+        2> {log} 1>&2
 
         nonpareil \
-            -s {params.reads} \
+            -s {params.forward_fq} \
             -T kmer \
             -b {params.prefix} \
             -f fastq \
             -t {threads} \
-        2>> {log} 1>&2
+        2>> {log} \
+        1>&2 || true
 
-        rm \
-            --force \
-            --verbose \
-            {params.reads} \
-        2>> {log} 1>&2
+        rm --force --verbose {params.forward_fq} 2>> {log} 1>&2
         """
 
 
-rule preprocess__nonpareil__aggregate__:
+rule preprocess__nonpareil:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [
-            NONPAREIL / "run" / f"{sample_id}.{library_id}.npo"
+            NONPAREIL / "run" / f"{sample_id}.{library_id}.{suffix}"
             for sample_id, library_id in SAMPLE_LIBRARY
+            for suffix in ["npa", "npc", "npl", "npo"]
         ],
     output:
-        NONPAREIL / "nonpareil.tsv.gz",
+        NONPAREIL / "nonpareil.tsv",
     log:
         NONPAREIL / "nonpareil.log",
     conda:
@@ -67,8 +67,3 @@ rule preprocess__nonpareil__aggregate__:
             --output-file {output} \
         2> {log} 1>&2
         """
-
-
-rule preprocess__nonpareil:
-    input:
-        rules.preprocess__nonpareil__aggregate__.output,

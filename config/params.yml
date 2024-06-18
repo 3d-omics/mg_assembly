@@ -2,11 +2,9 @@
 ---
 preprocess:
   fastp:
-    length_required: 25  # nonpareil requires at least 25bp
-    extra: "--trim_poly_g --trim_poly_x"
-  bowtie2:
-    samtools:
-      mem_per_thread: 1G
+    length_required: 75  # nonpareil requires at least 25bp
+  bowtie2:  # mem_gb >= mem_host + threads * samtools_mem
+    samtools_mem: 1G
 
 assemble:
   megahit:
@@ -16,22 +14,22 @@ assemble:
 
 # common both to prokaryotes and viruses
 quantify:
-  samtools:
-    mem: 1G
-  coverm:
+  bowtie2:
+    samtools_mem: 1G
+  coverm:   # https://github.com/wwood/CoverM#calculation-methods
     genome:
-      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
+      methods: ["count", "covered_bases", "length"]
       min_covered_fraction: 0.0
       separator: "@"
     contig:
-      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
+      methods: ["count", "covered_bases", "length"]
+
+prokaryotes:
+  cluster:
+    drep: "--completeness 75 --contamination --25 --P_ani 0.9 --S_ani 0.95"
 
 viral:
   genomad:
     filtering: ""  # nothing, --conservative, or --relaxed
     use_cuda: "export CUDA_VISIBLE_DEVICES=-1"  # in case you have problems with cuda and tensorflow
     extra: "--disable-nn-classification"  # leave empty if you want to use. it is here to disable it for testing
-
-prokaryotes:
-  cluster:
-    drep: "--completeness 75 --contamination --25 --P_ani 0.9 --S_ani 0.95"

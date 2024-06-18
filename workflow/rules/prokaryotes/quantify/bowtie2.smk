@@ -2,8 +2,8 @@ rule prokaryotes__quantify__bowtie2__:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=QUANT_INDEX / "dereplicated_genomes",
-        forward_=get_final_forward_from_pre,
-        reverse_=get_final_reverse_from_pre,
+        forward_=get_host_clean_fastq_forward,
+        reverse_=get_host_clean_fastq_reverse,
         reference=DREP / "dereplicated_genomes.fa.gz",
         fai=DREP / "dereplicated_genomes.fa.gz.fai",
     output:
@@ -13,7 +13,7 @@ rule prokaryotes__quantify__bowtie2__:
     conda:
         "__environment__.yml"
     params:
-        samtools_mem=params["quantify"]["samtools"]["mem"],
+        samtools_mem=params["quantify"]["bowtie2"]["samtools_mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     shell:
