@@ -3,13 +3,13 @@ set -euo pipefail
 
 rm -rf results reports
 
-function run() { 
+function run() {
     snakemake \
         --use-conda \
         --profile profile/default \
         --rerun-triggers mtime \
         --cache \
-        "$@" 
+        "$@"
 }
 
 run \
@@ -29,7 +29,7 @@ cp \
 run \
     --jobs 8 \
     prokaryotes__cluster__magscot
-    
+
 
 # Skip drep-related results
 mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
