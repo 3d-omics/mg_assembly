@@ -12,8 +12,7 @@ def get_stats_files_from_sample_and_library_ids(wildcards):
     ]
 
     pre_fastp_fastqc = [
-        FASTP / f"{sample_id}.{library_id}_{end}_fastqc.zip"
-        for end in ["1", "2"]
+        FASTP / f"{sample_id}.{library_id}_{end}_fastqc.zip" for end in ["1", "2"]
     ]
 
     pre_fastp_html = FASTP / f"{sample_id}.{library_id}_fastp.html"

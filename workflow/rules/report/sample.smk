@@ -1,12 +1,10 @@
 rule report__sample__multiqc__:
     input:
         reads_fastqc=lambda w: [
-            READS / f"{w.sample_id}.{w.library_id}_{end}_fastqc.zip"
-            for end in [1, 2]
-        ], 
+            READS / f"{w.sample_id}.{w.library_id}_{end}_fastqc.zip" for end in [1, 2]
+        ],
         pre_fastp_fastqc=lambda w: [
-            FASTP / f"{w.sample_id}.{w.library_id}_{end}_fastqc.zip"
-            for end in [1, 2]
+            FASTP / f"{w.sample_id}.{w.library_id}_{end}_fastqc.zip" for end in [1, 2]
         ],
         pre_fastp_html=FASTP / "{sample_id}.{library_id}_fastp.json",
         bowtie2=lambda w: [

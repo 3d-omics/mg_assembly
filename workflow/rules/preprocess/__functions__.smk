@@ -83,5 +83,6 @@ def get_host_clean_fastq(wildcards, forward_or_reverse):
 def get_host_clean_fastq_forward(wildcards):
     return get_host_clean_fastq(wildcards, "forward")
 
+
 def get_host_clean_fastq_reverse(wildcards):
     return get_host_clean_fastq(wildcards, "reverse")

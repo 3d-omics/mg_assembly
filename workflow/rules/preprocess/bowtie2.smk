@@ -88,7 +88,6 @@ rule preprocess__bowtie2__:
         """
 
 
-
 rule preprocess__bowtie2__extract_nonhost__:
     """
     Keep only pairs unmapped to the human reference genome, sort by name rather
