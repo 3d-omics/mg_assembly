@@ -32,7 +32,7 @@ run \
     prokaryotes__cluster__metabat2 \
     prokaryotes__cluster__maxbin2
 
-# skip magscot 
+# skip magscot
 
 # Skip drep-related results
 mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
