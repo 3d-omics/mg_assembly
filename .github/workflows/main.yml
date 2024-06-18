@@ -56,8 +56,8 @@ jobs:
       #       --conda-cleanup-pkgs cache
       #       --conda-create-envs-only
 
-      - name: Clean conda cache
-        run: conda clean --all --yes
+      # - name: Clean conda cache
+      #   run: conda clean --all --yes
 
       - name: Test workflow - Preprocess
         uses: snakemake/snakemake-github-action@v1
@@ -73,6 +73,7 @@ jobs:
             preprocess__fastp
             preprocess__kraken2
             preprocess__samtools
+            report__step__preprocess
 
       - name: Clean after preprocess
         uses: snakemake/snakemake-github-action@v1
@@ -160,6 +161,7 @@ jobs:
             --cores 3
             --latency-wait 5
             prokaryotes__quantify
+            report__step__quantify
 
 
       - name: Clean after quantify

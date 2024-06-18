@@ -15,8 +15,7 @@ function run() {
 
 run \
     --jobs 8 \
-    preprocess__kraken2 \
-    preprocess__samtools \
+    report__step__preprocess \
     assemble__megahit
 
 # generate mock assembly
@@ -47,7 +46,8 @@ cp \
     results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
 
 run \
-    prokaryotes__quantify
+    prokaryotes__quantify \
+    report__step__quantify
 
 run \
     prokaryotes__annotate__quast
