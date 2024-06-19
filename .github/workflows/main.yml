@@ -42,6 +42,9 @@ jobs:
       #       ~/.cache/pre-commit/
       #     key: snakemake-conda
 
+      - name: Set up strict channels
+        run: conda config --set channel_priority strict
+
       - name: Download All Environments
         uses: snakemake/snakemake-github-action@v1
         with:
@@ -58,9 +61,6 @@ jobs:
 
       - name: Clean conda cache
         run: conda clean --all --yes
-
-      - name: Set up strict channels
-        run: conda config --set channel_priority strict
 
       - name: Test workflow - Preprocess and Assemble
         uses: snakemake/snakemake-github-action@v1
