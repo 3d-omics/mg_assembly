@@ -66,6 +66,7 @@ jobs:
           snakefile: workflow/Snakefile
           args: >
             --use-conda
+            --profile profile/default
             --show-failed-logs
             --cores 3
             --latency-wait 5
@@ -93,6 +94,7 @@ jobs:
           snakefile: workflow/Snakefile
           args: >
             --use-conda
+            --profile profile/default
             --show-failed-logs
             --cores 3
             --latency-wait 5
@@ -122,6 +124,7 @@ jobs:
           snakefile: workflow/Snakefile
           args: >
             --use-conda
+            --profile profile/default
             --rerun-triggers mtime
             --show-failed-logs
             --cores 3
@@ -137,6 +140,7 @@ jobs:
           snakefile: workflow/Snakefile
           args: >
             --use-conda
+            --profile profile/default
             --conda-cleanup-envs
             --conda-cleanup-pkgs cache
             --cores 1
@@ -156,6 +160,7 @@ jobs:
           snakefile: workflow/Snakefile
           args: >
             --use-conda
+            --profile profile/default
             --rerun-triggers mtime
             --show-failed-logs
             --cores 3
@@ -183,6 +188,7 @@ jobs:
           snakefile: workflow/Snakefile
           args: >
             --use-conda
+            --profile profile/default
             --rerun-triggers mtime
             --show-failed-logs
             --cores 3
@@ -208,6 +214,7 @@ jobs:
           snakefile: workflow/Snakefile
           args: >
             --use-conda
+            --profile profile/default
             --rerun-triggers mtime
             --show-failed-logs
             --cores 3
