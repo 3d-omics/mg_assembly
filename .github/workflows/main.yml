@@ -62,10 +62,6 @@ jobs:
       - name: Set up strict channels
         run: conda config --set channel_priority strict
 
-      - name: Clean conda stuff
-        run:
-          sudo rm -rf .snakemake/conda
-
       - name: Test workflow - Preprocess and Assemble
         uses: snakemake/snakemake-github-action@v1
         with:
@@ -95,11 +91,6 @@ jobs:
       #       --conda-cleanup-pkgs cache
       #       --cores 1
 
-      - name: Clean conda stuff
-        run:
-          sudo rm -rf .snakemake/conda
-
-
       - name: Test workflow - Assemble (replace mock assembly for something more meaty)
         run: |
           sudo mkdir --parents results/assemble/megahit
@@ -119,11 +110,6 @@ jobs:
             --latency-wait 5
             prokaryotes__cluster__metabat2
             prokaryotes__cluster__maxbin2
-            prokaryotes__cluster__concoct
-
-      - name: Clean conda stuff
-        run:
-          sudo rm -rf .snakemake/conda
 
       - name: Test workflow - Skip magscot and drep
         run: |
@@ -147,10 +133,6 @@ jobs:
             prokaryotes__quantify
             report__step__prokaryotes
 
-      - name: Clean conda stuff
-        run:
-          sudo rm -rf .snakemake/conda
-
       - name: Test workflow - Annotate (only quast)
         uses: snakemake/snakemake-github-action@v1
         with:
@@ -164,10 +146,6 @@ jobs:
             --cores 3
             --latency-wait 5
             prokaryotes__annotate__quast
-
-      - name: Clean conda stuff
-        run:
-          sudo rm -rf .snakemake/conda
 
       - name: Delete everything
         run: |
