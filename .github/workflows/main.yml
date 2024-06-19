@@ -59,6 +59,9 @@ jobs:
       # - name: Clean conda cache
       #   run: conda clean --all --yes
 
+      - name: Set up strict channels
+        run: conda config --set channel_priority strict
+
       - name: Clean conda stuff
         run:
           sudo rm -rf .snakemake/conda
