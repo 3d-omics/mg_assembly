@@ -166,7 +166,7 @@ jobs:
             --cores 3
             --latency-wait 5
             prokaryotes__quantify
-            report__step__quantify
+            report__step__prokaryotes
 
 
       - name: Clean after quantify
