@@ -46,8 +46,6 @@ rule preprocess__fastp__import__:
         FASTP / "{sample_id}.{library_id}.cram.log",
     conda:
         "__environment__.yml"
-    group:
-        "sample"
     shell:
         """
         samtools import \
