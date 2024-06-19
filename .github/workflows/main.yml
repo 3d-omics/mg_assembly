@@ -42,22 +42,22 @@ jobs:
       #       ~/.cache/pre-commit/
       #     key: snakemake-conda
 
-      # - name: Download All Environments
-      #   uses: snakemake/snakemake-github-action@v1
-      #   with:
-      #     directory: .
-      #     snakefile: workflow/Snakefile
-      #     args: >
-      #       preprocess prokaryotes report
-      #       --use-conda
-      #       --conda-frontend mamba
-      #       --show-failed-logs
-      #       --cores 3
-      #       --conda-cleanup-pkgs cache
-      #       --conda-create-envs-only
+      - name: Download All Environments
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --conda-frontend mamba
+            --show-failed-logs
+            --cores 3
+            --conda-cleanup-pkgs cache
+            --conda-create-envs-only
+            all
 
-      # - name: Clean conda cache
-      #   run: conda clean --all --yes
+      - name: Clean conda cache
+        run: conda clean --all --yes
 
       - name: Set up strict channels
         run: conda config --set channel_priority strict
