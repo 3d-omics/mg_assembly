@@ -62,7 +62,7 @@ jobs:
       - name: Clean conda stuff
         run:
           sudo rm -rf .snakemake/conda
-      
+
       - name: Test workflow - Preprocess and Assemble
         uses: snakemake/snakemake-github-action@v1
         with:
@@ -95,7 +95,7 @@ jobs:
       - name: Clean conda stuff
         run:
           sudo rm -rf .snakemake/conda
-      
+
 
       - name: Test workflow - Assemble (replace mock assembly for something more meaty)
         run: |
@@ -121,7 +121,7 @@ jobs:
       - name: Clean conda stuff
         run:
           sudo rm -rf .snakemake/conda
-      
+
       - name: Test workflow - Skip magscot and drep
         run: |
           sudo mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
@@ -165,7 +165,7 @@ jobs:
       - name: Clean conda stuff
         run:
           sudo rm -rf .snakemake/conda
-      
+
       - name: Delete everything
         run: |
           sudo find results -not -name "*.log" -type f -delete -print
