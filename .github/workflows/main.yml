@@ -14,7 +14,7 @@ env:
 jobs:
 
   Pre-Commit:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,7 +25,7 @@ jobs:
           extra_args: --all-files
 
   Testing:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # ubuntu-latest
     needs:
       - Pre-Commit
     steps:
