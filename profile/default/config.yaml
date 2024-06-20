@@ -13,7 +13,7 @@ set-threads:
     preprocess__fastp__: 24
     preprocess__index__: 24
     preprocess__bowtie2__: 24
-    preprocess__kraken2__: 8
+    preprocess__kraken2__assign__: 8
     preprocess__bowtie2__cram_to_fastq__: 24
     assemble__megahit__: 24
     prokaryotes__cluster__index__: 24
@@ -54,7 +54,7 @@ set-resources:
     preprocess__bowtie2__:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    preprocess__kraken2__:
+    preprocess__kraken2__assign__:
         mem_mb: 500G
         runtime: 1d
     preprocess__nonpareil__:
