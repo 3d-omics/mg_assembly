@@ -9,3 +9,4 @@ dependencies:
   - conda-forge::gsl=2.7
   - conda-forge::libopenblas=0.3.24=openmp_h2e9423c_0  # If you want it to parallelize properly
   - pigz=2.8
+  - scikit-learn ==1.1.3

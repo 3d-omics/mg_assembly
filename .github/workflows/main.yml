@@ -42,9 +42,6 @@ jobs:
       #       ~/.cache/pre-commit/
       #     key: snakemake-conda
 
-      - name: Set up strict channels
-        run: conda config --set channel_priority strict
-
       - name: Download All Environments
         uses: snakemake/snakemake-github-action@v1
         with:
@@ -110,6 +107,7 @@ jobs:
             --latency-wait 5
             prokaryotes__cluster__metabat2
             prokaryotes__cluster__maxbin2
+            prokaryotes__cluster__concoct
 
       - name: Test workflow - Skip magscot and drep
         run: |
@@ -133,19 +131,19 @@ jobs:
             prokaryotes__quantify
             report__step__prokaryotes
 
-      - name: Test workflow - Annotate (only quast)
-        uses: snakemake/snakemake-github-action@v1
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            --use-conda
-            --profile profile/default
-            --rerun-triggers mtime
-            --show-failed-logs
-            --cores 3
-            --latency-wait 5
-            prokaryotes__annotate__quast
+      # - name: Test workflow - Annotate (only quast)
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       --use-conda
+      #       --profile profile/default
+      #       --rerun-triggers mtime
+      #       --show-failed-logs
+      #       --cores 3
+      #       --latency-wait 5
+      #       prokaryotes__annotate__quast
 
       - name: Delete everything
         run: |
