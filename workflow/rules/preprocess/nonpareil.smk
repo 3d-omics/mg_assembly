@@ -22,7 +22,12 @@ rule preprocess__nonpareil__:
         forward_fq=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
     shell:
         """
-        gzip --decompress --stdout {input} > {params.forward_fq} 2>> {log} 1>&2
+        gzip \
+            --decompress \
+            --stdout \
+            {input} \
+        > {params.forward_fq} \
+        2> {log}
 
         nonpareil \
             -s {params.forward_fq} \
@@ -33,7 +38,11 @@ rule preprocess__nonpareil__:
         2>> {log} \
         1>&2 || true
 
-        rm --force --verbose {params.forward_fq} 2>> {log} 1>&2
+        rm \
+            --force \
+            --verbose \
+            {params.forward_fq} \
+        2>> {log} 1>&2
         """
 
 
