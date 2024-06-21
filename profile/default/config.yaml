@@ -62,7 +62,7 @@ set-resources:
     preprocess__singlem__pipe__:
         runtime: 2d
         mem_mb: 16G
-    preprocess__singlem__condense:
+    preprocess__singlem__condense__:
         runtime: 6h
     preprocess__bowtie2__cram_to_fastq__:
         mem_mb: 32G
