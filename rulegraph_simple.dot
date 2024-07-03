@@ -81,7 +81,7 @@ digraph snakemake_dag {
             dram    [label = "DRAM",     color = "0.01 0.6 0.85",    style = "rounded"];
             checkm  [label = "CheckM2",  color = "0.35 0.44 0.72"];
             quast   [label = "QUAST",    color = "0.76 0.55 0.22"];
-
+            
             gtdbtk -> dram
 
         }
@@ -134,9 +134,10 @@ digraph snakemake_dag {
             virsorter2  [label = "VirSorter2",   color = green];
             dramv      [label = "DRAM-V",      color = green];
             quastv     [label = "QUAST",       color = "0.76 0.55 0.22"];
+            checkv  [label = "CheckV",   color = "0.76 0.55 0.22"];
 
             genomad2 -> virsorter2 -> dramv
-
+            mmseqs2 -> checkv
         }
 
         mmseqs2 -> genomad2
