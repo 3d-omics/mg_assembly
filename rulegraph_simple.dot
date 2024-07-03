@@ -81,7 +81,7 @@ digraph snakemake_dag {
             dram    [label = "DRAM",     color = "0.01 0.6 0.85",    style = "rounded"];
             checkm  [label = "CheckM2",  color = "0.35 0.44 0.72"];
             quast   [label = "QUAST",    color = "0.76 0.55 0.22"];
-            
+
             gtdbtk -> dram
 
         }

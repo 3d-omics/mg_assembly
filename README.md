@@ -10,13 +10,13 @@ A Snakemake workflow for Genome Resolved Metagenomics
 - Mapping of preprocessed reads against the host(s) with `bowtie2`. Skip if no host is provided.
 - Assembly-free statistics with `kraken2`, `nonpareil` and `singlem`.
 - Assembly of non-host reads with `megahit`.
-- Bacterial metagenomics: 
+- Bacterial metagenomics:
   - Binning with CONCOCT, Maxbin2, MetaBAT2, and aggregated with MAGScoT.
   - Dereplication with `dRep`
   - Quantification with `bowtie2` and `coverm`
   - Annotation with `quast`, `gtdbtk` and `dram`
 - Viral metagenomics:
-  - Identification and clustering with `genomad`, 
+  - Identification and clustering with `genomad`,
 - Reporting with `samtools`, `fastqc` and `multiqc`
 
 
@@ -86,7 +86,7 @@ A Snakemake workflow for Genome Resolved Metagenomics
 
 
 6. Output:
-  
+
     The main outputs are:
     1. `results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz`: all the assembled MAGs.
     2. `results/prokaryotes/annotate/`: the different annotations.
