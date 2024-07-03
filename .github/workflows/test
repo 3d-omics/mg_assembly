@@ -47,13 +47,13 @@ cp \
 
 run \
     prokaryotes__quantify \
-    report__step__quantify
+    report__step__prokaryotes
 
-run \
-    prokaryotes__annotate__quast
+# run \
+#     prokaryotes__annotate__quast
 
-run \
-    viruses
+# run \
+#     viruses
 
-run \
-    report
+# run \
+#     report
