@@ -16,8 +16,11 @@ A Snakemake workflow for Genome Resolved Metagenomics
   - Quantification with `bowtie2` and `coverm`
   - Annotation with `quast`, `gtdbtk` and `dram`
 - Viral metagenomics:
-  - Identification and clustering with `genomad`,
-- Reporting with `samtools`, `fastqc` and `multiqc`
+  - Identification and clustering with `genomad`
+  - Clustering with `bbmap` and `mmseqs`.
+  - Quantification with `bowtie2` and `coverm`.
+  - Annotation with `dram`, `virsorter2`, `checkv` and `quast`.
+- Reporting with `samtools`, `fastqc` and `multiqc`.
 
 
 
@@ -61,7 +64,7 @@ A Snakemake workflow for Genome Resolved Metagenomics
       pfam_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_Pfam-A.hmm.gz
       tigr_hmm: workflow/scripts/MAGScoT/hmm/gtdbtk_rel207_tigrfam.hmm.gz
 
-    databases:  # The pipeline does not provide or generate them
+    databases:  # The pipeline does not provide or generate them. There are scripts tho.
       checkm2: resources/databases/checkm2/20210323/uniref100.KO.1.dmnd
       checkv: resources/databases/checkv/20230320/checkv-db-v1.5/
       dram: resources/databases/dram/20230811
@@ -91,7 +94,7 @@ A Snakemake workflow for Genome Resolved Metagenomics
     1. `results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz`: all the assembled MAGs.
     2. `results/prokaryotes/annotate/`: the different annotations.
     3. `results/prokaryotes/quantify/`: MAG and contig-wise quantifications.
-    4. There is an experimental pipeline for viral identification with a similar structure. Seel below.
+    4. There is an experimental pipeline for viral identification with a similar structure. See below. The results are in `results/viruses/`.
     5. MultiQC html reports and tables in `reports`, step and sample-wise.
 
 
