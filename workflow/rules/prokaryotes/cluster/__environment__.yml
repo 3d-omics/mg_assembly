@@ -1,7 +1,6 @@
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - biopython =1.83
   - bowtie2 =2.5.3
