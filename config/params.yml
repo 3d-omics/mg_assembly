@@ -27,13 +27,13 @@ quantify:
 prokaryotes:
   annotate:
     drep:
-      secondary_anis: 
+      secondary_anis:
         - 0.95
         - 0.98
         - 0.99
       minimum_completeness: 75
       maximum_contamination: 25
-    dram: 
+    dram:
       annotate:
         min_contig_size: 1500
 

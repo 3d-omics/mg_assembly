@@ -5,7 +5,7 @@ rule prokaryotes__annotate__checkm2__:
         db=features["databases"]["checkm2"],
     output:
         report=PROK_ANN / "checkm2.quality_report.tsv",
-        tmp_dir = temp(directory(PROK_ANN / "checkm2.quality_report"))
+        tmp_dir=temp(directory(PROK_ANN / "checkm2.quality_report")),
     log:
         PROK_ANN / "quality_report.log",
     conda:

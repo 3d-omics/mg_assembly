@@ -47,7 +47,9 @@ rule prokaryotes__annotate__dram__annotate__:
     conda:
         "__environment__.yml"
     params:
-        min_contig_size=params["prokaryotes"]["annotate"]["dram"]["annotate"]["min_contig_size"],
+        min_contig_size=params["prokaryotes"]["annotate"]["dram"]["annotate"][
+            "min_contig_size"
+        ],
     shell:
         """
         rm -rf {params.work_dir}

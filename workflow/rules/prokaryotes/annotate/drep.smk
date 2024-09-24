@@ -37,8 +37,12 @@ rule prokaryotes__annotate__drep__dereplicate__:
         "__environment__.yml"
     params:
         secondary_ani=lambda w: w.secondary_ani,
-        minimum_completeness=params["prokaryotes"]["annotate"]["drep"]["minimum_completeness"],
-        maximum_contamination=params["prokaryotes"]["annotate"]["drep"]["maximum_contamination"],
+        minimum_completeness=params["prokaryotes"]["annotate"]["drep"][
+            "minimum_completeness"
+        ],
+        maximum_contamination=params["prokaryotes"]["annotate"]["drep"][
+            "maximum_contamination"
+        ],
     shell:
         """
         dRep dereplicate \
@@ -93,7 +97,6 @@ rule prokaryotes__annotate__drep__tarball__:
             {input.work_dir} \
         2>> {log} 1>&2
         """
-
 
 
 rule prokaryotes__annotate__drep:

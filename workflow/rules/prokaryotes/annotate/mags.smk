@@ -24,5 +24,6 @@ checkpoint prokaryotes__annotate__mags__:
         ) >> {log} 2>&1
         """
 
+
 localrules:
     prokaryotes__annotate__mags__,

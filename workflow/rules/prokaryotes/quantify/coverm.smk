@@ -2,15 +2,25 @@ rule prokaryotes__quantify__coverm__genome__:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         cram=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram",
-        crai=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram.crai",
+        crai=QUANT_BOWTIE2
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.cram.crai",
         reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
-        fai=PROK_ANN/ "drep.{secondary_ani}" / "dereplicated_genomes.fa.gz.fai",
+        fai=PROK_ANN / "drep.{secondary_ani}" / "dereplicated_genomes.fa.gz.fai",
     output:
-        tsv=COVERM / "genome" / "{method}" / "drep.{secondary_ani}" / "{sample_id}.{library_id}.tsv.gz",
+        tsv=COVERM
+        / "genome"
+        / "{method}"
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.tsv.gz",
     conda:
         "__environment__.yml"
     log:
-        COVERM / "genome" / "{method}" / "drep.{secondary_ani}" / "{sample_id}.{library_id}.log",
+        COVERM
+        / "genome"
+        / "{method}"
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
         min_covered_fraction=params["quantify"]["coverm"]["genome"][
@@ -71,15 +81,25 @@ rule prokaryotes__quantify__coverm__contig__:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         cram=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram",
-        crai=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram.crai",
+        crai=QUANT_BOWTIE2
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.cram.crai",
         reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
         fai=PROK_ANN / "drep.{secondary_ani}.fa.gz.fai",
     output:
-        tsv=COVERM / "contig" / "{method}" / "drep.{secondary_ani}" / "{sample_id}.{library_id}.tsv.gz",
+        tsv=COVERM
+        / "contig"
+        / "{method}"
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.tsv.gz",
     conda:
         "__environment__.yml"
     log:
-        COVERM / "contig" / "{method}" / "drep.{secondary_ani}" / "{sample_id}.{library_id}.log",
+        COVERM
+        / "contig"
+        / "{method}"
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
     shell:

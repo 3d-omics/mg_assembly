@@ -73,4 +73,3 @@ rule prokaryotes__annotate__gtdbtk__join_bac_and_ar__:
 rule prokaryotes__annotate__gtdbtk:
     input:
         rules.prokaryotes__annotate__gtdbtk__join_bac_and_ar__.output,
-
