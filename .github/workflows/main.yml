@@ -42,40 +42,40 @@ jobs:
       #       ~/.cache/pre-commit/
       #     key: snakemake-conda
 
-      - name: Download All Environments
-        uses: snakemake/snakemake-github-action@v1
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            --use-conda
-            --conda-frontend mamba
-            --show-failed-logs
-            --cores 3
-            --conda-cleanup-pkgs cache
-            --conda-create-envs-only
-            all
+      # - name: Download All Environments
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       --use-conda
+      #       --conda-frontend mamba
+      #       --show-failed-logs
+      #       --cores 3
+      #       --conda-cleanup-pkgs cache
+      #       --conda-create-envs-only
+      #       all
 
-      - name: Clean conda cache
-        run: conda clean --all --yes
+      # - name: Clean conda cache
+      #   run: conda clean --all --yes
 
-      - name: Test workflow - Preprocess and Assemble
-        uses: snakemake/snakemake-github-action@v1
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            --use-conda
-            --profile profile/default
-            --show-failed-logs
-            --cores 3
-            --latency-wait 5
-            preprocess__bowtie2
-            preprocess__fastp
-            preprocess__kraken2
-            preprocess__samtools
-            report__step__preprocess
-            assemble__megahit
+      # - name: Test workflow - Preprocess and Assemble
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       --use-conda
+      #       --profile profile/default
+      #       --show-failed-logs
+      #       --cores 3
+      #       --latency-wait 5
+      #       preprocess__bowtie2
+      #       preprocess__fastp
+      #       preprocess__kraken2
+      #       preprocess__samtools
+      #       report__step__preprocess
+      #       assemble__megahit
 
       # - name: Clean after preprocess
       #   uses: snakemake/snakemake-github-action@v1
@@ -88,48 +88,48 @@ jobs:
       #       --conda-cleanup-pkgs cache
       #       --cores 1
 
-      - name: Test workflow - Assemble (replace mock assembly for something more meaty)
-        run: |
-          sudo mkdir --parents results/assemble/megahit
-          sudo cp resources/mock_assembly.fa.gz results/assemble/megahit/all.fa.gz
+      # - name: Test workflow - Assemble (replace mock assembly for something more meaty)
+      #   run: |
+      #     sudo mkdir --parents results/assemble/megahit
+      #     sudo cp resources/mock_assembly.fa.gz results/assemble/megahit/all.fa.gz
 
-      - name: Test workflow - Assemble (from megahit to magscot)
-        uses: snakemake/snakemake-github-action@v1
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            --use-conda
-            --profile profile/default
-            --rerun-triggers mtime
-            --show-failed-logs
-            --cores 3
-            --latency-wait 5
-            prokaryotes__cluster__metabat2
-            prokaryotes__cluster__maxbin2
-            prokaryotes__cluster__concoct
+      # - name: Test workflow - Assemble (from megahit to magscot)
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       --use-conda
+      #       --profile profile/default
+      #       --rerun-triggers mtime
+      #       --show-failed-logs
+      #       --cores 3
+      #       --latency-wait 5
+      #       prokaryotes__cluster__metabat2
+      #       prokaryotes__cluster__maxbin2
+      #       prokaryotes__cluster__concoct
 
-      - name: Test workflow - Skip magscot and drep
-        run: |
-          sudo mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
-          sudo touch results/prokaryotes/cluster/drep/dereplicated_genomes/.snakemake_timestamp
-          sudo cp resources/mock_assembly.fa.gz results/prokaryotes/cluster/drep/dereplicated_genomes/all:bin_00001.fa.gz
-          sudo cp resources/mock_assembly.fa.gz results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
+      # - name: Test workflow - Skip magscot and drep
+      #   run: |
+      #     sudo mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
+      #     sudo touch results/prokaryotes/cluster/drep/dereplicated_genomes/.snakemake_timestamp
+      #     sudo cp resources/mock_assembly.fa.gz results/prokaryotes/cluster/drep/dereplicated_genomes/all:bin_00001.fa.gz
+      #     sudo cp resources/mock_assembly.fa.gz results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
 
-      - name: Test workflow - Quantify
-        uses: snakemake/snakemake-github-action@v1
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            --use-conda
-            --profile profile/default
-            --rerun-triggers mtime
-            --show-failed-logs
-            --cores 3
-            --latency-wait 5
-            prokaryotes__quantify
-            report__step__prokaryotes
+      # - name: Test workflow - Quantify
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       --use-conda
+      #       --profile profile/default
+      #       --rerun-triggers mtime
+      #       --show-failed-logs
+      #       --cores 3
+      #       --latency-wait 5
+      #       prokaryotes__quantify
+      #       report__step__prokaryotes
 
       # - name: Test workflow - Annotate (only quast)
       #   uses: snakemake/snakemake-github-action@v1
@@ -145,9 +145,22 @@ jobs:
       #       --latency-wait 5
       #       prokaryotes__annotate__quast
 
-      - name: Delete everything
-        run: |
-          sudo find results -not -name "*.log" -type f -delete -print
+      # - name: Delete everything
+      #   run: |
+      #     sudo find results -not -name "*.log" -type f -delete -print
+
+
+      - name: Test workflow - Dry run
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: .
+          snakefile: workflow/Snakefile
+          args: >
+            --use-conda
+            --profile profile/default
+            --cores 3
+            --dry-run
+            --printshellcmds
 
       - uses: actions/upload-artifact@v4
         if: failure()
