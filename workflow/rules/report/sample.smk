@@ -18,7 +18,9 @@ rule report__sample__multiqc__:
             for kraken2_db in KRAKEN2_DBS
         ],
         quantify_bowtie2=lambda w: [
-            QUANT_BOWTIE2 / f"drep.{secondary_ani}" / f"{w.sample_id}.{w.library_id}.{extension}"
+            QUANT_BOWTIE2
+            / f"drep.{secondary_ani}"
+            / f"{w.sample_id}.{w.library_id}.{extension}"
             for extension in ["stats.txt", "flagstats.txt"]
             for secondary_ani in SECONDARY_ANIS
         ],
