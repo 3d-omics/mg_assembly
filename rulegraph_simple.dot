@@ -56,12 +56,11 @@ digraph snakemake_dag {
             maxbin2  [label = "MaxBin2",    color = "0.52 0.6 0.85"];
             metabat2 [label = "MetaBAT2",   color = "0.02 0.6 0.85"];
             magscot  [label = "MAGScoT",    color = "0.23 0.6 0.85"];
-            drep     [label = "dRep",       color = "0.32 0.6 0.85",    style = "rounded"];
 
             metabat2    ->  magscot
             concoct     ->  magscot
             maxbin2     ->  magscot
-            magscot     ->  drep
+            
         }
 
         subgraph cluster_3_2 {
@@ -79,10 +78,14 @@ digraph snakemake_dag {
 
             gtdbtk  [label = "GTDB-TK",  color = "0.34 0.6 0.85",    style = "rounded"];
             dram    [label = "DRAM",     color = "0.01 0.6 0.85",    style = "rounded"];
-            checkm  [label = "CheckM2",  color = "0.35 0.44 0.72"];
-            quast   [label = "QUAST",    color = "0.76 0.55 0.22"];
+            checkm2 [label = "CheckM2",  color = "0.35 0.44 0.72"];
+            drep    [label = "dRep",     color = "0.32 0.6 0.85",    style = "rounded"];
 
+            // magscot ->  dram
+            magscot ->  checkm2
+            magscot ->  gtdbtk
             gtdbtk -> dram
+            checkm2 -> drep
 
         }
 
@@ -91,10 +94,7 @@ digraph snakemake_dag {
     reference   ->  bowtie2
     fastq       ->  fastp
     extract     ->  megahit
-    drep        ->  gtdbtk
-    drep        ->  bowtie2_drep
-    drep        ->  checkm
-    drep        ->  quast
+    drep -> bowtie2_drep
 
     subgraph cluster_4 {
         label = "Viruses";
