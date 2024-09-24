@@ -81,9 +81,10 @@ rule report__step__prokaryotes:
     """Collect all reports for the bowtie2 step when mapping to a mag catalogue"""
     input:
         reports=[
-            QUANT_BOWTIE2 / f"{sample_id}.{library_id}.{report}"
+            QUANT_BOWTIE2 / f"drep.{secondary_ani}" / f"{sample_id}.{library_id}.{report}"
             for sample_id, library_id in SAMPLE_LIBRARY
             for report in ["stats.txt", "flagstats.txt"]
+            for secondary_ani in SECONDARY_ANIS
         ],
     output:
         REPORT_STEP / "prokaryotes.html",
