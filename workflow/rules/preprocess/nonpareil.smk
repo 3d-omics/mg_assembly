@@ -92,6 +92,7 @@ rule preprocess__nonpareil__aggregate__:
         2> {log} 1>&2
         """
 
+
 rule preprocess__nonpareil:
     """Run nonpareil over all samples and produce JSONs for multiqc"""
     input:
