@@ -7,12 +7,12 @@ A Snakemake workflow for Genome Resolved Metagenomics
 
 ## Features
 - FASTQ processing with `fastp`.
-- Mapping of preprocessed reads against the host(s) with `bowtie2`. Skip if no host is provided.
+- Mapping of preprocessed reads against the host(s) and possible contaminants with `bowtie2`. Skip if no host is provided.
 - Assembly-free statistics with `kraken2`, `nonpareil` and `singlem`.
 - Assembly of non-host reads with `megahit`.
 - Bacterial metagenomics:
   - Binning with CONCOCT, Maxbin2, MetaBAT2, and aggregated with MAGScoT.
-  - Dereplication with `dRep`
+  - Dereplication with `dRep`, using multiple secondary ANIs, in case you need one for read mapping, and a different for something like pangenomics.
   - Quantification with `bowtie2` and `coverm`
   - Annotation with `quast`, `gtdbtk` and `dram`
 - Viral metagenomics:
