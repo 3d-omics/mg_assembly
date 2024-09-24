@@ -25,8 +25,17 @@ quantify:
       methods: ["count", "covered_bases", "length"]
 
 prokaryotes:
-  cluster:
-    drep: "--completeness 75 --contamination 25 --P_ani 0.9 --S_ani 0.95"
+  annotate:
+    drep:
+      secondary_anis: 
+        - 0.95
+        - 0.98
+        - 0.99
+      minimum_completeness: 75
+      maximum_contamination: 25
+    dram: 
+      annotate:
+        min_contig_size: 1500
 
 viral:
   genomad:
