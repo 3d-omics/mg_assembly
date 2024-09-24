@@ -60,7 +60,7 @@ digraph snakemake_dag {
             metabat2    ->  magscot
             concoct     ->  magscot
             maxbin2     ->  magscot
-            
+
         }
 
         subgraph cluster_3_2 {
