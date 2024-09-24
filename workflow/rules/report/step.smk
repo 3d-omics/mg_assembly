@@ -50,6 +50,10 @@ rule report__step__preprocess:
             for report in BAM_REPORTS
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
+        nonpareil=[
+            NONPAREIL / "run" / f"{sample_id}.{library_id}.json"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],
     output:
         REPORT_STEP / "preprocess.html",
     log:
