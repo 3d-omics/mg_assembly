@@ -37,6 +37,7 @@ prokaryotes:
       annotate:
         min_contig_size: 1500
 
+
 viral:
   genomad:
     filtering: ""  # nothing, --conservative, or --relaxed
