@@ -93,4 +93,5 @@ rule preprocess__bowtie2:
         [
             PRE_BOWTIE2 / LAST_HOST / f"{sample_id}.{library_id}.cram"
             for sample_id, library_id in SAMPLE_LIBRARY
+            if len(HOST_NAMES) > 0
         ],

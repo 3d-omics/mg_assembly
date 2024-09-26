@@ -44,9 +44,9 @@ def get_input_cram_for_host_mapping(wildcards):
 # clean ----
 def get_host_clean_cram(wildcards):
     """Get the input file that is clean from hosts"""
-    last_genome = HOST_NAMES[-1]
     sample_id = wildcards.sample_id
     library_id = wildcards.library_id
     if len(HOST_NAMES) == 0:
         return FASTP / f"{sample_id}.{library_id}.cram"
+    last_genome = HOST_NAMES[-1]
     return PRE_BOWTIE2 / last_genome / f"{sample_id}.{library_id}.cram"
