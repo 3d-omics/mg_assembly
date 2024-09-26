@@ -9,17 +9,17 @@ PRE = Path("results/preprocess/")
 FASTP = PRE / "fastp/"
 PRE_INDEX = PRE / "index/"
 PRE_BOWTIE2 = PRE / "bowtie2"
-NONHOST = PRE / "nonhost/"
 
 # preprocess evaluation
 NONPAREIL = PRE / "nonpareil/"
 SINGLEM = PRE / "singlem/"
 PRE_COVERM = PRE / "coverm/"
 KRAKEN2 = PRE / "kraken2/"
-
+CLEAN = PRE / "clean/"
 
 # assemble
 ASSEMBLE = Path("results/assemble/")
+ASSEMBLE_READS = ASSEMBLE / "reads/"
 MEGAHIT = ASSEMBLE / "megahit/"
 ASSEMBLE_RENAME = ASSEMBLE / "renaming/"
 
@@ -46,10 +46,10 @@ COVERM = PROK_QUANT / "coverm/"
 
 # dereplicate evaluation
 PROK_ANN = PROK / "annotate"
+MAGS = PROK_ANN / "mags/"
 GTDBTK = PROK_ANN / "gtdbtk/"
 QUAST = PROK_ANN / "quast/"
 DRAM = PROK_ANN / "dram/"
-CHECKM = PROK_ANN / "checkm2"
 
 
 # Viral prediction

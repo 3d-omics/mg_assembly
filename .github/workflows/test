@@ -3,73 +3,57 @@ set -euo pipefail
 
 rm -rf results reports
 
-./run \
-    --jobs 8 \
-    preprocess__bowtie2 \
-    preprocess__fastp \
-    preprocess__kraken2 \
-    preprocess__samtools \
+function run() {
+    snakemake \
+        --use-conda \
+        --profile profile/default \
+        --rerun-triggers mtime \
+        --cache \
+        --cores 8 \
+        "$@"
+}
 
-./run \
+run \
     --jobs 8 \
+    report__step__preprocess \
     assemble__megahit
 
 # generate mock assembly
+mkdir --parents results/assemble/megahit
 cp \
+    --verbose \
+    --force \
     resources/mock_assembly.fa.gz \
     results/assemble/megahit/all.fa.gz
 
-./run \
-    --jobs 8 \
-    prokaryotes__cluster__magscot \
-    --rerun-triggers mtime
+run \
+    prokaryotes__cluster__concoct \
+    prokaryotes__cluster__metabat2 \
+    prokaryotes__cluster__maxbin2
 
-# Run drep
-mkdir --parents results/prokaryotes/cluster/drep/separated_bins
-touch results/prokaryotes/cluster/drep/separated_bins/.snakemake_timestamp
-cp \
-    resources/mock_assembly.fa.gz \
-    results/prokaryotes/cluster/drep/separated_bins/bin1.fa.gz
-cp \
-    resources/mock_assembly.fa.gz \
-    results/prokaryotes/cluster/drep/separated_bins/bin2.fa.gz
-
+# skip magscot
 
 # Skip drep-related results
-cp \
-    resources/mock_assembly.fa.gz \
-    results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
-touch results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
 mkdir --parents results/prokaryotes/cluster/drep/dereplicated_genomes
 touch results/prokaryotes/cluster/drep/dereplicated_genomes/.snakemake_timestamp
 cp \
+    --verbose \
     resources/mock_assembly.fa.gz \
-    results/prokaryotes/cluster/drep/dereplicated_genomes/bin1.fa.gz
+    results/prokaryotes/cluster/drep/dereplicated_genomes/all:bin_00001.fa.gz
 cp \
+    --verbose \
     resources/mock_assembly.fa.gz \
-    results/prokaryotes/cluster/drep/dereplicated_genomes/bin2.fa.gz
-touch \
-    results/prokaryotes/cluster/drep/data.tar.gz \
-    results/prokaryotes/cluster/drep/data_tables.tar.gz
+    results/prokaryotes/cluster/drep/dereplicated_genomes.fa.gz
 
-
-
-./run \
-    --jobs 8 \
+run \
     prokaryotes__quantify \
-    --rerun-triggers mtime
+    report__step__prokaryotes
 
-./run \
-    --jobs 8 \
-    prokaryotes__annotate__quast \
-    --rerun-triggers mtime
+# run \
+#     prokaryotes__annotate__quast
 
-./run \
-    --jobs 4 \
-    viruses \
-    --rerun-triggers mtime
+# run \
+#     viruses
 
-./run \
-    --jobs 8 \
-    report \
-    --rerun-triggers mtime
+# run \
+#     report

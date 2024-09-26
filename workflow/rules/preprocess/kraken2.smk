@@ -1,4 +1,4 @@
-rule preprocess__kraken2__:
+rule preprocess__kraken2__assign__:
     """
     Run kraken2 over all samples at once using the /dev/shm/ trick.
 
@@ -6,29 +6,27 @@ rule preprocess__kraken2__:
     """
     input:
         forwards=[
-            FASTP / f"{sample_id}.{library_id}_1.fq.gz"
-            for sample_id, library_id in SAMPLE_LIBRARY
+            FASTP / f"{sample}.{library}_1.fq.gz" for sample, library in SAMPLE_LIBRARY
         ],
         rerverses=[
-            FASTP / f"{sample_id}.{library_id}_2.fq.gz"
-            for sample_id, library_id in SAMPLE_LIBRARY
+            FASTP / f"{sample}.{library}_2.fq.gz" for sample, library in SAMPLE_LIBRARY
         ],
-        database=lambda w: features["databases"]["kraken2"][w.kraken_db],
+        database=lambda w: features["databases"]["kraken2"][w.kraken2_db],
     output:
         out_gzs=[
-            KRAKEN2 / "{kraken_db}" / f"{sample_id}.{library_id}.out.gz"
-            for sample_id, library_id in SAMPLE_LIBRARY
+            KRAKEN2 / "{kraken2_db}" / f"{sample}.{library}.out.gz"
+            for sample, library in SAMPLE_LIBRARY
         ],
         reports=[
-            KRAKEN2 / "{kraken_db}" / f"{sample_id}.{library_id}.report"
-            for sample_id, library_id in SAMPLE_LIBRARY
+            KRAKEN2 / "{kraken2_db}" / f"{sample}.{library}.report"
+            for sample, library in SAMPLE_LIBRARY
         ],
     log:
-        KRAKEN2 / "{kraken_db}.log",
+        KRAKEN2 / "{kraken2_db}.log",
     params:
         in_folder=FASTP,
-        out_folder=lambda w: KRAKEN2 / w.kraken_db,
-        kraken_db_shm="/dev/shm/{kraken_db}",
+        out_folder=lambda w: KRAKEN2 / w.kraken2_db,
+        kraken_db_name="{kraken2_db}",
     conda:
         "__environment__.yml"
     shell:
@@ -36,7 +34,7 @@ rule preprocess__kraken2__:
         {{
             echo Running kraken2 in $(hostname) 2>> {log} 1>&2
 
-            mkdir --parents {params.kraken_db_shm}
+            mkdir --parents /dev/shm/{params.kraken_db_name}
             mkdir --parents {params.out_folder}
 
             rsync \
@@ -45,10 +43,10 @@ rule preprocess__kraken2__:
                 --recursive \
                 --times \
                 --verbose \
+                --chown $(whoami):$(whoami) \
                 --chmod u+rw \
-                --chown $(id --user):$(id --group) \
                 {input.database}/*.k2d \
-                {params.kraken_db_shm} \
+                /dev/shm/{params.kraken_db_name} \
             2>> {log} 1>&2
 
             for file in {input.forwards} ; do \
@@ -63,7 +61,7 @@ rule preprocess__kraken2__:
                 echo $(date) Processing $sample_id 2>> {log} 1>&2
 
                 kraken2 \
-                    --db {params.kraken_db_shm} \
+                    --db /dev/shm/{params.kraken_db_name} \
                     --threads {threads} \
                     --gzip-compressed \
                     --paired \
@@ -79,7 +77,7 @@ rule preprocess__kraken2__:
             echo "Failed job" 2>> {log} 1>&2
         }}
 
-        rm --force --recursive --verbose {params.kraken_db_shm} 2>>{log} 1>&2
+        rm --force --recursive --verbose /dev/shm/{params.kraken_db_name} 2>>{log} 1>&2
         """
 
 
@@ -87,7 +85,8 @@ rule preprocess__kraken2:
     """Run kraken2 over all samples at once using the /dev/shm/ trick."""
     input:
         [
-            KRAKEN2 / kraken_db / f"{sample_id}.{library_id}.report"
+            KRAKEN2 / kraken2_db / f"{sample_id}.{library_id}.{extension}"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for kraken_db in features["databases"]["kraken2"]
+            for kraken2_db in KRAKEN2_DBS
+            for extension in ["out.gz", "report"]
         ],

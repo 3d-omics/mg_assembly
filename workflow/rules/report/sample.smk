@@ -1,6 +1,29 @@
 rule report__sample__multiqc__:
     input:
-        get_stats_files_from_sample_and_library_ids,
+        reads_fastqc=lambda w: [
+            READS / f"{w.sample_id}.{w.library_id}_{end}_fastqc.zip" for end in [1, 2]
+        ],
+        pre_fastp_fastqc=lambda w: [
+            FASTP / f"{w.sample_id}.{w.library_id}_{end}_fastqc.zip" for end in [1, 2]
+        ],
+        pre_fastp_html=FASTP / "{sample_id}.{library_id}_fastp.json",
+        pre_nonpareil=NONPAREIL / "run" / "{sample_id}.{library_id}.json",
+        bowtie2=lambda w: [
+            PRE_BOWTIE2 / host_name / f"{w.sample_id}.{w.library_id}.{report}"
+            for host_name in HOST_NAMES
+            for report in BAM_REPORTS
+        ],
+        kraken2=lambda w: [
+            KRAKEN2 / kraken2_db / f"{w.sample_id}.{w.library_id}.report"
+            for kraken2_db in KRAKEN2_DBS
+        ],
+        quantify_bowtie2=lambda w: [
+            QUANT_BOWTIE2
+            / f"drep.{secondary_ani}"
+            / f"{w.sample_id}.{w.library_id}.{extension}"
+            for extension in ["stats.txt", "flagstats.txt"]
+            for secondary_ani in SECONDARY_ANIS
+        ],
     output:
         html=REPORT_SAMPLE / "{sample_id}.{library_id}.html",
     log:

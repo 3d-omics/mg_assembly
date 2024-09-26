@@ -13,7 +13,8 @@ set-threads:
     preprocess__fastp__: 24
     preprocess__index__: 24
     preprocess__bowtie2__: 24
-    preprocess__kraken2__: 8
+    preprocess__kraken2__assign__: 8
+    preprocess__bowtie2__cram_to_fastq__: 24
     assemble__megahit__: 24
     prokaryotes__cluster__index__: 24
     prokaryotes__cluster__bowtie2__: 24
@@ -43,6 +44,7 @@ set-threads:
 
 
 set-resources:
+    # preprocess
     preprocess__fastp__:
         mem_mb: 8G
         runtime: 4h
@@ -52,7 +54,7 @@ set-resources:
     preprocess__bowtie2__:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    preprocess__kraken2__:
+    preprocess__kraken2__assign__:
         mem_mb: 500G
         runtime: 1d
     preprocess__nonpareil__:
@@ -60,14 +62,19 @@ set-resources:
     preprocess__singlem__pipe__:
         runtime: 2d
         mem_mb: 16G
-    preprocess__singlem__condense:
+    preprocess__singlem__condense__:
         runtime: 6h
+    preprocess__bowtie2__cram_to_fastq__:
+        mem_mb: 32G
+        runtime: 1d
+    # assemble
     assemble__megahit__:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1w
     prokaryotes__cluster__index__:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 2d
+    # prokaryotes - cluster
     prokaryotes__cluster__bowtie2__:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
@@ -96,9 +103,8 @@ set-resources:
         mem_mb: 8G
     prokaryotes__cluster__magscot__rename__:
         mem_mb: 8G
-    prokaryotes__cluster__drep__run__:
-        mem_mb: 64G
-        runtime: 7d
+
+    # prokaryotes - annotate
     prokaryotes__annotate__checkm2__:
         mem_mb: 16G
     prokaryotes__annotate__dram__annotate__:
@@ -110,8 +116,12 @@ set-resources:
     prokaryotes__annotate__gtdbtk__:
         mem_mb: 64 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
+    prokaryotes__annotate__drep__run__:
+        mem_mb: 64G
+        runtime: 7d
     prokaryotes__annotate__quast__:
         mem_mb: 8G
+    # prokaryotes - quantify
     prokaryotes__quantify__index__:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
@@ -122,12 +132,15 @@ set-resources:
         mem_mb: 8G
     prokaryotes__quantify__coverm__contig__aggregate__:
         mem_mb: 8G
+    # viruses - cluster
     viruses__cluster__genomad__:
         mem_mb: 32G
+    # viruses - annotate
     viruses__annotate__genomad__:
         mem_mb: 32G
     viruses__annotate__quast__:
         mem_mb: 8G
+    # viruses - quantify
     viruses__quantify__index__:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
@@ -138,6 +151,7 @@ set-resources:
         mem_mb: 8G
     viruses__quantify__coverm__contig_aggregate__:
         mem_mb: 8G
+    # report
     report__sample__multiqc__:
         mem_mb: 8G
     report__step__reads__:

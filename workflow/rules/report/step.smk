@@ -1,15 +1,20 @@
-rule report__step__reads__:
+rule report__step__reads:
     """Collect all reports for the reads step"""
     input:
-        rules.reads__fastqc.input,
+        [
+            READS / f"{sample_id}.{library_id}_{end}_fastqc.zip"
+            for sample_id, library_id in SAMPLE_LIBRARY
+            for end in ["1", "2"]
+        ],
     output:
-        html=REPORT_STEP / "reads.html",
+        REPORT_STEP / "reads.html",
     log:
         REPORT_STEP / "reads.log",
     conda:
         "__environment__.yml"
     params:
         dir=REPORT_STEP,
+    retries: 5
     shell:
         """
         multiqc \
@@ -22,23 +27,41 @@ rule report__step__reads__:
         """
 
 
-rule report__step__preprocess__:
-    """Collect all reports for the preprocessing step"""
+rule report__step__preprocess:
+    """Collect all reports for the preprocess step"""
     input:
-        rules.preprocess__fastp.input.json,
-        rules.preprocess__fastqc.input,
-        rules.preprocess__samtools.input,
-        rules.preprocess__kraken2.input,
+        fastp=[
+            FASTP / f"{sample_id}.{library_id}_fastp.json"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],
+        fastqc=[
+            FASTP / f"{sample_id}.{library_id}_{end}_fastqc.zip"
+            for sample_id, library_id in SAMPLE_LIBRARY
+            for end in ["1", "2"]
+        ],
+        kraken2=[
+            KRAKEN2 / kraken2_db / f"{sample_id}.{library_id}.report"
+            for sample_id, library_id in SAMPLE_LIBRARY
+            for kraken2_db in KRAKEN2_DBS
+        ],
+        bowtie2=[
+            PRE_BOWTIE2 / host_name / f"{sample_id}.{library_id}.{report}"
+            for host_name in HOST_NAMES
+            for report in BAM_REPORTS
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],
+        nonpareil=[
+            NONPAREIL / "run" / f"{sample_id}.{library_id}.json"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],
     output:
-        html=REPORT_STEP / "preprocess.html",
+        REPORT_STEP / "preprocess.html",
     log:
         REPORT_STEP / "preprocess.log",
     conda:
         "__environment__.yml"
     params:
         dir=REPORT_STEP,
-    resources:
-        attempt=get_attempt,
     retries: 5
     shell:
         """
@@ -50,64 +73,47 @@ rule report__step__preprocess__:
             --dirs \
             --dirs-depth 1 \
             {input} \
-        2> {log}.{resources.attempt} 1>&2
-
-        mv {log}.{resources.attempt} {log}
-        """
-
-
-rule report__step__assemble__:
-    """Collect all reports from the assemble step"""
-    input:
-        QUAST,
-    output:
-        REPORT_STEP / "assemble.html",
-    log:
-        REPORT_STEP / "assemble.log",
-    conda:
-        "__environment__.yml"
-    params:
-        dir=REPORT_STEP,
-    shell:
-        """
-        multiqc \
-            --title assemble \
-            --force \
-            --filename assemble \
-            --outdir {params.dir} \
-            {input} \
         2> {log} 1>&2
         """
 
 
-rule report__step__quantify__:
-    """Collect all reports from the quantify step"""
+rule report__step__prokaryotes:
+    """Collect all reports for the bowtie2 step when mapping to a mag catalogue"""
     input:
-        rules.prokaryotes__quantify__samtools.input,
+        reports=[
+            QUANT_BOWTIE2
+            / f"drep.{secondary_ani}"
+            / f"{sample_id}.{library_id}.{report}"
+            for sample_id, library_id in SAMPLE_LIBRARY
+            for report in ["stats.txt", "flagstats.txt"]
+            for secondary_ani in SECONDARY_ANIS
+        ],
     output:
-        REPORT_STEP / "quantify.html",
+        REPORT_STEP / "prokaryotes.html",
     log:
-        REPORT_STEP / "quantify.log",
+        REPORT_STEP / "prokaryotes.log",
     conda:
         "__environment__.yml"
     params:
         dir=REPORT_STEP,
+    retries: 5
     shell:
         """
         multiqc \
-            --title quantify \
+            --title prokaryotes \
             --force \
-            --filename quantify \
+            --filename prokaryotes \
             --outdir {params.dir} \
-            {input} \
+            --dirs \
+            --dirs-depth 1 \
+            {input.reports} \
         2> {log} 1>&2
         """
 
 
 rule report__step:
-    """Report for all steps"""
+    """Collect all per step reports for the pipeline"""
     input:
-        REPORT_STEP / "reads.html",
-        REPORT_STEP / "preprocess.html",
-        REPORT_STEP / "assemble.html",
-        REPORT_STEP / "quantify.html",
+        rules.report__step__reads.output,
+        rules.report__step__preprocess.output,
+        rules.report__step__prokaryotes.output,

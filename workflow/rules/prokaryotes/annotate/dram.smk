@@ -1,36 +1,17 @@
-rule prokaryotes__annotate__dram__annotate__:
-    """Annotate dereplicate genomes with DRAM"""
+rule prokaryotes__annotate__dram__setup__:
+    """
+    Set up the databases from DRAM, no matter what the config file says.
+    """
     input:
-        dereplicated_genomes=DREP / "dereplicated_genomes",
-        gtdbtk_summary=GTDBTK / "gtdbtk.summary.tsv",
         dram_db=features["databases"]["dram"],
     output:
-        annotation=DRAM / "annotations.tsv",
-        trnas=DRAM / "trnas.tsv",
-        rrnas=DRAM / "rrnas.tsv",
-        tarball=DRAM / "annotate.tar.gz",
+        touch(PROK_ANN / "dram.setup.txt"),
     log:
-        DRAM / "annotate.log",
+        PROK_ANN / "dram.setup.log",
     conda:
         "__environment__.yml"
-    params:
-        min_contig_size=1500,
-        out_dir=DRAM,
-        tmp_dir=DRAM / "annotate",
-        parallel_retries=5,
     shell:
         """
-        rm \
-            --recursive \
-            --force \
-            --verbose {params.tmp_dir} \
-        2>> {log} 1>&2
-
-        mkdir \
-            --parents \
-            {params.tmp_dir} \
-        2>>{log} 1>&2
-
         DRAM-setup.py set_database_locations \
             --amg_database_loc          {input.dram_db}/amg_database.*.tsv \
             --dbcan_fam_activities_loc  {input.dram_db}/CAZyDB.*.fam-activities.txt \
@@ -50,93 +31,206 @@ rule prokaryotes__annotate__dram__annotate__:
             --vog_annotations_loc       {input.dram_db}/vog_annotations_latest.tsv.gz \
             --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
         2>> {log} 1>&2
+        """
 
-        parallel \
-            --jobs $(( {threads} / 2 )) \
-            DRAM.py annotate \
-                --input_fasta {{}} \
-                --output_dir {params.tmp_dir}/{{/.}} \
-                --threads 2 \
-                --gtdb_taxonomy {input.gtdbtk_summary} \
-        ::: {input.dereplicated_genomes}/*.fa.gz \
+
+rule prokaryotes__annotate__dram__annotate__:
+    """Annotate dereplicate genomes with DRAM"""
+    input:
+        fasta=MAGS / "{mag_id}.fa",
+        dram_db=features["databases"]["dram"],
+        setup=PROK_ANN / "dram.setup.txt",
+    output:
+        work_dir=temp(directory(PROK_ANN / "dram.annotate" / "{mag_id}")),
+    log:
+        PROK_ANN / "dram.annotate" / "{mag_id}.log",
+    conda:
+        "__environment__.yml"
+    params:
+        min_contig_size=params["prokaryotes"]["annotate"]["dram"]["annotate"][
+            "min_contig_size"
+        ],
+    shell:
+        """
+        rm -rf {params.work_dir}
+
+        DRAM.py annotate \
+            --input_fasta {input.fasta} \
+            --output_dir {output.work_dir} \
+            --threads 1 \
         2>> {log} 1>&2
+        """
 
-        for file in annotations trnas rrnas ; do
-            ( csvstack \
-                --tabs \
-                {params.tmp_dir}/*/$file.tsv \
-            | csvformat \
-                --out-tabs \
-            > {params.out_dir}/$file.tsv \
-            ) 2>> {log}
-        done
 
+def collect_dram_annotate(wildcards):
+    checkpoint_output = checkpoints.prokaryotes__annotate__mags__.get().output[0]
+    mag_ids = glob_wildcards(MAGS / "{mag_id}.fa").mag_id
+    return [PROK_ANN / "dram.annotate" / mag_id for mag_id in mag_ids]
+
+
+rule prokaryotes__annotate__dram__annotate__aggregate_annotations__:
+    """Aggregate DRAM annotations"""
+    input:
+        collect_dram_annotate,
+    output:
+        PROK_ANN / "dram.annotations.tsv.gz",
+    log:
+        PROK_ANN / "dram.annotate.aggregate.log",
+    conda:
+        "__environment__.yml"
+    params:
+        work_dir=PROK_ANN / "dram.annotate",
+    shell:
+        """
+        ( csvstack \
+            --tabs \
+            {params.work_dir}/*/annotations.tsv \
+        | csvformat \
+            --out-tabs \
+        | bgzip \
+            --compress-level 9 \
+        > {output} ) \
+        2> {log}
+        """
+
+
+rule prokaryotes__annotate__dram__annotate__aggregate_trnas__:
+    """Aggregate DRAM tRNAs"""
+    input:
+        collect_dram_annotate,
+    output:
+        PROK_ANN / "dram.trnas.tsv",
+    log:
+        PROK_ANN / "dram.trnas.log",
+    conda:
+        "__environment__.yml"
+    params:
+        work_dir=PROK_ANN / "dram.annotate",
+    shell:
+        """
+        ( csvstack \
+            --tabs \
+            {params.work_dir}/*/trnas.tsv \
+        | csvformat \
+            --out-tabs \
+        > {output} ) \
+        2> {log}
+        """
+
+
+rule prokaryotes__annotate__dram__annotate_aggregate_rrnas__:
+    """Aggregate DRAM rRNAs"""
+    input:
+        collect_dram_annotate,
+    output:
+        PROK_ANN / "dram.rrnas.tsv",
+    log:
+        PROK_ANN / "dram.rrnas.log",
+    conda:
+        "__environment__.yml"
+    params:
+        work_dir=PROK_ANN / "dram.annotate",
+    shell:
+        """
+        ( csvstack \
+            --tabs \
+            {params.work_dir}/*/rrnas.tsv \
+        | csvformat \
+            --out-tabs \
+        > {output} ) \
+        2> {log}
+        """
+
+
+rule prokaryotes__annotate__dram__annotate_archive__:
+    """
+    Create tarball once annotations are merged done
+    """
+    input:
+        work_dirs=collect_dram_annotate,
+        annotations=PROK_ANN / "dram.annotations.tsv.gz",
+        trnas=PROK_ANN / "dram.trnas.tsv",
+        rrnas=PROK_ANN / "dram.rrnas.tsv",
+    output:
+        tarball=PROK_ANN / "dram.annotate.tar.gz",
+    log:
+        PROK_ANN / "dram.archive.log",
+    conda:
+        "__environment__.yml"
+    params:
+        out_dir=PROK_ANN,
+        work_dir=PROK_ANN / "dram.annotate",
+    shell:
+        """
         tar \
             --create \
-            --directory {params.out_dir} \
             --file {output.tarball} \
-            --remove-files \
             --use-compress-program="pigz --processes {threads}" \
             --verbose \
-            annotate \
+            {params.work_dir} \
         2>> {log} 1>&2
+
+        rm -rfv {params.work_dir}
         """
 
 
 rule prokaryotes__annotate__dram__distill__:
     """Distill DRAM annotations."""
     input:
-        annotations=DRAM / "annotations.tsv",
-        trnas=DRAM / "trnas.tsv",
-        rrnas=DRAM / "rrnas.tsv",
+        annotations=PROK_ANN / "dram.annotations.tsv.gz",
+        trnas=PROK_ANN / "dram.trnas.tsv",
+        rrnas=PROK_ANN / "dram.rrnas.tsv",
         dram_db=features["databases"]["dram"],
+        setup=PROK_ANN / "dram.setup.txt",
     output:
-        genome=DRAM / "genome_stats.tsv",
-        metabolism=DRAM / "metabolism_summary.xlsx",
-        product_html=DRAM / "product.html",
-        product_tsv=DRAM / "product.tsv",
+        work_dir=temp(directory(PROK_ANN / "dram.distill")),
     log:
-        DRAM / "distill.log",
+        PROK_ANN / "dram.distill.log",
+    conda:
+        "__environment__.yml"
+    shell:
+        """
+        DRAM.py distill \
+            --input_file {input.annotations} \
+            --output_dir {output.work_dir} \
+            --rrna_path  {input.rrnas} \
+            --trna_path  {input.trnas} \
+        2>> {log} 1>&2
+        """
+
+
+rule prokaryotes__annotate__dram__distill_archive__:
+    input:
+        work_dir=PROK_ANN / "dram.distill",
+    output:
+        genome=PROK_ANN / "dram.genome_stats.tsv",
+        metabolism=PROK_ANN / "dram.metabolism_summary.xlsx",
+        product_tsv=PROK_ANN / "dram.product.tsv",
+    log:
+        PROK_ANN / "dram.distill_archive.log",
     conda:
         "__environment__.yml"
     params:
-        outdir_tmp=DRAM / "distill",
-        outdir=DRAM,
+        out_dir=PROK_ANN,
     shell:
         """
-        DRAM-setup.py set_database_locations \
-            --amg_database_loc          {input.dram_db}/amg_database.*.tsv \
-            --dbcan_fam_activities_loc  {input.dram_db}/CAZyDB.*.fam-activities.txt \
-            --dbcan_loc                 {input.dram_db}/dbCAN-HMMdb-V*.txt \
-            --dbcan_subfam_ec_loc       {input.dram_db}/CAZyDB.*.fam.subfam.ec.txt \
-            --description_db_loc        {input.dram_db}/description_db.sqlite \
-            --etc_module_database_loc   {input.dram_db}/etc_mdoule_database.*.tsv \
-            --function_heatmap_form_loc {input.dram_db}/function_heatmap_form.*.tsv \
-            --genome_summary_form_loc   {input.dram_db}/genome_summary_form.*.tsv \
-            --kofam_hmm_loc             {input.dram_db}/kofam_profiles.hmm \
-            --kofam_ko_list_loc         {input.dram_db}/kofam_ko_list.tsv \
-            --module_step_form_loc      {input.dram_db}/module_step_form.*.tsv \
-            --peptidase_loc             {input.dram_db}/peptidases.*.mmsdb \
-            --pfam_hmm_loc              {input.dram_db}/Pfam-A.hmm.dat.gz \
-            --pfam_loc                  {input.dram_db}/pfam.mmspro \
-            --viral_loc                 {input.dram_db}/refseq_viral.*.mmsdb \
-            --vog_annotations_loc       {input.dram_db}/vog_annotations_latest.tsv.gz \
-            --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
-        2>> {log} 1>&2
+        for file in genome_stats.tsv metabolism_summary.xlsx product.tsv ; do
 
-        DRAM.py distill \
-            --input_file {input.annotations} \
-            --rrna_path {input.rrnas} \
-            --trna_path {input.trnas} \
-            --output_dir {params.outdir_tmp} \
-        2> {log} 1>&2
+            cp \
+                --verbose \
+                {input.work_dir}/$file \
+                {params.out_dir}/dram.$file \
 
-        mv {params.outdir_tmp}/* {params.outdir}/ 2>> {log} 1>&2
-        rmdir {params.outdir_tmp} 2>> {log} 1>&2
+        done 2> {log} 1>&2
         """
 
 
 rule prokaryotes__annotate__dram:
     """Run DRAM on dereplicated genomes."""
     input:
-        rules.prokaryotes__annotate__dram__distill__.output,
+        rules.prokaryotes__annotate__dram__annotate_archive__.output,
+        rules.prokaryotes__annotate__dram__distill_archive__.output,
+
+
+localrules:
+    prokaryotes__annotate__dram__distill_archive__,

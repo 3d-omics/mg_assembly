@@ -3,10 +3,8 @@
 preprocess:
   fastp:
     length_required: 25  # nonpareil requires at least 25bp
-    extra: "--trim_poly_g --trim_poly_x"
-  bowtie2:
-    samtools:
-      mem_per_thread: 1G
+  bowtie2:  # mem_gb >= mem_host + threads * samtools_mem
+    samtools_mem: 1G
 
 assemble:
   megahit:
@@ -14,16 +12,31 @@ assemble:
   samtools:
     mem: 1G
 
+# common both to prokaryotes and viruses
 quantify:
-  samtools:
-    mem: 1G
-  coverm:
+  bowtie2:
+    samtools_mem: 1G
+  coverm:   # https://github.com/wwood/CoverM#calculation-methods
     genome:
-      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
+      methods: ["count", "covered_bases", "length"]
       min_covered_fraction: 0.0
       separator: "@"
     contig:
-      methods:  ["count", "covered_bases", "length"]  # https://github.com/wwood/CoverM#calculation-methods
+      methods: ["count", "covered_bases", "length"]
+
+prokaryotes:
+  annotate:
+    drep:
+      secondary_anis:
+        - 0.95
+        - 0.98
+        - 0.99
+      minimum_completeness: 75
+      maximum_contamination: 25
+    dram:
+      annotate:
+        min_contig_size: 1500
+
 
 viral:
   genomad:

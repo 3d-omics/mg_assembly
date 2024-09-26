@@ -1,11 +1,11 @@
 rule prokaryotes__quantify__index__:
     """Index dereplicader"""
     input:
-        contigs=DREP / "dereplicated_genomes.fa.gz",
+        contigs=PROK_ANN / "drep.{secondary_ani}.fa.gz",
     output:
-        mock=touch(QUANT_INDEX / "dereplicated_genomes"),
+        mock=touch(QUANT_INDEX / "drep.{secondary_ani}"),
     log:
-        QUANT_INDEX / "dereplicated_genomes.log",
+        QUANT_INDEX / "drep.{secondary_ani}.log",
     conda:
         "__environment__.yml"
     shell:
@@ -20,4 +20,7 @@ rule prokaryotes__quantify__index__:
 
 rule prokaryotes__quantify__index:
     input:
-        rules.prokaryotes__quantify__index__.output,
+        [
+            QUANT_INDEX / f"drep.{secondary_ani}.fa.gz"
+            for secondary_ani in SECONDARY_ANIS
+        ],

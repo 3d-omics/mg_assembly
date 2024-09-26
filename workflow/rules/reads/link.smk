@@ -10,9 +10,6 @@ rule reads__link__:
         READS / "{sample}.{library}.log",
     conda:
         "__environment__.yml"
-    resources:  # run it superfast
-        mem_mb=1024,
-        runtime=60,
     shell:
         """
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_} 2>  {log} 1>&2
@@ -28,3 +25,7 @@ rule reads__link:
             for sample, library in SAMPLE_LIBRARY
             for end in ["1", "2"]
         ],
+
+
+localrules:
+    reads__link__,

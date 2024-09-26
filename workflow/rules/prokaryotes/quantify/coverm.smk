@@ -1,16 +1,26 @@
 rule prokaryotes__quantify__coverm__genome__:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=DREP / "dereplicated_genomes.fa.gz",
-        fai=DREP / "dereplicated_genomes.fa.gz.fai",
+        cram=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram",
+        crai=QUANT_BOWTIE2
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.cram.crai",
+        reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
+        fai=PROK_ANN / "drep.{secondary_ani}" / "dereplicated_genomes.fa.gz.fai",
     output:
-        tsv=COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
+        tsv=COVERM
+        / "genome"
+        / "{method}"
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.tsv.gz",
     conda:
         "__environment__.yml"
     log:
-        COVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
+        COVERM
+        / "genome"
+        / "{method}"
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
         min_covered_fraction=params["quantify"]["coverm"]["genome"][
@@ -40,13 +50,13 @@ rule prokaryotes__quantify__coverm__genome__aggregate__:
     input:
         get_tsvs_for_dereplicate_coverm_genome,
     output:
-        tsv=COVERM / "genome.{method}.tsv.gz",
+        tsv=COVERM / "genome.{method}.{secondary_ani}.tsv.gz",
     log:
-        COVERM / "genome.{method}.log",
+        COVERM / "genome.{method}.{secondary_ani}.log",
     conda:
         "__environment__.yml"
     params:
-        input_dir=lambda w: COVERM / "genome" / w.method,
+        input_dir=lambda w: COVERM / "genome" / w.method / w.secondary_ani,
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
@@ -60,8 +70,9 @@ rule prokaryotes__quantify__coverm__genome:
     """Run coverm genome and all methods"""
     input:
         [
-            COVERM / f"genome.{method}.tsv.gz"
+            COVERM / f"genome.{method}.{secondary_ani}.tsv.gz"
             for method in params["quantify"]["coverm"]["genome"]["methods"]
+            for secondary_ani in SECONDARY_ANIS
         ],
 
 
@@ -69,16 +80,26 @@ rule prokaryotes__quantify__coverm__genome:
 rule prokaryotes__quantify__coverm__contig__:
     """Run coverm contig for one library and one mag catalogue"""
     input:
-        cram=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=QUANT_BOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=DREP / "dereplicated_genomes.fa.gz",
-        fai=DREP / "dereplicated_genomes.fa.gz.fai",
+        cram=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram",
+        crai=QUANT_BOWTIE2
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.cram.crai",
+        reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
+        fai=PROK_ANN / "drep.{secondary_ani}.fa.gz.fai",
     output:
-        tsv=COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
+        tsv=COVERM
+        / "contig"
+        / "{method}"
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.tsv.gz",
     conda:
         "__environment__.yml"
     log:
-        COVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
+        COVERM
+        / "contig"
+        / "{method}"
+        / "drep.{secondary_ani}"
+        / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
     shell:
@@ -103,13 +124,13 @@ rule prokaryotes__quantify__coverm__contig__aggregate__:
     input:
         get_tsvs_for_dereplicate_coverm_contig,
     output:
-        tsv=COVERM / "contig.{method}.tsv.gz",
+        tsv=COVERM / "contig.{method}.{secondary_ani}.tsv.gz",
     log:
-        COVERM / "contig.{method}.log",
+        COVERM / "contig.{method}.{secondary_ani}log",
     conda:
         "__environment__.yml"
     params:
-        input_dir=lambda w: COVERM / "contig" / w.method,
+        input_dir=lambda w: COVERM / "contig" / w.method / w.secondary_ani,
     shell:
         """
         Rscript --vanilla workflow/scripts/aggregate_coverm.R \
@@ -123,8 +144,9 @@ rule prokaryotes__quantify__coverm__contig:
     """Run coverm contig and all methods"""
     input:
         [
-            COVERM / f"contig.{method}.tsv.gz"
+            COVERM / f"contig.{method}.{secondary_ani}.tsv.gz"
             for method in params["quantify"]["coverm"]["contig"]["methods"]
+            for secondary_ani in SECONDARY_ANIS
         ],
 
 

@@ -1,4 +1,4 @@
-rule preprocess__nonpareil__run__:
+rule preprocess__nonpareil__:
     """Run nonpareil over one sample
 
     Note: Nonpareil only ask for one of the pair-end reads
@@ -7,7 +7,7 @@ rule preprocess__nonpareil__run__:
     empty files
     """
     input:
-        forward_=get_final_forward_from_pre,
+        CLEAN / "{sample_id}.{library_id}_1.fq.gz",
     output:
         npa=touch(NONPAREIL / "run" / "{sample_id}.{library_id}.npa"),
         npc=touch(NONPAREIL / "run" / "{sample_id}.{library_id}.npc"),
@@ -19,29 +19,52 @@ rule preprocess__nonpareil__run__:
         "__environment__.yml"
     params:
         prefix=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}",
-        reads=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
+        forward_fq=lambda w: NONPAREIL / "run" / f"{w.sample_id}.{w.library_id}_1.fq",
     shell:
         """
         gzip \
             --decompress \
             --stdout \
-            --verbose \
-            {input.forward_} \
-        > {params.reads} 2> {log}
+            {input} \
+        > {params.forward_fq} \
+        2> {log}
 
         nonpareil \
-            -s {params.reads} \
+            -s {params.forward_fq} \
             -T kmer \
             -b {params.prefix} \
             -f fastq \
             -t {threads} \
-        2>> {log} 1>&2
+        2>> {log} \
+        1>&2 || true
 
         rm \
             --force \
             --verbose \
-            {params.reads} \
+            {params.forward_fq} \
         2>> {log} 1>&2
+        """
+
+
+rule preprocess__nonpareil__curves__:
+    """Export nonpareil results to json for multiqc"""
+    input:
+        NONPAREIL / "run" / "{sample_id}.{library_id}.npo",
+    output:
+        NONPAREIL / "run" / "{sample_id}.{library_id}.json",
+    log:
+        NONPAREIL / "run" / "{sample_id}.{library_id}.json.log",
+    conda:
+        "__environment__.yml"
+    params:
+        labels=lambda w: f"{w.sample_id}.{w.library_id}",
+    shell:
+        """
+        Rscript --no-init-file $(which NonpareilCurves.R) \
+            --labels {params.labels} \
+            --json {output} \
+            {input} \
+        2> {log} 1>&2
         """
 
 
@@ -49,11 +72,12 @@ rule preprocess__nonpareil__aggregate__:
     """Aggregate all the nonpareil results into a single table"""
     input:
         [
-            NONPAREIL / "run" / f"{sample_id}.{library_id}.npo"
+            NONPAREIL / "run" / f"{sample_id}.{library_id}.{suffix}"
             for sample_id, library_id in SAMPLE_LIBRARY
+            for suffix in ["npa", "npc", "npl", "npo"]
         ],
     output:
-        NONPAREIL / "nonpareil.tsv.gz",
+        tsv=NONPAREIL / "nonpareil.tsv",
     log:
         NONPAREIL / "nonpareil.log",
     conda:
@@ -64,11 +88,16 @@ rule preprocess__nonpareil__aggregate__:
         """
         Rscript --no-init-file workflow/scripts/aggregate_nonpareil.R \
             --input-folder {params.input_dir} \
-            --output-file {output} \
+            --output-tsv {output.tsv} \
         2> {log} 1>&2
         """
 
 
 rule preprocess__nonpareil:
+    """Run nonpareil over all samples and produce JSONs for multiqc"""
     input:
-        rules.preprocess__nonpareil__aggregate__.output,
+        [
+            NONPAREIL / "run" / f"{sample_id}.{library_id}.json"
+            for sample_id, library_id in SAMPLE_LIBRARY
+        ],
+        NONPAREIL / "nonpareil.tsv",

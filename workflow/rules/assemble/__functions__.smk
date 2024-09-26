@@ -4,13 +4,8 @@ def _get_reads_from_assembly_id(wildcards, end):
     end = 1 if end == "forward" else 2
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
-    if len(HOST_NAMES) == 0:
-        return [
-            FASTP / f"{sample_id}.{library_id}_{end}.fq.gz"
-            for sample_id, library_id in samples_in_assembly
-        ]
     return [
-        PRE_BOWTIE2 / f"non{LAST_HOST}" / f"{sample_id}.{library_id}_{end}.fq.gz"
+        CLEAN / f"{sample_id}.{library_id}_{end}.fq.gz"
         for sample_id, library_id in samples_in_assembly
     ]
 

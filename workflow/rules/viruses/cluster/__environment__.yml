@@ -3,7 +3,6 @@
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - bbmap=39.01
   - genomad=1.7.4

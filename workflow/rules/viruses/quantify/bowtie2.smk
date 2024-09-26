@@ -3,8 +3,8 @@ rule viruses__quantify__bowtie2__:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=VINDEX / "viruses",
-        forward_=get_final_forward_from_pre,
-        reverse_=get_final_reverse_from_pre,
+        forward_=CLEAN / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=CLEAN / "{sample_id}.{library_id}_2.fq.gz",
         reference=MMSEQS / "rep_seq.fasta.gz",
         fai=MMSEQS / "rep_seq.fasta.gz.fai",
     output:
@@ -14,7 +14,7 @@ rule viruses__quantify__bowtie2__:
     conda:
         "__environment__.yml"
     params:
-        samtools_mem=params["quantify"]["samtools"]["mem"],
+        samtools_mem=params["quantify"]["bowtie2"]["samtools_mem"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
     shell:

@@ -2,9 +2,8 @@
 
 library(tidyverse)
 library(argparse)
-library(Nonpareil)
 
-parser <- ArgumentParser()
+parser <- argparse::ArgumentParser()
 
 parser$add_argument(
   "-i", "--input-folder",
@@ -14,18 +13,19 @@ parser$add_argument(
 )
 
 parser$add_argument(
-  "-o", "--output-file",
+  "-t", "--output-tsv",
   type = "character",
-  dest = "output_file",
+  dest = "output_tsv",
   help = "Output TSV file"
 )
 
+
+
 args <- parser$parse_args()
 input_folder <- args$input_folder
-output_file <- args$output_file
-output_folder <- dirname(output_file)
+output_tsv <- args$output_tsv
 
-dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
+dir.create(output_tsv %>% dirname(), showWarnings = FALSE, recursive = TRUE)
 
 nonempty_files <-
   list.files(args$input_folder, pattern = "*.npo", full.names = TRUE) %>%
@@ -34,10 +34,18 @@ nonempty_files <-
   filter(size > 0) %>%
   pull(file)
 
-nonempty_files %>%
-  Nonpareil.set(plot = FALSE) %>%
-  summary() %>%
-  as.data.frame() %>%
-  rownames_to_column("sample_id") %>%
-  as_tibble() %>%
-  write_tsv(output_file)
+if (length(nonempty_files) > 0) {
+
+  nonempty_files %>%
+    Nonpareil::Nonpareil.set(plot = FALSE) %>%
+    summary() %>%
+    as.data.frame() %>%
+    rownames_to_column("sample_id") %>%
+    as_tibble() %>%
+    write_tsv(output_tsv)
+
+} else {
+
+  write_tsv(data.frame(), output_tsv)
+
+}

@@ -1,13 +1,11 @@
 channels:
   - conda-forge
   - bioconda
-  - defaults
 dependencies:
   - biopython =1.83
   - bowtie2 =2.5.3
   - checkm-genome =1.2.2
   - coreutils =9.4
-  - drep =3.4.5
   - hmmer =3.4
   - maxbin2 =2.2.7
   - megahit =1.2.9
