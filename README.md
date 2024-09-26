@@ -7,8 +7,8 @@ A Snakemake workflow for Genome Resolved Metagenomics
 
 ## Features
 - FASTQ processing with `fastp`.
-- Mapping of preprocessed reads against the host(s) and possible contaminants with `bowtie2`. Skip if no host is provided. 
-  - Useful for environmental genomics (there is no host in soil, duh!), or 
+- Mapping of preprocessed reads against the host(s) and possible contaminants with `bowtie2`. Skip if no host is provided.
+  - Useful for environmental genomics (there is no host in soil, duh!), or
   - environments that can have multiple genomes, like in mycorrhiza, where plant, fungus and even insects, can be there.
 - Assembly-free statistics with `kraken2`, `nonpareil` and `singlem`.
 - Assembly of non-host reads with `megahit`.
