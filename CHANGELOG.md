@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.1.0](https://github.com/3d-omics/mg_assembly/compare/v1.0.0...v1.1.0) (2024-09-26)
+
+
+### Features
+
+* add nonpareil curves to multiqc ([bc140b1](https://github.com/3d-omics/mg_assembly/commit/bc140b1f5d770e55b3e879972519820084bec71e))
+* add per secondary ani bowtie2 reporst ([7ba9276](https://github.com/3d-omics/mg_assembly/commit/7ba9276bb1e16d63cbe26a3e68bfa7d40e8a0951))
+* add preprocess__samtools ([f07f298](https://github.com/3d-omics/mg_assembly/commit/f07f298f10dd1e87e052b02a23fa128fb00fd421))
+* do prokaryote annotation as in mg_annotate ([3f4a78c](https://github.com/3d-omics/mg_assembly/commit/3f4a78c261877441541c7f862f8ca60066943c0b))
+* do prokaryote quantification over all anis ([fd8decd](https://github.com/3d-omics/mg_assembly/commit/fd8decdae81323b0fb578768a9fa6fca152a7fab))
+* extract drep params to config file ([64bb9f2](https://github.com/3d-omics/mg_assembly/commit/64bb9f2d4eb4b717e1f126a1286fbf9601c847e4))
+* harmonize with mg_quant; handle crams instead of pairs of fastq files ([7257054](https://github.com/3d-omics/mg_assembly/commit/7257054165a531b1f170866fabadc844ad42dd38))
+* pin dependencies ([38169a6](https://github.com/3d-omics/mg_assembly/commit/38169a660016a74183538a37a3d528f97fc62a56))
+* stop storing u1 and u2 from fastp ([648f7c4](https://github.com/3d-omics/mg_assembly/commit/648f7c4ca4b311d6818d0dce15af8f55f346170e))
+* update multiqc to 1.24 ([d9fc566](https://github.com/3d-omics/mg_assembly/commit/d9fc5669818bc5f2cb6f95cdfb91cd2e5be3d7f6))
+* update nonpareil and multiqc so they do the jsoning and the reporting ([5f73a0a](https://github.com/3d-omics/mg_assembly/commit/5f73a0a22df60506e5114218d8d5e7fb4d3c9a95))
+* update readme ([fe9b0f6](https://github.com/3d-omics/mg_assembly/commit/fe9b0f6788fccf4e20b7ade48d0480bd3728a9bb))
+* update rulegraphs ([454e777](https://github.com/3d-omics/mg_assembly/commit/454e777ab54b4eadaf1bc7f51cf7f59f30a0e09e))
+
+
+### Bug Fixes
+
+* correct folder ([5196257](https://github.com/3d-omics/mg_assembly/commit/519625730481a68e08a1e97b459f0c122aa0cdf8))
+* correct nonpareil ([4c40ed2](https://github.com/3d-omics/mg_assembly/commit/4c40ed21b3705df84246458bd7690d93923af116))
+* correct singlem rule names and fix them in the profile ([3aeb0b7](https://github.com/3d-omics/mg_assembly/commit/3aeb0b7589da14d22afcb01095228dcba14cddf7))
+* harmonization ([1b218bc](https://github.com/3d-omics/mg_assembly/commit/1b218bcb3e7e96be00af53dcaa028b36db689e5c))
+* nonpareil ([685f75c](https://github.com/3d-omics/mg_assembly/commit/685f75c98e4ad6ba4c727e4d330d75319f7ba72e))
+
+
+### Performance Improvements
+
+* disable groups ([77d906a](https://github.com/3d-omics/mg_assembly/commit/77d906a9a81e69078c2b45fd71290ff65e5497fa))
+* fix kraken2 rule name ([90b4f27](https://github.com/3d-omics/mg_assembly/commit/90b4f270507949988b01c0e4feef553f9bfcbdff))
+* run read symlinking locally ([1ad21cd](https://github.com/3d-omics/mg_assembly/commit/1ad21cd6a70fa7e2c93bf4cdb60dc034f18fc0a8))
+
 ## 1.0.0 (2024-06-13)
 
 
