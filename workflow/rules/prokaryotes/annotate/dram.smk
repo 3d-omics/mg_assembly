@@ -52,7 +52,12 @@ rule prokaryotes__annotate__dram__annotate__:
         ],
     shell:
         """
-        rm -rf {params.work_dir}
+        rm \
+            --recursive \
+            --force \
+            --verbose \
+            {output.work_dir} \
+        2> {log} 1>&2
 
         DRAM.py annotate \
             --input_fasta {input.fasta} \
