@@ -103,3 +103,7 @@ rule prokaryotes__annotate__drep:
     input:
         [PROK_ANN / f"drep.{secondary_ani}.tar.gz" for secondary_ani in SECONDARY_ANIS],
         [PROK_ANN / f"drep.{secondary_ani}.fa.gz" for secondary_ani in SECONDARY_ANIS],
+
+
+localrules:
+    prokaryotes__annotate__drep__quality_report__,
