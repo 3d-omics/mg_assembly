@@ -82,10 +82,10 @@ set-resources:
         mem_mb: 8 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
     prokaryotes__cluster__maxbin2__:
-        mem_mb: 8G
+        mem_mb: 8 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
     prokaryotes__cluster__metabat2__:
-        mem_mb: 8G
+        mem_mb: 8 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
     prokaryotes__cluster__magscot__prodigal__:
         mem_mb: 8 * 1024 * 2 ** (attempt - 1)
@@ -156,10 +156,10 @@ set-resources:
         mem_mb: 8G
     report__step__reads__:
         mem_mb: 8G
-    report__step__preprocess__:
+    report__step__preprocess:
         mem_mb: 4 * 1024 * 2 ** (attempt - 1)
         runtime: 6h
-    report__step__assemble__:
+    report__step__assemble:
         mem_mb: 8G
-    report__step__quantify__:
+    report__step__quantify:
         mem_mb: 8G
