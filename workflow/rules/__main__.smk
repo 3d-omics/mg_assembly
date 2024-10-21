@@ -6,10 +6,6 @@ include: "viruses/__main__.smk"
 include: "report/__main__.smk"
 
 
-module helpers:
-    snakefile:
-        "helpers/Snakefile"
-
 module preprocess:
     snakefile:
         github("jlanga/mg_preprocess", path="workflow/Snakefile", branch="devel")
@@ -20,4 +16,4 @@ module preprocess:
 use rule * from preprocess
 
 
-use rule * from helpers as helpers__*
+
