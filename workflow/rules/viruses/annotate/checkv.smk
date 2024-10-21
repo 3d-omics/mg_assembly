@@ -1,4 +1,4 @@
-rule viruses__annotate__checkv__:
+rule viruses__annotate__checkv:
     input:
         fasta=MMSEQS / "rep_seq.fa.gz",
         database=features["databases"]["checkv"],
@@ -27,6 +27,6 @@ rule viruses__annotate__checkv__:
         """
 
 
-rule viruses__annotate__checkv:
+rule viruses__annotate__checkv__all:
     input:
-        rules.viruses__annotate__checkv__.output,
+        rules.viruses__annotate__checkv.output,

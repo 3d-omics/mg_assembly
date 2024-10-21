@@ -1,4 +1,4 @@
-rule viruses__cluster__dedupe__:
+rule viruses__cluster__dedupe:
     input:
         fastas=[GENOMADC / f"{assembly_id}_virus.fna.gz" for assembly_id in ASSEMBLIES],
     output:
@@ -25,6 +25,6 @@ rule viruses__cluster__dedupe__:
         """
 
 
-rule viruses__cluster__dedupe:
+rule viruses__cluster__dedupe__all:
     input:
-        rules.viruses__cluster__dedupe__.output,
+        rules.viruses__cluster__dedupe.output,

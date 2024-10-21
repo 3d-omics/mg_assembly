@@ -1,4 +1,4 @@
-rule viruses__cluster__mmseqs__:
+rule viruses__cluster__mmseqs:
     input:
         fasta=DEDUPE / "dedupe.fa.gz",
     output:
@@ -46,6 +46,6 @@ rule viruses__cluster__mmseqs__:
         """
 
 
-rule viruses__cluster__mmseqs:
+rule viruses__cluster__mmseqs__all:
     input:
-        rules.viruses__cluster__mmseqs__.output,
+        rules.viruses__cluster__mmseqs.output,

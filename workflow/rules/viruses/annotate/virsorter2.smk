@@ -1,4 +1,4 @@
-rule viruses__annotate__virsorter2__:
+rule viruses__annotate__virsorter2:
     input:
         fna=GENOMADA / "rep_seq_virus.fna.gz",
         database=features["databases"]["virsorter2"],
@@ -46,6 +46,6 @@ rule viruses__annotate__virsorter2__:
         """
 
 
-rule viruses__annotate__virsorter2:
+rule viruses__annotate__virsorter2__all:
     input:
-        rules.viruses__annotate__virsorter2__.output,
+        rules.viruses__annotate__virsorter2.output,

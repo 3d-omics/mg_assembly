@@ -1,5 +1,5 @@
 
-rule viruses__quantify__bowtie2__:
+rule viruses__quantify__bowtie2:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=VINDEX / "viruses",
@@ -40,7 +40,7 @@ rule viruses__quantify__bowtie2__:
         """
 
 
-rule viruses__quantify__bowtie2:
+rule viruses__quantify__bowtie2__all:
     """Align all samples to the dereplicated genomes"""
     input:
         [

@@ -1,4 +1,4 @@
-rule viruses__annotate__genomad__:
+rule viruses__annotate__genomad:
     input:
         fasta=MMSEQS / "rep_seq.fa.gz",
         database=features["databases"]["genomad"],
@@ -52,6 +52,6 @@ rule viruses__annotate__genomad__:
         """
 
 
-rule viruses__annotate__genomad:
+rule viruses__annotate__genomad__all:
     input:
-        rules.viruses__annotate__genomad__.output,
+        rules.viruses__annotate__genomad.output,

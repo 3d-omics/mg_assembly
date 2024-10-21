@@ -1,4 +1,4 @@
-rule viruses__quantify__index__:
+rule viruses__quantify__index:
     """Index dereplicader"""
     input:
         contigs=MMSEQS / "rep_seq.fa.gz",
@@ -18,6 +18,6 @@ rule viruses__quantify__index__:
         """
 
 
-rule viruses__quantify__index:
+rule viruses__quantify__index__all:
     input:
-        rules.viruses__quantify__index__.output,
+        rules.viruses__quantify__index.output,

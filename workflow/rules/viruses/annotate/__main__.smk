@@ -5,9 +5,10 @@ include: "virsorter2.smk"
 include: "checkv.smk"
 
 
-rule viruses__annotate:
+rule viruses__annotate__all:
     input:
-        rules.viruses__annotate__genomad.input,
-        rules.viruses__annotate__dramv.input,
-        rules.viruses__annotate__quast.input,
-        rules.viruses__annotate__checkv.input,
+        rules.viruses__annotate__genomad__all.input,
+        rules.viruses__annotate__dramv__all.input,
+        rules.viruses__annotate__quast__all.input,
+        rules.viruses__annotate__checkv__all.input,
+        rules.viruses__annotate__quast__all.input,

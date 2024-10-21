@@ -1,4 +1,4 @@
-rule viruses__cluster__genomad__:
+rule viruses__cluster__genomad:
     input:
         fasta=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
         database=features["databases"]["genomad"],
@@ -53,6 +53,6 @@ rule viruses__cluster__genomad__:
         """
 
 
-rule viruses__cluster__genomad:
+rule viruses__cluster__genomad__all:
     input:
         [GENOMADC / f"{assembly_id}_virus.fna.gz" for assembly_id in ASSEMBLIES],

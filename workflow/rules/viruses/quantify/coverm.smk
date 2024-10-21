@@ -1,4 +1,4 @@
-rule viruses__quantify__coverm__genome__:
+rule viruses__quantify__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=VBOWTIE2 / "{sample_id}.{library_id}.bam",
@@ -28,7 +28,7 @@ rule viruses__quantify__coverm__genome__:
         """
 
 
-rule viruses__quantify__coverm__genome_aggregate__:
+rule viruses__quantify__coverm__genome_aggregate:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_vcoverm_genome,
@@ -49,7 +49,7 @@ rule viruses__quantify__coverm__genome_aggregate__:
         """
 
 
-rule viruses__quantify__coverm__genome:
+rule viruses__quantify__coverm__genome__all:
     """Run coverm genome and all methods"""
     input:
         [
@@ -59,7 +59,7 @@ rule viruses__quantify__coverm__genome:
 
 
 # coverm contig ----
-rule viruses__quantify__coverm__contig__:
+rule viruses__quantify__coverm__contig:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         bam=VBOWTIE2 / "{sample_id}.{library_id}.bam",
@@ -84,7 +84,7 @@ rule viruses__quantify__coverm__contig__:
         """
 
 
-rule viruses__quantify__coverm__contig_aggregate__:
+rule viruses__quantify__coverm__contig_aggregate:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_vcoverm_contig,
@@ -105,7 +105,7 @@ rule viruses__quantify__coverm__contig_aggregate__:
         """
 
 
-rule viruses__quantify__coverm__contig:
+rule viruses__quantify__coverm__contig__all:
     """Run coverm contig and all methods"""
     input:
         [
@@ -114,7 +114,7 @@ rule viruses__quantify__coverm__contig:
         ],
 
 
-rule viruses__quantify__coverm:
+rule viruses__quantify__coverm__all:
     input:
-        rules.viruses__quantify__coverm__contig.input,
-        rules.viruses__quantify__coverm__genome.input,
+        rules.viruses__quantify__coverm__contig__all.input,
+        rules.viruses__quantify__coverm__genome__all.input,
