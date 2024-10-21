@@ -52,7 +52,8 @@ rule assemble__bowtie2__all:
         [
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
-        ] + [
+        ]
+        + [
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam.bai"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],

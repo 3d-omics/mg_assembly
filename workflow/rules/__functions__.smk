@@ -7,6 +7,7 @@ def get_attempt(wildcards, attempt):
     """Get the number of attempt in resources"""
     return attempt
 
+
 def compose_rg_id(w):
     """Compose the read group ID for bowtie2"""
     return f"{w.sample_id}_{w.library_id}"

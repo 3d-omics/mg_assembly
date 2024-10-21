@@ -3,7 +3,7 @@ rule prokaryotes__quantify__bowtie2:
     input:
         mock=QUANT_INDEX / "drep.{secondary_ani}",
         forward_=PRE_BOWTIE2 / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_= PRE_BOWTIE2 / "{sample_id}.{library_id}_2.fq.gz",
+        reverse_=PRE_BOWTIE2 / "{sample_id}.{library_id}_2.fq.gz",
         reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
         fai=PROK_ANN / "drep.{secondary_ani}.fa.gz.fai",
     output:
