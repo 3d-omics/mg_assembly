@@ -31,10 +31,10 @@ set-threads:
     prokaryotes__cluster__drep__separate_bins__: 24
     prokaryotes__cluster__drep__run__: 24
     # prokaryotes - annotate
-    prokaryotes__annotate__checkm2__: 24
-    prokaryotes__annotate__dram__annotate__: 24
-    prokaryotes__annotate__gtdbtk__: 24
-    prokaryotes__annotate__quast__: 4
+    prokaryotes__annotate__checkm2: 24
+    prokaryotes__annotate__dram__annotate: 24
+    prokaryotes__annotate__gtdbtk: 24
+    prokaryotes__annotate__quast: 4
     # prokaryotes - quantify
     prokaryotes__quantify__index__: 24
     prokaryotes__quantify__bowtie2__: 24

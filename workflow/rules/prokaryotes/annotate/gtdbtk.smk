@@ -1,4 +1,4 @@
-rule prokaryotes__annotate__gtdbtk__classify_wf__:
+rule prokaryotes__annotate__gtdbtk__classify_wf:
     """Run GTDB-Tk over the dereplicated genomes."""
     input:
         mags=MAGS,
@@ -23,7 +23,7 @@ rule prokaryotes__annotate__gtdbtk__classify_wf__:
         """
 
 
-rule prokaryotes__annotate__gtdbtk__join_bac_and_ar__:
+rule prokaryotes__annotate__gtdbtk__join_bac_and_ar:
     input:
         work_dir=GTDBTK,
     output:
@@ -70,6 +70,6 @@ rule prokaryotes__annotate__gtdbtk__join_bac_and_ar__:
         """
 
 
-rule prokaryotes__annotate__gtdbtk:
+rule prokaryotes__annotate__gtdbtk__all:
     input:
-        rules.prokaryotes__annotate__gtdbtk__join_bac_and_ar__.output,
+        rules.prokaryotes__annotate__gtdbtk__join_bac_and_ar.output,

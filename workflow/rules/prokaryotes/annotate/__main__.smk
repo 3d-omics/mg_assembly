@@ -8,6 +8,6 @@ include: "drep.smk"
 rule prokaryotes__annotate:
     """Evaluate the dereplication steps"""
     input:
-        #rules.prokaryotes__annotate__quast.input,
-        rules.prokaryotes__annotate__checkm2.input,
-        rules.prokaryotes__annotate__dram.input,
+        #rules.prokaryotes__annotate__quast__all.input,
+        rules.prokaryotes__annotate__checkm2__all.input,
+        rules.prokaryotes__annotate__dram__all.input,

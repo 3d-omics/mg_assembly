@@ -1,4 +1,4 @@
-rule prokaryotes__annotate__drep__quality_report__:
+rule prokaryotes__annotate__drep__quality_report:
     input:
         PROK_ANN / "checkm2.quality_report.tsv",
     output:
@@ -24,7 +24,7 @@ rule prokaryotes__annotate__drep__quality_report__:
         """
 
 
-rule prokaryotes__annotate__drep__dereplicate__:
+rule prokaryotes__annotate__drep__dereplicate:
     """Dereplicate all the bins using dRep."""
     input:
         genomes=MAGS,
@@ -57,7 +57,7 @@ rule prokaryotes__annotate__drep__dereplicate__:
         """
 
 
-rule prokaryotes__annotate__drep__get_fasta__:
+rule prokaryotes__annotate__drep__get_fasta:
     input:
         work_dir=PROK_ANN / "drep.{secondary_ani}.dir",
     output:
@@ -78,7 +78,7 @@ rule prokaryotes__annotate__drep__get_fasta__:
         """
 
 
-rule prokaryotes__annotate__drep__tarball__:
+rule prokaryotes__annotate__drep__tarball:
     input:
         work_dir=PROK_ANN / "drep.{secondary_ani}.dir",
     output:
@@ -99,11 +99,11 @@ rule prokaryotes__annotate__drep__tarball__:
         """
 
 
-rule prokaryotes__annotate__drep:
+rule prokaryotes__annotate__drep__all:
     input:
         [PROK_ANN / f"drep.{secondary_ani}.tar.gz" for secondary_ani in SECONDARY_ANIS],
         [PROK_ANN / f"drep.{secondary_ani}.fa.gz" for secondary_ani in SECONDARY_ANIS],
 
 
 localrules:
-    prokaryotes__annotate__drep__quality_report__,
+    prokaryotes__annotate__drep__quality_report,

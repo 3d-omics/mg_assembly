@@ -1,4 +1,4 @@
-rule prokaryotes__annotate__checkm2__:
+rule prokaryotes__annotate__checkm2:
     """Run CheckM2 over the dereplicated mags"""
     input:
         mags=MAGS,
@@ -29,6 +29,6 @@ rule prokaryotes__annotate__checkm2__:
         """
 
 
-rule prokaryotes__annotate__checkm2:
+rule prokaryotes__annotate__checkm2__all:
     input:
-        rules.prokaryotes__annotate__checkm2__.output,
+        rules.prokaryotes__annotate__checkm2.output,
