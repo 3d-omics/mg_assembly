@@ -4,6 +4,6 @@ include: "bowtie2.smk"
 include: "coverm.smk"
 
 
-rule prokaryotes__quantify:
+rule prokaryotes__quantify__all:
     input:
-        rules.prokaryotes__quantify__coverm.input,
+        rules.prokaryotes__quantify__coverm__all.input,

@@ -1,4 +1,4 @@
-rule prokaryotes__quantify__index__:
+rule prokaryotes__quantify__index:
     """Index dereplicader"""
     input:
         contigs=PROK_ANN / "drep.{secondary_ani}.fa.gz",
@@ -18,7 +18,7 @@ rule prokaryotes__quantify__index__:
         """
 
 
-rule prokaryotes__quantify__index:
+rule prokaryotes__quantify__index__all:
     input:
         [
             QUANT_INDEX / f"drep.{secondary_ani}.fa.gz"

@@ -3,8 +3,8 @@ include: "annotate/__main__.smk"
 include: "quantify/__main__.smk"
 
 
-rule prokaryotes:
+rule prokaryotes__all:
     input:
-        rules.prokaryotes__cluster.input,
-        rules.prokaryotes__annotate.input,
-        rules.prokaryotes__quantify.input,
+        rules.prokaryotes__cluster__all.input,
+        rules.prokaryotes__annotate__all.input,
+        rules.prokaryotes__quantify__all.input,

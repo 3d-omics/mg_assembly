@@ -36,8 +36,8 @@ set-threads:
     prokaryotes__annotate__gtdbtk: 24
     prokaryotes__annotate__quast: 4
     # prokaryotes - quantify
-    prokaryotes__quantify__index__: 24
-    prokaryotes__quantify__bowtie2__: 24
+    prokaryotes__quantify__index: 24
+    prokaryotes__quantify__bowtie2: 24
     # viruses
     # viruses - cluster
     viruses__cluster__genomad__: 24
@@ -91,58 +91,56 @@ set-resources:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
     # prokaryotes - cluster
-    prokaryotes__cluster__concoct__:
+    prokaryotes__cluster__concoct:
         mem_mb: 8 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    prokaryotes__cluster__maxbin2__:
+    prokaryotes__cluster__maxbin2:
         mem_mb: 8 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    prokaryotes__cluster__metabat2__:
+    prokaryotes__cluster__metabat2:
         mem_mb: 8 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    prokaryotes__cluster__magscot__prodigal__:
+    prokaryotes__cluster__magscot__prodigal:
         mem_mb: 8 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    prokaryotes__cluster__magscot__hmmsearch_pfam__:
+    prokaryotes__cluster__magscot__hmmsearch_pfam:
         mem_mb: 8G
         runtime: 1d
-    prokaryotes__cluster__magscot__hmmsearch_tigr__:
+    prokaryotes__cluster__magscot__hmmsearch_tigr:
         mem_mb: 8G
         runtime: 1d
-    prokaryotes__cluster__magscot__run__:
+    prokaryotes__cluster__magscot__run:
         mem_mb: 8G
         runtime: 12h
-    prokaryotes__cluster__magscot__reformat__:
+    prokaryotes__cluster__magscot__reformat:
         mem_mb: 8G
-    prokaryotes__cluster__magscot__rename__:
+    prokaryotes__cluster__magscot__rename:
         mem_mb: 8G
     # prokaryotes - annotate
-    prokaryotes__annotate__checkm2__:
+    prokaryotes__annotate__checkm2:
         mem_mb: 16G
-    prokaryotes__annotate__dram__annotate__:
+    prokaryotes__annotate__dram__annotate:
         mem_mb: 64G
         runtime: 1d
-    prokaryotes__annotate__dram__distill__:
+    prokaryotes__annotate__dram__distill:
         mem_mb: 16G
         runtime: 1d
-    prokaryotes__annotate__gtdbtk__:
+    prokaryotes__annotate__gtdbtk:
         mem_mb: 64 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    prokaryotes__annotate__drep__dereplicate__:
+    prokaryotes__annotate__drep__dereplicate:
         mem_mb: 4G
         runtime: 6h
-    prokaryotes__annotate__quast__:
-        mem_mb: 8G
     # prokaryotes - quantify
-    prokaryotes__quantify__index__:
+    prokaryotes__quantify__index:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    prokaryotes__quantify__bowtie2__:
+    prokaryotes__quantify__bowtie2:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    prokaryotes__quantify__coverm__genome__aggregate__:
+    prokaryotes__quantify__coverm__genome__aggregate:
         mem_mb: 8G
-    prokaryotes__quantify__coverm__contig__aggregate__:
+    prokaryotes__quantify__coverm__contig__aggregate:
         mem_mb: 8G
     # viruses - cluster
     viruses__cluster__genomad__:

@@ -1,4 +1,4 @@
-rule prokaryotes__quantify__coverm__genome__:
+rule prokaryotes__quantify__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
         bam=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam",
@@ -40,7 +40,7 @@ rule prokaryotes__quantify__coverm__genome__:
         """
 
 
-rule prokaryotes__quantify__coverm__genome__aggregate__:
+rule prokaryotes__quantify__coverm__genome__aggregate:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_genome,
@@ -61,7 +61,7 @@ rule prokaryotes__quantify__coverm__genome__aggregate__:
         """
 
 
-rule prokaryotes__quantify__coverm__genome:
+rule prokaryotes__quantify__coverm__genome__all:
     """Run coverm genome and all methods"""
     input:
         [
@@ -72,7 +72,7 @@ rule prokaryotes__quantify__coverm__genome:
 
 
 # coverm contig ----
-rule prokaryotes__quantify__coverm__contig__:
+rule prokaryotes__quantify__coverm__contig:
     """Run coverm contig for one library and one mag catalogue"""
     input:
         bam=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam",
@@ -109,7 +109,7 @@ rule prokaryotes__quantify__coverm__contig__:
         """
 
 
-rule prokaryotes__quantify__coverm__contig__aggregate__:
+rule prokaryotes__quantify__coverm__contig__aggregate:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_contig,
@@ -130,7 +130,7 @@ rule prokaryotes__quantify__coverm__contig__aggregate__:
         """
 
 
-rule prokaryotes__quantify__coverm__contig:
+rule prokaryotes__quantify__coverm__contig__all:
     """Run coverm contig and all methods"""
     input:
         [
@@ -140,7 +140,7 @@ rule prokaryotes__quantify__coverm__contig:
         ],
 
 
-rule prokaryotes__quantify__coverm:
+rule prokaryotes__quantify__coverm__all:
     input:
-        rules.prokaryotes__quantify__coverm__genome.input,
-        rules.prokaryotes__quantify__coverm__contig.input,
+        rules.prokaryotes__quantify__coverm__genome__all.input,
+        rules.prokaryotes__quantify__coverm__contig__all.input,

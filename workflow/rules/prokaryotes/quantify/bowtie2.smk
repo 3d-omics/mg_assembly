@@ -1,4 +1,4 @@
-rule prokaryotes__quantify__bowtie2__:
+rule prokaryotes__quantify__bowtie2:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=QUANT_INDEX / "drep.{secondary_ani}",
@@ -42,7 +42,7 @@ rule prokaryotes__quantify__bowtie2__:
         """
 
 
-rule prokaryotes__quantify__bowtie2:
+rule prokaryotes__quantify__bowtie2__all:
     """Align all samples to the dereplicated genomes"""
     input:
         [
