@@ -1,4 +1,4 @@
-rule prokaryotes__cluster__concoct__:
+rule prokaryotes__cluster__concoct:
     input:
         assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
         bams=get_bams_from_assembly_id,
@@ -69,7 +69,7 @@ rule prokaryotes__cluster__concoct__:
         """
 
 
-rule prokaryotes__cluster__concoct:
+rule prokaryotes__cluster__concoct__all:
     """Run concoct on all assemblies"""
     input:
         [CONCOCT / f"{assembly_id}" for assembly_id in ASSEMBLIES],

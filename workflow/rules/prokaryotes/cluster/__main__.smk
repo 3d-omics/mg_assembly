@@ -8,4 +8,4 @@ include: "metabat2.smk"
 rule prokaryotes__cluster:
     """Run the assemble module"""
     input:
-        rules.prokaryotes__cluster__magscot.input,
+        rules.prokaryotes__cluster__magscot__all.input,

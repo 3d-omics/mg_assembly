@@ -1,4 +1,4 @@
-rule prokaryotes__cluster__metabat2__:
+rule prokaryotes__cluster__metabat2:
     """Run metabat2 end-to-end on a single assembly"""
     input:
         bams=get_bams_from_assembly_id,
@@ -46,7 +46,7 @@ rule prokaryotes__cluster__metabat2__:
         """
 
 
-rule prokaryotes__cluster__metabat2:
+rule prokaryotes__cluster__metabat2__all:
     """Run metabat2 over all assemblies"""
     input:
         [METABAT2 / assembly_id for assembly_id in ASSEMBLIES],

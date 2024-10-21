@@ -1,4 +1,4 @@
-rule prokaryotes__cluster__maxbin2__:
+rule prokaryotes__cluster__maxbin2:
     """Run MaxBin2 over a single assembly"""
     input:
         assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
@@ -49,7 +49,7 @@ rule prokaryotes__cluster__maxbin2__:
         """
 
 
-rule prokaryotes__cluster__maxbin2:
+rule prokaryotes__cluster__maxbin2__all:
     """Run MaxBin2 over all assemblies"""
     input:
         [MAXBIN2 / assembly_id for assembly_id in ASSEMBLIES],
