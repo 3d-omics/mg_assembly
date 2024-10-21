@@ -1,6 +1,6 @@
 rule prokaryotes__cluster__concoct__:
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
         bams=get_bams_from_assembly_id,
         bais=get_bais_from_assembly_id,
     output:

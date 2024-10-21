@@ -10,16 +10,15 @@ PRE_BOWTIE2 = PRE / "bowtie2"
 
 # assemble
 ASSEMBLE = Path("results/assemble/")
-ASSEMBLE_READS = ASSEMBLE / "reads/"
-MEGAHIT = ASSEMBLE / "megahit/"
-ASSEMBLE_RENAME = ASSEMBLE / "renaming/"
+ASSEMBLE_MEGAHIT = ASSEMBLE / "megahit/"
+ASSEMBLE_INDEX = ASSEMBLE / "index/"
+ASSEMBLE_BOWTIE2 = ASSEMBLE / "bowtie2/"
 
 # Prokaryotes
 PROK = Path("results/prokaryotes")
 
 PROK_CLUSTER = PROK / "cluster"
-ASSEMBLE_INDEX = PROK_CLUSTER / "index/"
-ASSEMBLE_BOWTIE2 = PROK_CLUSTER / "bowtie2/"
+
 CONCOCT = PROK_CLUSTER / "concoct/"
 METABAT2 = PROK_CLUSTER / "metabat2/"
 MAXBIN2 = PROK_CLUSTER / "maxbin2/"

@@ -1,6 +1,6 @@
 rule viruses__cluster__genomad__:
     input:
-        fasta=MEGAHIT / "{assembly_id}.fa.gz",
+        fasta=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
         database=features["databases"]["genomad"],
     output:
         plasmid=GENOMADC / "{assembly_id}_plasmid.fna.gz",

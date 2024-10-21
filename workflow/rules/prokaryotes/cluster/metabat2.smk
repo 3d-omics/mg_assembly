@@ -2,7 +2,7 @@ rule prokaryotes__cluster__metabat2__:
     """Run metabat2 end-to-end on a single assembly"""
     input:
         bams=get_bams_from_assembly_id,
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
     output:
         bins=directory(METABAT2 / "{assembly_id}"),
     log:

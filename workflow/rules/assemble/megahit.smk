@@ -8,14 +8,14 @@ rule assemble__megahit:
         forwards=get_forwards_from_assembly_id,
         reverses=get_reverses_from_assembly_id,
     output:
-        fasta=MEGAHIT / "{assembly_id}.fa.gz",
-        tarball=MEGAHIT / "{assembly_id}.tar.gz",
+        fasta=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
+        tarball=ASSEMBLE_MEGAHIT / "{assembly_id}.tar.gz",
     log:
-        log=MEGAHIT / "{assembly_id}.log",
+        log=ASSEMBLE_MEGAHIT / "{assembly_id}.log",
     conda:
         "__environment__.yml"
     params:
-        out_dir=lambda w: MEGAHIT / w.assembly_id,
+        out_dir=lambda w: ASSEMBLE_MEGAHIT / w.assembly_id,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,
@@ -64,4 +64,4 @@ rule assemble__megahit:
 rule assemble__megahit__all:
     """Rename all assemblies contigs to avoid future collisions"""
     input:
-        [MEGAHIT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],
+        [ASSEMBLE_MEGAHIT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],

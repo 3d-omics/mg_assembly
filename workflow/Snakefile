@@ -46,5 +46,5 @@ rule all:
     """Run the entire pipeline"""
     input:
         rules.preprocess__all.input,
-        rules.assemble.input,
+        rules.assemble__all.input,
         rules.report.input,

@@ -1,6 +1,4 @@
 include: "__functions__.smk"
-include: "index.smk"
-include: "bowtie2.smk"
 include: "concoct.smk"
 include: "magscot.smk"
 include: "maxbin2.smk"

@@ -18,10 +18,10 @@ set-threads:
     preprocess__kraken2__assign: 8
     # assemble
     assemble__megahit: 24
+    assemble__index: 24
+    assemble__bowtie2: 24
     # prokaryotes
     # prokaryotes - cluster
-    prokaryotes__cluster__index__: 24
-    prokaryotes__cluster__bowtie2__: 24
     prokaryotes__cluster__concoct__: 24
     prokaryotes__cluster__maxbin2__: 4
     prokaryotes__cluster__metabat2__: 24
@@ -84,13 +84,13 @@ set-resources:
     assemble__megahit:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1w
-    # prokaryotes - cluster
-    prokaryotes__cluster__index__:
+    assemble__index:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 2d
-    prokaryotes__cluster__bowtie2__:
+    assemble__bowtie2:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
+    # prokaryotes - cluster
     prokaryotes__cluster__concoct__:
         mem_mb: 8 * 1024 * 2 ** (attempt - 1)
         runtime: 1d

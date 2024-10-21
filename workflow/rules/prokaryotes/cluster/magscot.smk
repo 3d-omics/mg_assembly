@@ -1,7 +1,7 @@
 rule prokaryotes__cluster__magscot__prodigal__:
     """Run prodigal over a single assembly"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
     output:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
     log:
@@ -207,7 +207,7 @@ rule prokaryotes__cluster__magscot__reformat__:
 rule prokaryotes__cluster__magscot__rename__:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     output:
         fasta=MAGSCOT / "{assembly_id}.fa.gz",

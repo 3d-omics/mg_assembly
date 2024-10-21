@@ -1,7 +1,7 @@
 rule prokaryotes__cluster__maxbin2__:
     """Run MaxBin2 over a single assembly"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
         bams=get_bams_from_assembly_id,
     output:
         workdir=directory(MAXBIN2 / "{assembly_id}"),

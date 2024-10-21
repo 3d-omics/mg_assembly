@@ -1,7 +1,7 @@
-rule prokaryotes__cluster__index__:
+rule assemble__index:
     """Index a megahit assembly"""
     input:
-        contigs=MEGAHIT / "{assembly_id}.fa.gz",
+        contigs=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
     output:
         mock=touch(ASSEMBLE_INDEX / "{assembly_id}"),
     log:
@@ -23,7 +23,7 @@ rule prokaryotes__cluster__index__:
         """
 
 
-rule prokaryotes__cluster__index:
+rule assemble__index__all:
     """Index all megahit assemblies"""
     input:
         [ASSEMBLE_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],

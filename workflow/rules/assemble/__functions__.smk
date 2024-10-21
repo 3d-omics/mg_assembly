@@ -1,3 +1,11 @@
+def get_sample_and_library_from_assembly_id(assembly_id):
+    """Get all the sample and library ids for a given assembly_id"""
+    samples_in_assembly = samples[samples.assembly_id == assembly_id][
+        ["sample_id", "library_id"]
+    ].values.tolist()
+    return samples_in_assembly
+
+
 def _get_reads_from_assembly_id(wildcards, end):
     """Get the file_end for megahit"""
     assert end in ["forward", "reverse"]

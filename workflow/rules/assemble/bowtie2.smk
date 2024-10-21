@@ -1,11 +1,11 @@
-rule prokaryotes__cluster__bowtie2__:
+rule assemble__bowtie2:
     """Map one sample to one megahit assembly"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
         forward_=PRE_BOWTIE2 / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_BOWTIE2 / "{sample_id}.{library_id}_2.fq.gz",
-        reference=MEGAHIT / "{assembly_id}.fa.gz",
-        fai=MEGAHIT / "{assembly_id}.fa.gz.fai",
+        reference=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
+        fai=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz.fai",
     output:
         bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
     log:
@@ -46,10 +46,13 @@ rule prokaryotes__cluster__bowtie2__:
         """
 
 
-rule prokaryotes__cluster__bowtie2:
+rule assemble__bowtie2__all:
     """Map all samples to all the assemblies that they belong to"""
     input:
         [
             ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
+            for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
+        ] + [
+            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam.bai"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
