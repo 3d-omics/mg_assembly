@@ -18,5 +18,4 @@ dependencies:
   - r-optparse =1.7.4
   - r-tidyverse =2.0.0
   - rename =1.601
-  # - samtools =1.19.2
-  # - seqtk =1.4
+  - samtools =1.19.2
