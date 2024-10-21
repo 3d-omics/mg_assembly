@@ -39,17 +39,21 @@ mkdir --parents resources/reads/
 wgsim \
     -S 0 \
     -N 100000 \
+    -1 150 \
+    -2 150 \
      resources/reference/contigs.fa.gz \
-    >(pigz -1 > resources/reads/sample1_1.fq.gz) \
-    >(pigz -1 > resources/reads/sample1_2.fq.gz) \
+    >(bgzip -l 9 -@ 8 > resources/reads/sample1_1.fq.gz) \
+    >(bgzip -l 9 -@ 8 > resources/reads/sample1_2.fq.gz) \
 > /dev/null
 
 wgsim \
     -S 1 \
     -N 600000 \
+    -1 150 \
+    -2 150 \
     resources/reference/contigs.fa.gz \
-    >(pigz -1 > resources/reads/sample2_1.fq.gz) \
-    >(pigz -1 > resources/reads/sample2_2.fq.gz) \
+    >(bgzip -l 9 -@ 8 > resources/reads/sample2_1.fq.gz) \
+    >(bgzip -l 9 -@ 8 > resources/reads/sample2_2.fq.gz) \
 > /dev/null
 
 # 10M works

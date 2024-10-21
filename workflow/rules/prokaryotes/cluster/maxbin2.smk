@@ -2,7 +2,7 @@ rule prokaryotes__cluster__maxbin2__:
     """Run MaxBin2 over a single assembly"""
     input:
         assembly=MEGAHIT / "{assembly_id}.fa.gz",
-        crams=get_crams_from_assembly_id,
+        bams=get_bams_from_assembly_id,
     output:
         workdir=directory(MAXBIN2 / "{assembly_id}"),
     log:
@@ -16,7 +16,7 @@ rule prokaryotes__cluster__maxbin2__:
         """
         mkdir --parents {output.workdir}
 
-        ( samtools coverage {input.crams} \
+        ( samtools coverage {input.bams} \
         | awk '{{print $1"\\t"$5}}' \
         | grep -v '^#' \
         ) > {params.coverage} \

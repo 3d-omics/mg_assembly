@@ -1,10 +1,10 @@
 rule prokaryotes__quantify__coverm__genome__:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        cram=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram",
-        crai=QUANT_BOWTIE2
+        bam=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam",
+        bai=QUANT_BOWTIE2
         / "drep.{secondary_ani}"
-        / "{sample_id}.{library_id}.cram.crai",
+        / "{sample_id}.{library_id}.bam.bai",
         reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
         fai=PROK_ANN / "drep.{secondary_ani}" / "dereplicated_genomes.fa.gz.fai",
     output:
@@ -29,17 +29,12 @@ rule prokaryotes__quantify__coverm__genome__:
         separator=params["quantify"]["coverm"]["genome"]["separator"],
     shell:
         """
-        ( samtools view \
-            --exclude-flags 4 \
-            --reference {input.reference} \
-            --fast \
-            {input.cram} \
-        | coverm genome \
-            --bam-files /dev/stdin \
+        ( coverm genome \
+            --bam-files {input.bam} \
             --methods {params.method} \
             --separator {params.separator} \
             --min-covered-fraction {params.min_covered_fraction} \
-        | gzip \
+        | gzip --best \
         > {output.tsv} \
         ) 2> {log}
         """
@@ -80,10 +75,10 @@ rule prokaryotes__quantify__coverm__genome:
 rule prokaryotes__quantify__coverm__contig__:
     """Run coverm contig for one library and one mag catalogue"""
     input:
-        cram=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram",
-        crai=QUANT_BOWTIE2
+        bam=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam",
+        bai=QUANT_BOWTIE2
         / "drep.{secondary_ani}"
-        / "{sample_id}.{library_id}.cram.crai",
+        / "{sample_id}.{library_id}.bam.bai",
         reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
         fai=PROK_ANN / "drep.{secondary_ani}.fa.gz.fai",
     output:
@@ -104,16 +99,11 @@ rule prokaryotes__quantify__coverm__contig__:
         method="{method}",
     shell:
         """
-        ( samtools view \
-            --exclude-flags 4 \
-            --reference {input.reference} \
-            --fast \
-            {input.cram} \
-        | coverm contig \
+        ( coverm contig \
             --bam-files /dev/stdin \
             --methods {params.method} \
             --proper-pairs-only \
-        | gzip \
+        | gzip --best \
         > {output.tsv} \
         ) 2> {log}
         """

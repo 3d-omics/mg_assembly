@@ -1,10 +1,10 @@
-rule viruses__quantify__samtools__stats_cram__:
-    """Get stats from CRAM files using samtools stats."""
+rule viruses__quantify__samtools__stats_bam__:
+    """Get stats from bam files using samtools stats."""
     input:
-        cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "rep_seq.fasta.gz",
-        fai=MMSEQS / "rep_seq.fasta.gz.fai",
+        bam=VBOWTIE2 / "{sample_id}.{library_id}.bam",
+        bai=VBOWTIE2 / "{sample_id}.{library_id}.bam.bai",
+        reference=MMSEQS / "rep_seq.fa.gz",
+        fai=MMSEQS / "rep_seq.fa.gz.fai",
     output:
         txt=VBOWTIE2 / "{sample_id}.{library_id}.stats.txt",
     log:
@@ -12,11 +12,11 @@ rule viruses__quantify__samtools__stats_cram__:
     conda:
         "__environment__.yml"
     shell:
-        "samtools stats --reference {input.reference} {input.cram} > {output.txt} 2> {log}"
+        "samtools stats --reference {input.reference} {input.bam} > {output.txt} 2> {log}"
 
 
 rule viruses__quantify__samtools:
-    """Get stats from CRAM files using samtools stats."""
+    """Get stats from bam files using samtools stats."""
     input:
         [
             VBOWTIE2 / f"{sample_id}.{library_id}.{extension}"

@@ -1,6 +1,6 @@
 rule viruses__annotate__checkv__:
     input:
-        fasta=MMSEQS / "rep_seq.fasta.gz",
+        fasta=MMSEQS / "rep_seq.fa.gz",
         database=features["databases"]["checkv"],
     output:
         complete_genomes=CHECKV / "complete_genomes.tsv",

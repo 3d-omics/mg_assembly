@@ -2,12 +2,12 @@ rule prokaryotes__cluster__bowtie2__:
     """Map one sample to one megahit assembly"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
-        forward_=CLEAN / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=CLEAN / "{sample_id}.{library_id}_2.fq.gz",
+        forward_=PRE_BOWTIE2 / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "{sample_id}.{library_id}_2.fq.gz",
         reference=MEGAHIT / "{assembly_id}.fa.gz",
         fai=MEGAHIT / "{assembly_id}.fa.gz.fai",
     output:
-        cram=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.cram",
+        bam=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
     log:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
@@ -22,8 +22,8 @@ rule prokaryotes__cluster__bowtie2__:
     shell:
         """
         find \
-            $(dirname {output.cram}) \
-            -name "$(basename {output.cram}).tmp.*.bam" \
+            $(dirname {output.bam}) \
+            -name "$(basename {output.bam}).tmp.*.bam" \
             -delete \
         2> {log}.{resources.attempt} 1>&2
 
@@ -37,7 +37,7 @@ rule prokaryotes__cluster__bowtie2__:
         | samtools sort \
             -l 9 \
             -m {params.samtools_mem} \
-            -o {output.cram} \
+            -o {output.bam} \
             --reference {input.reference} \
             --threads {threads} \
         ) 2>> {log}.{resources.attempt} 1>&2
@@ -50,6 +50,6 @@ rule prokaryotes__cluster__bowtie2:
     """Map all samples to all the assemblies that they belong to"""
     input:
         [
-            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+            ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],

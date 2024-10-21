@@ -2,9 +2,9 @@ rule viruses__cluster__mmseqs__:
     input:
         fasta=DEDUPE / "dedupe.fa.gz",
     output:
-        all_seq=MMSEQS / "all_seqs.fasta.gz",
+        all_seq=MMSEQS / "all_seqs.fa.gz",
         cluster=MMSEQS / "cluster.tsv.gz",
-        rep_seq=MMSEQS / "rep_seq.fasta.gz",
+        rep_seq=MMSEQS / "rep_seq.fa.gz",
     log:
         MMSEQS / "easy_cluster.log",
     conda:

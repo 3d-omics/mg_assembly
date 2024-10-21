@@ -1,10 +1,8 @@
 rule viruses__quantify__coverm__genome__:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "rep_seq.fasta.gz",
-        fai=MMSEQS / "rep_seq.fasta.gz.fai",
+        bam=VBOWTIE2 / "{sample_id}.{library_id}.bam",
+        bai=VBOWTIE2 / "{sample_id}.{library_id}.bam.bai",
     output:
         tsv=VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
@@ -19,12 +17,8 @@ rule viruses__quantify__coverm__genome__:
         separator=params["quantify"]["coverm"]["genome"]["separator"],
     shell:
         """
-        ( samtools view \
-            --reference {input.reference} \
-            --fast \
-            {input.cram} \
-        | coverm genome \
-            --bam-files /dev/stdin \
+        ( coverm genome \
+            --bam-files {input.bam} \
             --methods {params.method} \
             --separator {params.separator} \
             --min-covered-fraction {params.min_covered_fraction} \
@@ -68,10 +62,8 @@ rule viruses__quantify__coverm__genome:
 rule viruses__quantify__coverm__contig__:
     """Run coverm contig for one library and one mag catalogue"""
     input:
-        cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "rep_seq.fasta.gz",
-        fai=MMSEQS / "rep_seq.fasta.gz.fai",
+        bam=VBOWTIE2 / "{sample_id}.{library_id}.bam",
+        bai=VBOWTIE2 / "{sample_id}.{library_id}.bam.bai",
     output:
         tsv=VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
@@ -82,12 +74,8 @@ rule viruses__quantify__coverm__contig__:
         method="{method}",
     shell:
         """
-        ( samtools view \
-            --reference {input.reference} \
-            --fast \
-            {input.cram} \
-        | coverm contig \
-            --bam-files /dev/stdin \
+        ( coverm contig \
+            --bam-files {input.bam} \
             --methods {params.method} \
             --proper-pairs-only \
         | bgzip \

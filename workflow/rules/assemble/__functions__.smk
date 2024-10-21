@@ -5,7 +5,7 @@ def _get_reads_from_assembly_id(wildcards, end):
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     return [
-        CLEAN / f"{sample_id}.{library_id}_{end}.fq.gz"
+        PRE_BOWTIE2 / f"{sample_id}.{library_id}_{end}.fq.gz"
         for sample_id, library_id in samples_in_assembly
     ]
 

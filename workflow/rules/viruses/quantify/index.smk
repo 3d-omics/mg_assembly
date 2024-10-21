@@ -1,7 +1,7 @@
 rule viruses__quantify__index__:
     """Index dereplicader"""
     input:
-        contigs=MMSEQS / "rep_seq.fasta.gz",
+        contigs=MMSEQS / "rep_seq.fa.gz",
     output:
         mock=touch(VINDEX / "viruses"),
     log:

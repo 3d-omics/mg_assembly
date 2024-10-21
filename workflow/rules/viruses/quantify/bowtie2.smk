@@ -3,12 +3,10 @@ rule viruses__quantify__bowtie2__:
     """Align one sample to the dereplicated genomes"""
     input:
         mock=VINDEX / "viruses",
-        forward_=CLEAN / "{sample_id}.{library_id}_1.fq.gz",
-        reverse_=CLEAN / "{sample_id}.{library_id}_2.fq.gz",
-        reference=MMSEQS / "rep_seq.fasta.gz",
-        fai=MMSEQS / "rep_seq.fasta.gz.fai",
+        forward_=PRE_BOWTIE2 / "{sample_id}.{library_id}_1.fq.gz",
+        reverse_=PRE_BOWTIE2 / "{sample_id}.{library_id}_2.fq.gz",
     output:
-        cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
+        bam=VBOWTIE2 / "{sample_id}.{library_id}.bam",
     log:
         VBOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
@@ -20,8 +18,8 @@ rule viruses__quantify__bowtie2__:
     shell:
         """
         find \
-            $(dirname {output.cram}) \
-            -name "$(basename {output.cram}).tmp.*.bam" \
+            $(dirname {output.bam}) \
+            -name "$(basename {output.bam}).tmp.*.bam" \
             -delete \
         2> {log} 1>&2
 
@@ -36,8 +34,7 @@ rule viruses__quantify__bowtie2__:
             -l 9 \
             -M \
             -m {params.samtools_mem} \
-            -o {output.cram} \
-            --reference {input.reference} \
+            -o {output.bam} \
             --threads {threads} \
         ) 2>> {log} 1>&2
         """
@@ -47,6 +44,6 @@ rule viruses__quantify__bowtie2:
     """Align all samples to the dereplicated genomes"""
     input:
         [
-            VBOWTIE2 / f"{sample_id}.{library_id}.cram"
+            VBOWTIE2 / f"{sample_id}.{library_id}.bam"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],

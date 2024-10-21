@@ -1,7 +1,8 @@
 rule prokaryotes__cluster__concoct__:
     input:
         assembly=MEGAHIT / "{assembly_id}.fa.gz",
-        crams=get_crams_from_assembly_id,
+        bams=get_bams_from_assembly_id,
+        bais=get_bais_from_assembly_id,
     output:
         directory(CONCOCT / "{assembly_id}"),
     log:
@@ -24,26 +25,9 @@ rule prokaryotes__cluster__concoct__:
         > {params.workdir}/cut.fa \
         2>> {log}
 
-        for cram in {input.crams} ; do
-
-            bam={params.workdir}/$(basename $cram .cram).bam
-
-            samtools view \
-                --exclude-flags 4 \
-                --fast \
-                --output $bam \
-                --output-fmt BAM \
-                --reference {input.assembly} \
-                --threads {threads} \
-                $cram
-
-            samtools index $bam
-
-        done 2>> {log} 1>&2
-
         concoct_coverage_table.py \
             {params.workdir}/cut.bed \
-            {params.workdir}/*.bam \
+            {input.bams} \
         > {params.workdir}/coverage.tsv \
         2>> {log}
 

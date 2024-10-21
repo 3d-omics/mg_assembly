@@ -45,7 +45,6 @@ include: "rules/__main__.smk"
 rule all:
     """Run the entire pipeline"""
     input:
-        rules.reads.input,
-        rules.preprocess.input,
+        rules.preprocess__all.input,
         rules.assemble.input,
         rules.report.input,

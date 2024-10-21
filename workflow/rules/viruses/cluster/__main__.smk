@@ -7,5 +7,5 @@ include: "mmseqs.smk"
 rule viruses__cluster:
     input:
         rules.viruses__cluster__genomad.input,
-        rules.viruses__cluster__dedupe.output,
-        rules.viruses__cluster__mmseqs.output,
+        rules.viruses__cluster__dedupe.input,
+        rules.viruses__cluster__mmseqs.input,

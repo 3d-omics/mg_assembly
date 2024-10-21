@@ -5,17 +5,21 @@ __use_yte__: true
 
 default-resources:
     runtime: 1h
-    mem_mb: 1G
+    mem_mb: 1024
 
 
 set-threads:
-    reference__recompress__: 8
-    preprocess__fastp__: 24
-    preprocess__index__: 24
-    preprocess__bowtie2__: 24
-    preprocess__kraken2__assign__: 8
-    preprocess__bowtie2__cram_to_fastq__: 24
+    # preprocess
+    preprocess__fastp: 8
+    preprocess__bowtie2__build: 24
+    preprocess__bowtie2__map: 24
+    preprocess__bowtie2__fastq: 24
+    preprocess__bowtie2__clean: 24
+    preprocess__kraken2__assign: 8
+    # assemble
     assemble__megahit__: 24
+    # prokaryotes
+    # prokaryotes - cluster
     prokaryotes__cluster__index__: 24
     prokaryotes__cluster__bowtie2__: 24
     prokaryotes__cluster__concoct__: 24
@@ -26,47 +30,56 @@ set-threads:
     prokaryotes__cluster__magscot__hmmsearch_tigr__: 4
     prokaryotes__cluster__drep__separate_bins__: 24
     prokaryotes__cluster__drep__run__: 24
+    # prokaryotes - annotate
     prokaryotes__annotate__checkm2__: 24
     prokaryotes__annotate__dram__annotate__: 24
     prokaryotes__annotate__gtdbtk__: 24
     prokaryotes__annotate__quast__: 4
+    # prokaryotes - quantify
     prokaryotes__quantify__index__: 24
     prokaryotes__quantify__bowtie2__: 24
+    # viruses
+    # viruses - cluster
     viruses__cluster__genomad__: 24
     viruses__cluster__dedupe__: 24
     viruses__cluster__mmseqs__: 24
+    # viruses - annotate
     viruses__annotate__genomad__: 24
     viruses__annotate__virsorter2__: 24
     viruses__annotate__dramv__annotate__: 24
     viruses__annotate__quast__: 4
+    # viruses - quantify
     viruses__quantify__index__: 24
     viruses__quantify__bowtie2__: 24
 
 
 set-resources:
     # preprocess
-    preprocess__fastp__:
+    preprocess__fastp:
         mem_mb: 8G
         runtime: 4h
-    preprocess__index__:
+    preprocess__bowtie2__build:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    preprocess__bowtie2__:
+    preprocess__bowtie2__map:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
-    preprocess__kraken2__assign__:
-        mem_mb: 500G
-        runtime: 1d
-    preprocess__nonpareil__:
-        runtime: 1d
-    preprocess__singlem__pipe__:
-        runtime: 2d
-        mem_mb: 16G
-    preprocess__singlem__condense__:
-        runtime: 6h
-    preprocess__bowtie2__cram_to_fastq__:
+    preprocess__bowtie2__fastq:
         mem_mb: 32G
         runtime: 1d
+    preprocess__kraken2__assign:
+        mem_mb: 500G
+        runtime: 1d
+    preprocess__nonpareil__run:
+        runtime: 1d
+    preprocess__singlem__pipe:
+        runtime: 2d
+        mem_mb: 16G
+    preprocess__singlem__condense:
+        runtime: 6h
+    preprocess__multiqc:
+        mem_mb: 4 * 1024 * 2 ** (attempt - 1)
+        runtime: 6h
     # assemble
     assemble__megahit__:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
@@ -103,7 +116,6 @@ set-resources:
         mem_mb: 8G
     prokaryotes__cluster__magscot__rename__:
         mem_mb: 8G
-
     # prokaryotes - annotate
     prokaryotes__annotate__checkm2__:
         mem_mb: 16G
@@ -152,13 +164,6 @@ set-resources:
     viruses__quantify__coverm__contig_aggregate__:
         mem_mb: 8G
     # report
-    report__sample__multiqc__:
-        mem_mb: 8G
-    report__step__reads__:
-        mem_mb: 8G
-    report__step__preprocess:
-        mem_mb: 4 * 1024 * 2 ** (attempt - 1)
-        runtime: 6h
     report__step__assemble:
         mem_mb: 8G
     report__step__quantify:

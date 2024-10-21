@@ -15,7 +15,7 @@ function run() {
 
 run \
     --jobs 8 \
-    report__step__preprocess \
+    preprocess__multiqc \
     assemble__megahit
 
 # generate mock assembly

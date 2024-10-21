@@ -1,21 +1,12 @@
-READS = Path("results/reads/")
-
 # reference
-REFERENCE = Path("results/reference/")
-HOSTS = REFERENCE / "hosts"
+# REFERENCE = Path("results/reference/")
+# HOSTS = REFERENCE / "hosts"
 
 # preprocess
 PRE = Path("results/preprocess/")
 FASTP = PRE / "fastp/"
 PRE_INDEX = PRE / "index/"
 PRE_BOWTIE2 = PRE / "bowtie2"
-
-# preprocess evaluation
-NONPAREIL = PRE / "nonpareil/"
-SINGLEM = PRE / "singlem/"
-PRE_COVERM = PRE / "coverm/"
-KRAKEN2 = PRE / "kraken2/"
-CLEAN = PRE / "clean/"
 
 # assemble
 ASSEMBLE = Path("results/assemble/")

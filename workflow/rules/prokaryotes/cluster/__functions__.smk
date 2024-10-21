@@ -14,7 +14,7 @@ def _get_reads_from_assembly_id(wildcards, end):
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     return [
-        CLEAN / f"{sample_id}.{library_id}_{end}.fq.gz"
+        PRE_BOWTIE2 / f"{sample_id}.{library_id}_{end}.fq.gz"
         for sample_id, library_id in samples_in_assembly
     ]
 
@@ -48,20 +48,20 @@ def aggregate_reverses_for_megahit(wildcards):
 
 
 # Concoct, metabat2 and maxbin2
-def get_crams_from_assembly_id(wildcards):
-    """Given an assembly_id, get all the cram files for that assembly."""
+def get_bams_from_assembly_id(wildcards):
+    """Given an assembly_id, get all the bam files for that assembly."""
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
-    cram_files = [
-        ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.cram"
+    bam_files = [
+        ASSEMBLE_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
         for sample_id, library_id in samples_in_assembly
     ]
-    return cram_files
+    return bam_files
 
 
-def get_crais_from_assembly_id(wildcards):
-    """Given an assembly_id, get all the cram files for that assembly."""
-    return [f"{cram}.crai" for cram in get_crams_from_assembly_id(wildcards)]
+def get_bais_from_assembly_id(wildcards):
+    """Given an assembly_id, get all the bam files for that assembly."""
+    return [f"{bam}.bai" for bam in get_bams_from_assembly_id(wildcards)]
 
 
 def compose_bams_for_metabat2_run(wildcards):

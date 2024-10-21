@@ -1,8 +1,7 @@
 rule prokaryotes__cluster__metabat2__:
     """Run metabat2 end-to-end on a single assembly"""
     input:
-        crams=get_crams_from_assembly_id,
-        crais=get_crais_from_assembly_id,
+        bams=get_bams_from_assembly_id,
         assembly=MEGAHIT / "{assembly_id}.fa.gz",
     output:
         bins=directory(METABAT2 / "{assembly_id}"),
@@ -12,31 +11,15 @@ rule prokaryotes__cluster__metabat2__:
         "__environment__.yml"
     params:
         bins_prefix=lambda w: METABAT2 / f"{w.assembly_id}/bin",
-        bams=compose_bams_for_metabat2_run,
         depth=lambda w: METABAT2 / f"{w.assembly_id}.depth",
         paired=lambda w: METABAT2 / f"{w.assembly_id}.paired",
         workdir=METABAT2,
     shell:
         """
-        for cram in {input.crams} ; do
-
-            bam={params.workdir}/$(basename $cram .cram).bam
-
-            samtools view \
-                --exclude-flags 4 \
-                --fast \
-                --output $bam \
-                --output-fmt BAM \
-                --reference {input.assembly} \
-                --threads {threads} \
-                $cram
-
-        done 2> {log} 1>&2
-
         jgi_summarize_bam_contig_depths \
             --outputDepth {params.depth} \
             --pairedContigs {params.paired} \
-            {params.bams} \
+            {input.bams} \
         2>> {log} 1>&2
 
         metabat2 \
@@ -50,15 +33,15 @@ rule prokaryotes__cluster__metabat2__:
         rm \
             --force \
             --verbose \
-            {params.bams} \
             {params.depth} \
             {params.paired} \
         2>> {log} 1>&2
 
-        pigz \
-            --best \
-            --verbose \
-            {output.bins}/*.fa \
+        parallel --jobs {threads} \
+            bgzip \
+                --compress-level 9 \
+                {{}} \
+        ::: {output.bins}/*.fa \
         2>> {log} 1>&2
         """
 
