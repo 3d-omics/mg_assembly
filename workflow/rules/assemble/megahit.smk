@@ -1,4 +1,4 @@
-rule assemble__megahit__:
+rule assemble__megahit:
     """Run megahit over one sample, merging all libraries in the process
 
     Note: the initial rm -rf is to delete the folder that snakemake creates.
@@ -61,7 +61,7 @@ rule assemble__megahit__:
         """
 
 
-rule assemble__megahit:
+rule assemble__megahit__all:
     """Rename all assemblies contigs to avoid future collisions"""
     input:
         [MEGAHIT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],
