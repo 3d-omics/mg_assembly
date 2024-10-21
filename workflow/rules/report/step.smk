@@ -6,7 +6,7 @@ rule report__step__prokaryotes:
             / f"drep.{secondary_ani}"
             / f"{sample_id}.{library_id}.{report}"
             for sample_id, library_id in SAMPLE_LIBRARY
-            for report in ["stats.txt", "flagstats.txt"]
+            for report in ["stats.tsv", "flagstats.txt"]
             for secondary_ani in SECONDARY_ANIS
         ],
     output:
