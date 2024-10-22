@@ -15,7 +15,7 @@ rule assemble__multiqc:
     log:
         RESULTS / "assemble.log",
     conda:
-        "__environment__.yml"
+        "../../environments/multiqc.yml"
     params:
         outdir=RESULTS,
     shell:

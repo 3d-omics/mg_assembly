@@ -7,7 +7,7 @@ rule assemble__quast:
     log:
         ASSEMBLE_QUAST / "{assembly_id}.log",
     conda:
-        "__environment__.yml"
+        "../../environments/quast.yml"
     shell:
         """
         quast \

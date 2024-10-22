@@ -13,7 +13,7 @@ rule assemble__megahit:
     log:
         log=ASSEMBLE_MEGAHIT / "{assembly_id}.log",
     conda:
-        "__environment__.yml"
+        "../../environments/megahit.yml"
     params:
         out_dir=lambda w: ASSEMBLE_MEGAHIT / w.assembly_id,
         min_contig_len=params["assemble"]["megahit"]["min_contig_len"],

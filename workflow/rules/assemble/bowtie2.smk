@@ -11,7 +11,7 @@ rule assemble__bowtie2:
     log:
         log=ASSEMBLE_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "__environment__.yml"
+        "../../environments/bowtie2_samtools.yml"
     params:
         samtools_mem=params["assemble"]["samtools"]["mem"],
         rg_id=compose_rg_id,

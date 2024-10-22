@@ -7,7 +7,7 @@ rule assemble__index:
     log:
         ASSEMBLE_INDEX / "{assembly_id}.log",
     conda:
-        "__environment__.yml"
+        "../../environments/bowtie2_samtools.yml"
     resources:
         attempt=get_attempt,
     retries: 5
