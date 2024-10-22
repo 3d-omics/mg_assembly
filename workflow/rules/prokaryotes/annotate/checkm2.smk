@@ -9,7 +9,7 @@ rule prokaryotes__annotate__checkm2:
     log:
         PROK_ANN / "quality_report.log",
     conda:
-        "checkm2.yml"
+        "../../../environments/checkm2.yml"
     shell:
         """
         checkm2 predict \

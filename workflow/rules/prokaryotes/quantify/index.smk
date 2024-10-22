@@ -7,7 +7,7 @@ rule prokaryotes__quantify__index:
     log:
         QUANT_INDEX / "drep.{secondary_ani}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/bowtie2_samtools.yml"
     shell:
         """
         bowtie2-build \

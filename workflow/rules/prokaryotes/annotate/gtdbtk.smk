@@ -8,7 +8,7 @@ rule prokaryotes__annotate__gtdbtk__classify_wf:
     log:
         PROK_ANN / "gtdbtk.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/gtdbtk.yml"
     shell:
         """
         export GTDBTK_DATA_PATH="{input.database}"
@@ -33,7 +33,7 @@ rule prokaryotes__annotate__gtdbtk__join_bac_and_ar:
     log:
         PROK_ANN / "gtdbtk.join.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/gtdbtk.yml"
     shell:
         """
         if [[ -f {input.work_dir}/gtdbtk.ar122.summary.tsv ]] ; then

@@ -49,4 +49,3 @@ rule all:
         rules.assemble__all.input,
         rules.prokaryotes__all.input,
         rules.viruses__all.input,
-        rules.report.input,

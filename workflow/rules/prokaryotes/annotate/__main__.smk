@@ -3,6 +3,7 @@ include: "gtdbtk.smk"
 include: "dram.smk"
 include: "checkm2.smk"
 include: "drep.smk"
+include: "quast.smk"
 
 
 rule prokaryotes__annotate__all:

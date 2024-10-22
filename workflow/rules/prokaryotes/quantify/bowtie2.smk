@@ -11,7 +11,7 @@ rule prokaryotes__quantify__bowtie2:
     log:
         QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/bowtie2_samtools.yml"
     params:
         samtools_mem=params["quantify"]["bowtie2"]["samtools_mem"],
         rg_id=compose_rg_id,

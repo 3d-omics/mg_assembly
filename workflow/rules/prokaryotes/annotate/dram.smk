@@ -9,7 +9,7 @@ rule prokaryotes__annotate__dram__setup:
     log:
         PROK_ANN / "dram.setup.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -45,7 +45,7 @@ rule prokaryotes__annotate__dram__annotate:
     log:
         PROK_ANN / "dram.annotate" / "{mag_id}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         min_contig_size=params["prokaryotes"]["annotate"]["dram"]["annotate"][
             "min_contig_size"
@@ -82,7 +82,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_annotations:
     log:
         PROK_ANN / "dram.annotate.aggregate.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     shell:
@@ -108,7 +108,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_trnas:
     log:
         PROK_ANN / "dram.trnas.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     shell:
@@ -132,7 +132,7 @@ rule prokaryotes__annotate__dram__annotate_aggregate_rrnas:
     log:
         PROK_ANN / "dram.rrnas.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     shell:
@@ -161,7 +161,7 @@ rule prokaryotes__annotate__dram__annotate_archive:
     log:
         PROK_ANN / "dram.archive.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         out_dir=PROK_ANN,
         work_dir=PROK_ANN / "dram.annotate",
@@ -192,7 +192,7 @@ rule prokaryotes__annotate__dram__distill:
     log:
         PROK_ANN / "dram.distill.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     shell:
         """
         DRAM.py distill \
@@ -214,7 +214,7 @@ rule prokaryotes__annotate__dram__distill_archive:
     log:
         PROK_ANN / "dram.distill_archive.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         out_dir=PROK_ANN,
     shell:

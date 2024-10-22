@@ -7,7 +7,7 @@ checkpoint prokaryotes__annotate__mags:
     log:
         MAGS / ".." / "mags.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/coreutils.yml"
     shell:
         """
         mkdir --parents {output.out_dir} 2> {log} 1>&2

@@ -3,7 +3,6 @@ include: "__functions__.smk"
 include: "assemble/__main__.smk"
 include: "prokaryotes/__main__.smk"
 include: "viruses/__main__.smk"
-include: "report/__main__.smk"
 
 
 module preprocess:

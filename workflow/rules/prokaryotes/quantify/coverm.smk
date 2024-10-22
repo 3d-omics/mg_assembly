@@ -12,7 +12,7 @@ rule prokaryotes__quantify__coverm__genome:
         / "drep.{secondary_ani}"
         / "{sample_id}.{library_id}.tsv.gz",
     conda:
-        "__environment__.yml"
+        "../../../environments/coverm.yml"
     log:
         COVERM
         / "genome"
@@ -47,7 +47,7 @@ rule prokaryotes__quantify__coverm__genome__aggregate:
     log:
         COVERM / "genome.{method}.{secondary_ani}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/r.yml"
     params:
         input_dir=lambda w: COVERM / "genome" / w.method / w.secondary_ani,
     shell:
@@ -84,7 +84,7 @@ rule prokaryotes__quantify__coverm__contig:
         / "drep.{secondary_ani}"
         / "{sample_id}.{library_id}.tsv.gz",
     conda:
-        "__environment__.yml"
+        "../../../environments/coverm.yml"
     log:
         COVERM
         / "contig"
@@ -114,7 +114,7 @@ rule prokaryotes__quantify__coverm__contig__aggregate:
     log:
         COVERM / "contig.{method}.{secondary_ani}log",
     conda:
-        "__environment__.yml"
+        "../../../environments/r.yml"
     params:
         input_dir=lambda w: COVERM / "contig" / w.method / w.secondary_ani,
     shell:

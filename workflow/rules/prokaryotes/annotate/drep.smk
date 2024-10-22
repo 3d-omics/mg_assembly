@@ -6,7 +6,7 @@ rule prokaryotes__annotate__drep__quality_report:
     log:
         PROK_ANN / "drep.quality_report.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/drep.yml"
     shell:
         """
         echo \
@@ -34,7 +34,7 @@ rule prokaryotes__annotate__drep__dereplicate:
     log:
         PROK_ANN / "drep.{secondary_ani}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/drep.yml"
     params:
         secondary_ani=lambda w: w.secondary_ani,
         minimum_completeness=params["prokaryotes"]["annotate"]["drep"][
@@ -65,7 +65,7 @@ rule prokaryotes__annotate__drep__get_fasta:
     log:
         PROK_ANN / "drep.{secondary_ani}.fa.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/drep.yml"
     shell:
         """
         ( cat \
@@ -86,7 +86,7 @@ rule prokaryotes__annotate__drep__tarball:
     log:
         PROK_ANN / "drep.{secondary_ani}.tar.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/drep.yml"
     shell:
         """
         tar \
