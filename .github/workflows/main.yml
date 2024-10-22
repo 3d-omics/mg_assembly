@@ -73,7 +73,7 @@ jobs:
             --show-failed-logs
             --cores 3
             --latency-wait 5
-            assemble
+            assemble__all
 
       - name: Test workflow - Prokaryotes - Cluster
         uses: snakemake/snakemake-github-action@v1
