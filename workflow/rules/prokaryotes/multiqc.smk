@@ -15,7 +15,7 @@ rule prokaryotes__multiqc:
     log:
         RESULTS / "prokaryotes.log",
     conda:
-        "../../environments/multiqc.yml",
+        "../../environments/multiqc.yml"
     params:
         outdir=RESULTS,
     shell:

@@ -29,6 +29,7 @@ rule viruses__multiqc:
         2> {log} 1>&2
         """
 
+
 rule viruses__multiqc__all:
     input:
         rules.viruses__multiqc.output,

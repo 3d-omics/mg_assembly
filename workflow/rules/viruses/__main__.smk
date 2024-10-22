@@ -3,6 +3,7 @@ include: "annotate/__main__.smk"
 include: "quantify/__main__.smk"
 include: "multiqc.smk"
 
+
 rule viruses__all:
     input:
         rules.viruses__cluster__all.input,
