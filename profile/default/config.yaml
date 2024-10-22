@@ -90,7 +90,13 @@ set-resources:
     assemble__bowtie2:
         mem_mb: 32 * 1024 * 2 ** (attempt - 1)
         runtime: 1d
+    assemble__multiqc:
+        mem_mb: 8 * 1024 * 2 ** (attempt - 1)
+        runtime: 6h
     # prokaryotes
+    prokaryotes__multiqc:
+        mem_mb: 8 * 1024 * 2 ** (attempt - 1)
+        runtime: 6h
     ## prokaryotes - cluster
     prokaryotes__cluster__concoct:
         mem_mb: 8 * 1024 * 2 ** (attempt - 1)
@@ -144,6 +150,9 @@ set-resources:
     prokaryotes__quantify__coverm__contig__aggregate:
         mem_mb: 8G
     # viruses
+    viruses__multiqc:
+        mem_mb: 8 * 1024 * 2 ** (attempt - 1)
+        runtime: 6h
     ## viruses - cluster
     viruses__cluster__genomad:
         mem_mb: 32G
@@ -162,9 +171,4 @@ set-resources:
     viruses__quantify__coverm__genome__aggregate:
         mem_mb: 8G
     viruses__quantify__coverm__contig_aggregate:
-        mem_mb: 8G
-    # report
-    report__step__assemble:
-        mem_mb: 8G
-    report__step__quantify:
         mem_mb: 8G
