@@ -7,7 +7,7 @@ rule viruses__annotate__quast:
     log:
         QUASTV / "quast.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/quast.yml"
     shell:
         """
         quast \

@@ -11,7 +11,7 @@ rule viruses__annotate__virsorter2:
     log:
         VIRSORTER2 / "virsorter2.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/virsorter2.yml"
     params:
         workdir=VIRSORTER2,
     shadow:

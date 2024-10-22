@@ -12,7 +12,7 @@ rule viruses__annotate__checkv:
     log:
         CHECKV / "checkv.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/checkv.yml"
     params:
         workdir=CHECKV,
     shell:

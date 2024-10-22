@@ -7,7 +7,7 @@ rule viruses__quantify__index:
     log:
         VINDEX / "virues.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/bowtie2_samtools.yml"
     shell:
         """
         bowtie2-build \

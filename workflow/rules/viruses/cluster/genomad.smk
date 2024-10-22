@@ -15,7 +15,7 @@ rule viruses__cluster__genomad:
     log:
         GENOMADC / "{assembly_id}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/genomad.yml"
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         genomad_workdir=GENOMADC,

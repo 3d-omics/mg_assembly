@@ -1,12 +1,12 @@
-rule viruses__cluster__dedupe:
+rule viruses__cluster__bbmap__dedupe:
     input:
         fastas=[GENOMADC / f"{assembly_id}_virus.fna.gz" for assembly_id in ASSEMBLIES],
     output:
         fasta=DEDUPE / "dedupe.fa.gz",
     log:
-        DEDUPE / "dedupe.log",
+        DEDUPE / "bbmap.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/bbmap.yml"
     params:
         fastas_comma=lambda w, input: ",".join(input),
         minimum_length=500,
@@ -25,6 +25,6 @@ rule viruses__cluster__dedupe:
         """
 
 
-rule viruses__cluster__dedupe__all:
+rule viruses__cluster__bbmap__all:
     input:
-        rules.viruses__cluster__dedupe.output,
+        rules.viruses__cluster__bbmap__dedupe.output,

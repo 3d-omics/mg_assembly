@@ -8,7 +8,7 @@ rule viruses__annotate__dramv__annotate:
     log:
         DRAMV / "annotate.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         workdir=DRAMV,
     shell:
@@ -68,7 +68,7 @@ rule viruses__annotate__dramv__distill:
     log:
         DRAMV / "distill.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         workdir=DRAMV / "tmp",
     shadow:

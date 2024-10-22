@@ -8,7 +8,7 @@ rule viruses__cluster__mmseqs:
     log:
         MMSEQS / "easy_cluster.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/mmseqs.yml"
     params:
         prefix=MMSEQS / "tmp",
         tmpdir=MMSEQS,

@@ -1,4 +1,3 @@
-
 rule viruses__quantify__bowtie2:
     """Align one sample to the dereplicated genomes"""
     input:
@@ -10,7 +9,7 @@ rule viruses__quantify__bowtie2:
     log:
         VBOWTIE2 / "{sample_id}.{library_id}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/bowtie2_samtools.yml"
     params:
         samtools_mem=params["quantify"]["bowtie2"]["samtools_mem"],
         rg_id=compose_rg_id,

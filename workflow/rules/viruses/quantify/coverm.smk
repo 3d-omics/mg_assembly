@@ -6,7 +6,7 @@ rule viruses__quantify__coverm__genome:
     output:
         tsv=VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
-        "__environment__.yml"
+        "../../../environments/coverm.yml"
     log:
         VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -37,7 +37,7 @@ rule viruses__quantify__coverm__genome_aggregate:
     log:
         VCOVERM / "genome.{method}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/r.yml"
     params:
         input_dir=lambda w: VCOVERM / "genome" / w.method,
     shell:
@@ -67,7 +67,7 @@ rule viruses__quantify__coverm__contig:
     output:
         tsv=VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
-        "__environment__.yml"
+        "../../../environments/coverm.yml"
     log:
         VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -93,7 +93,7 @@ rule viruses__quantify__coverm__contig_aggregate:
     log:
         VCOVERM / "contig.{method}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/r.yml"
     params:
         input_dir=lambda w: VCOVERM / "contig" / w.method,
     shell:
