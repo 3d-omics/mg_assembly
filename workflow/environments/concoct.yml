@@ -1,5 +1,3 @@
-# binning: environment to bin mags
----
 channels:
   - conda-forge
   - bioconda

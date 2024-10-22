@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - maxbin2 =2.2.7
+  - pigz =2
+  - samtools =1.21
+  - coreutils =9

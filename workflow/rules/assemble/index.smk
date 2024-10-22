@@ -1,4 +1,4 @@
-rule assemble__index:
+rule assemble__bowtie2__build:
     """Index a megahit assembly"""
     input:
         contigs=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
@@ -23,7 +23,7 @@ rule assemble__index:
         """
 
 
-rule assemble__index__all:
+rule assemble__bowtie2__build__all:
     """Index all megahit assemblies"""
     input:
         [ASSEMBLE_INDEX / f"{assembly_id}" for assembly_id in ASSEMBLIES],

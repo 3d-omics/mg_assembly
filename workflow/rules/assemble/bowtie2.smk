@@ -1,4 +1,4 @@
-rule assemble__bowtie2:
+rule assemble__bowtie2__map:
     """Map one sample to one megahit assembly"""
     input:
         mock=ASSEMBLE_INDEX / "{assembly_id}",
@@ -46,7 +46,7 @@ rule assemble__bowtie2:
         """
 
 
-rule assemble__bowtie2__all:
+rule assemble__bowtie2__map__all:
     """Map all samples to all the assemblies that they belong to"""
     input:
         [

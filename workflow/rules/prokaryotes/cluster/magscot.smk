@@ -7,7 +7,7 @@ rule prokaryotes__cluster__magscot__prodigal:
     log:
         MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     resources:
         attempt=get_attempt,
     retries: 5
@@ -48,7 +48,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_pfam:
     log:
         MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         hmmsearch \
@@ -74,7 +74,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_tigr:
     log:
         MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         hmmsearch \
@@ -103,7 +103,7 @@ rule prokaryotes__cluster__magscot__join_hmms:
     log:
         MAGSCOT / "{assembly_id}" / "hmm.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
@@ -131,7 +131,7 @@ rule prokaryotes__cluster__magscot__merge_contig_to_bin:
     log:
         MAGSCOT / "{assembly_id}" / "contigs_to_bin.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
@@ -170,7 +170,7 @@ rule prokaryotes__cluster__magscot__run:
     log:
         MAGSCOT / "{assembly_id}/magscot.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     params:
         out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
     shell:
@@ -194,7 +194,7 @@ rule prokaryotes__cluster__magscot__reformat:
     log:
         MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
@@ -214,7 +214,7 @@ rule prokaryotes__cluster__magscot__rename:
     log:
         MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         ( python workflow/scripts/reformat_fasta_magscot.py \
