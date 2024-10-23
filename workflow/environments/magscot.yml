@@ -11,3 +11,4 @@ dependencies:
   - parallel =20240122
   - prodigal =2.6.3
   - hmmer =3.4
+  - pigz =2.8
