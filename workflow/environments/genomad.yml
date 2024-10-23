@@ -2,6 +2,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - genomad=1.7.4
-  - pip:
-    - keras==3
+  - genomad =1.8.1

@@ -3,7 +3,7 @@ channels:
   - bioconda
 dependencies:
   - maxbin2 =2.2.7
-  - pigz =2
+  - pigz =2.8
   - samtools =1.21
-  - coreutils =9
+  - coreutils =9.5
   - rename =1.601

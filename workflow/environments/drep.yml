@@ -2,4 +2,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - drep =3.4.5
+  - drep =3.5.0
