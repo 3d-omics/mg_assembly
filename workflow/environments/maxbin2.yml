@@ -6,3 +6,4 @@ dependencies:
   - pigz =2
   - samtools =1.21
   - coreutils =9
+  - rename =1.601
