@@ -86,6 +86,7 @@ jobs:
             --show-failed-logs
             --cores 3
             --latency-wait 5
+            --conda-cleanup-envs
             prokaryotes__cluster__all
 
 
