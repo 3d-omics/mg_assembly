@@ -49,3 +49,11 @@ rule all:
         rules.assemble__all.input,
         rules.prokaryotes__all.input,
         rules.viruses__all.input,
+
+
+rule test:
+    """Run only the testable parts"""
+    input:
+        rules.preprocess__multiqc__all.input,
+        rules.assemble__all.input,
+        rules.prokaryotes__cluster__all.input,
