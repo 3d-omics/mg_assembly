@@ -8,5 +8,6 @@ dependencies:
   - r-funr =0.3.2
   - r-optparse =1.7.4
   - r-tidyverse =2.0.0
+  - parallel =20240122
   - prodigal =2.6.3
   - hmmer =3.4

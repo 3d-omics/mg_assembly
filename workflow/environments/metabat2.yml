@@ -3,3 +3,4 @@ channels:
   - bioconda
 dependencies:
   - metabat2 =2.15
+  - parallel =20240122
