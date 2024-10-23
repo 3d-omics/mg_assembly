@@ -70,6 +70,7 @@ rule viruses__annotate__dramv__distill:
     conda:
         "../../../environments/dram.yml"
     params:
+        outdir=DRAMV,
         workdir=DRAMV / "tmp",
     shadow:
         "minimal"
@@ -82,13 +83,13 @@ rule viruses__annotate__dramv__distill:
 
         mv \
             {params.workdir}/* \
-            {DRAMV}/ \
+            {params.outdir}/ \
         2>> {log} 1>&2
 
         bgzip \
             --threads {threads} \
-            {DRAMV}/amg_summary.tsv \
-            {DRAMV}/vMAG_stats.tsv \
+            {params.outdir}/amg_summary.tsv \
+            {params.outdir}/vMAG_stats.tsv \
         2>> {log} 1>&2
         """
 

@@ -48,7 +48,7 @@ rule viruses__cluster__genomad:
         mv \
             --verbose \
             {params.genomad_summary_dir}/* \
-            {GENOMADC} \
+            {params.genomad_workdir} \
         2>> {log} 1>&2
         """
 

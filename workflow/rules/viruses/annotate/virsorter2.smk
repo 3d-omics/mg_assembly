@@ -32,16 +32,16 @@ rule viruses__annotate__virsorter2:
         mv \
             {params.workdir}/for-dramv/viral-affi-contigs-for-dramv.tab \
             {params.workdir}/for-dramv/final-viral-combined-for-dramv.fa \
-            {VIRSORTER2}/ \
+            {params.workdir}/ \
         2>> {log} 1>&2
 
         bgzip \
             --threads {threads} \
-            {VIRSORTER2}/final-viral-boundary.tsv \
-            {VIRSORTER2}/final-viral-combined.fa \
-            {VIRSORTER2}/final-viral-score.tsv \
-            {VIRSORTER2}/final-viral-combined-for-dramv.fa \
-            {VIRSORTER2}/viral-affi-contigs-for-dramv.tab \
+            {params.workdir}/final-viral-boundary.tsv \
+            {params.workdir}/final-viral-combined.fa \
+            {params.workdir}/final-viral-score.tsv \
+            {params.workdir}/final-viral-combined-for-dramv.fa \
+            {params.workdir}/viral-affi-contigs-for-dramv.tab \
         2>> {log} 1>&2
         """
 
