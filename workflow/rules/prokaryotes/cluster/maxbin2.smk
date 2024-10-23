@@ -1,14 +1,14 @@
-rule prokaryotes__cluster__maxbin2__:
+rule prokaryotes__cluster__maxbin2:
     """Run MaxBin2 over a single assembly"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
-        crams=get_crams_from_assembly_id,
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
+        bams=get_bams_from_assembly_id,
     output:
         workdir=directory(MAXBIN2 / "{assembly_id}"),
     log:
         MAXBIN2 / "{assembly_id}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/maxbin2.yml"
     params:
         seed=1,
         coverage=lambda w: MAXBIN2 / f"{w.assembly_id}/maxbin2.coverage",
@@ -16,7 +16,7 @@ rule prokaryotes__cluster__maxbin2__:
         """
         mkdir --parents {output.workdir}
 
-        ( samtools coverage {input.crams} \
+        ( samtools coverage {input.bams} \
         | awk '{{print $1"\\t"$5}}' \
         | grep -v '^#' \
         ) > {params.coverage} \
@@ -49,7 +49,7 @@ rule prokaryotes__cluster__maxbin2__:
         """
 
 
-rule prokaryotes__cluster__maxbin2:
+rule prokaryotes__cluster__maxbin2__all:
     """Run MaxBin2 over all assemblies"""
     input:
         [MAXBIN2 / assembly_id for assembly_id in ASSEMBLIES],

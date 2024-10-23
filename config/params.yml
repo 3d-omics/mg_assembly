@@ -2,9 +2,10 @@
 ---
 preprocess:
   fastp:
-    length_required: 25  # nonpareil requires at least 25bp
-  bowtie2:  # mem_gb >= mem_host + threads * samtools_mem
-    samtools_mem: 1G
+    extra: " --length_required 75 --trim_poly_g --trim_poly_x"
+  bowtie2:
+    bowtie2_extra: ""
+    samtools_extra: "-m 1G"
 
 assemble:
   megahit:

@@ -1,14 +1,14 @@
-rule viruses__cluster__mmseqs__:
+rule viruses__cluster__mmseqs:
     input:
         fasta=DEDUPE / "dedupe.fa.gz",
     output:
-        all_seq=MMSEQS / "all_seqs.fasta.gz",
+        all_seq=MMSEQS / "all_seqs.fa.gz",
         cluster=MMSEQS / "cluster.tsv.gz",
-        rep_seq=MMSEQS / "rep_seq.fasta.gz",
+        rep_seq=MMSEQS / "rep_seq.fa.gz",
     log:
         MMSEQS / "easy_cluster.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/mmseqs.yml"
     params:
         prefix=MMSEQS / "tmp",
         tmpdir=MMSEQS,
@@ -46,6 +46,6 @@ rule viruses__cluster__mmseqs__:
         """
 
 
-rule viruses__cluster__mmseqs:
+rule viruses__cluster__mmseqs__all:
     input:
-        rules.viruses__cluster__mmseqs__.output,
+        rules.viruses__cluster__mmseqs.output,

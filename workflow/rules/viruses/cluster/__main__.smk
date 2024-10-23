@@ -1,11 +1,10 @@
-include: "__functions__.smk"
 include: "genomad.smk"
-include: "dedupe.smk"
+include: "bbmap.smk"
 include: "mmseqs.smk"
 
 
-rule viruses__cluster:
+rule viruses__cluster__all:
     input:
-        rules.viruses__cluster__genomad.input,
-        rules.viruses__cluster__dedupe.output,
-        rules.viruses__cluster__mmseqs.output,
+        rules.viruses__cluster__genomad__all.input,
+        rules.viruses__cluster__bbmap__all.input,
+        rules.viruses__cluster__mmseqs__all.input,

@@ -1,14 +1,12 @@
-rule viruses__quantify__coverm__genome__:
+rule viruses__quantify__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "rep_seq.fasta.gz",
-        fai=MMSEQS / "rep_seq.fasta.gz.fai",
+        bam=VBOWTIE2 / "{sample_id}.{library_id}.bam",
+        bai=VBOWTIE2 / "{sample_id}.{library_id}.bam.bai",
     output:
         tsv=VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
-        "__environment__.yml"
+        "../../../environments/coverm.yml"
     log:
         VCOVERM / "genome" / "{method}" / "{sample_id}.{library_id}.log",
     params:
@@ -19,12 +17,8 @@ rule viruses__quantify__coverm__genome__:
         separator=params["quantify"]["coverm"]["genome"]["separator"],
     shell:
         """
-        ( samtools view \
-            --reference {input.reference} \
-            --fast \
-            {input.cram} \
-        | coverm genome \
-            --bam-files /dev/stdin \
+        ( coverm genome \
+            --bam-files {input.bam} \
             --methods {params.method} \
             --separator {params.separator} \
             --min-covered-fraction {params.min_covered_fraction} \
@@ -34,7 +28,7 @@ rule viruses__quantify__coverm__genome__:
         """
 
 
-rule viruses__quantify__coverm__genome_aggregate__:
+rule viruses__quantify__coverm__genome_aggregate:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_vcoverm_genome,
@@ -43,7 +37,7 @@ rule viruses__quantify__coverm__genome_aggregate__:
     log:
         VCOVERM / "genome.{method}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/r.yml"
     params:
         input_dir=lambda w: VCOVERM / "genome" / w.method,
     shell:
@@ -55,7 +49,7 @@ rule viruses__quantify__coverm__genome_aggregate__:
         """
 
 
-rule viruses__quantify__coverm__genome:
+rule viruses__quantify__coverm__genome__all:
     """Run coverm genome and all methods"""
     input:
         [
@@ -65,29 +59,23 @@ rule viruses__quantify__coverm__genome:
 
 
 # coverm contig ----
-rule viruses__quantify__coverm__contig__:
+rule viruses__quantify__coverm__contig:
     """Run coverm contig for one library and one mag catalogue"""
     input:
-        cram=VBOWTIE2 / "{sample_id}.{library_id}.cram",
-        crai=VBOWTIE2 / "{sample_id}.{library_id}.cram.crai",
-        reference=MMSEQS / "rep_seq.fasta.gz",
-        fai=MMSEQS / "rep_seq.fasta.gz.fai",
+        bam=VBOWTIE2 / "{sample_id}.{library_id}.bam",
+        bai=VBOWTIE2 / "{sample_id}.{library_id}.bam.bai",
     output:
         tsv=VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.tsv.gz",
     conda:
-        "__environment__.yml"
+        "../../../environments/coverm.yml"
     log:
         VCOVERM / "contig" / "{method}" / "{sample_id}.{library_id}.log",
     params:
         method="{method}",
     shell:
         """
-        ( samtools view \
-            --reference {input.reference} \
-            --fast \
-            {input.cram} \
-        | coverm contig \
-            --bam-files /dev/stdin \
+        ( coverm contig \
+            --bam-files {input.bam} \
             --methods {params.method} \
             --proper-pairs-only \
         | bgzip \
@@ -96,7 +84,7 @@ rule viruses__quantify__coverm__contig__:
         """
 
 
-rule viruses__quantify__coverm__contig_aggregate__:
+rule viruses__quantify__coverm__contig_aggregate:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_vcoverm_contig,
@@ -105,7 +93,7 @@ rule viruses__quantify__coverm__contig_aggregate__:
     log:
         VCOVERM / "contig.{method}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/r.yml"
     params:
         input_dir=lambda w: VCOVERM / "contig" / w.method,
     shell:
@@ -117,7 +105,7 @@ rule viruses__quantify__coverm__contig_aggregate__:
         """
 
 
-rule viruses__quantify__coverm__contig:
+rule viruses__quantify__coverm__contig__all:
     """Run coverm contig and all methods"""
     input:
         [
@@ -126,7 +114,7 @@ rule viruses__quantify__coverm__contig:
         ],
 
 
-rule viruses__quantify__coverm:
+rule viruses__quantify__coverm__all:
     input:
-        rules.viruses__quantify__coverm__contig.input,
-        rules.viruses__quantify__coverm__genome.input,
+        rules.viruses__quantify__coverm__contig__all.input,
+        rules.viruses__quantify__coverm__genome__all.input,

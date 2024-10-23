@@ -1,4 +1,7 @@
-rule prokaryotes__annotate__dram__setup__:
+include: "dram_functions.smk"
+
+
+rule prokaryotes__annotate__dram__setup:
     """
     Set up the databases from DRAM, no matter what the config file says.
     """
@@ -9,7 +12,7 @@ rule prokaryotes__annotate__dram__setup__:
     log:
         PROK_ANN / "dram.setup.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -34,7 +37,7 @@ rule prokaryotes__annotate__dram__setup__:
         """
 
 
-rule prokaryotes__annotate__dram__annotate__:
+rule prokaryotes__annotate__dram__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
         fasta=MAGS / "{mag_id}.fa",
@@ -45,14 +48,19 @@ rule prokaryotes__annotate__dram__annotate__:
     log:
         PROK_ANN / "dram.annotate" / "{mag_id}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         min_contig_size=params["prokaryotes"]["annotate"]["dram"]["annotate"][
             "min_contig_size"
         ],
     shell:
         """
-        rm -rf {params.work_dir}
+        rm \
+            --recursive \
+            --force \
+            --verbose \
+            {output.work_dir} \
+        2> {log} 1>&2
 
         DRAM.py annotate \
             --input_fasta {input.fasta} \
@@ -62,13 +70,7 @@ rule prokaryotes__annotate__dram__annotate__:
         """
 
 
-def collect_dram_annotate(wildcards):
-    checkpoint_output = checkpoints.prokaryotes__annotate__mags__.get().output[0]
-    mag_ids = glob_wildcards(MAGS / "{mag_id}.fa").mag_id
-    return [PROK_ANN / "dram.annotate" / mag_id for mag_id in mag_ids]
-
-
-rule prokaryotes__annotate__dram__annotate__aggregate_annotations__:
+rule prokaryotes__annotate__dram__annotate__aggregate_annotations:
     """Aggregate DRAM annotations"""
     input:
         collect_dram_annotate,
@@ -77,7 +79,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_annotations__:
     log:
         PROK_ANN / "dram.annotate.aggregate.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     shell:
@@ -94,7 +96,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_annotations__:
         """
 
 
-rule prokaryotes__annotate__dram__annotate__aggregate_trnas__:
+rule prokaryotes__annotate__dram__annotate__aggregate_trnas:
     """Aggregate DRAM tRNAs"""
     input:
         collect_dram_annotate,
@@ -103,7 +105,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_trnas__:
     log:
         PROK_ANN / "dram.trnas.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     shell:
@@ -118,7 +120,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_trnas__:
         """
 
 
-rule prokaryotes__annotate__dram__annotate_aggregate_rrnas__:
+rule prokaryotes__annotate__dram__annotate_aggregate_rrnas:
     """Aggregate DRAM rRNAs"""
     input:
         collect_dram_annotate,
@@ -127,7 +129,7 @@ rule prokaryotes__annotate__dram__annotate_aggregate_rrnas__:
     log:
         PROK_ANN / "dram.rrnas.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     shell:
@@ -142,7 +144,7 @@ rule prokaryotes__annotate__dram__annotate_aggregate_rrnas__:
         """
 
 
-rule prokaryotes__annotate__dram__annotate_archive__:
+rule prokaryotes__annotate__dram__annotate_archive:
     """
     Create tarball once annotations are merged done
     """
@@ -156,7 +158,7 @@ rule prokaryotes__annotate__dram__annotate_archive__:
     log:
         PROK_ANN / "dram.archive.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         out_dir=PROK_ANN,
         work_dir=PROK_ANN / "dram.annotate",
@@ -174,7 +176,7 @@ rule prokaryotes__annotate__dram__annotate_archive__:
         """
 
 
-rule prokaryotes__annotate__dram__distill__:
+rule prokaryotes__annotate__dram__distill:
     """Distill DRAM annotations."""
     input:
         annotations=PROK_ANN / "dram.annotations.tsv.gz",
@@ -187,7 +189,7 @@ rule prokaryotes__annotate__dram__distill__:
     log:
         PROK_ANN / "dram.distill.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     shell:
         """
         DRAM.py distill \
@@ -199,7 +201,7 @@ rule prokaryotes__annotate__dram__distill__:
         """
 
 
-rule prokaryotes__annotate__dram__distill_archive__:
+rule prokaryotes__annotate__dram__distill_archive:
     input:
         work_dir=PROK_ANN / "dram.distill",
     output:
@@ -209,7 +211,7 @@ rule prokaryotes__annotate__dram__distill_archive__:
     log:
         PROK_ANN / "dram.distill_archive.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         out_dir=PROK_ANN,
     shell:
@@ -225,12 +227,12 @@ rule prokaryotes__annotate__dram__distill_archive__:
         """
 
 
-rule prokaryotes__annotate__dram:
+rule prokaryotes__annotate__dram__all:
     """Run DRAM on dereplicated genomes."""
     input:
-        rules.prokaryotes__annotate__dram__annotate_archive__.output,
-        rules.prokaryotes__annotate__dram__distill_archive__.output,
+        rules.prokaryotes__annotate__dram__annotate_archive.output,
+        rules.prokaryotes__annotate__dram__distill_archive.output,
 
 
 localrules:
-    prokaryotes__annotate__dram__distill_archive__,
+    prokaryotes__annotate__dram__distill_archive,

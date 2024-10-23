@@ -1,6 +1,6 @@
-rule viruses__annotate__genomad__:
+rule viruses__annotate__genomad:
     input:
-        fasta=MMSEQS / "rep_seq.fasta.gz",
+        fasta=MMSEQS / "rep_seq.fa.gz",
         database=features["databases"]["genomad"],
     output:
         plasmid=GENOMADA / "rep_seq_plasmid.fna.gz",
@@ -15,7 +15,7 @@ rule viruses__annotate__genomad__:
     log:
         GENOMADA / "genomad.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/genomad.yml"
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=GENOMADA,
@@ -52,6 +52,6 @@ rule viruses__annotate__genomad__:
         """
 
 
-rule viruses__annotate__genomad:
+rule viruses__annotate__genomad__all:
     input:
-        rules.viruses__annotate__genomad__.output,
+        rules.viruses__annotate__genomad.output,

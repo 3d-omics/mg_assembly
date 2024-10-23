@@ -1,13 +1,13 @@
-rule viruses__annotate__quast__:
+rule viruses__annotate__quast:
     """Run quast over one the dereplicated mags"""
     input:
-        MMSEQS / "rep_seq.fasta.gz",
+        MMSEQS / "rep_seq.fa.gz",
     output:
         directory(QUASTV),
     log:
         QUASTV / "quast.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/quast.yml"
     shell:
         """
         quast \
@@ -18,6 +18,6 @@ rule viruses__annotate__quast__:
         """
 
 
-rule viruses__annotate__quast:
+rule viruses__annotate__quast__all:
     input:
-        rules.viruses__annotate__quast__.output,
+        rules.viruses__annotate__quast.output,

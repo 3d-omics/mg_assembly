@@ -1,13 +1,13 @@
-rule viruses__quantify__index__:
+rule viruses__quantify__index:
     """Index dereplicader"""
     input:
-        contigs=MMSEQS / "rep_seq.fasta.gz",
+        contigs=MMSEQS / "rep_seq.fa.gz",
     output:
         mock=touch(VINDEX / "viruses"),
     log:
         VINDEX / "virues.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/bowtie2_samtools.yml"
     shell:
         """
         bowtie2-build \
@@ -18,6 +18,6 @@ rule viruses__quantify__index__:
         """
 
 
-rule viruses__quantify__index:
+rule viruses__quantify__index__all:
     input:
-        rules.viruses__quantify__index__.output,
+        rules.viruses__quantify__index.output,

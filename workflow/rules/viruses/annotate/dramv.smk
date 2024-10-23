@@ -1,4 +1,4 @@
-rule viruses__annotate__dramv__annotate__:
+rule viruses__annotate__dramv__annotate:
     input:
         fa=VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
         tsv=VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
@@ -8,7 +8,7 @@ rule viruses__annotate__dramv__annotate__:
     log:
         DRAMV / "annotate.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
         workdir=DRAMV,
     shell:
@@ -58,7 +58,7 @@ rule viruses__annotate__dramv__annotate__:
         """
 
 
-rule viruses__annotate__dramv__distill__:
+rule viruses__annotate__dramv__distill:
     input:
         annotations=DRAMV / "annotations.tsv.gz",
     output:
@@ -68,8 +68,9 @@ rule viruses__annotate__dramv__distill__:
     log:
         DRAMV / "distill.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/dram.yml"
     params:
+        outdir=DRAMV,
         workdir=DRAMV / "tmp",
     shadow:
         "minimal"
@@ -82,17 +83,17 @@ rule viruses__annotate__dramv__distill__:
 
         mv \
             {params.workdir}/* \
-            {DRAMV}/ \
+            {params.outdir}/ \
         2>> {log} 1>&2
 
         bgzip \
             --threads {threads} \
-            {DRAMV}/amg_summary.tsv \
-            {DRAMV}/vMAG_stats.tsv \
+            {params.outdir}/amg_summary.tsv \
+            {params.outdir}/vMAG_stats.tsv \
         2>> {log} 1>&2
         """
 
 
-rule viruses__annotate__dramv:
+rule viruses__annotate__dramv__all:
     input:
-        rules.viruses__annotate__dramv__distill__.output,
+        rules.viruses__annotate__dramv__distill.output,

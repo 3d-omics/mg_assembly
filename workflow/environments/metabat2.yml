@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - metabat2 =2.17
+  - parallel =20240922

@@ -1,4 +1,4 @@
-rule prokaryotes__annotate__drep__quality_report__:
+rule prokaryotes__annotate__drep__quality_report:
     input:
         PROK_ANN / "checkm2.quality_report.tsv",
     output:
@@ -6,7 +6,7 @@ rule prokaryotes__annotate__drep__quality_report__:
     log:
         PROK_ANN / "drep.quality_report.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/drep.yml"
     shell:
         """
         echo \
@@ -24,7 +24,7 @@ rule prokaryotes__annotate__drep__quality_report__:
         """
 
 
-rule prokaryotes__annotate__drep__dereplicate__:
+rule prokaryotes__annotate__drep__dereplicate:
     """Dereplicate all the bins using dRep."""
     input:
         genomes=MAGS,
@@ -34,7 +34,7 @@ rule prokaryotes__annotate__drep__dereplicate__:
     log:
         PROK_ANN / "drep.{secondary_ani}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/drep.yml"
     params:
         secondary_ani=lambda w: w.secondary_ani,
         minimum_completeness=params["prokaryotes"]["annotate"]["drep"][
@@ -57,7 +57,7 @@ rule prokaryotes__annotate__drep__dereplicate__:
         """
 
 
-rule prokaryotes__annotate__drep__get_fasta__:
+rule prokaryotes__annotate__drep__get_fasta:
     input:
         work_dir=PROK_ANN / "drep.{secondary_ani}.dir",
     output:
@@ -65,7 +65,7 @@ rule prokaryotes__annotate__drep__get_fasta__:
     log:
         PROK_ANN / "drep.{secondary_ani}.fa.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/drep.yml"
     shell:
         """
         ( cat \
@@ -78,7 +78,7 @@ rule prokaryotes__annotate__drep__get_fasta__:
         """
 
 
-rule prokaryotes__annotate__drep__tarball__:
+rule prokaryotes__annotate__drep__tarball:
     input:
         work_dir=PROK_ANN / "drep.{secondary_ani}.dir",
     output:
@@ -86,7 +86,7 @@ rule prokaryotes__annotate__drep__tarball__:
     log:
         PROK_ANN / "drep.{secondary_ani}.tar.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/drep.yml"
     shell:
         """
         tar \
@@ -99,7 +99,11 @@ rule prokaryotes__annotate__drep__tarball__:
         """
 
 
-rule prokaryotes__annotate__drep:
+rule prokaryotes__annotate__drep__all:
     input:
         [PROK_ANN / f"drep.{secondary_ani}.tar.gz" for secondary_ani in SECONDARY_ANIS],
         [PROK_ANN / f"drep.{secondary_ani}.fa.gz" for secondary_ani in SECONDARY_ANIS],
+
+
+localrules:
+    prokaryotes__annotate__drep__quality_report,

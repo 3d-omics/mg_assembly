@@ -1,6 +1,6 @@
-rule viruses__annotate__checkv__:
+rule viruses__annotate__checkv:
     input:
-        fasta=MMSEQS / "rep_seq.fasta.gz",
+        fasta=MMSEQS / "rep_seq.fa.gz",
         database=features["databases"]["checkv"],
     output:
         complete_genomes=CHECKV / "complete_genomes.tsv",
@@ -12,7 +12,7 @@ rule viruses__annotate__checkv__:
     log:
         CHECKV / "checkv.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/checkv.yml"
     params:
         workdir=CHECKV,
     shell:
@@ -27,6 +27,6 @@ rule viruses__annotate__checkv__:
         """
 
 
-rule viruses__annotate__checkv:
+rule viruses__annotate__checkv__all:
     input:
-        rules.viruses__annotate__checkv__.output,
+        rules.viruses__annotate__checkv.output,

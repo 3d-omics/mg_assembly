@@ -1,17 +1,15 @@
 include: "folders.smk"
 include: "__functions__.smk"
-include: "reads/__main__.smk"
-include: "reference/__main__.smk"
-include: "preprocess/__main__.smk"
 include: "assemble/__main__.smk"
 include: "prokaryotes/__main__.smk"
 include: "viruses/__main__.smk"
-include: "report/__main__.smk"
 
 
-module helpers:
+module preprocess:
     snakefile:
-        "helpers/Snakefile"
+        github("jlanga/mg_preprocess", path="workflow/Snakefile", branch="devel")
+    config:
+        params
 
 
-use rule * from helpers as helpers__*
+use rule * from preprocess

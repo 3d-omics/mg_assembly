@@ -1,13 +1,13 @@
-rule prokaryotes__annotate__quast__:
+rule prokaryotes__annotate__quast:
     """Run quast over one the dereplicated mags"""
     input:
-        DREP / "dereplicated_genomes.fa.gz",
+        PROK_ANN / "drep.{secondary_ani}.fa.gz",
     output:
-        directory(QUAST),
+        directory(QUAST / "drep.{secondary_ani}"),
     log:
-        QUAST / "quast.log",
+        QUAST / "drep.{secondary_ani}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/quast.yml"
     shell:
         """
         quast \
@@ -18,6 +18,6 @@ rule prokaryotes__annotate__quast__:
         """
 
 
-rule prokaryotes__annotate__quast:
+rule prokaryotes__annotate__quast__all:
     input:
-        rules.prokaryotes__annotate__quast__.output,
+        [PROK_ANN / f"drep.{secondary_ani}.fa.gz" for secondary_ani in SECONDARY_ANIS],

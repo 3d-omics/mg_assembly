@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - biopython =1.84
+  - pandas =2.2.3
+  - r-argparse =2.2.3
+  - r-funr =0.3.2
+  - r-optparse =1.7.5
+  - r-tidyverse =2.0.0
+  - parallel =20240922
+  - prodigal =2.6.3
+  - hmmer =3.4
+  - pigz =2.8

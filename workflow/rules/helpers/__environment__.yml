@@ -1,8 +1,0 @@
-# auxiliary: environment for common tasks
----
-channels:
-  - conda-forge
-  - bioconda
-dependencies:
-  - fastqc=0.12.1
-  - samtools=1.18

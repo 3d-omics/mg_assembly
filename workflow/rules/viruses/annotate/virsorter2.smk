@@ -1,4 +1,4 @@
-rule viruses__annotate__virsorter2__:
+rule viruses__annotate__virsorter2:
     input:
         fna=GENOMADA / "rep_seq_virus.fna.gz",
         database=features["databases"]["virsorter2"],
@@ -11,7 +11,7 @@ rule viruses__annotate__virsorter2__:
     log:
         VIRSORTER2 / "virsorter2.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/virsorter2.yml"
     params:
         workdir=VIRSORTER2,
     shadow:
@@ -32,20 +32,20 @@ rule viruses__annotate__virsorter2__:
         mv \
             {params.workdir}/for-dramv/viral-affi-contigs-for-dramv.tab \
             {params.workdir}/for-dramv/final-viral-combined-for-dramv.fa \
-            {VIRSORTER2}/ \
+            {params.workdir}/ \
         2>> {log} 1>&2
 
         bgzip \
             --threads {threads} \
-            {VIRSORTER2}/final-viral-boundary.tsv \
-            {VIRSORTER2}/final-viral-combined.fa \
-            {VIRSORTER2}/final-viral-score.tsv \
-            {VIRSORTER2}/final-viral-combined-for-dramv.fa \
-            {VIRSORTER2}/viral-affi-contigs-for-dramv.tab \
+            {params.workdir}/final-viral-boundary.tsv \
+            {params.workdir}/final-viral-combined.fa \
+            {params.workdir}/final-viral-score.tsv \
+            {params.workdir}/final-viral-combined-for-dramv.fa \
+            {params.workdir}/viral-affi-contigs-for-dramv.tab \
         2>> {log} 1>&2
         """
 
 
-rule viruses__annotate__virsorter2:
+rule viruses__annotate__virsorter2__all:
     input:
-        rules.viruses__annotate__virsorter2__.output,
+        rules.viruses__annotate__virsorter2.output,

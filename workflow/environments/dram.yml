@@ -1,0 +1,7 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - csvkit =1.3.0
+  - dram =1.4.6
+  - parallel =20240122

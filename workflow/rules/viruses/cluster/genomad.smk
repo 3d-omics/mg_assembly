@@ -1,6 +1,6 @@
-rule viruses__cluster__genomad__:
+rule viruses__cluster__genomad:
     input:
-        fasta=MEGAHIT / "{assembly_id}.fa.gz",
+        fasta=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
         database=features["databases"]["genomad"],
     output:
         plasmid=GENOMADC / "{assembly_id}_plasmid.fna.gz",
@@ -15,7 +15,7 @@ rule viruses__cluster__genomad__:
     log:
         GENOMADC / "{assembly_id}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/genomad.yml"
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         genomad_workdir=GENOMADC,
@@ -48,11 +48,11 @@ rule viruses__cluster__genomad__:
         mv \
             --verbose \
             {params.genomad_summary_dir}/* \
-            {GENOMADC} \
+            {params.genomad_workdir} \
         2>> {log} 1>&2
         """
 
 
-rule viruses__cluster__genomad:
+rule viruses__cluster__genomad__all:
     input:
         [GENOMADC / f"{assembly_id}_virus.fna.gz" for assembly_id in ASSEMBLIES],

@@ -1,10 +1,8 @@
-rule prokaryotes__quantify__coverm__genome__:
+rule prokaryotes__quantify__coverm__genome:
     """Run coverm genome for one library and one mag catalogue"""
     input:
-        cram=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram",
-        crai=QUANT_BOWTIE2
-        / "drep.{secondary_ani}"
-        / "{sample_id}.{library_id}.cram.crai",
+        bam=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam",
+        bai=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam.bai",
         reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
         fai=PROK_ANN / "drep.{secondary_ani}" / "dereplicated_genomes.fa.gz.fai",
     output:
@@ -14,7 +12,7 @@ rule prokaryotes__quantify__coverm__genome__:
         / "drep.{secondary_ani}"
         / "{sample_id}.{library_id}.tsv.gz",
     conda:
-        "__environment__.yml"
+        "../../../environments/coverm.yml"
     log:
         COVERM
         / "genome"
@@ -29,23 +27,18 @@ rule prokaryotes__quantify__coverm__genome__:
         separator=params["quantify"]["coverm"]["genome"]["separator"],
     shell:
         """
-        ( samtools view \
-            --exclude-flags 4 \
-            --reference {input.reference} \
-            --fast \
-            {input.cram} \
-        | coverm genome \
-            --bam-files /dev/stdin \
+        ( coverm genome \
+            --bam-files {input.bam} \
             --methods {params.method} \
             --separator {params.separator} \
             --min-covered-fraction {params.min_covered_fraction} \
-        | gzip \
+        | gzip --best \
         > {output.tsv} \
         ) 2> {log}
         """
 
 
-rule prokaryotes__quantify__coverm__genome__aggregate__:
+rule prokaryotes__quantify__coverm__genome__aggregate:
     """Run coverm genome and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_genome,
@@ -54,7 +47,7 @@ rule prokaryotes__quantify__coverm__genome__aggregate__:
     log:
         COVERM / "genome.{method}.{secondary_ani}.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/r.yml"
     params:
         input_dir=lambda w: COVERM / "genome" / w.method / w.secondary_ani,
     shell:
@@ -66,7 +59,7 @@ rule prokaryotes__quantify__coverm__genome__aggregate__:
         """
 
 
-rule prokaryotes__quantify__coverm__genome:
+rule prokaryotes__quantify__coverm__genome__all:
     """Run coverm genome and all methods"""
     input:
         [
@@ -77,13 +70,11 @@ rule prokaryotes__quantify__coverm__genome:
 
 
 # coverm contig ----
-rule prokaryotes__quantify__coverm__contig__:
+rule prokaryotes__quantify__coverm__contig:
     """Run coverm contig for one library and one mag catalogue"""
     input:
-        cram=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.cram",
-        crai=QUANT_BOWTIE2
-        / "drep.{secondary_ani}"
-        / "{sample_id}.{library_id}.cram.crai",
+        bam=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam",
+        bai=QUANT_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam.bai",
         reference=PROK_ANN / "drep.{secondary_ani}.fa.gz",
         fai=PROK_ANN / "drep.{secondary_ani}.fa.gz.fai",
     output:
@@ -93,7 +84,7 @@ rule prokaryotes__quantify__coverm__contig__:
         / "drep.{secondary_ani}"
         / "{sample_id}.{library_id}.tsv.gz",
     conda:
-        "__environment__.yml"
+        "../../../environments/coverm.yml"
     log:
         COVERM
         / "contig"
@@ -104,22 +95,17 @@ rule prokaryotes__quantify__coverm__contig__:
         method="{method}",
     shell:
         """
-        ( samtools view \
-            --exclude-flags 4 \
-            --reference {input.reference} \
-            --fast \
-            {input.cram} \
-        | coverm contig \
+        ( coverm contig \
             --bam-files /dev/stdin \
             --methods {params.method} \
             --proper-pairs-only \
-        | gzip \
+        | gzip --best \
         > {output.tsv} \
         ) 2> {log}
         """
 
 
-rule prokaryotes__quantify__coverm__contig__aggregate__:
+rule prokaryotes__quantify__coverm__contig__aggregate:
     """Run coverm contig and a single method"""
     input:
         get_tsvs_for_dereplicate_coverm_contig,
@@ -128,7 +114,7 @@ rule prokaryotes__quantify__coverm__contig__aggregate__:
     log:
         COVERM / "contig.{method}.{secondary_ani}log",
     conda:
-        "__environment__.yml"
+        "../../../environments/r.yml"
     params:
         input_dir=lambda w: COVERM / "contig" / w.method / w.secondary_ani,
     shell:
@@ -140,7 +126,7 @@ rule prokaryotes__quantify__coverm__contig__aggregate__:
         """
 
 
-rule prokaryotes__quantify__coverm__contig:
+rule prokaryotes__quantify__coverm__contig__all:
     """Run coverm contig and all methods"""
     input:
         [
@@ -150,7 +136,7 @@ rule prokaryotes__quantify__coverm__contig:
         ],
 
 
-rule prokaryotes__quantify__coverm:
+rule prokaryotes__quantify__coverm__all:
     input:
-        rules.prokaryotes__quantify__coverm__genome.input,
-        rules.prokaryotes__quantify__coverm__contig.input,
+        rules.prokaryotes__quantify__coverm__genome__all.input,
+        rules.prokaryotes__quantify__coverm__contig__all.input,

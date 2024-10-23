@@ -1,13 +1,14 @@
-rule prokaryotes__cluster__concoct__:
+rule prokaryotes__cluster__concoct:
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
-        crams=get_crams_from_assembly_id,
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
+        bams=get_bams_from_assembly_id,
+        bais=get_bais_from_assembly_id,
     output:
         directory(CONCOCT / "{assembly_id}"),
     log:
         CONCOCT / "{assembly_id}.log",
     conda:
-        "concoct.yml"
+        "../../../environments/concoct.yml"
     retries: 5
     params:
         workdir=lambda w: CONCOCT / w.assembly_id,
@@ -24,26 +25,9 @@ rule prokaryotes__cluster__concoct__:
         > {params.workdir}/cut.fa \
         2>> {log}
 
-        for cram in {input.crams} ; do
-
-            bam={params.workdir}/$(basename $cram .cram).bam
-
-            samtools view \
-                --exclude-flags 4 \
-                --fast \
-                --output $bam \
-                --output-fmt BAM \
-                --reference {input.assembly} \
-                --threads {threads} \
-                $cram
-
-            samtools index $bam
-
-        done 2>> {log} 1>&2
-
         concoct_coverage_table.py \
             {params.workdir}/cut.bed \
-            {params.workdir}/*.bam \
+            {input.bams} \
         > {params.workdir}/coverage.tsv \
         2>> {log}
 
@@ -85,7 +69,7 @@ rule prokaryotes__cluster__concoct__:
         """
 
 
-rule prokaryotes__cluster__concoct:
+rule prokaryotes__cluster__concoct__all:
     """Run concoct on all assemblies"""
     input:
         [CONCOCT / f"{assembly_id}" for assembly_id in ASSEMBLIES],

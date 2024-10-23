@@ -1,13 +1,13 @@
-rule prokaryotes__cluster__magscot__prodigal__:
+rule prokaryotes__cluster__magscot__prodigal:
     """Run prodigal over a single assembly"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
     output:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
     log:
         MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     resources:
         attempt=get_attempt,
     retries: 5
@@ -35,7 +35,7 @@ rule prokaryotes__cluster__magscot__prodigal__:
         """
 
 
-rule prokaryotes__cluster__magscot__hmmsearch_pfam__:
+rule prokaryotes__cluster__magscot__hmmsearch_pfam:
     """Run hmmsearch over the predicted proteins of an assembly using Pfam as database
 
     Note: hmmsearch must be decompressed
@@ -48,7 +48,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_pfam__:
     log:
         MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         hmmsearch \
@@ -64,7 +64,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_pfam__:
         """
 
 
-rule prokaryotes__cluster__magscot__hmmsearch_tigr__:
+rule prokaryotes__cluster__magscot__hmmsearch_tigr:
     """Run hmmsearch over the predicted proteins of an assembly using TIGR as database"""
     input:
         proteins=MAGSCOT / "{assembly_id}" / "prodigal.faa",
@@ -74,7 +74,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_tigr__:
     log:
         MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         hmmsearch \
@@ -90,7 +90,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_tigr__:
         """
 
 
-rule prokaryotes__cluster__magscot__join_hmms__:
+rule prokaryotes__cluster__magscot__join_hmms:
     """Join the results of hmmsearch over TIGR and Pfam
 
     Note: "|| true" is used to avoid grep returning an error code when no lines are found
@@ -103,7 +103,7 @@ rule prokaryotes__cluster__magscot__join_hmms__:
     log:
         MAGSCOT / "{assembly_id}" / "hmm.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
@@ -116,7 +116,7 @@ rule prokaryotes__cluster__magscot__join_hmms__:
         """
 
 
-rule prokaryotes__cluster__magscot__merge_contig_to_bin__:
+rule prokaryotes__cluster__magscot__merge_contig_to_bin:
     """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2
 
     The output file should have the following format:
@@ -131,7 +131,7 @@ rule prokaryotes__cluster__magscot__merge_contig_to_bin__:
     log:
         MAGSCOT / "{assembly_id}" / "contigs_to_bin.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
@@ -154,7 +154,7 @@ rule prokaryotes__cluster__magscot__merge_contig_to_bin__:
         """
 
 
-rule prokaryotes__cluster__magscot__run__:
+rule prokaryotes__cluster__magscot__run:
     """Run MAGSCOT over one assembly"""
     input:
         contigs_to_bin=MAGSCOT / "{assembly_id}" / "contigs_to_bin.tsv",
@@ -170,7 +170,7 @@ rule prokaryotes__cluster__magscot__run__:
     log:
         MAGSCOT / "{assembly_id}/magscot.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     params:
         out_prefix=lambda w: MAGSCOT / w.assembly_id / "magscot",
     shell:
@@ -183,7 +183,7 @@ rule prokaryotes__cluster__magscot__run__:
         """
 
 
-rule prokaryotes__cluster__magscot__reformat__:
+rule prokaryotes__cluster__magscot__reformat:
     """Reformat the results from MAGSCOT"""
     input:
         refined_contig_to_bin=MAGSCOT
@@ -194,7 +194,7 @@ rule prokaryotes__cluster__magscot__reformat__:
     log:
         MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         Rscript --vanilla workflow/scripts/clean_magscot_bin_to_contig.R \
@@ -204,17 +204,17 @@ rule prokaryotes__cluster__magscot__reformat__:
         """
 
 
-rule prokaryotes__cluster__magscot__rename__:
+rule prokaryotes__cluster__magscot__rename:
     """Rename the contigs in the assembly to match the assembly and bin names"""
     input:
-        assembly=MEGAHIT / "{assembly_id}.fa.gz",
+        assembly=ASSEMBLE_MEGAHIT / "{assembly_id}.fa.gz",
         clean=MAGSCOT / "{assembly_id}" / "magscot.reformat.tsv",
     output:
         fasta=MAGSCOT / "{assembly_id}.fa.gz",
     log:
         MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
-        "__environment__.yml"
+        "../../../environments/magscot.yml"
     shell:
         """
         ( python workflow/scripts/reformat_fasta_magscot.py \
@@ -227,7 +227,7 @@ rule prokaryotes__cluster__magscot__rename__:
         """
 
 
-rule prokaryotes__cluster__magscot:
+rule prokaryotes__cluster__magscot__all:
     """Run MAGSCOT over all assemblies"""
     input:
         [MAGSCOT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],

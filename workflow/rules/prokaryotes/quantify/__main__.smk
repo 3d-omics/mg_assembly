@@ -2,10 +2,8 @@ include: "__functions__.smk"
 include: "index.smk"
 include: "bowtie2.smk"
 include: "coverm.smk"
-include: "samtools.smk"
 
 
-rule prokaryotes__quantify:
+rule prokaryotes__quantify__all:
     input:
-        rules.prokaryotes__quantify__coverm.input,
-        rules.prokaryotes__quantify__samtools.input,
+        rules.prokaryotes__quantify__coverm__all.input,

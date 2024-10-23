@@ -1,9 +1,0 @@
-channels:
-  - conda-forge
-  - bioconda
-dependencies:
-  - bowtie2 =2.5.3
-  - coverm =0.7.0
-  - r-argparse =2.2.2
-  - r-tidyverse =2.0.0
-  - samtools =1.19.2
