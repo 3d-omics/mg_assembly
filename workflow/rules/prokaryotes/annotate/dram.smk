@@ -1,5 +1,6 @@
 include: "dram_functions.smk"
 
+
 rule prokaryotes__annotate__dram__setup:
     """
     Set up the databases from DRAM, no matter what the config file says.
@@ -67,8 +68,6 @@ rule prokaryotes__annotate__dram__annotate:
             --threads 1 \
         2>> {log} 1>&2
         """
-
-
 
 
 rule prokaryotes__annotate__dram__annotate__aggregate_annotations:
