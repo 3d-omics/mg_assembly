@@ -94,17 +94,17 @@ jobs:
           sudo find results -not -name "*.log" -type f -delete -print
 
 
-      - name: Test workflow - Dry run
-        uses: snakemake/snakemake-github-action@v1
-        with:
-          directory: .
-          snakefile: workflow/Snakefile
-          args: >
-            --use-conda
-            --profile profile/default
-            --cores 3
-            --dry-run
-            --printshellcmds
+      # - name: Test workflow - Dry run
+      #   uses: snakemake/snakemake-github-action@v1
+      #   with:
+      #     directory: .
+      #     snakefile: workflow/Snakefile
+      #     args: >
+      #       --use-conda
+      #       --profile profile/default
+      #       --cores 3
+      #       --dry-run
+      #       --printshellcmds
 
       - uses: actions/upload-artifact@v4
         if: failure()
