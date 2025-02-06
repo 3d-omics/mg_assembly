@@ -20,7 +20,7 @@ rule preprocess__kraken2__assign:
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
         reports=[
-            PRE_KRAKEN2 / "{kraken2_db}" / f"{sample_id}.{library_id}.report"
+            PRE_KRAKEN2 / "{kraken2_db}" / f"{sample_id}.{library_id}.k2report"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
     log:
@@ -72,7 +72,7 @@ rule preprocess__kraken2__assign:
                     --gzip-compressed \
                     --paired \
                     --output ">(gzip > {params.out_folder}/{{}}.out.gz)" \
-                    --report {params.out_folder}/{{}}.report \
+                    --report {params.out_folder}/{{}}.k2report \
                     --memory-mapping \
                     {params.in_folder}/{{}}_1.fq.gz \
                     {params.in_folder}/{{}}_2.fq.gz \
@@ -96,7 +96,7 @@ rule preprocess__kraken2__assign:
 rule preprocess__kraken2__bracken:
     input:
         database=lambda w: features["databases"]["kraken2"][w.kraken2_db],
-        report=PRE_KRAKEN2 / "{kraken2_db}" / "{sample_id}.{library_id}.report",
+        report=PRE_KRAKEN2 / "{kraken2_db}" / "{sample_id}.{library_id}.k2report",
     output:
         bracken=touch(PRE_KRAKEN2 / "{kraken2_db}" / "{sample_id}.{library_id}.bracken"),
     log:
