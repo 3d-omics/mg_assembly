@@ -102,7 +102,7 @@ rule preprocess__kraken2__bracken:
             PRE_KRAKEN2 / "{kraken2_db}" / "{sample_id}.{library_id}.{level}.bracken"
         ),
     log:
-        PRE_KRAKEN2 / "{kraken2_db}" / "{sample_id}.{library_id}.{level}.bracken.log",
+        PRE_KRAKEN2 / "{kraken2_db}" / "{sample_id}.{library_id}.{level}.log",
     conda:
         "../../environments/kraken2.yml"
     params:
@@ -135,7 +135,7 @@ rule preprocess__kraken2__bracken__combine:
     output:
         PRE_KRAKEN2 / "{kraken2_db}.{level}.tsv",
     log:
-        PRE_KRAKEN2 / "{kraken2_db}.{level}tsv.log",
+        PRE_KRAKEN2 / "{kraken2_db}.{level}.log",
     conda:
         "../../environments/kraken2.yml"
     shell:
