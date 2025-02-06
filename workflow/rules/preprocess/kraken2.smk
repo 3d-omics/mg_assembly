@@ -153,5 +153,5 @@ rule preprocess__kraken2__all:
         [
             PRE_KRAKEN2 / f"{kraken2_db}.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in "DPCOFGS".split("")
+            for level in "DPCOFGS"
         ],
