@@ -4,6 +4,7 @@ channels:
 dependencies:
   - biopython =1.84
   - hmmer =3.4
+  - htslib =1.21
   - pandas =2.2.3
   - parallel =20240922
   - pigz =2.8

@@ -38,9 +38,8 @@ rule prokaryotes__cluster__maxbin2:
             {output.workdir}/*.fasta \
         2>> {log}
 
-        pigz \
-            --best \
-            --verbose \
+        bgzip \
+            --compress-level 9 \
             {output.workdir}/*.fa \
         2>> {log} 1>&2
 
