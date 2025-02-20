@@ -24,14 +24,14 @@ print(args)
 
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 
+# input_file <- "results/prokaryotes/cluster/magscot/all/magscot.refined.contig_to_bin.out"
+
 raw_magscot <- readr::read_tsv(input_file)
 
-
-# can't use map_chr(-1) so we have to find the position
 bin_location <-
   raw_magscot$binnew[1] |>
-  stringr::str_split("/") |>
-  purrr::map(1) |>
+  stringr::str_split("/", simplify = TRUE) |>
+  purrr::map_chr(-1) |>
   length()
 
 raw_magscot |>
