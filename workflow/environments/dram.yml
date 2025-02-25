@@ -3,6 +3,6 @@ channels:
   - bioconda
 dependencies:
   - csvtk =0.31.1
-  - dram =1.5.0
+  - dram =1.4.6
   - parallel =20241122
   - htslib =1.21
