@@ -40,7 +40,7 @@ rule prokaryotes__annotate__dram__setup:
 rule prokaryotes__annotate__dram__annotate:
     """Annotate dereplicate genomes with DRAM"""
     input:
-        fasta=PROK_ANN / "dram.mags" / "{mag_id}.fa",
+        fasta=PROK_MAGS / "{mag_id}.fa",
         dram_db=features["databases"]["dram"],
         setup=PROK_ANN / "dram.setup.txt",
     output:
