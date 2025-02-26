@@ -73,52 +73,60 @@ rule prokaryotes__annotate__dram__annotate:
         """
 
 
-for file in ["annotations", "trnas", "rrnas"]:
+rule prokaryotes__annotate__dram__annotate__aggregate_tsvs:
+    input:
+        collect_dram_annotate,
+    output:
+        PROK_ANN / "dram.annotations.tsv.gz",
+        PROK_ANN / "dram.trnas.tsv.gz",
+        PROK_ANN / "dram.rrnas.tsv.gz",
+    log:
+        PROK_ANN / "dram.aggregate_tsvs.log",
+    conda:
+        "../../../environments/dram.yml"
+    params:
+        work_dir=PROK_ANN / "dram.annotate",
+    threads: 24
+    shell:
+        """
+        for file in annotations trnas rrnas ; do
 
-    rule:
-        name:
-            f"prokaryotes__annotate__dram__annotate__aggregate_{file}"
-        input:
-            collect_dram_annotate,
-        output:
-            PROK_ANN / f"dram.{file}.tsv.gz",
-        log:
-            PROK_ANN / f"dram.{file}.log",
-        conda:
-            "../../../environments/dram.yml"
-        params:
-            work_dir=PROK_ANN / "dram.annotate",
-        threads: 24
-        shell:
-            f"( csvtk concat --tabs {{params.work_dir}}/*/{file} "
-            f"| sed -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\1/g' "
-            f"| bgzip --compress-level 9 --threads {{threads}} "
-            f"> {{output}} "
-            f") 2> {{log}}"
+            csvtk concat --tabs {{params.work_dir}}/*/$file.tsv \
+            | sed -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
+            | bgzip --compress-level 9 --threads {{threads}} \
+            > {params.work_dir}/$file.tsv.gz \
+
+        done 2> {log} 1>&2
+        """
 
 
-for file in ["genes.gff", "genes.fna", "genes.faa", "scaffolds.fna"]:
+rule prokaryotes__annotate__dram__annotate__concatenate_fastas:
+    input:
+        collect_dram_annotate,
+    output:
+        PROK_ANN / f"dram.genes.fna.gz",
+        PROK_ANN / f"dram.genes.faa.gz",
+        PROK_ANN / f"dram.scaffolds.fna.gz",
+        PROK_ANN / f"dram.genes.gff.gz",
+    log:
+        PROK_ANN / f"dram.concatenate_fastas.log",
+    conda:
+        "../../../environments/dram.yml"
+    params:
+        work_dir=PROK_ANN / "dram.annotate",
+    threads: 24
+    shell:
+        """
+        for file in genes.fna genes.faa scaffolds.fna genes.gff ; do
 
-    rule:
-        name:
-            f"prokaryotes__annotate__dram__annotate__concatenate_{file}"
-        input:
-            collect_dram_annotate,
-        output:
-            PROK_ANN / f"dram.{file}.gz",
-        log:
-            PROK_ANN / f"dram.{file}.log",
-        conda:
-            "../../../environments/dram.yml"
-        params:
-            work_dir=PROK_ANN / "dram.annotate",
-        threads: 24
-        shell:
-            f"( cat {{params.work_dir}}/*/{file} "
-            f"| sed -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\1/g' "
-            f"| bgzip --compress-level 9 --threads {{threads}}"
-            f"> {{output}}"
-            f") 2> {{log}}"
+            sed \
+                -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
+                {params.work_dir}/*/$file \
+            | bgzip --compress-level 9 --threads {threads} \
+            > {params.work_dir}/$file.gz \
+
+        done 2> {log}
+        """
 
 
 rule prokaryotes__annotate__dram__annotate__aggregate_genbank:
@@ -156,7 +164,7 @@ rule prokaryotes__annotate__dram__annotate__archive:
         annotations=PROK_ANN / "dram.annotations.tsv.gz",
         trnas=PROK_ANN / "dram.trnas.tsv.gz",
         rrnas=PROK_ANN / "dram.rrnas.tsv.gz",
-        gtf=PROK_ANN / "dram.genes.gff.gz",
+        gff=PROK_ANN / "dram.genes.gff.gz",
         fna=PROK_ANN / "dram.genes.fna.gz",
         faa=PROK_ANN / "dram.genes.faa.gz",
         scaffolds=PROK_ANN / "dram.scaffolds.fna.gz",
