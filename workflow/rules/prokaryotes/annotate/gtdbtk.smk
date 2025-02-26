@@ -40,7 +40,7 @@ rule prokaryotes__annotate__gtdbtk__join_bac_and_ar:
         "../../../environments/gtdbtk.yml"
     shell:
         """
-        csvkit concat \
+        csvtk concat \
             {input.work_dir}/gtdbtk.*.summary.tsv \
         > {output.summary} \
         2> {log}
