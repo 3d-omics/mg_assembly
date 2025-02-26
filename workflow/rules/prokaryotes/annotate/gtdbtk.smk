@@ -41,6 +41,7 @@ rule prokaryotes__annotate__gtdbtk__join_bac_and_ar:
     shell:
         """
         csvtk concat \
+            --tabs \
             {input.work_dir}/gtdbtk.*.summary.tsv \
         > {output.summary} \
         2> {log}

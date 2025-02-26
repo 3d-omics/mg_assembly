@@ -89,7 +89,7 @@ for file in ["annotations", "trnas", "rrnas"]:
         params:
             work_dir=PROK_ANN / "dram.annotate",
         shell:
-            f"( csvtk concat {{params.work_dir}}/*/{file} "
+            f"( csvtk concat --tabs {{params.work_dir}}/*/{file} "
             f"| sed -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\1/g' "
             f"| bgzip --compress-level 9 "
             f"> {{output}} "
