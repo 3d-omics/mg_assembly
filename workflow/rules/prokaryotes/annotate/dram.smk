@@ -88,10 +88,11 @@ for file in ["annotations", "trnas", "rrnas"]:
             "../../../environments/dram.yml"
         params:
             work_dir=PROK_ANN / "dram.annotate",
+        threads: 24
         shell:
             f"( csvtk concat --tabs {{params.work_dir}}/*/{file} "
             f"| sed -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\1/g' "
-            f"| bgzip --compress-level 9 "
+            f"| bgzip --compress-level 9 --threads {{threads}} "
             f"> {{output}} "
             f") 2> {{log}}"
 
