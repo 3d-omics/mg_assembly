@@ -91,7 +91,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_tsvs:
         """
         for file in annotations trnas rrnas ; do
 
-            csvtk concat --tabs {{params.work_dir}}/*/$file.tsv \
+            csvtk concat --tabs {params.work_dir}/*/$file.tsv \
             | sed -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
             | bgzip --compress-level 9 --threads {{threads}} \
             > {params.work_dir}/$file.tsv.gz \
