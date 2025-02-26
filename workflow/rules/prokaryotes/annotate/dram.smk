@@ -144,10 +144,9 @@ rule prokaryotes__annotate__dram__annotate__aggregate_genbank:
     threads: 24
     shell:
         """
-        ( cat \
+        ( sed \
+            -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
             {params.work_dir}/*/genbank/*.gbk \
-        | sed \
-            -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\1/g' \
         | bgzip \
             --compress-level 9 \
             --threads {threads} \
