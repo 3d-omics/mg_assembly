@@ -43,7 +43,7 @@ rule viruses__cluster__bbmap__clean:
     shell:
         """
         ( seqtk seq {input} \
-        | cut --fields 1,2 \
+        | cut --fields 1,2 -d ">" \
         | tr "|" "_" \
         | bgzip \
         > {output} \
