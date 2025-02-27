@@ -1,6 +1,6 @@
 rule viruses__cluster__mmseqs:
     input:
-        fasta=VIR_DEDUPE / "dedupe.fa.gz",
+        fasta=VIR_DEDUPE / "clean.fa.gz",
     output:
         all_seq=VIR_MMSEQS / "all_seqs.fa.gz",
         cluster=VIR_MMSEQS / "cluster.tsv.gz",

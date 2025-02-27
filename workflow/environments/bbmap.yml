@@ -3,3 +3,5 @@ channels:
   - bioconda
 dependencies:
   - bbmap =39.10
+  - htslib =1.21
+  - seqtk =1.4
