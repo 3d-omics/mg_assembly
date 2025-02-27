@@ -5,7 +5,7 @@ rule prokaryotes__annotate__quast:
     output:
         directory(PROK_QUAST),
     log:
-        PROK / "quast.log",
+        PROK_ANN / "quast.log",
     conda:
         "../../../environments/quast.yml"
     threads: 4
