@@ -37,46 +37,22 @@ rule viruses__annotate__dramv__setup:
 checkpoint viruses__annotate__dramv__contigs:
     input:
         VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
-    output:
-        contigs=directory(VIR_DRAMV / "contigs"),
-    log:
-        VIR_DRAMV / "contigs.log",
-    conda:
-        "../../../environments/bbmap.yml"  # any env with seqtk
-    params:
-        splits=24,
-    shell:
-        """
-        mkdir \
-            --parents \
-            {output} \
-        2> {log} 1>&2
-
-        ( gzip \
-            --decompress \
-            --stdout \
-            {input} \
-        | seqtk seq \
-        | paste - - \
-        | tr -d ">" \
-        | awk \
-            '{{ print ">" $1 "\\n" $2 > "{output}/" $1 ".fa" }}' \
-        ) >> {log} 2>&1
-        """
 
 
 rule viruses__annotate__dramv__annotate:
     input:
-        fasta=VIR_DRAMV / "contigs" / "{contig_id}.fa",
+        fasta=VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
         tsv=VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
     output:
-        work_dir=temp(directory(VIR_DRAMV / "annotate" / "{contig_id}")),
+        VIR_DRAMV / "annotations.tsv.gz",
     log:
         VIR_DRAMV / "annotate" / "{contig_id}.log",
     conda:
         "../../../environments/dram.yml"
+    params: 
+        work_dir=VIR_DRAMV / "annotate",
     resources:
         mem_mb=8 * 1024,
         runtime=24 * 60,
@@ -84,31 +60,21 @@ rule viruses__annotate__dramv__annotate:
         """
         DRAM-v.py annotate \
             --input_fasta {input.fasta} \
-            --output_dir {output} \
+            --output_dir {params.work_dir} \
             --skip_trnascan \
             --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
         2> {log} 1>&2
-        """
 
+        mv \
+            --verbose \
+            {params.work_dir}/annotations.tsv \
+            {output}/ \
+        2>> {log} 1>&2
 
-rule viruses__annotate__dramv__concat:
-    input:
-        collect_dramv_annotate,
-    output:
-        annotations=VIR_DRAMV / "annotations.tsv.gz",
-    log:
-        VIR_DRAMV / "annotations.log",
-    params:
-        work_dir=VIR_DRAMV / "annotate",
-    shell:
-        """
-        ( csvtk concat \
-            --tabs \
-            --out-tabs \
-            {params.work_dir}/*/annotations.tsv \
-        | gzip \
-        > {output.annotations} \
-        ) 2> {log} 1>&2
+        gzip \
+            --force \
+            {output}/annotations.tsv \
+        2>> {log} 1>&2
         """
 
 
