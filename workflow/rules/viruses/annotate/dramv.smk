@@ -38,9 +38,9 @@ rule viruses__annotate__dramv__annotate:
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
     output:
-        fasta=temp(VIR_DRAMV / "final-viral-combined-for-dramv.fa")
+        fasta=temp(VIR_DRAMV / "final-viral-combined-for-dramv.fa"),
         annotations=VIR_DRAMV / "annotations.tsv.gz",
-        work_dir=temp(directory(VIR_DRAMV / "annotate"))
+        work_dir=temp(directory(VIR_DRAMV / "annotate")),
     log:
         VIR_DRAMV / "annotations.log",
     conda:
