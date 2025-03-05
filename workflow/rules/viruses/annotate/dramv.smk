@@ -38,28 +38,20 @@ rule viruses__annotate__dramv__annotate:
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
     output:
-        VIR_DRAMV / "annotations.tsv.gz",
+        annotations=VIR_DRAMV / "annotations.tsv.gz",
+        work_dir=temp(directory(VIR_DRAMV / "annotate"))
     log:
         VIR_DRAMV / "annotations.log",
     conda:
         "../../../environments/dram.yml"
-    params:
-        work_dir=VIR_DRAMV / "annotate",
     resources:
         mem_mb=8 * 1024,
         runtime=24 * 60,
     shell:
         """
-        ( find \
-            {params.work_dir} \
-            -delete \
-            -print \
-        || true ) \
-        2> {log} 1>&2    
-        
-        DRAM-v.py annotate \
+       DRAM-v.py annotate \
             --input_fasta <(gzip -dc {input.fasta}) \
-            --output_dir {params.work_dir} \
+            --output_dir {output.work_dir} \
             --skip_trnascan \
             --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
         2> {log} 1>&2
