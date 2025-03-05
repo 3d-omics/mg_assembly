@@ -30,6 +30,7 @@ rule viruses__annotate__dramv__setup:
         2> {log} 1>&2
         """
 
+
 rule viruses__annotate__dramv__annotate:
     input:
         fa=VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
