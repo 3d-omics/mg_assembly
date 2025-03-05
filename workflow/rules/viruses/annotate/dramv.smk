@@ -51,7 +51,7 @@ rule viruses__annotate__dramv__annotate:
     shell:
         """
         DRAM-v.py annotate \
-            --input_fasta {input.fasta} \
+            --input_fasta <(gzip -dc {input.fasta}) \
             --output_dir {params.work_dir} \
             --skip_trnascan \
             --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
