@@ -72,7 +72,7 @@ rule viruses__annotate__dramv__annotate:
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
     output:
-        work_dir=temp(VIR_DRAMV / "annotate" / "{contig_id}"),
+        work_dir=temp(directory(VIR_DRAMV / "annotate" / "{contig_id}")),
     log:
         VIR_DRAMV / "annotate" / "{contig_id}.log",
     conda:
@@ -98,12 +98,14 @@ rule viruses__annotate__dramv__concat:
         annotations=VIR_DRAMV / "annotations.tsv.gz",
     log:
         VIR_DRAMV / "annotations.log",
+    params:
+        work_dir=VIR_DRAMV / "annotate",
     shell:
         """
         ( csvtk concat \
             --tabs \
             --out-tabs \
-            {input} \
+            {params.work_dir}/*/annotations.tsv \
         | gzip \
         > {output.annotations} \
         ) 2> {log} 1>&2
