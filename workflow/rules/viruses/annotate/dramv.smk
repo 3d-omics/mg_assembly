@@ -51,7 +51,7 @@ rule viruses__annotate__dramv__annotate:
         VIR_DRAMV / "annotate" / "{contig_id}.log",
     conda:
         "../../../environments/dram.yml"
-    params: 
+    params:
         work_dir=VIR_DRAMV / "annotate",
     resources:
         mem_mb=8 * 1024,
