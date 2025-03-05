@@ -1,6 +1,3 @@
-include: "dramv_functions.smk"
-
-
 rule viruses__annotate__dramv__setup:
     input:
         dram_db=features["databases"]["dram"],
