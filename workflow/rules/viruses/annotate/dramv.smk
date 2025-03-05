@@ -1,3 +1,6 @@
+include: "dramv_functions.smk"
+
+
 rule viruses__annotate__dramv__setup:
     input:
         dram_db=features["databases"]["dram"],
@@ -31,7 +34,7 @@ rule viruses__annotate__dramv__setup:
         """
 
 
-rule viruses__annotate__dramv__contigs:
+checkpoint viruses__annotate__dramv__contigs:
     input:
         VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
     output:
@@ -44,55 +47,66 @@ rule viruses__annotate__dramv__contigs:
         splits=24,
     shell:
         """
-        seqtk split \
-            -n {params.spits} \
-            {output}/splits \
-            {input} \
+        mkdir \
+            --parents \
+            {output} \
         2> {log} 1>&2
+
+        ( gzip \
+            --decompress \
+            --stdout \
+            {input} \
+        | seqtk seq \
+        | paste - - \
+        | tr -d ">" \
+        | awk \
+            '{{ print ">" $1 "\\n" $2 > {output}/" $1 ".fa" }}' \
+        ) >> {log} 2>&1
         """
 
 
 rule viruses__annotate__dramv__annotate:
     input:
-        contigs=VIR_DRAMV / "contigs",
+        fasta=VIR_DRAMV / "contigs" / "{contig_id}.fa",
         tsv=VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
     output:
-        annotations=VIR_DRAMV / "annotations.tsv.gz",
+        work_dir=temp(VIR_DRAMV / "annotate" / "{contig_id}"),
     log:
-        VIR_DRAMV / "annotate.log",
+        VIR_DRAMV / "annotate" / "{contig_id}.log",
     conda:
         "../../../environments/dram.yml"
-    params:
-        workdir=VIR_DRAMV / "contigs",
-    threads: 24
     resources:
-        mem_mb=32 * 1024,
-        time_min=60,
+        mem_mb=8 * 1024,
+        runtime=24 * 60,
     shell:
         """
-        parallel \
-            --jobs {threads} \
-            DRAM-v.py annotate \
-                --input_fasta {{.}}.fa \
-                --output_dir {params.workdir}/{{/.}} \
-                --skip_trnascan \
-                --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
-        ::: {input.contigs}/splits.*.fa \
-        2>> {log} 1>&2
+        DRAM-v.py annotate \
+            --input_fasta {input.fasta} \
+            --output_dir {output} \
+            --skip_trnascan \
+            --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
+        2> {log} 1>&2
+        """
 
-        Rscript --vanilla workflow/scripts/stack_dram_annotations.R \
-            --output-file {output.annotations} \
-            {params.workdir}/splits.*/annotations.tsv \
-        2>> {log} 1>&2
 
-        rm \
-            --recursive \
-            --force \
-            --verbose \
-            {params.workdir}/splits* \
-        2>> {log} 1>&2
+rule viruses__annotate__dramv__concat:
+    input:
+        collect_dramv_annotate,
+    output:
+        annotations=VIR_DRAMV / "annotations.tsv.gz",
+    log:
+        VIR_DRAMV / "annotations.log",
+    shell:
+        """
+        ( csvtk concat \
+            --tabs \
+            --out-tabs \
+            {input} \
+        | gzip \
+        > {output.annotations} \
+        ) 2> {log} 1>&2
         """
 
 
@@ -110,8 +124,6 @@ rule viruses__annotate__dramv__distill:
     params:
         outdir=VIR_DRAMV,
         workdir=VIR_DRAMV / "tmp",
-    shadow:
-        "minimal"
     shell:
         """
         DRAM-v.py distill \
@@ -134,4 +146,4 @@ rule viruses__annotate__dramv__distill:
 
 rule viruses__annotate__dramv__all:
     input:
-        rules.viruses__annotate__dramv__distill.output,
+        VIR_DRAMV / "product.html",
