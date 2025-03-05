@@ -64,16 +64,12 @@ rule viruses__annotate__dramv__annotate:
             --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
         2>> {log} 1>&2
 
-        mv \
-            --verbose \
-            {params.work_dir}/annotations.tsv \
-            {output}/ \
-        2>> {log} 1>&2
-
         gzip \
+            --stdout \
             --force \
-            {output}/annotations.tsv \
-        2>> {log} 1>&2
+            {output.work_dir}/annotations.tsv \
+        > {output.annotations} \
+        2>> {log}
         """
 
 
