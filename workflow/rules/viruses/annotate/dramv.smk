@@ -45,7 +45,7 @@ rule viruses__annotate__dramv__annotate:
     output:
         VIR_DRAMV / "annotations.tsv.gz",
     log:
-        VIR_DRAMV / "annotate" / "{contig_id}.log",
+        VIR_DRAMV / "annotations.log",
     conda:
         "../../../environments/dram.yml"
     params:
