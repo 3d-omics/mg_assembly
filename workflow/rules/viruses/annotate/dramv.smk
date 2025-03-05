@@ -31,9 +31,30 @@ rule viruses__annotate__dramv__setup:
         """
 
 
+rule viruses__annotate__dramv__contigs:
+    input:
+        VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
+    output:
+        contigs=directory(VIR_DRAMV / "contigs"),
+    log:
+        VIR_DRAMV / "contigs.log",
+    conda:
+        "../../../environments/dram.yml"
+    params:
+        splits=24,
+    shell:
+        """
+        seqtk split \
+            -n {params.spits} \
+            {output}/splits \
+            {input} \
+        2> {log} 1>&2
+        """
+
+
 rule viruses__annotate__dramv__annotate:
     input:
-        fa=VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
+        contigs=VIR_DRAMV / "contigs",
         tsv=VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
@@ -44,19 +65,13 @@ rule viruses__annotate__dramv__annotate:
     conda:
         "../../../environments/dram.yml"
     params:
-        workdir=VIR_DRAMV,
+        workdir=VIR_DRAMV / "contigs",
     threads: 24
     resources:
         mem_mb=32 * 1024,
         time_min=60,
     shell:
         """
-        seqtk split \
-            -n {threads} \
-            {params.workdir}/splits \
-            {input.fa} \
-        2>> {log} 1>&2
-
         parallel \
             --jobs {threads} \
             DRAM-v.py annotate \
@@ -64,7 +79,7 @@ rule viruses__annotate__dramv__annotate:
                 --output_dir {params.workdir}/{{/.}} \
                 --skip_trnascan \
                 --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
-        ::: {params.workdir}/splits.*.fa \
+        ::: {input.contigs}/splits.*.fa \
         2>> {log} 1>&2
 
         Rscript --vanilla workflow/scripts/stack_dram_annotations.R \
