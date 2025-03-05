@@ -1,20 +1,12 @@
-rule viruses__annotate__dramv__annotate:
+rule viruses__annotate__dramv__setup:
     input:
-        fa=VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
-        tsv=VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
         dram_db=features["databases"]["dram"],
     output:
-        annotations=VIR_DRAMV / "annotations.tsv.gz",
+        setup=touch(VIR_DRAMV / "setup.done"),
     log:
-        VIR_DRAMV / "annotate.log",
+        VIR_DRAMV / "setup.log",
     conda:
         "../../../environments/dram.yml"
-    params:
-        workdir=VIR_DRAMV,
-    threads: 24
-    resources:
-        mem_mb=32 * 1024,
-        time_min=60,
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -36,7 +28,28 @@ rule viruses__annotate__dramv__annotate:
             --vog_annotations_loc       {input.dram_db}/vog_annotations_latest.tsv.gz \
             --vogdb_loc                 {input.dram_db}/vog_latest_hmms.txt \
         2> {log} 1>&2
+        """
 
+rule viruses__annotate__dramv__annotate:
+    input:
+        fa=VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
+        tsv=VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
+        dram_db=features["databases"]["dram"],
+        setup=VIR_DRAMV / "setup.done",
+    output:
+        annotations=VIR_DRAMV / "annotations.tsv.gz",
+    log:
+        VIR_DRAMV / "annotate.log",
+    conda:
+        "../../../environments/dram.yml"
+    params:
+        workdir=VIR_DRAMV,
+    threads: 24
+    resources:
+        mem_mb=32 * 1024,
+        time_min=60,
+    shell:
+        """
         seqtk split \
             -n {threads} \
             {params.workdir}/splits \
@@ -58,7 +71,12 @@ rule viruses__annotate__dramv__annotate:
             {params.workdir}/splits.*/annotations.tsv \
         2>> {log} 1>&2
 
-        rm --recursive --force {params.workdir}/splits*
+        rm \
+            --recursive \
+            --force \
+            --verbose \
+            {params.workdir}/splits* \
+        2>> {log} 1>&2
         """
 
 
