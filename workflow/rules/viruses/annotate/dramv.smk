@@ -31,11 +31,6 @@ rule viruses__annotate__dramv__setup:
         """
 
 
-checkpoint viruses__annotate__dramv__contigs:
-    input:
-        VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
-
-
 rule viruses__annotate__dramv__annotate:
     input:
         fasta=VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
