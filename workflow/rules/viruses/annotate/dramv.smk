@@ -60,7 +60,7 @@ checkpoint viruses__annotate__dramv__contigs:
         | paste - - \
         | tr -d ">" \
         | awk \
-            '{{ print ">" $1 "\\n" $2 > {output}/" $1 ".fa" }}' \
+            '{{ print ">" $1 "\\n" $2 > "{output}/" $1 ".fa" }}' \
         ) >> {log} 2>&1
         """
 
