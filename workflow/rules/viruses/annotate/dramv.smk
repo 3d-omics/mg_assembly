@@ -38,6 +38,7 @@ rule viruses__annotate__dramv__annotate:
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
     output:
+        fasta=temp(VIR_DRAMV / "final-viral-combined-for-dramv.fa")
         annotations=VIR_DRAMV / "annotations.tsv.gz",
         work_dir=temp(directory(VIR_DRAMV / "annotate"))
     log:
@@ -49,12 +50,19 @@ rule viruses__annotate__dramv__annotate:
         runtime=24 * 60,
     shell:
         """
-       DRAM-v.py annotate \
-            --input_fasta <(gzip -dc {input.fasta}) \
+        gzip \
+            --decompress \
+            --stdout \
+            {input.fasta} \
+        > {output.fasta} \
+        2>> {log}
+
+        DRAM-v.py annotate \
+            --input_fasta {output.fasta} \
             --output_dir {output.work_dir} \
             --skip_trnascan \
             --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
-        2> {log} 1>&2
+        2>> {log} 1>&2
 
         mv \
             --verbose \
