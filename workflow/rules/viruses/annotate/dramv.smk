@@ -50,6 +50,12 @@ rule viruses__annotate__dramv__annotate:
         runtime=24 * 60,
     shell:
         """
+        find \
+            {params.work_dir} \
+            -delete \
+            -print \
+        2> {log} 1>&2    
+        
         DRAM-v.py annotate \
             --input_fasta <(gzip -dc {input.fasta}) \
             --output_dir {params.work_dir} \
