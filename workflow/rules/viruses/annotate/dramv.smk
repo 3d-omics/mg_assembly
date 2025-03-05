@@ -42,7 +42,7 @@ checkpoint viruses__annotate__dramv__contigs:
     log:
         VIR_DRAMV / "contigs.log",
     conda:
-        "../../../environments/dram.yml"
+        "../../../environments/bbmap.yml"  # any env with seqtk
     params:
         splits=24,
     shell:
