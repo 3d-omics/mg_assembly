@@ -50,10 +50,11 @@ rule viruses__annotate__dramv__annotate:
         runtime=24 * 60,
     shell:
         """
-        find \
+        ( find \
             {params.work_dir} \
             -delete \
             -print \
+        || true ) \
         2> {log} 1>&2    
         
         DRAM-v.py annotate \
