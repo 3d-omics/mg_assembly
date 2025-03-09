@@ -13,8 +13,6 @@ rule preprocess__clean:
         PRE_CLEAN / "{sample_id}.{library_id}.log",
     conda:
         "../../environments/bowtie2.yml"  # It has htslib in it
-    # group:
-    #     "preprocess__{sample_id}.{library_id}"
     threads: 24
     resources:
         mem_mb=1 * 1024,

@@ -17,8 +17,6 @@ use rule bowtie2__build as preprocess__bowtie2__build with:
     log:
         PRE_BUILD / "{host}.log",
     cache: "omit-software"
-    group:
-        "preprocess__{host}"
 
 
 rule preprocess__bowtie2__build__all:
@@ -63,10 +61,6 @@ use rule bowtie2__map as preprocess__bowtie2__map with:
         rg_extra=compose_rg_extra,
 
 
-# group:
-#    "preprocess__{sample_id}.{library_id}"
-
-
 rule preprocess__bowtie2__fastq:
     """Convert BAM to FASTQ using samtools and using the correct reference
 
@@ -83,8 +77,6 @@ rule preprocess__bowtie2__fastq:
         PRE_BOWTIE2 / "{host}.{sample_id}.{library_id}.unaligned.log",
     conda:
         "../../environments/bowtie2.yml"
-    # group:
-    #     "preprocess__{sample_id}.{library_id}"
     shell:
         """
         rm \

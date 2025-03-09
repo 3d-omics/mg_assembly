@@ -21,8 +21,6 @@ rule preprocess__fastp:
         json=PRE_FASTP / "{sample_id}.{library_id}_fastp.json",
     log:
         PRE_FASTP / "{sample_id}.{library_id}.log",
-    # group:
-    #     "preprocess__{sample_id}.{library_id}"
     params:
         extra=params["preprocess"]["fastp"]["extra"],
         adapters=compose_adapters,
