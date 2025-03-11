@@ -19,7 +19,7 @@ rule viruses__annotate__virsorter2:
     threads: 24
     resources:
         mem_mb=8 * 1024,
-        runtime=60,
+        runtime=24 * 60,
     shell:
         """
         virsorter run \
