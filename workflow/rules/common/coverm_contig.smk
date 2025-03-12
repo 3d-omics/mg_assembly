@@ -10,9 +10,6 @@ rule coverm__contig:
         "../../environments/coverm.yml"
     params:
         method=lambda w: w.method,
-    resources:
-        runtime: 60,
-        mem_mb: 8 * 1024,
     shell:
         """
         ( coverm contig \

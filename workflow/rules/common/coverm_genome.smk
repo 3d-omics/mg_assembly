@@ -12,9 +12,6 @@ rule coverm__genome:
         method=lambda w: w.method,
         separator="@",
         extra="--min-covered-fraction 0",
-    resources:
-        runtime: 60,
-        mem_mb: 8 * 1024,
     shell:
         """
         ( coverm genome \

@@ -34,6 +34,9 @@ rule prokaryotes__quantify__coverm__genome__join:
     params:
         subcommand="join",
         extra="--left-join --tabs --out-tabs",
+    resources:
+        runtime=60,
+        mem_mb=8 * 1024,
     wrapper:
         "v5.2.1/utils/csvtk"
 
