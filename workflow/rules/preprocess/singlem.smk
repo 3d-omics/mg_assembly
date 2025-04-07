@@ -90,8 +90,8 @@ rule preprocess__singlem__microbial_fraction:
         "../../environments/singlem.yml"
     shell:
         """
-        if [ ! -s {input.forward_} ]; then
-            echo "Empty file: {input.forward_}" > {log} 2>&1
+        if [ ! -s {input.condense} ]; then
+            echo "Empty file: {input.condense}" > {log} 2>&1
             touch {output}
             exit 0
         fi
