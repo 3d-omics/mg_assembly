@@ -14,7 +14,7 @@ rule viruses__multiqc:
     params:
         extra="--title viruses --dirs --fullnames --fn_as_s_name --force",
     wrapper:
-        "v5.1.0/bio/multiqc"
+        "v6.0.0/bio/multiqc"
 
 
 rule viruses__multiqc__all:
