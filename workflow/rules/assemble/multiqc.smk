@@ -17,7 +17,7 @@ rule assemble__multiqc:
     log:
         RESULTS / "assemble.log",
     params:
-        extra="--title assemble --dirs --dirs-depth 1 --fullnames --force",
+        extra="--title assemble --dirs --fullnames --fn_as_s_name --force",
     resources:
         mem_mb=double_ram(8 * 1024),
         runtime=6 * 60,

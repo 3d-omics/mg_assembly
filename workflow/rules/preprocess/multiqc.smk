@@ -35,7 +35,7 @@ rule preprocess__multiqc:
     log:
         RESULTS / "preprocess.log",
     params:
-        extra="--title preprocess --dirs --dirs-depth 1 --fullnames --force",
+        extra="--title preprocess --dirs --fullnames --fn_as_s_name --force",
     resources:
         mem_mb=double_ram(4 * 1024),
         runtime=6 * 60,

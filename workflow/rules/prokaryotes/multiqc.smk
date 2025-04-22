@@ -14,7 +14,7 @@ rule prokaryotes__multiqc:
     log:
         RESULTS / "prokaryotes.log",
     params:
-        extra="--title prokaryotes --dirs --dirs-depth 1 --fullnames --force",
+        extra="--title prokaryotes --dirs --fullnames --fn_as_s_name --force",
     resources:
         mem_mb=double_ram(8 * 1024),
         runtime=6 * 60,

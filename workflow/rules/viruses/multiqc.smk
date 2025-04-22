@@ -12,7 +12,7 @@ rule viruses__multiqc:
     log:
         RESULTS / "viruses.log",
     params:
-        extra="--title viruses --dirs --dirs-depth 1 --fullnames --force",
+        extra="--title viruses --dirs --fullnames --fn_as_s_name --force",
     wrapper:
         "v5.1.0/bio/multiqc"
 
