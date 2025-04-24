@@ -20,9 +20,6 @@ rule assemble__quast:
         """
 
 
-
 rule assemble__quast__all:
     input:
-        [
-            ASMB_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES
-        ]
+        [ASMB_QUAST / f"{assembly_id}" for assembly_id in ASSEMBLIES],

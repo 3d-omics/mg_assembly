@@ -4,7 +4,8 @@ def get_libraries_from_sample(wildcards):
     """
 
     sample_library_filt = [
-        [sample_id, library_id] for sample_id, library_id in SAMPLE_LIBRARY 
+        [sample_id, library_id]
+        for sample_id, library_id in SAMPLE_LIBRARY
         if sample_id == wildcards.sample_id
     ]
 

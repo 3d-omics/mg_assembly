@@ -8,7 +8,7 @@ rule preprocess__bracken__recompute:
         ),
         report=touch(
             PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.report"
-        )
+        ),
     log:
         PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.log",
     conda:
@@ -85,7 +85,7 @@ rule preprocess__bracken__alpha_diversity:
         ) > {output} \
         2> {log}
         """
-    
+
 
 rule preprocess__bracken__beta_diversity:
     """Compute beta diversity metrics for all samples and one level"""
@@ -124,10 +124,7 @@ rule preprocess__bracken__all:
             for kraken2_db in KRAKEN2_DBS
             for level in "DPCOFGS"
         ],
-        [
-            PRE_BRACKEN / kraken2_db / "alpha.tsv"
-            for kraken2_db in KRAKEN2_DBS
-        ],
+        [PRE_BRACKEN / kraken2_db / "alpha.tsv" for kraken2_db in KRAKEN2_DBS],
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS

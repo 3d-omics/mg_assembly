@@ -1,5 +1,6 @@
 include: "kraken2_functions.smk"
 
+
 rule preprocess__kraken2__join_libraries:
     """Join all libraries for a single sample"""
     input:
@@ -29,22 +30,20 @@ rule preprocess__kraken2__assign:
     """
     Run kraken2 over all samples at once using the /dev/shm/ trick.
 
-    NOTE: 
+    NOTE:
         - /dev/shm may be not empty after the job is done.
-        - Specify twice the amount of RAM needed: Linux systems usually 
+        - Specify twice the amount of RAM needed: Linux systems usually
             come configured with /dev/shm to be half the RAM size
         - After read classification the report generation step uses suddenly
-            ~10GB of RAM per sample processed in parallel. The 2x RAM usage 
+            ~10GB of RAM per sample processed in parallel. The 2x RAM usage
             comes handy to avoid OOM errors.
     """
     input:
         forwards=[
-            PRE_KRAKEN2 / "samples" / f"{sample_id}_1.fq.gz"
-            for sample_id in SAMPLES
+            PRE_KRAKEN2 / "samples" / f"{sample_id}_1.fq.gz" for sample_id in SAMPLES
         ],
         rerverses=[
-            PRE_KRAKEN2 / "samples" / f"{sample_id}_2.fq.gz"
-            for sample_id in SAMPLES
+            PRE_KRAKEN2 / "samples" / f"{sample_id}_2.fq.gz" for sample_id in SAMPLES
         ],
         database=lambda w: features["databases"]["kraken2"][w.kraken2_db],
     output:
