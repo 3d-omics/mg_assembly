@@ -20,8 +20,8 @@ rule preprocess__kraken2__join_libraries:
         "../../environments/kraken2.yml"
     shell:
         """
-        cat {input.forwards} > {output.forwards} 2> {log} 1>&2
-        cat {input.reverses} > {output.reverses} 2>> {log} 1>&2
+        cat {input.forwards} > {output.forwards} 2> {log}
+        cat {input.reverses} > {output.reverses} 2>> {log}
         """
 
 
@@ -59,7 +59,7 @@ rule preprocess__kraken2__assign:
     log:
         PRE_KRAKEN2 / "{kraken2_db}.log",
     params:
-        in_folder=PRE_FASTP,
+        in_folder=PRE_KRAKEN2 / "samples",
         out_folder=lambda w: PRE_KRAKEN2 / w.kraken2_db,
         kraken_db_name=lambda w: w.kraken2_db,
         samples=" ".join(SAMPLES),
@@ -134,10 +134,12 @@ rule preprocess__kraken2__assign:
 rule preprocess__kraken2__all:
     input:
         out_gzs=[
-            PRE_KRAKEN2 / "{kraken2_db}" / f"{sample_id}.out.gz"
+            PRE_KRAKEN2 / kraken2_db / f"{sample_id}.out.gz"
             for sample_id in SAMPLES
+            for kraken2_db in KRAKEN2_DBS
         ],
         reports=[
-            PRE_KRAKEN2 / "{kraken2_db}" / f"{sample_id}.k2report"
+            PRE_KRAKEN2 / kraken2_db / f"{sample_id}.k2report"
             for sample_id in SAMPLES
+            for kraken2_db in KRAKEN2_DBS
         ],

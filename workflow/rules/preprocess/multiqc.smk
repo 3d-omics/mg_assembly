@@ -25,7 +25,7 @@ rule preprocess__multiqc:
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
         bracken=[
-            PRE_BRACKEN / kraken2_db / f"{sample_id}.{level}.bracken"
+            PRE_BRACKEN / kraken2_db / "recompute" / f"{sample_id}.{level}.report"
             for sample_id in SAMPLES
             for kraken2_db in KRAKEN2_DBS
             for level in "DPCOFGS"

@@ -3,6 +3,6 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - kraken2 =2.1.3
+  - bracken =3.0
+  - krakentools = 1.2
   - parallel =20241122
-  - pigz =2.8
