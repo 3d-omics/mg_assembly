@@ -24,10 +24,11 @@ rule preprocess__multiqc:
             PRE_NONPAREIL / f"{sample_id}.{library_id}.json"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
-        kraken2=[
-            PRE_BRACKEN / kraken2_db / f"{sample_id}.k2report"
+        bracken=[
+            PRE_BRACKEN / kraken2_db / f"{sample_id}.{level}.bracken"
             for sample_id in SAMPLES
             for kraken2_db in KRAKEN2_DBS
+            for level in "DPCOFGS"
         ],
     output:
         RESULTS / "preprocess.html",
