@@ -25,7 +25,7 @@ rule preprocess__multiqc:
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
         kraken2=[
-            PRE_KRAKEN2 / kraken2_db / f"{sample_id}.k2report"
+            PRE_BRACKEN / kraken2_db / f"{sample_id}.k2report"
             for sample_id in SAMPLES
             for kraken2_db in KRAKEN2_DBS
         ],
