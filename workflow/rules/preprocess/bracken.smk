@@ -75,6 +75,7 @@ rule preprocess__bracken__alpha_diversity:
         """
         ( parallel \
             --tag \
+            --keep-order \
             --jobs {threads} \
             alpha_diversity.py \
                 --filename {{1}} \
