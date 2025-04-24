@@ -7,7 +7,10 @@ rule prokaryotes__multiqc:
             for sample_id, library_id in SAMPLE_LIBRARY
             for secondary_ani in SECONDARY_ANIS
         ],
-        quast=PROK_QUAST,
+        quast=[
+            PROK_QUAST / f"drep.{secondary_ani}"
+            for secondary_ani in SECONDARY_ANIS
+        ],
     output:
         RESULTS / "prokaryotes.html",
         RESULTS / "prokaryotes_data.zip",
