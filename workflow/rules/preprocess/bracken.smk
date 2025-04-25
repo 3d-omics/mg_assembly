@@ -7,9 +7,14 @@ rule preprocess__bracken__recompute:
         bracken=touch(
             PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.bracken"
         ),
-        report=touch(temp(
-            PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.report"
-        )),
+        report=touch(
+            temp(
+                PRE_BRACKEN
+                / "{kraken2_db}"
+                / "recompute"
+                / "{sample_id}.{level}.report"
+            )
+        ),
     log:
         PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.log",
     conda:
@@ -38,11 +43,11 @@ rule preprocess__bracken__recompute:
 rule preprocess__bracken__report:
     """Move a species report to its folder (all bracken reports are the same no matter the level)"""
     input:
-        PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.S.report"
+        PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.S.report",
     output:
-        PRE_BRACKEN / "{kraken2_db}" / "report" / "{sample_id}.report"
+        PRE_BRACKEN / "{kraken2_db}" / "report" / "{sample_id}.report",
     log:
-        PRE_BRACKEN / "{kraken2_db}" / "report" / "{sample_id}.log"
+        PRE_BRACKEN / "{kraken2_db}" / "report" / "{sample_id}.log",
     conda:
         "../../environments/bracken.yml"
     shell:
