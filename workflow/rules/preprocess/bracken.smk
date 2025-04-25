@@ -1,4 +1,5 @@
 rule preprocess__bracken__recompute:
+    """Recompute kraken2 reports and counts and for all samples and levels"""
     input:
         database=lambda w: features["databases"]["kraken2"][w.kraken2_db],
         report=PRE_KRAKEN2 / "{kraken2_db}" / "{sample_id}.k2report",
@@ -6,9 +7,9 @@ rule preprocess__bracken__recompute:
         bracken=touch(
             PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.bracken"
         ),
-        report=touch(
+        report=touch(temp(
             PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.report"
-        ),
+        )),
     log:
         PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.log",
     conda:
@@ -31,6 +32,22 @@ rule preprocess__bracken__recompute:
             -l {params.level} \
             {params.extra} \
         2> {log} 1>&2
+        """
+
+
+rule preprocess__bracken__report:
+    """Move a species report to its folder (all bracken reports are the same no matter the level)"""
+    input:
+        PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.S.report"
+    output:
+        PRE_BRACKEN / "{kraken2_db}" / "report" / "{sample_id}.report"
+    log:
+        PRE_BRACKEN / "{kraken2_db}" / "report" / "{sample_id}.log"
+    conda:
+        "../../environments/bracken.yml"
+    shell:
+        """
+        cp --verbose {input} {output} 2> {log} 1>&2
         """
 
 
