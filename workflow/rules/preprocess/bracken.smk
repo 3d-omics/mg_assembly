@@ -77,9 +77,8 @@ rule preprocess__bracken__alpha_diversity:
     """Calculate alpha diversity metrics for all samples, metrics and levels at once"""
     input:
         lambda w: [
-            PRE_BRACKEN / w.kraken2_db / "recompute" / f"{sample_id}.{level}.bracken"
+            PRE_BRACKEN / w.kraken2_db / "recompute" / f"{sample_id}.S.bracken"
             for sample_id in SAMPLES
-            for level in "DPCOFGS"
         ],
     output:
         PRE_BRACKEN / "{kraken2_db}" / "alpha.tsv",
@@ -100,6 +99,7 @@ rule preprocess__bracken__alpha_diversity:
         ::: {input} \
         ::: Sh BP Si ISi F \
         | sed 's/: /\\t/' \
+        | grep -v loading \
         ) > {output} \
         2> {log}
         """
@@ -146,5 +146,5 @@ rule preprocess__bracken__all:
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in "DPCOFGS"
+            for level in ["S", "G", "F", "O"]
         ],
