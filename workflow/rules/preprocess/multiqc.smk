@@ -10,7 +10,7 @@ rule preprocess__multiqc:
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
         bowtie2=[
-            PRE_BOWTIE2 / f"{host}.{sample_id}.{library_id}.{report}"
+            PRE_BOWTIE2 / host / f"{sample_id}.{library_id}.{report}"
             for host in HOST_NAMES
             for report in BAM_REPORTS
             for sample_id, library_id in SAMPLE_LIBRARY
