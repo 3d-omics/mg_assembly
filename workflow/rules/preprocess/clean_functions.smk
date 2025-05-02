@@ -10,8 +10,8 @@ def get_final_fastq(wildcards):
         ]
     last_host = HOST_NAMES[-1]
     return [
-        PRE_BOWTIE2 / f"{last_host}.{sample_id}.{library_id}_u1.fq.gz",
-        PRE_BOWTIE2 / f"{last_host}.{sample_id}.{library_id}_u2.fq.gz",
+        PRE_BOWTIE2 / f"{last_host}" / f"{sample_id}.{library_id}_u1.fq.gz",
+        PRE_BOWTIE2 / f"{last_host}" / f"{sample_id}.{library_id}_u2.fq.gz",
     ]
 
 
