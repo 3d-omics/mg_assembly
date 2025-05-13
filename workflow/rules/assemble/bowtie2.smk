@@ -47,9 +47,9 @@ use rule bowtie2__map as assemble__bowtie2__map with:
             ".rev.2.bt2",
         ),
     output:
-        ASMB_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.bam",
+        ASMB_BOWTIE2 / "{assembly_id}" / "{sample_id}.{library_id}.bam",
     log:
-        ASMB_BOWTIE2 / "{assembly_id}.{sample_id}.{library_id}.log",
+        ASMB_BOWTIE2 / "{assembly_id}" / "{sample_id}.{library_id}.log",
     params:
         index=lambda w: ASMB_BUILD / f"{w.assembly_id}",
         rg_id=compose_rg_id,
@@ -62,7 +62,7 @@ rule assemble__bowtie2__map__all:
     """Map all samples to all the assemblies that they belong to"""
     input:
         [
-            ASMB_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
+            ASMB_BOWTIE2 / assembly_id / f"{sample_id}.{library_id}.bam"
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
         ],
 

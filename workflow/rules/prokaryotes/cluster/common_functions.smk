@@ -3,7 +3,7 @@ def get_bams_from_assembly_id(wildcards):
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     bam_files = [
-        ASMB_BOWTIE2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
+        ASMB_BOWTIE2 / assembly_id / f"{sample_id}.{library_id}.bam"
         for sample_id, library_id in samples_in_assembly
     ]
     return bam_files
@@ -19,7 +19,7 @@ def compose_bams_for_metabat2_run(wildcards):
     assembly_id = wildcards.assembly_id
     samples_in_assembly = get_sample_and_library_from_assembly_id(assembly_id)
     bam_files = [
-        METABAT2 / f"{assembly_id}.{sample_id}.{library_id}.bam"
+        METABAT2 / assembly_id / f"{sample_id}.{library_id}.bam"
         for sample_id, library_id in samples_in_assembly
     ]
     return bam_files

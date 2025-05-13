@@ -4,10 +4,10 @@ rule coverm__genome:
         "sample.{method}.bam",
     output:
         "sample.{method}.tsv.gz",  # it can be tsv too
-    conda:
-        "../../environments/coverm.yml"
     log:
         "sample.{method}.log",
+    conda:
+        "../../environments/coverm.yml"
     params:
         method=lambda w: w.method,
         separator="@",
@@ -23,8 +23,9 @@ rule coverm__genome:
             --fields 1 \
             --delimiter " " \
         | sed \
-            '1 s/^Contig/sequence_id/g' \
-        | gzip --best \
+            '1 s/^Genome/sequence_id/g' \
+        | gzip \
+            --best \
         > {output} \
         ) 2> {log}
         """

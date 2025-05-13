@@ -17,8 +17,6 @@ use rule bowtie2__build as preprocess__bowtie2__build with:
     log:
         PRE_BUILD / "{host}.log",
     cache: "omit-software"
-    group:
-        "preprocess__{host}"
 
 
 rule preprocess__bowtie2__build__all:
@@ -52,17 +50,15 @@ use rule bowtie2__map as preprocess__bowtie2__map with:
             ".rev.2.bt2",
         ),
     output:
-        PRE_BOWTIE2 / "{host}.{sample_id}.{library_id}.bam",
+        PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.bam",
     log:
-        PRE_BOWTIE2 / "{host}.{sample_id}.{library_id}.log",
+        PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.log",
     params:
         index=lambda w: PRE_BUILD / f"{w.host}",
         samtools_extra=params["preprocess"]["bowtie2"]["samtools_extra"],
         bowtie2_extra=params["preprocess"]["bowtie2"]["bowtie2_extra"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    group:
-        "preprocess__{sample_id}.{library_id}"
 
 
 rule preprocess__bowtie2__fastq:
@@ -72,17 +68,15 @@ rule preprocess__bowtie2__fastq:
     bowtie2 fails to receive a piped SAM input. Therefore, we need to convert the CRAM file to a physical FASTQ file.
     """
     input:
-        bam=PRE_BOWTIE2 / "{host}.{sample_id}.{library_id}.bam",
-        bai=PRE_BOWTIE2 / "{host}.{sample_id}.{library_id}.bam.bai",
+        bam=PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.bam",
+        bai=PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.bam.bai",
     output:
-        forward_=temp(PRE_BOWTIE2 / "{host}.{sample_id}.{library_id}_u1.fq.gz"),
-        reverse_=temp(PRE_BOWTIE2 / "{host}.{sample_id}.{library_id}_u2.fq.gz"),
+        forward_=temp(PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}_u1.fq.gz"),
+        reverse_=temp(PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}_u2.fq.gz"),
     log:
-        PRE_BOWTIE2 / "{host}.{sample_id}.{library_id}.unaligned.log",
+        PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.unaligned.log",
     conda:
         "../../environments/bowtie2.yml"
-    group:
-        "preprocess__{sample_id}.{library_id}"
     shell:
         """
         rm \

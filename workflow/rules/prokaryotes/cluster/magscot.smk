@@ -239,8 +239,9 @@ rule prokaryotes__cluster__magscot__rename:
         ( python workflow/scripts/reformat_fasta_magscot.py \
             <(gzip -dc {input.assembly}) \
             {input.clean} \
-        | pigz \
-            --best \
+        | bgzip \
+            --compress-level 9 \
+            --threads {threads} \
         > {output.fasta} \
         ) 2> {log}
         """

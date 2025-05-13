@@ -34,9 +34,9 @@ use rule bowtie2__map as viruses__quantify__bowtie2__map with:
             ".rev.2.bt2",
         ),
     output:
-        VIR_BOWTIE2 / "{sample_id}.{library_id}.bam",
+        VIR_BOWTIE2 / "rep_seq" / "{sample_id}.{library_id}.bam",
     log:
-        VIR_BOWTIE2 / "{sample_id}.{library_id}.log",
+        VIR_BOWTIE2 / "rep_seq" / "{sample_id}.{library_id}.log",
     params:
         index=VIR_BUILD / "viruses",
         samtools_extra=params["preprocess"]["bowtie2"]["samtools_extra"],
@@ -51,7 +51,7 @@ rule viruses__quantify__bowtie2__map__all:
     """Align all samples to the dereplicated genomes"""
     input:
         [
-            VIR_BOWTIE2 / f"{sample_id}.{library_id}.bam"
+            VIR_BOWTIE2 / "rep_seq" / f"{sample_id}.{library_id}.bam"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
 

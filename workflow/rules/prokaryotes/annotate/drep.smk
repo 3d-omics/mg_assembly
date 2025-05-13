@@ -47,8 +47,6 @@ rule prokaryotes__annotate__drep__dereplicate:
     resources:
         mem_mb=double_ram(4 * 1024),
         runtime=6 * 60,
-    group:
-        "prokaryotes__annotate__drep__{secondary_ani}"
     shell:
         """
         dRep dereplicate \
@@ -73,8 +71,6 @@ rule prokaryotes__annotate__drep__get_fasta:
     conda:
         "../../../environments/drep.yml"
     threads: 24
-    group:
-        "prokaryotes__annotate__drep__{secondary_ani}"
     shell:
         """
         ( cat \
@@ -97,8 +93,6 @@ rule prokaryotes__annotate__drep__tarball:
     conda:
         "../../../environments/drep.yml"
     threads: 24
-    group:
-        "prokaryotes__annotate__drep__{secondary_ani}"
     shell:
         """
         tar \

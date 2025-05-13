@@ -9,8 +9,6 @@ rule preprocess__hosts:
     conda:
         "../../environments/hosts.yml"
     cache: "omit-software"
-    group:
-        "preprocess__{host}"
     threads: 8
     shell:
         """

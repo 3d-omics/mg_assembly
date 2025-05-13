@@ -23,8 +23,8 @@ def get_fastq_for_host_mapping(wildcards):
         ]
     previous_host = HOST_NAMES[host_index - 1]
     return [
-        PRE_BOWTIE2 / f"{previous_host}.{sample_id}.{library_id}_u1.fq.gz",
-        PRE_BOWTIE2 / f"{previous_host}.{sample_id}.{library_id}_u2.fq.gz",
+        PRE_BOWTIE2 / f"{previous_host}" / f"{sample_id}.{library_id}_u1.fq.gz",
+        PRE_BOWTIE2 / f"{previous_host}" / f"{sample_id}.{library_id}_u2.fq.gz",
     ]
 
 

@@ -45,9 +45,9 @@ use rule bowtie2__map as prokaryotes__quantify__bowtie2__map with:
             "rev.2.bt2",
         ),
     output:
-        PROK_BOWTIE2 / "drep.{secondary_ani}.{sample_id}.{library_id}.bam",
+        PROK_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.bam",
     log:
-        PROK_BOWTIE2 / "drep.{secondary_ani}.{sample_id}.{library_id}.log",
+        PROK_BOWTIE2 / "drep.{secondary_ani}" / "{sample_id}.{library_id}.log",
     conda:
         "../../../environments/bowtie2.yml"
     params:
@@ -62,7 +62,7 @@ rule prokaryotes__quantify__bowtie2__map__all:
     """Align all samples to the dereplicated genomes"""
     input:
         [
-            PROK_BOWTIE2 / f"drep.{secondary_ani}.{sample_id}.{library_id}.bam"
+            PROK_BOWTIE2 / f"drep.{secondary_ani}" / f"{sample_id}.{library_id}.bam"
             for sample_id, library_id in SAMPLE_LIBRARY
             for secondary_ani in SECONDARY_ANIS
         ],

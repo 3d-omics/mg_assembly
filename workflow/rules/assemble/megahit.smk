@@ -21,8 +21,6 @@ rule assemble__megahit:
         reverses=aggregate_reverses_for_megahit,
         extra=params["assemble"]["megahit"]["extra"],
     retries: 5
-    group:
-        "assemble__megahit__{assembly_id}"
     threads: 24
     resources:
         mem_mb=double_ram(32 * 1024),
@@ -51,8 +49,6 @@ rule assemble__megahit__rename:
         ASMB_MEGAHIT / "{assembly_id}.rename.log",
     conda:
         "../../environments/megahit.yml"
-    group:
-        "assemble__megahit__{assembly_id}"
     params:
         assembly_id=lambda w: w.assembly_id,
     threads: 24
@@ -86,8 +82,6 @@ rule assemble__megahit__archive:
         ASMB_MEGAHIT / "{assembly_id}.archive.log",
     conda:
         "../../environments/megahit.yml"
-    group:
-        "assemble__megahit__{assembly_id}"
     threads: 24
     shell:
         """

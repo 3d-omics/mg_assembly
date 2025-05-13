@@ -12,7 +12,7 @@ rule preprocess__reads:
     log:
         PRE_READS / "{sample_id}.{library_id}.log",
     conda:
-        "../../environments/reads.yml"
+        "base"
     shell:
         """
         ln --symbolic $(readlink --canonicalize {input.forward_}) {output.forward_} 2> {log}
@@ -28,7 +28,3 @@ rule preprocess__reads__all:
             for sample_id, library_id in SAMPLE_LIBRARY
             for end in ["1", "2"]
         ],
-
-
-localrules:
-    preprocess__reads,

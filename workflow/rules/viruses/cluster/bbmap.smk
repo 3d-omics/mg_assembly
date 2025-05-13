@@ -28,6 +28,29 @@ rule viruses__cluster__bbmap__dedupe:
         """
 
 
+rule viruses__cluster__bbmap__clean:
+    """
+    Clean up the deduped fasta file since merged sequences headers contain multiple ">"
+    """
+    input:
+        VIR_DEDUPE / "dedupe.fa.gz",
+    output:
+        VIR_DEDUPE / "clean.fa.gz",
+    log:
+        VIR_DEDUPE / "clean.log",
+    conda:
+        "../../../environments/bbmap.yml"
+    shell:
+        """
+        ( seqtk seq {input} \
+        | cut --fields 1,2 -d ">" \
+        | tr "|" "_" \
+        | bgzip \
+        > {output} \
+        ) 2> {log}
+        """
+
+
 rule viruses__cluster__bbmap__all:
     input:
-        rules.viruses__cluster__bbmap__dedupe.output,
+        rules.viruses__cluster__bbmap__clean.output,

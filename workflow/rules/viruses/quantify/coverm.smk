@@ -1,84 +1,48 @@
-# coverm genome ----
-use rule coverm__genome as viruses__quantify__coverm__genome with:
+# coverm contig ----
+use rule coverm__contig as viruses__quantify__coverm__contig with:
     input:
-        VIR_BOWTIE2 / "{sample_id}.{library_id}.bam",
+        VIR_BOWTIE2 / "rep_seq" / "{sample_id}.{library_id}.bam",
     output:
-        temp(VIR_COVERM / "files" / "genome.{method}.{sample_id}.{library_id}.tsv.gz"),
+        temp(VIR_COVERM / "contig" / "{method}.rep_seq.{sample_id}.{library_id}.tsv.gz"),
     log:
-        VIR_COVERM / "files" / "genome.{method}.{sample_id}.{library_id}.log",
+        VIR_COVERM / "contig" / "{method}.{sample_id}.{library_id}.log",
     conda:
         "../../../environments/coverm.yml"
     params:
         method=lambda w: w.method,
-        extra=params["quantify"]["coverm"]["genome"]["extra"],
-        separator=params["quantify"]["coverm"]["genome"]["separator"],
 
 
-rule viruses__quantify__coverm__genome__join:
+rule viruses__quantify__coverm__contig__join:
     input:
         lambda w: [
-            VIR_COVERM / "files" / f"genome.{w.method}.{sample_id}.{library_id}.tsv.gz"
+            VIR_COVERM
+            / "contig"
+            / f"{w.method}.rep_seq.{sample_id}.{library_id}.tsv.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
         ],
     output:
-        VIR_COVERM / "coverm.genome.{method}.tsv.gz",
+        VIR_COVERM / "contig.{method}.rep_seq.tsv.gz",
     log:
-        VIR_COVERM / "coverm.genome.{method}.log",
+        VIR_COVERM / "contig.{method}.rep_seq.log",
     params:
         subcommand="join",
+        extra="--left-join --tabs --out-tabs",
+    resources:
+        runtime=60,
+        mem_mb=8 * 1024,
     wrapper:
         "v5.2.1/utils/csvtk"
 
 
-rule viruses__quantify__coverm__genome__all:
-    """Run coverm genome and all methods"""
+rule viruses__quantify__coverm__contig__all:
+    """Run coverm contig and all methods"""
     input:
         [
-            VIR_COVERM / f"coverm.genome.{method}.tsv.gz"
+            VIR_COVERM / f"contig.{method}.rep_seq.tsv.gz"
             for method in ["count", "covered_bases"]
         ],
 
 
-# coverm contig ----
-# use rule coverm__contig as viruses__quantify__coverm__contig with:
-#     input:
-#         VIR_BOWTIE2 / "{sample_id}.{library_id}.bam",
-#     output:
-#         temp(VIR_COVERM / "files" / "contig.{method}.{sample_id}.{library_id}.tsv.gz"),
-#     log:
-#         VIR_COVERM / "files" / "contig.{method}.{sample_id}.{library_id}.log",
-#     conda:
-#         "../../../environments/coverm.yml"
-#     params:
-#         method=lambda w: w.method,
-
-
-# rule viruses__quantify__coverm__contig__join:
-#     input:
-#         lambda w: [
-#             VIR_COVERM / "files" / f"contig.{w.method}.{sample_id}.{library_id}.tsv.gz"
-#             for sample_id, library_id in SAMPLE_LIBRARY
-#         ],
-#     output:
-#         VIR_COVERM / "coverm.contig.{method}.tsv.gz",
-#     log:
-#         VIR_COVERM / "coverm.contig.{method}.log",
-#     params:
-#         subcommand="join",
-#     wrapper:
-#         "v5.2.1/utils/csvtk"
-
-
-# rule viruses__quantify__coverm__contig__all:
-#     """Run coverm contig and all methods"""
-#     input:
-#         [
-#             VIR_COVERM / f"coverm.contig.{method}.tsv.gz"
-#             for method in params["quantify"]["coverm"]["contig"]["methods"]
-#         ],
-
-
 rule viruses__quantify__coverm__all:
     input:
-        # rules.viruses__quantify__coverm__contig__all.input,
-        rules.viruses__quantify__coverm__genome__all.input,
+        rules.viruses__quantify__coverm__contig__all.input,

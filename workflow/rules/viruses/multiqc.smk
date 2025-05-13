@@ -1,7 +1,7 @@
 rule viruses__multiqc:
     input:
         bowtie2=[
-            VIR_BOWTIE2 / f"{sample_id}.{library_id}.{report}"
+            VIR_BOWTIE2 / "rep_seq" / f"{sample_id}.{library_id}.{report}"
             for sample_id, library_id in SAMPLE_LIBRARY
             for report in BAM_REPORTS
         ],
@@ -12,9 +12,9 @@ rule viruses__multiqc:
     log:
         RESULTS / "viruses.log",
     params:
-        extra="--title viruses --dirs --dirs-depth 1 --fullnames --force",
+        extra="--title viruses --dirs --fullnames --fn_as_s_name --force",
     wrapper:
-        "v5.1.0/bio/multiqc"
+        "v6.0.0/bio/multiqc"
 
 
 rule viruses__multiqc__all:

@@ -13,6 +13,7 @@ PRE_BUILD = PRE / "build"
 PRE_BOWTIE2 = PRE / "bowtie2"
 PRE_CLEAN = PRE / "clean"
 PRE_KRAKEN2 = PRE / "kraken2"
+PRE_BRACKEN = PRE / "bracken"
 PRE_SINGLEM = PRE / "singlem"
 PRE_NONPAREIL = PRE / "nonpareil"
 

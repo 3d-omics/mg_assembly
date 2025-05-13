@@ -69,9 +69,8 @@ rule prokaryotes__cluster__concoct:
             {params.workdir}/*.txt \
         2>> {log} 1>&2
 
-        pigz \
-            --best \
-            --verbose \
+        bgzip \
+            --compress-level 9 \
             {params.workdir}/*.fa \
         2>> {log} 1>&2
         """
