@@ -25,7 +25,7 @@ rule preprocess__bracken__recompute:
     shell:
         """
         if [ ! -s {input.report} ] ; then
-            echo "Empty report. Skipping" 2> {log} 1>&2
+            echo "Empty kraken2 report. Skipping" 2> {log} 1>&2
             exit 0
         fi
 
@@ -82,8 +82,9 @@ rule preprocess__bracken__alpha_diversity:
     """Calculate alpha diversity metrics for all samples, metrics and levels at once"""
     input:
         lambda w: [
-            PRE_BRACKEN / w.kraken2_db / "recompute" / f"{sample_id}.S.bracken"
+            PRE_BRACKEN / w.kraken2_db / "recompute" / f"{sample_id}.{level}.bracken"
             for sample_id in SAMPLES
+            for level in "SGFOPCD"
         ],
     output:
         PRE_BRACKEN / "{kraken2_db}" / "alpha.tsv",
@@ -151,5 +152,5 @@ rule preprocess__bracken__all:
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in ["S", "G", "F", "O"]
+            for level in "SGFO"  # Doesn't do for levels above
         ],

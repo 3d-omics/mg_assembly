@@ -8,7 +8,7 @@ preprocess:
     samtools_extra: "-m 1G"
   kraken2:
     bracken:
-      extra: "-r 150 -t 0 -l S"
+      extra: "-r 150 -t 10"
 
 assemble:
   megahit:
