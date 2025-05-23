@@ -99,18 +99,26 @@ rule preprocess__bracken__combine:
         """
 
 
+rule preprocess__bracken__combine__all:
+    input:
+        [
+            PRE_BRACKEN / kraken2_db / "combine" / f"{level}.tsv"
+            for kraken2_db in KRAKEN2_DBS
+            for level in "DPCOFGS"
+        ],
+
+
 rule preprocess__bracken__alpha_diversity:
     """Calculate alpha diversity metrics for all samples, metrics and levels at once"""
     input:
         lambda w: [
-            PRE_BRACKEN / w.kraken2_db / "recompute" / f"{sample_id}.{level}.bracken"
+            PRE_BRACKEN / w.kraken2_db / "recompute" / f"{sample_id}.{w.level}.bracken"
             for sample_id in SAMPLES
-            for level in "SGFOPCD"
         ],
     output:
-        PRE_BRACKEN / "{kraken2_db}" / "alpha.tsv",
+        PRE_BRACKEN / "{kraken2_db}" / "alpha.{level}.tsv",
     log:
-        PRE_BRACKEN / "{kraken2_db}" / "alpha.log",
+        PRE_BRACKEN / "{kraken2_db}" / "alpha.{level}.log",
     conda:
         "../../environments/bracken.yml"
     threads: 8
@@ -130,6 +138,15 @@ rule preprocess__bracken__alpha_diversity:
         ) > {output} \
         2> {log}
         """
+
+
+rule preprocess__bracken__alpha_diversity__all:
+    input:
+        [
+            PRE_BRACKEN / kraken2_db / f"alpha.{level}.tsv"
+            for kraken2_db in KRAKEN2_DBS
+            for level in "SGFOPCD"
+        ],
 
 
 rule preprocess__bracken__beta_diversity:
@@ -155,19 +172,24 @@ rule preprocess__bracken__beta_diversity:
         """
 
 
-rule preprocess__bracken__all:
-    """Get the combined bracken results for all databases"""
+rule preprocess__bracken__beta_diversity__all:
+    """Run preprocess__bracken__beta_diversity for all databases and some levels
+
+    Note: Beta diversity is only computed for Order, Family, Genus and Species
+    """
     input:
-        rules.preprocess__bracken__recompute__all.input,
-        rules.preprocess__bracken__report__all.input,
-        [
-            PRE_BRACKEN / kraken2_db / "combine" / f"{level}.tsv"
-            for kraken2_db in KRAKEN2_DBS
-            for level in "DPCOFGS"
-        ],
-        [PRE_BRACKEN / kraken2_db / "alpha.tsv" for kraken2_db in KRAKEN2_DBS],
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
             for level in "OFGS"
         ],
+
+
+rule preprocess__bracken__all:
+    """Get the combined bracken results for all databases"""
+    input:
+        rules.preprocess__bracken__recompute__all.input,
+        rules.preprocess__bracken__report__all.input,
+        rules.preprocess__bracken__combine__all.input,
+        rules.preprocess__bracken__alpha_diversity__all.input,
+        rules.preprocess__bracken__beta_diversity__all.input,
