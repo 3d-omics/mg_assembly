@@ -8,12 +8,7 @@ rule preprocess__bracken__recompute:
             PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.bracken"
         ),
         report=touch(
-            temp(
-                PRE_BRACKEN
-                / "{kraken2_db}"
-                / "recompute"
-                / "{sample_id}.{level}.report"
-            )
+            PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.report"
         ),
     log:
         PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.log",
@@ -26,17 +21,22 @@ rule preprocess__bracken__recompute:
         """
         if [ ! -s {input.report} ] ; then
             echo "Empty kraken2 report. Skipping" 2> {log} 1>&2
+            echo -e "name\ttaxonomy_id\ttaxonomy_lvl\tkraken_assigned_reads\tadded_reads\tnew_est_reads\tfraction_total_reads" > {output.bracken}
             exit 0
         fi
 
-        bracken \
-            -d {input.database} \
-            -i {input.report} \
-            -o {output.bracken} \
-            -w {output.report} \
-            -l {params.level} \
-            {params.extra} \
-        2> {log} 1>&2
+        {{
+            bracken \
+                -d {input.database} \
+                -i {input.report} \
+                -o {output.bracken} \
+                -w {output.report} \
+                -l {params.level} \
+                {params.extra} \
+            2> {log} 1>&2
+        }} || {{
+            echo -e "name\ttaxonomy_id\ttaxonomy_lvl\tkraken_assigned_reads\tadded_reads\tnew_est_reads\tfraction_total_reads" > {output.bracken}
+        }}
         """
 
 
