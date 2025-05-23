@@ -41,7 +41,7 @@ rule preprocess__bracken__recompute:
 
 
 rule preprocess__bracken__report:
-    """Move a species report to its folder (all bracken reports are the same no matter the level)"""
+    """Move a species report to a different folder for MultiQC"""
     input:
         PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.S.report",
     output:
@@ -152,5 +152,5 @@ rule preprocess__bracken__all:
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in "SGFO"  # Doesn't do for levels above
+            for level in "OFGS"
         ],
