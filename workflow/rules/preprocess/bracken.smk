@@ -67,6 +67,16 @@ rule preprocess__bracken__report:
         """
 
 
+rule preprocess__bracken__report__all:
+    """Run preprocess__bracken__report for all databases and samples"""
+    input:
+        [
+            PRE_BRACKEN / kraken2_db / "report" / f"{sample_id}.report"
+            for kraken2_db in KRAKEN2_DBS
+            for sample_id in SAMPLES
+        ],
+
+
 rule preprocess__bracken__combine:
     """Combine all the bracken outputs for a single database"""
     input:
@@ -149,6 +159,7 @@ rule preprocess__bracken__all:
     """Get the combined bracken results for all databases"""
     input:
         rules.preprocess__bracken__recompute__all.input,
+        rules.preprocess__bracken__report__all.input,
         [
             PRE_BRACKEN / kraken2_db / "combine" / f"{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
