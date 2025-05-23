@@ -40,6 +40,17 @@ rule preprocess__bracken__recompute:
         """
 
 
+rule preprocess__bracken__recompute__all:
+    """Run preprocess__bracken__combine for all databases, samples and levels"""
+    input:
+        [
+            PRE_BRACKEN / kraken2_db / "recompute" / f"{sample_id}.{level}.bracken"
+            for kraken2_db in KRAKEN2_DBS
+            for sample_id in SAMPLES
+            for level in "DPCOFGS"
+        ],
+
+
 rule preprocess__bracken__report:
     """Move a species report to a different folder for MultiQC"""
     input:
@@ -137,12 +148,7 @@ rule preprocess__bracken__beta_diversity:
 rule preprocess__bracken__all:
     """Get the combined bracken results for all databases"""
     input:
-        [
-            PRE_BRACKEN / kraken2_db / "recompute" / f"{sample_id}.{level}.bracken"
-            for kraken2_db in KRAKEN2_DBS
-            for sample_id in SAMPLES
-            for level in "DPCOFGS"
-        ],
+        rules.preprocess__bracken__recompute__all.input,
         [
             PRE_BRACKEN / kraken2_db / "combine" / f"{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
