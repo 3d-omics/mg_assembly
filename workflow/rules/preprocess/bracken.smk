@@ -18,8 +18,8 @@ rule preprocess__bracken__recompute:
     conda:
         "../../environments/bracken.yml"
     params:
-        read_length=params["preprocess"]["kraken2"]["bracken"]["read_length"],
-        threshold=params["preprocess"]["kraken2"]["bracken"]["threshold"],
+        read_length=params["preprocess"]["bracken"]["read_length"],
+        threshold=params["preprocess"]["bracken"]["threshold"],
         level=lambda w: w.level,
     shell:
         """
