@@ -15,7 +15,8 @@ rule preprocess__bracken__recompute:
     conda:
         "../../environments/bracken.yml"
     params:
-        extra=params["preprocess"]["kraken2"]["bracken"]["extra"],
+        read_length=params["preprocess"]["kraken2"]["bracken"]["read_length"],
+        threshold=params["preprocess"]["kraken2"]["bracken"]["threshold"],
         level=lambda w: w.level,
     shell:
         """
@@ -32,7 +33,8 @@ rule preprocess__bracken__recompute:
                 -o {output.bracken} \
                 -w {output.report} \
                 -l {params.level} \
-                {params.extra} \
+                -r {params.read_length} \
+                -t {params.threshold} \
             2> {log} 1>&2
         }} || {{
             echo -e "name\ttaxonomy_id\ttaxonomy_lvl\tkraken_assigned_reads\tadded_reads\tnew_est_reads\tfraction_total_reads" > {output.bracken}
@@ -47,7 +49,7 @@ rule preprocess__bracken__recompute__all:
             PRE_BRACKEN / kraken2_db / "recompute" / f"{sample_id}.{level}.bracken"
             for kraken2_db in KRAKEN2_DBS
             for sample_id in SAMPLES
-            for level in "DPCOFGS"
+            for level in ["S", "G", "F", "O", "P", "C", "D"]
         ],
 
 
