@@ -46,7 +46,7 @@ rule preprocess__bracken__recompute:
 
 
 rule preprocess__bracken__recompute__all:
-    """Run preprocess__bracken__combine for all databases, samples and levels"""
+    """Run preprocess__bracken__recompute for all databases, samples and levels"""
     input:
         [
             PRE_BRACKEN / kraken2_db / "recompute" / f"{sample_id}.{level}.bracken"
