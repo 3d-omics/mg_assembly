@@ -1,3 +1,5 @@
+include: "bracken_functions.smk"
+
 rule preprocess__bracken__recompute:
     """Recompute kraken2 reports and counts and for all samples and levels"""
     input:

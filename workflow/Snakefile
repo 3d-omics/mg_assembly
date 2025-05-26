@@ -44,9 +44,6 @@ BAM_REPORTS = ["stats.tsv"]  # , "flagstats.txt", "idxstats.tsv"]
 
 SECONDARY_ANIS = params["prokaryotes"]["annotate"]["drep"]["secondary_anis"]
 
-ALL_TAXONOMY_LEVELS = ["S", "G", "F", "O", "P", "C", "D"]
-LOW_TAXONOMY_LEVELS = ["S", "G", "F", "O"]
-
 
 # Import subworkflows
 
