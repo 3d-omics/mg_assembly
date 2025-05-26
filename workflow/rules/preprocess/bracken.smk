@@ -49,7 +49,7 @@ rule preprocess__bracken__recompute__all:
             PRE_BRACKEN / kraken2_db / "recompute" / f"{sample_id}.{level}.bracken"
             for kraken2_db in KRAKEN2_DBS
             for sample_id in SAMPLES
-            for level in ["S", "G", "F", "O", "P", "C", "D"]
+            for level in ALL_TAXONOMY_LEVELS
         ],
 
 
@@ -107,7 +107,7 @@ rule preprocess__bracken__combine__all:
         [
             PRE_BRACKEN / kraken2_db / "combine" / f"{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in ["S", "G", "F", "O", "P", "C", "D"]
+            for level in ALL_TAXONOMY_LEVELS
         ],
 
 
@@ -149,7 +149,7 @@ rule preprocess__bracken__alpha_diversity__all:
         [
             PRE_BRACKEN / kraken2_db / f"alpha.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in ["S", "G", "F", "O", "P", "C", "D"]
+            for level in ALL_TAXONOMY_LEVELS
         ],
 
 
@@ -185,7 +185,7 @@ rule preprocess__bracken__beta_diversity__all:
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in ["S", "G", "F", "O"]
+            for level in LOW_TAXONOMY_LEVELS
         ],
 
 
