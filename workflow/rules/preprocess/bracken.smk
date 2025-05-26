@@ -100,11 +100,12 @@ rule preprocess__bracken__combine:
 
 
 rule preprocess__bracken__combine__all:
+    """Run preprocess__bracken__combine for all databases and levels"""
     input:
         [
             PRE_BRACKEN / kraken2_db / "combine" / f"{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in "DPCOFGS"
+            for level in ["S", "G", "F", "O", "P", "C", "D"]
         ],
 
 
@@ -141,11 +142,12 @@ rule preprocess__bracken__alpha_diversity:
 
 
 rule preprocess__bracken__alpha_diversity__all:
+    """Run preprocess__bracken__alpha_diversity for all databases and levels"""
     input:
         [
             PRE_BRACKEN / kraken2_db / f"alpha.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in "SGFOPCD"
+            for level in ["S", "G", "F", "O", "P", "C", "D"]
         ],
 
 
@@ -181,7 +183,7 @@ rule preprocess__bracken__beta_diversity__all:
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"
             for kraken2_db in KRAKEN2_DBS
-            for level in "OFGS"
+            for level in ["S", "G", "F", "O"]
         ],
 
 
