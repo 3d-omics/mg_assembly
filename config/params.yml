@@ -6,9 +6,9 @@ preprocess:
   bowtie2:
     bowtie2_extra: ""
     samtools_extra: "-m 1G"
-  kraken2:
-    bracken:
-      extra: "-r 150 -t 0 -l S"
+  bracken:
+    read_length: 150
+    threshold: 10
 
 assemble:
   megahit:

@@ -92,7 +92,8 @@ rule prokaryotes__annotate__dram__annotate__aggregate_tsvs:
         for file in annotations trnas rrnas ; do
 
             csvtk concat --tabs {params.work_dir}/*/$file.tsv \
-            | sed -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
+            | sed -r \
+                's/[[:graph:]]+:bin_[0-9]+_([[:graph:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
             | bgzip --compress-level 9 --threads {threads} \
             > {PROK_ANN}/dram.$file.tsv.gz \
 
@@ -120,7 +121,7 @@ rule prokaryotes__annotate__dram__annotate__concatenate_fastas:
         for file in genes.fna genes.faa scaffolds.fna genes.gff ; do
 
             sed \
-                -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
+                -r 's/[[:graph:]]+:bin_[0-9]+_([[:graph:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
                 {params.work_dir}/*/$file \
             | bgzip --compress-level 9 --threads {threads} \
             > {PROK_ANN}/dram.$file.gz \
@@ -145,7 +146,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_genbank:
     shell:
         """
         ( sed \
-            -r 's/[[:alnum:]]+:bin_[0-9]+_([[:alnum:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
+            -r 's/[[:graph:]]+:bin_[0-9]+_([[:graph:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
             {params.work_dir}/*/genbank/*.gbk \
         | bgzip \
             --compress-level 9 \
