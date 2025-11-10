@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.6.0](https://github.com/3d-omics/mg_assembly/compare/v1.5.0...v1.6.0) (2025-11-10)
+
+
+### Features
+
+* **bracken:** add checkpoints. separate alpha diversities by level ([df37337](https://github.com/3d-omics/mg_assembly/commit/df37337c198551506a038cd382aa455ecd7eaf94))
+* **bracken:** recompute__all ([96dcc7c](https://github.com/3d-omics/mg_assembly/commit/96dcc7cc6dbc6196be2763ff587eb0332e981a78))
+* **bracken:** report__all ([fd31b0e](https://github.com/3d-omics/mg_assembly/commit/fd31b0e737534c9504927be3e2daedecc969a36c))
+
+
+### Bug Fixes
+
+* bracken computations on alpha and beta diversity ([7d1dc5d](https://github.com/3d-omics/mg_assembly/commit/7d1dc5dc83c2a9ce79fb954ed97047284f5c9973))
+* **bracken:** corner case in recompute ([2af72d2](https://github.com/3d-omics/mg_assembly/commit/2af72d2eb3cd5d3ddbd5453763120d806899bd22))
+* **bracken:** remove a comment ([ffb8efd](https://github.com/3d-omics/mg_assembly/commit/ffb8efde49e4b24fb49b8713fa66d9e555ae9f26))
+* **bracken:** use default threshold 10, remove species from params ([690eb07](https://github.com/3d-omics/mg_assembly/commit/690eb07f8526eaa92ec4bd5233fdaebb55f03966))
+* change alnum to graph to allow dashes and underscores ([5beea2a](https://github.com/3d-omics/mg_assembly/commit/5beea2a9fe36b53ae13f8c4b8a9a0a4ba6768e5d))
+
 ## [1.5.0](https://github.com/3d-omics/mg_assembly/compare/v1.4.0...v1.5.0) (2025-05-13)
 
 
