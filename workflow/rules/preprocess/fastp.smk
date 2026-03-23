@@ -29,7 +29,7 @@ rule preprocess__fastp:
         mem_mb=8 * 1024,
         runtime=60,
     wrapper:
-        "v4.7.1/bio/fastp"
+        "v9.4.0/bio/fastp"
 
 
 rule preprocess__fastp__all:

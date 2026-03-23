@@ -40,7 +40,7 @@ rule preprocess__multiqc:
         mem_mb=double_ram(4 * 1024),
         runtime=6 * 60,
     wrapper:
-        "v6.0.0/bio/multiqc"
+        "v9.4.0/bio/multiqc"
 
 
 rule preprocess__multiqc__all:
