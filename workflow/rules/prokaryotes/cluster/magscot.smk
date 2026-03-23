@@ -190,7 +190,7 @@ rule prokaryotes__cluster__magscot__run:
         runtime=12 * 60,
     shell:
         """
-        Rscript --no-init-file workflow/scripts/MAGScoT/MAGScoT.R \
+        Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \
             --input {input.contigs_to_bin} \
             --hmm {input.hmm} \
             --out {params.out_prefix} \
@@ -214,7 +214,7 @@ rule prokaryotes__cluster__magscot__reformat:
         mem_mb=8 * 1024,
     shell:
         """
-        Rscript --no-init-file workflow/scripts/clean_magscot_bin_to_contig.R \
+        Rscript --vanilla --verbose workflow/scripts/clean_magscot_bin_to_contig.R \
             --input-file {input.refined_contig_to_bin} \
             --output-file {output.clean} \
         2> {log} 1>&2
