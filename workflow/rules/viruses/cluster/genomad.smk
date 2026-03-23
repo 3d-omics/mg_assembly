@@ -29,6 +29,12 @@ rule viruses__cluster__genomad:
         mem_mb=double_ram(32 * 1024),
     shell:
         """
+        if [[ $(gzip -dc {input.fasta} | wc -l ) -lt 2 ]] ; then
+            echo "Empty fasta. Touching outputs" 2> {log}  1>&2
+            touch {output}
+            exit 0
+        fi
+
         {params.use_cuda}
 
         genomad end-to-end \
