@@ -58,6 +58,9 @@ module helpers:
 use rule * from helpers as helpers__*
 
 
+ruleorder: helpers__samtools__stats__bam > helpers__samtools__stats__cram
+
+
 include: "rules/functions.smk"
 include: "rules/folders.smk"
 include: "rules/common.smk"
