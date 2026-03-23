@@ -2,5 +2,5 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - csvtk =0.31.1
-  - gtdbtk =2.4.0
+  - csvtk =0.36.0
+  - gtdbtk =2.6.1
