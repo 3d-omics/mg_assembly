@@ -2,5 +2,5 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - htslib =1.21
-  - mmseqs2 =15.6f452
+  - htslib =1.23.1
+  - mmseqs2 =18.8cc5c

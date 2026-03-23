@@ -2,6 +2,6 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - htslib=1.21
-  - mamba=1
+  - htslib =1.23.1
+  - mamba =2.5.0
   - virsorter =2.2.4
