@@ -1,17 +1,17 @@
 rule viruses__cluster__mmseqs:
     input:
-        fasta=VIR_DEDUPE / "clean.fa.gz",
+        fasta=VIR_CLUSTER / "bbmap.clean.fa.gz",
     output:
-        all_seq=VIR_MMSEQS / "all_seqs.fa.gz",
-        cluster=VIR_MMSEQS / "cluster.tsv.gz",
-        rep_seq=VIR_MMSEQS / "rep_seq.fa.gz",
+        all_seq=VIR_CLUSTER / "mmseqs.all_seqs.fa.gz",
+        cluster=VIR_CLUSTER / "mmseqs.cluster.tsv.gz",
+        rep_seq=VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
     log:
-        VIR_MMSEQS / "easy_cluster.log",
+        VIR_CLUSTER / "easy_cluster.log",
     conda:
         "../../../environments/mmseqs.yml"
     params:
-        prefix=VIR_MMSEQS / "tmp",
-        tmpdir=VIR_MMSEQS,
+        prefix=VIR_CLUSTER / "tmp",
+        tmpdir=VIR_CLUSTER,
     shadow:
         "minimal"
     threads: 24

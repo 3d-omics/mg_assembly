@@ -1,12 +1,10 @@
 rule viruses__cluster__bbmap__dedupe:
     input:
-        fastas=[
-            VIR_GENOMADC / f"{assembly_id}_virus.fna.gz" for assembly_id in ASSEMBLIES
-        ],
+        VIR_CLUSTER / "genomad_virus.fna.gz"
     output:
-        fasta=VIR_DEDUPE / "dedupe.fa.gz",
+        fasta=VIR_CLUSTER / "bbmap.dedupe.fa.gz",
     log:
-        VIR_DEDUPE / "bbmap.log",
+        VIR_CLUSTER / "bbmap.dedupe.log",
     conda:
         "../../../environments/bbmap.yml"
     params:
@@ -33,11 +31,11 @@ rule viruses__cluster__bbmap__clean:
     Clean up the deduped fasta file since merged sequences headers contain multiple ">"
     """
     input:
-        VIR_DEDUPE / "dedupe.fa.gz",
+        VIR_CLUSTER / "bbmap.dedupe.fa.gz",
     output:
-        VIR_DEDUPE / "clean.fa.gz",
+        VIR_CLUSTER / "bbmap.clean.fa.gz",
     log:
-        VIR_DEDUPE / "clean.log",
+        VIR_CLUSTER / "bbmap.clean.log",
     conda:
         "../../../environments/bbmap.yml"
     shell:
