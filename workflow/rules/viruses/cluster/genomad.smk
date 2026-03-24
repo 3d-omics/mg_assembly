@@ -1,3 +1,26 @@
+rule viruses__cluster__genomad__download_database:
+    output:
+        directory(features["databases"]["genomad"])
+    log:
+        f"{features["databases"]["genomad"]}.log"
+    conda:
+        "../../../environments/genomad.yml"
+    shell:
+        """
+        genomad download-database \
+            --verbose \
+            $(dirname {output}) \
+        2> {log} 1>&2
+
+        mv \
+            --verbose \
+            $(dirname {output})/genomad_db \
+            {output} \
+        2>> {log} 1>&2
+        """
+
+
+
 rule viruses__cluster__genomad:
     input:
         fasta=ASMB_MEGAHIT / "{assembly_id}.fa.gz",
