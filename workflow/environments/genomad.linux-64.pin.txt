@@ -3,6 +3,7 @@
 # platform: linux-64
 # created-by: conda 25.11.1
 @EXPLICIT
+https://conda.anaconda.org/conda-forge/linux-64/csvtk-0.36.0-h8c20cfc_2.conda#e419f358652cb17e67b295982288e90f
 https://conda.anaconda.org/conda-forge/noarch/_x86_64-microarch-level-3-3_skylake.conda#4326f571d3b0dc41e7d6613039380988
 https://conda.anaconda.org/conda-forge/noarch/ca-certificates-2026.2.25-hbd8a1cb_0.conda#4492fd26db29495f0ba23f146cd5638d
 https://conda.anaconda.org/conda-forge/noarch/cuda-version-12.9-h4f385c5_3.conda#b6d5d7f1c171cbd228ea06b556cfa859
@@ -129,7 +130,7 @@ https://conda.anaconda.org/conda-forge/linux-64/liblapack-3.11.0-5_h47877c9_open
 https://conda.anaconda.org/conda-forge/noarch/markdown-it-py-4.0.0-pyhd8ed1ab_0.conda#5b5203189eb668f042ac2b0826244964
 https://conda.anaconda.org/bioconda/linux-64/pyrodigal-3.7.1-py312h247cb63_1.conda#6a8b2a5779d50c21f5132a7dc14bf311
 https://conda.anaconda.org/conda-forge/noarch/typing-extensions-4.15.0-h396c80c_0.conda#edd329d7d3a4ab45dcf905899a7a6115
-https://conda.anaconda.org/conda-forge/noarch/werkzeug-3.1.6-pyhcf101f3_0.conda#2d9bfc6055e55ff58b2c359323a753d2
+https://conda.anaconda.org/conda-forge/noarch/werkzeug-3.1.7-pyhcf101f3_0.conda#38cf6cde8cb2068fc896c7248e60f8ab
 https://conda.anaconda.org/conda-forge/noarch/wheel-0.46.3-pyhd8ed1ab_0.conda#bdbd7385b4a67025ac2dba4ef8cb6a8f
 https://conda.anaconda.org/conda-forge/linux-64/cudnn-9.10.2.21-hbcb9cd8_0.conda#c8168e26c0a9f50425ac05d6a5201c12
 https://conda.anaconda.org/conda-forge/linux-64/grpcio-1.73.1-py312h6f3464c_1.conda#dca50c100d8d67882ada32756810372f
