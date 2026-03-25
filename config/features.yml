@@ -12,7 +12,7 @@ magscot:
 
 databases:
   checkm2: resources/databases/checkm2/20210323/
-  checkv: resources/databases/checkv/20230320/checkv-db-v1.5/
+  checkv: resources/databases/checkv/checkv-db-v1.5/
   dram: resources/databases/dram/20230811
   genomad: resources/databases/genomad/genomad_db_v1.7
   gtdbtk: resources/databases/gtdbtk/release214
