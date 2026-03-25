@@ -1,4 +1,4 @@
-rule viruses__cluster__mmseqs:
+rule viruses__cluster__mmseqs__easy_cluster:
     input:
         fasta=VIR_CLUSTER / "bbmap.clean.fa.gz",
     output:
@@ -6,7 +6,7 @@ rule viruses__cluster__mmseqs:
         cluster=VIR_CLUSTER / "mmseqs.cluster.tsv.gz",
         rep_seq=VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
     log:
-        VIR_CLUSTER / "easy_cluster.log",
+        VIR_CLUSTER / "mmseqs.easy_cluster.log",
     conda:
         "../../../environments/mmseqs.yml"
     params:
@@ -49,4 +49,4 @@ rule viruses__cluster__mmseqs:
 
 rule viruses__cluster__mmseqs__all:
     input:
-        rules.viruses__cluster__mmseqs.output,
+        rules.viruses__cluster__mmseqs__easy_cluster.output,
