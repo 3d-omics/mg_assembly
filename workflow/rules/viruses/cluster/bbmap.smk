@@ -1,6 +1,6 @@
 rule viruses__cluster__bbmap__dedupe:
     input:
-        VIR_CLUSTER / "genomad_virus.fna.gz"
+        VIR_CLUSTER / "genomad_virus.fna.gz",
     output:
         fasta=VIR_CLUSTER / "bbmap.dedupe.fa.gz",
     log:

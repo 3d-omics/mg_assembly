@@ -1,8 +1,8 @@
 rule viruses__cluster__genomad__download_database:
     output:
-        directory(features["databases"]["genomad"])
+        directory(features["databases"]["genomad"]),
     log:
-        f"{features["databases"]["genomad"]}.log"
+        f"{features["databases"]["genomad"]}.log",
     conda:
         "../../../environments/genomad.yml"
     shell:
@@ -18,7 +18,6 @@ rule viruses__cluster__genomad__download_database:
             {output} \
         2>> {log} 1>&2
         """
-
 
 
 rule viruses__cluster__genomad__run:
@@ -79,23 +78,33 @@ rule viruses__cluster__genomad__run:
         2>> {log} 1>&2
         """
 
+
 rule viruses__cluster__genomad__concatenate_fastas:
     input:
-        plasmid_fnas=[VIR_GENOMADC / f"{assembly_id}_plasmid.fna" for assembly_id in ASSEMBLIES],
-        plasmid_proteins_fnas=[VIR_GENOMADC / f"{assembly_id}_plasmid_genes.tsv" for assembly_id in ASSEMBLIES],
-        virus_fnas=[VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES],
-        virus_proteins_fnas=[VIR_GENOMADC / f"{assembly_id}_virus_proteins.faa" for assembly_id in ASSEMBLIES],
+        plasmid_fnas=[
+            VIR_GENOMADC / f"{assembly_id}_plasmid.fna" for assembly_id in ASSEMBLIES
+        ],
+        plasmid_proteins_fnas=[
+            VIR_GENOMADC / f"{assembly_id}_plasmid_genes.tsv"
+            for assembly_id in ASSEMBLIES
+        ],
+        virus_fnas=[
+            VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES
+        ],
+        virus_proteins_fnas=[
+            VIR_GENOMADC / f"{assembly_id}_virus_proteins.faa"
+            for assembly_id in ASSEMBLIES
+        ],
     output:
         plasmid_fna=VIR_CLUSTER / "genomad_plasmid.fna.gz",
         plasmid_proteins_fna=VIR_CLUSTER / "genomad_plasmid_proteins.fna.gz",
         virus_fna=VIR_CLUSTER / "genomad_virus.fna.gz",
-        virus_proteins_fna=VIR_CLUSTER /"genomad_virus_proteins.fna.gz"
+        virus_proteins_fna=VIR_CLUSTER / "genomad_virus_proteins.fna.gz",
     log:
-        VIR_CLUSTER / "genomad.fastas.log"
+        VIR_CLUSTER / "genomad.fastas.log",
     conda:
         "../../../environments/genomad.yml"
-    threads:
-        24
+    threads: 24
     shell:
         """
         (
@@ -109,19 +118,30 @@ rule viruses__cluster__genomad__concatenate_fastas:
 
 rule viruses__cluster__genomad__aggregate_tsvs:
     input:
-        plasmid_genes=[VIR_GENOMADC / f"{assembly_id}_plasmid_genes.tsv" for assembly_id in ASSEMBLIES],
-        plasmid_summary=[VIR_GENOMADC / f"{assembly_id}_plasmid_summary.tsv" for assembly_id in ASSEMBLIES],
-        virus_genes=[VIR_GENOMADC / f"{assembly_id}_virus_genes.tsv" for assembly_id in ASSEMBLIES],
-        virus_summary_tsv=[VIR_GENOMADC / f"{assembly_id}_virus_summary.tsv" for assembly_id in ASSEMBLIES],
+        plasmid_genes=[
+            VIR_GENOMADC / f"{assembly_id}_plasmid_genes.tsv"
+            for assembly_id in ASSEMBLIES
+        ],
+        plasmid_summary=[
+            VIR_GENOMADC / f"{assembly_id}_plasmid_summary.tsv"
+            for assembly_id in ASSEMBLIES
+        ],
+        virus_genes=[
+            VIR_GENOMADC / f"{assembly_id}_virus_genes.tsv"
+            for assembly_id in ASSEMBLIES
+        ],
+        virus_summary_tsv=[
+            VIR_GENOMADC / f"{assembly_id}_virus_summary.tsv"
+            for assembly_id in ASSEMBLIES
+        ],
     output:
         plasmid_genes=VIR_CLUSTER / "genomad_plasmid_genes.tsv.gz",
         plasmid_summary=VIR_CLUSTER / "genomad.plasmid_summary.tsv.gz",
         virus_genes=VIR_CLUSTER / "genomad.virus_genes.tsv.gz",
         virus_summary_tsv=VIR_CLUSTER / "genomad.virus_summary.tsv.gz",
     log:
-        VIR_CLUSTER / "genomad.tsvs.log"
-    threads:
-        24
+        VIR_CLUSTER / "genomad.tsvs.log",
+    threads: 24
     conda:
         "../../../environments/genomad.yml"
     shell:
@@ -137,7 +157,7 @@ rule viruses__cluster__genomad__aggregate_tsvs:
             {input.plasmid_summary} \
         | bgzip --compress-level 0 --threads {threads} \
         > {output.plasmid_summary}
-        
+
         csvtk concat \
             --tabs \
             {input.virus_genes} \
