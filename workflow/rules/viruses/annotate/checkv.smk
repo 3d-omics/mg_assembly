@@ -1,8 +1,8 @@
 rule viruses__annotate__checkv__download:
     output:
-        features["databases"]["checkv"]
+        features["databases"]["checkv"],
     log:
-        f"{features["databases"]["checkv"]}.log"
+        f"{features["databases"]["checkv"]}.log",
     shell:
         """
         checkv download_database \
@@ -56,28 +56,31 @@ rule viruses__annotate__checkv__end_to_end__all:
             VIR_CHECKV / f"{assembly_id}" / f"{file}"
             for assembly_id in ASSEMBLIES
             for file in [
-                "complete_genomes.tsv", "completeness.tsv", "contamination.tsv", "quality_summary.tsv",
-                "proviruses.fna", "viruses.fna"
+                "complete_genomes.tsv",
+                "completeness.tsv",
+                "contamination.tsv",
+                "quality_summary.tsv",
+                "proviruses.fna",
+                "viruses.fna",
             ]
         ],
 
 
-
 rule viruses__annotate__checkv__aggregate_tsvs:
     input:
-        complete_genomes = [
+        complete_genomes=[
             VIR_CHECKV / f"{assembly_id}" / "complete_genomes.tsv"
             for assembly_id in ASSEMBLIES
         ],
-        completeness = [
+        completeness=[
             VIR_CHECKV / f"{assembly_id}" / "completeness.tsv"
             for assembly_id in ASSEMBLIES
         ],
-        contamination = [
+        contamination=[
             VIR_CHECKV / f"{assembly_id}" / "contamination.tsv"
             for assembly_id in ASSEMBLIES
         ],
-        summary = [
+        summary=[
             VIR_CHECKV / f"{assembly_id}" / "quality_summary.tsv"
             for assembly_id in ASSEMBLIES
         ],
@@ -87,7 +90,7 @@ rule viruses__annotate__checkv__aggregate_tsvs:
         contamination=VIR_CHECKV / "checkv.contamination.tsv.gz",
         summary=VIR_CHECKV / "checkv.quality_summary.tsv.gz",
     log:
-        VIR_CHECKV / "checkv.aggregate_tsvs.log"
+        VIR_CHECKV / "checkv.aggregate_tsvs.log",
     conda:
         "../../../environments/checkv.yml"
     shell:
@@ -112,35 +115,32 @@ rule viruses__annotate__checkv__aggregate_tsvs:
 
 rule viruses__annotate__checkv__concatenate_fastas:
     input:
-        proviruses = [
+        proviruses=[
             VIR_CHECKV / f"{assembly_id}" / "proviruses.fna"
             for assembly_id in ASSEMBLIES
         ],
-        viruses = [
-            VIR_CHECKV / f"{assembly_id}" / "viruses.fna"
-            for assembly_id in ASSEMBLIES
+        viruses=[
+            VIR_CHECKV / f"{assembly_id}" / "viruses.fna" for assembly_id in ASSEMBLIES
         ],
     output:
-        proviruses = VIR_CHECKV / "checkv.proviruses.fna.gz",
-        viruses = VIR_CHECKV / "checkv.viruses.fna.gz"
+        proviruses=VIR_CHECKV / "checkv.proviruses.fna.gz",
+        viruses=VIR_CHECKV / "checkv.viruses.fna.gz",
     log:
-        VIR_CHECKV / "checkv.concatenate_fastas.log"
+        VIR_CHECKV / "checkv.concatenate_fastas.log",
     conda:
-        "../../../environments/checkv.yml" 
+        "../../../environments/checkv.yml"
     shell:
         """
         ( cat {input.proviruses} \
         | bgzip --compress-level 9 --threads {threads} \
         > {output.proviruses} \
         ) 2> {log}
-        
+
         ( cat {input.viruses} \
         | bgzip --compress-level 9 --threads {threads} \
         > {output.viruses} \
         ) 2>> {log}
-        """     
-
-
+        """
 
 
 rule viruses__annotate__checkv__all:
