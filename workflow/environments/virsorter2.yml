@@ -2,6 +2,20 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
+  - click
+  - csvtk =0
+  - hmmer =3.4
   - htslib =1.23.1
+  - imbalanced-learn
+  - last
   - mamba =2.5.0
+  - ncbi-genome-download
+  - numpy <1.24
+  - pandas =1.2
+  - prodigal =2.6
+  - python =3.8
+  - ruamel.yaml
+  - scikit-learn =0.22.1
+  - screed =1
+  - seaborn
   - virsorter =2.2.4

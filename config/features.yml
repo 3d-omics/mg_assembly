@@ -12,11 +12,11 @@ magscot:
 
 databases:
   checkm2: resources/databases/checkm2/20210323/
-  checkv: resources/databases/checkv/checkv-db-v1.5/
+  checkv: resources/databases/checkv/checkv-db-v1.5
   dram: resources/databases/dram/20230811
   genomad: resources/databases/genomad/genomad_db_v1.7
   gtdbtk: resources/databases/gtdbtk/release214
   kraken2:  # add entries as necessary
     refseq500: resources/databases/kraken2/kraken2_RefSeqV205_Complete_500GB/20220505/
   singlem: resources/databases/singlem/S4.3.0.GTDB_r220.metapackage_20240523.smpkg.zb/
-  virsorter2: resources/databases/virsorter2/20200511/
+  virsorter2: resources/databases/virsorter2
