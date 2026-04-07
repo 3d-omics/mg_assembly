@@ -33,43 +33,113 @@ rule viruses__annotate__dramv__setup:
 
 rule viruses__annotate__dramv__annotate:
     input:
-        fasta=VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
-        tsv=VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
+        fasta=VIR_VIRSORTER2 / "{assembly_id}" / "final-viral-combined-for-dramv.fa",
+        tsv=VIR_VIRSORTER2 / "{assembly_id}" / "viral-affi-contigs-for-dramv.tab",
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
     output:
-        fasta=temp(VIR_DRAMV / "final-viral-combined-for-dramv.fa"),
-        annotations=VIR_DRAMV / "annotations.tsv.gz",
-        work_dir=temp(directory(VIR_DRAMV / "annotate")),
+        annotations=VIR_DRAMV / "annotate" / "{assembly_id}" / "annotations.tsv",
+        genes_faa=VIR_DRAMV / "annotate" / "{assembly_id}" / "genes.faa",
+        genes_fna=VIR_DRAMV / "annotate" / "{assembly_id}" / "genes.fna",
+        genes_gff=VIR_DRAMV / "annotate" / "{assembly_id}" / "genes.gff",
+        scaffolds_fna=VIR_DRAMV / "annotate" / "{assembly_id}" / "scaffolds.fna",
+        genbank=VIR_DRAMV
+        / "annotate"
+        / "{assembly_id}"
+        / "genbank"
+        / "final-viral-combined-for-dramv.gbk",
     log:
-        VIR_DRAMV / "annotations.log",
+        VIR_DRAMV / "annotate" / "{assembly_id}.log",
     conda:
         "../../../environments/dram.yml"
     resources:
         mem_mb=8 * 1024,
         runtime=24 * 60,
+    params:
+        workdir=lambda w: VIR_DRAMV / "annotate" / w.assembly_id,
     shell:
         """
-        gzip \
-            --decompress \
-            --stdout \
-            {input.fasta} \
-        > {output.fasta} \
-        2>> {log}
+        rm \
+            --recursive \
+            --force \
+            --verbose \
+            {params.workdir} \
+        2> {log} 1>&2
 
         DRAM-v.py annotate \
-            --input_fasta {output.fasta} \
-            --output_dir {output.work_dir} \
+            --input_fasta {input.fasta} \
+            --output_dir {params.workdir} \
             --skip_trnascan \
-            --virsorter_affi_contigs <(gzip -dc {input.tsv}) \
+            --virsorter_affi_contigs {input.tsv} \
         2>> {log} 1>&2
+        """
 
-        gzip \
-            --stdout \
-            --force \
-            {output.work_dir}/annotations.tsv \
-        > {output.annotations} \
-        2>> {log}
+
+rule viruses__annotate__dramv__annotate__all:
+    input:
+        [
+            VIR_DRAMV / "annotate" / f"{assembly_id}" / "annotations.tsv"
+            for assembly_id in ASSEMBLIES
+        ],
+
+
+rule viruses__annotate__dramv__aggregate_tsvs:
+    input:
+        annotations=[
+            VIR_DRAMV / "annotate" / f"{assembly_id}" / "annotations.tsv"
+            for assembly_id in ASSEMBLIES
+        ],
+    output:
+        annotations=VIR_DRAMV / "annotations.tsv.gz",
+    log:
+        VIR_DRAMV / "annotate" / "aggregate_tsvs.log",
+    conda:
+        "../../../environments/dram.yml"
+    shell:
+        """
+        (
+            csvtk concat --tabs {input.annotations} /dev/null \
+            | bgzip --compress-level 9 --threads {threads} \
+            > {output.annotations}
+        ) 2> {log}
+        """
+
+
+rule viruses__annotate__dramv__concatenate_fastas:
+    input:
+        genes_fna=[
+            VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.fna"
+            for assembly_id in ASSEMBLIES
+        ],
+        genes_faa=[
+            VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.faa"
+            for assembly_id in ASSEMBLIES
+        ],
+        scaffolds_fna=[
+            VIR_DRAMV / "annotate" / f"{assembly_id}" / "scaffolds.fna"
+            for assembly_id in ASSEMBLIES
+        ],
+        genes_gff=[
+            VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.gff"
+            for assembly_id in ASSEMBLIES
+        ],
+    output:
+        genes_fna=VIR_ANN / "dram.genes.fna.gz",
+        genes_faa=VIR_ANN / "dram.genes.faa.gz",
+        scaffolds_fna=VIR_ANN / "dram.scaffolds.fna.gz",
+        genes_gff=VIR_ANN / "dram.genes.gff.gz",
+    log:
+        VIR_ANN / "dram.concatenate_fastas.log",
+    conda:
+        "../../../environments/dram.yml"
+    shell:
+        """
+        (
+            cat {input.genes_fna} | bgzip > {output.genes_fna}
+            cat {input.genes_faa} | bgzip > {output.genes_faa}
+            cat {input.scaffolds_fna} | bgzip > {output.scaffolds_fna}
+            cat {input.genes_gff} | bgzip > {output.genes_gff}
+        ) 2> {log}
         """
 
 
@@ -89,10 +159,12 @@ rule viruses__annotate__dramv__distill:
         workdir=VIR_DRAMV / "tmp",
     shell:
         """
+        rm -rfv {params.workdir} 2> {log}
+
         DRAM-v.py distill \
             --input_file {input.annotations} \
             --output_dir {params.workdir} \
-        2> {log} 1>&2
+        2>> {log} 1>&2
 
         mv \
             {params.workdir}/* \
