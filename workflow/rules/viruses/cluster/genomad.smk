@@ -174,6 +174,5 @@ rule viruses__cluster__genomad__aggregate_tsvs:
 
 rule viruses__cluster__genomad__all:
     input:
-        #[VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES],
         rules.viruses__cluster__genomad__concatenate_fastas.output,
         rules.viruses__cluster__genomad__aggregate_tsvs.output,
