@@ -143,7 +143,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_genbank:
     log:
         PROK_ANN / "dram.genbank.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     threads: 24
@@ -178,7 +178,7 @@ rule prokaryotes__annotate__dram__annotate__archive:
     log:
         PROK_ANN / "dram.archive.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     threads: 24
     params:
         out_dir=PROK_ANN,
@@ -210,7 +210,7 @@ rule prokaryotes__annotate__dram__distill:
     log:
         PROK_ANN / "dram.distill.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     resources:
         mem_mb=32 * 1024,
         runtime=24 * 60,
@@ -235,7 +235,7 @@ rule prokaryotes__annotate__dram__distill__archive:
     log:
         PROK_ANN / "dram.distill_archive.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     params:
         out_dir=PROK_ANN,
     threads: 24

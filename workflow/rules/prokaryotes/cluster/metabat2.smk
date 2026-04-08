@@ -8,7 +8,7 @@ rule prokaryotes__cluster__metabat2:
     log:
         PROK_METABAT2 / "{assembly_id}.log",
     conda:
-        "../../../environments/metabat2.yml"
+        ENVS / "metabat2.yml"
     params:
         bins_prefix=lambda w: PROK_METABAT2 / w.assembly_id / "bin",
         depth=lambda w: PROK_METABAT2 / f"{w.assembly_id}.depth",

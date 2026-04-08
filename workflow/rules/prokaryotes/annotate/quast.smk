@@ -7,7 +7,7 @@ rule prokaryotes__annotate__quast:
     log:
         PROK_QUAST / "drep.{secondary_ani}.log",
     conda:
-        "../../../environments/quast.yml"
+        ENVS / "quast.yml"
     threads: 4
     shell:
         """

@@ -8,7 +8,7 @@ rule prokaryotes__cluster__maxbin2:
     log:
         PROK_MAXBIN2 / "{assembly_id}.log",
     conda:
-        "../../../environments/maxbin2.yml"
+        ENVS / "maxbin2.yml"
     params:
         seed=1,
         coverage=lambda w: PROK_MAXBIN2 / w.assembly_id / "maxbin2.coverage",

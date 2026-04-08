@@ -8,7 +8,7 @@ rule prokaryotes__annotate__gtdbtk__classify_wf:
     log:
         PROK_ANN / "gtdbtk.log",
     conda:
-        "../../../environments/gtdbtk.yml"
+        ENVS / "gtdbtk.yml"
     threads: 24
     resources:
         mem_mb=128 * 1024,
@@ -37,7 +37,7 @@ rule prokaryotes__annotate__gtdbtk__join_bac_and_ar:
     log:
         PROK_ANN / "gtdbtk.join.log",
     conda:
-        "../../../environments/gtdbtk.yml"
+        ENVS / "gtdbtk.yml"
     shell:
         """
         csvtk concat \

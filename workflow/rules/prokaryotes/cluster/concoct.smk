@@ -14,7 +14,7 @@ rule prokaryotes__cluster__concoct:
     log:
         PROK_CONCOCT / "{assembly_id}.log",
     conda:
-        "../../../environments/concoct.yml"
+        ENVS / "concoct.yml"
     retries: 5
     params:
         workdir=lambda w: PROK_CONCOCT / w.assembly_id,

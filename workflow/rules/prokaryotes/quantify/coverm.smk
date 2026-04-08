@@ -11,8 +11,6 @@ use rule coverm__genome as prokaryotes__quantify__coverm__genome with:
         PROK_COVERM
         / "genome"
         / "{method}.drep.{secondary_ani}.{sample_id}.{library_id}.log",
-    conda:
-        "../../../environments/coverm.yml"
     params:
         method=lambda w: w.method,
         extra=params["quantify"]["coverm"]["genome"]["extra"],

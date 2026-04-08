@@ -7,7 +7,7 @@ rule prokaryotes__cluster__magscot__prodigal:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     resources:
         attempt=get_attempt,
     retries: 5
@@ -52,7 +52,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_pfam:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     threads: 4
     resources:
         mem_mb=double_ram(8 * 1024),
@@ -82,7 +82,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_tigr:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     threads: 4
     resources:
         mem_mb=double_ram(8 * 1024),
@@ -115,7 +115,7 @@ rule prokaryotes__cluster__magscot__join_hmms:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "hmm.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     shell:
         """
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
@@ -143,7 +143,7 @@ rule prokaryotes__cluster__magscot__merge_contig_to_bin:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "contigs_to_bin.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     shell:
         """
         for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
@@ -182,7 +182,7 @@ rule prokaryotes__cluster__magscot__run:
     log:
         PROK_MAGSCOT / "{assembly_id}/magscot.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     params:
         out_prefix=lambda w: PROK_MAGSCOT / w.assembly_id / "magscot",
     resources:
@@ -209,7 +209,7 @@ rule prokaryotes__cluster__magscot__reformat:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     resources:
         mem_mb=8 * 1024,
     shell:
@@ -231,7 +231,7 @@ rule prokaryotes__cluster__magscot__rename:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     resources:
         mem_mb=8 * 1024,
     shell:
