@@ -185,5 +185,4 @@ rule viruses__annotate__dramv__all:
             VIR_DRAMV / "product.html",
             VIR_ANN / "dram.genes.fna.gz",
             VIR_ANN / "dram.genes.faa.gz",
-
         ],
