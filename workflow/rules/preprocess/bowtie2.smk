@@ -76,7 +76,7 @@ rule preprocess__bowtie2__fastq:
     log:
         PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.unaligned.log",
     conda:
-        "../../environments/bowtie2.yml"
+        ENVS / "bowtie2.yml"
     shell:
         """
         rm \

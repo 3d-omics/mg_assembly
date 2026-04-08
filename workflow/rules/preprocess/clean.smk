@@ -12,7 +12,7 @@ rule preprocess__clean:
     log:
         PRE_CLEAN / "{sample_id}.{library_id}.log",
     conda:
-        "../../environments/bowtie2.yml"  # It has htslib in it
+        ENVS / "bowtie2.yml"  # It has htslib in it
     threads: 24
     resources:
         mem_mb=1 * 1024,

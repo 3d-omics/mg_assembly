@@ -1,5 +1,5 @@
 rule preprocess__hosts:
-    """Extract the fasta.gz on config.yaml into genome.fa,gz with bgzip"""
+    """Extract the fasta.gz on config.yaml into genome.fa.gz with bgzip"""
     input:
         fa_gz=lambda wildcards: features["hosts"][wildcards.host],
     output:
@@ -7,7 +7,7 @@ rule preprocess__hosts:
     log:
         PRE_HOSTS / "{host}.log",
     conda:
-        "../../environments/hosts.yml"
+        ENVS / "hosts.yml"
     cache: "omit-software"
     threads: 8
     shell:

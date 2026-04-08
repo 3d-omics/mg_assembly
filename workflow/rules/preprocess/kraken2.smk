@@ -18,7 +18,7 @@ rule preprocess__kraken2__join_libraries:
     log:
         PRE_KRAKEN2 / "samples" / "{sample_id}.log",
     conda:
-        "../../environments/kraken2.yml"
+        ENVS / "kraken2.yml"
     shell:
         """
         cat {input.forwards} > {output.forwards} 2> {log}
@@ -67,7 +67,7 @@ rule preprocess__kraken2__assign:
         mem_mb=2 * 800 * 1024,  # Use twice the size of the database, we use /dev/shm
         runtime=24 * 60,
     conda:
-        "../../environments/kraken2.yml"
+        ENVS / "kraken2.yml"
     shell:
         """
         {{

@@ -17,7 +17,7 @@ rule preprocess__singlem__pipe:
     log:
         PRE_SINGLEM / "pipe" / "{sample_id}.{library_id}.log",
     conda:
-        "../../environments/singlem.yml"
+        ENVS / "singlem.yml"
     resources:
         mem_mb=16 * 1024,
         runtime=2 * 60,
@@ -54,7 +54,7 @@ rule preprocess__singlem__condense:
     log:
         PRE_SINGLEM / "singlem.log",
     conda:
-        "../../environments/singlem.yml"
+        ENVS / "singlem.yml"
     params:
         input_dir=PRE_SINGLEM,
     resources:
@@ -87,7 +87,7 @@ rule preprocess__singlem__microbial_fraction:
     log:
         PRE_SINGLEM / "microbial_fraction" / "{sample_id}.{library_id}.log",
     conda:
-        "../../environments/singlem.yml"
+        ENVS / "singlem.yml"
     shell:
         """
         if [ ! -s {input.condense} ]; then
