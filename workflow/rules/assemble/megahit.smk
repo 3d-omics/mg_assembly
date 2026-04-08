@@ -15,7 +15,7 @@ rule assemble__megahit:
     log:
         log=ASMB_MEGAHIT / "{assembly_id}.log",
     conda:
-        "../../environments/megahit.yml"
+        ENVS / "megahit.yml"
     params:
         forwards=aggregate_forwards_for_megahit,
         reverses=aggregate_reverses_for_megahit,

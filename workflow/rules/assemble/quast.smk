@@ -7,7 +7,7 @@ rule assemble__quast:
     log:
         ASMB_QUAST / "{assembly_id}.log",
     conda:
-        "../../environments/quast.yml"
+        ENVS / "quast.yml"
     resources:
         mem_mb=8 * 1024,
     shell:

@@ -14,7 +14,7 @@ rule assemble__kraken2__assign_contigs:
     log:
         ASMB_KRAKEN2 / "{kraken2_db}.log",
     conda:
-        "../../environments/kraken2.yml"
+        ENVS / "kraken2.yml"
     params:
         in_folder=ASMB_MEGAHIT,
         out_folder=lambda w: ASMB_KRAKEN2 / w.kraken2_db,

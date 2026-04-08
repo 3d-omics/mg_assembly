@@ -10,7 +10,7 @@ use rule coverm__contig as assemble__coverm__contig with:
     log:
         ASMB_COVERM / "contig" / "{method}.{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "../../environments/coverm.yml"
+        ENVS / "coverm.yml"
     params:
         method=lambda w: w.method,
 
