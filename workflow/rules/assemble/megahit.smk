@@ -68,35 +68,7 @@ rule assemble__megahit__rename:
         """
 
 
-rule assemble__megahit__archive:
-    """Archive the assembly directory into a tar.gz file
-
-    NOTE: I ask for the fasta so the grouping job does rename and archive sequentially.
-    """
-    input:
-        folder=ASMB_MEGAHIT / "{assembly_id}.dir",
-        fasta=ASMB_MEGAHIT / "{assembly_id}.fa.gz",
-    output:
-        ASMB_MEGAHIT / "{assembly_id}.tar.gz",
-    log:
-        ASMB_MEGAHIT / "{assembly_id}.archive.log",
-    conda:
-        "../../environments/megahit.yml"
-    threads: 24
-    shell:
-        """
-        tar \
-            --create \
-            --file {output} \
-            --use-compress-program="pigz --best --processes {threads}" \
-            --verbose \
-            {input} \
-        2> {log} 1>&2
-        """
-
-
 rule assemble__megahit__all:
     """Rename all assemblies contigs to avoid future collisions"""
     input:
         [ASMB_MEGAHIT / f"{assembly_id}.fa.gz" for assembly_id in ASSEMBLIES],
-        [ASMB_MEGAHIT / f"{assembly_id}.tar.gz" for assembly_id in ASSEMBLIES],
