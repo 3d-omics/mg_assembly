@@ -83,64 +83,61 @@ rule viruses__annotate__dramv__annotate__all:
         ],
 
 
-rule viruses__annotate__dramv__aggregate_tsvs:
+
+use rule concatenate_tsv_ungzipped as viruses__annotate__dramv__concatenate_annotations_tsv with:
     input:
-        annotations=[
+        [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "annotations.tsv"
             for assembly_id in ASSEMBLIES
         ],
     output:
-        annotations=VIR_DRAMV / "annotations.tsv.gz",
+        VIR_DRAMV / "annotations.tsv.gz",
     log:
-        VIR_DRAMV / "annotate" / "aggregate_tsvs.log",
-    conda:
-        "../../../environments/dram.yml"
-    shell:
-        """
-        (
-            csvtk concat --tabs {input.annotations} /dev/null \
-            | bgzip --compress-level 9 --threads {threads} \
-            > {output.annotations}
-        ) 2> {log}
-        """
+        VIR_DRAMV / "annotate" / "annotations.log",
 
 
-rule viruses__annotate__dramv__concatenate_fastas:
+use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_genes_fna with:
     input:
-        genes_fna=[
+        [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.fna"
             for assembly_id in ASSEMBLIES
         ],
-        genes_faa=[
+    output:
+        VIR_ANN / "dram.genes.fna.gz"
+    log: VIR_ANN / "dram.genes.fna.log"
+
+
+use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_genes_faa with:
+    input:
+        [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.faa"
             for assembly_id in ASSEMBLIES
         ],
-        scaffolds_fna=[
+    output:
+        VIR_ANN / "dram.genes.faa.gz"
+    log: VIR_ANN / "dram.genes.faa.log"
+
+
+use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_scaffolds_fna with:
+    input:
+        [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "scaffolds.fna"
             for assembly_id in ASSEMBLIES
         ],
-        genes_gff=[
+    output:
+        VIR_ANN / "dram.scaffolds.fna.gz"
+    log: VIR_ANN / "dram.scaffolds.fna.log"
+
+
+use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_genes_gff with:
+    input:
+        [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.gff"
             for assembly_id in ASSEMBLIES
         ],
     output:
-        genes_fna=VIR_ANN / "dram.genes.fna.gz",
-        genes_faa=VIR_ANN / "dram.genes.faa.gz",
-        scaffolds_fna=VIR_ANN / "dram.scaffolds.fna.gz",
-        genes_gff=VIR_ANN / "dram.genes.gff.gz",
-    log:
-        VIR_ANN / "dram.concatenate_fastas.log",
-    conda:
-        "../../../environments/dram.yml"
-    shell:
-        """
-        (
-            cat {input.genes_fna} | bgzip > {output.genes_fna}
-            cat {input.genes_faa} | bgzip > {output.genes_faa}
-            cat {input.scaffolds_fna} | bgzip > {output.scaffolds_fna}
-            cat {input.genes_gff} | bgzip > {output.genes_gff}
-        ) 2> {log}
-        """
+        VIR_ANN / "dram.genes.gff.gz",
+    log: VIR_ANN / "dram.genes.gff.log"
 
 
 rule viruses__annotate__dramv__distill:

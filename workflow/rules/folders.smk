@@ -2,6 +2,8 @@
 # REFERENCE = Path("results/reference/")
 # HOSTS = REFERENCE / "hosts"
 
+ENVS =  Path("workflow/environments").resolve()
+
 RESULTS = Path("results/")
 
 # Preprocess

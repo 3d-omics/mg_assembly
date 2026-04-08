@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - htslib =1.23.1
+  - csvtk =0.37.0
