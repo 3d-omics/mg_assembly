@@ -1,6 +1,6 @@
 rule viruses__annotate__genomad:
     input:
-        fasta=VIR_MMSEQS / "rep_seq.fa.gz",
+        fasta=VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
         database=features["databases"]["genomad"],
     output:
         plasmid=VIR_GENOMADA / "rep_seq_plasmid.fna.gz",

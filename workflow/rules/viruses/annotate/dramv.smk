@@ -6,7 +6,7 @@ rule viruses__annotate__dramv__setup:
     log:
         VIR_DRAMV / "setup.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -51,7 +51,7 @@ rule viruses__annotate__dramv__annotate:
     log:
         VIR_DRAMV / "annotate" / "{assembly_id}.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     resources:
         mem_mb=8 * 1024,
         runtime=24 * 60,
@@ -153,7 +153,7 @@ rule viruses__annotate__dramv__distill:
     log:
         VIR_DRAMV / "distill.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     params:
         outdir=VIR_DRAMV,
         workdir=VIR_DRAMV / "tmp",
@@ -181,4 +181,9 @@ rule viruses__annotate__dramv__distill:
 
 rule viruses__annotate__dramv__all:
     input:
-        VIR_DRAMV / "product.html",
+        [
+            VIR_DRAMV / "product.html",
+            VIR_ANN / "dram.genes.fna.gz",
+            VIR_ANN / "dram.genes.faa.gz",
+
+        ],

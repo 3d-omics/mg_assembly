@@ -1,7 +1,7 @@
 rule viruses__annotate__quast__all:
     """Run quast over one the dereplicated mags"""
     input:
-        VIR_MMSEQS / "rep_seq.fa.gz",
+        VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
     output:
         directory(VIR_QUAST),
     log:

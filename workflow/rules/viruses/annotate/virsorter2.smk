@@ -33,7 +33,7 @@ rule viruses__annotate__virsorter2__run:
         workdir=lambda w: VIR_VIRSORTER2 / w.assembly_id,
     # shadow:
     #     "minimal"
-    threads: 8
+    threads: 1
     resources:
         mem_mb=8 * 1024,
         runtime=24 * 60,

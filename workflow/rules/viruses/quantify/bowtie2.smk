@@ -1,6 +1,6 @@
 use rule bowtie2__build as viruses__quantify__bowtie2__build with:
     input:
-        ref=VIR_MMSEQS / "rep_seq.fa.gz",
+        ref=VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
     output:
         multiext(
             str(VIR_BUILD / "viruses"),
