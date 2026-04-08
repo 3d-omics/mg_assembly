@@ -15,7 +15,7 @@ rule viruses__annotate__genomad:
     log:
         VIR_GENOMADA / "genomad.log",
     conda:
-        "../../../environments/genomad.yml"
+        ENVS / "genomad.yml"
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=VIR_GENOMADA,

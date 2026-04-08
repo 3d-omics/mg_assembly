@@ -31,7 +31,7 @@ rule viruses__annotate__checkv__end_to_end:
     log:
         VIR_CHECKV / "{assembly_id}" / "checkv.log",
     conda:
-        "../../../environments/checkv.yml"
+        ENVS / "checkv.yml"
     params:
         workdir=lambda w: VIR_CHECKV / f"{w.assembly_id}",
     threads: 24
@@ -92,7 +92,7 @@ rule viruses__annotate__checkv__aggregate_tsvs:
     log:
         VIR_CHECKV / "checkv.aggregate_tsvs.log",
     conda:
-        "../../../environments/checkv.yml"
+        ENVS / "checkv.yml"
     shell:
         """
         ( csvtk concat --tabs {input.complete_genomes} \
@@ -128,7 +128,7 @@ rule viruses__annotate__checkv__concatenate_fastas:
     log:
         VIR_CHECKV / "checkv.concatenate_fastas.log",
     conda:
-        "../../../environments/checkv.yml"
+        ENVS / "checkv.yml"
     shell:
         """
         ( cat {input.proviruses} \

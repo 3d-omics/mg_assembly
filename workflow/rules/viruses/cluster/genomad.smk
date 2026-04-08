@@ -4,7 +4,7 @@ rule viruses__cluster__genomad__download_database:
     log:
         f"{features["databases"]["genomad"]}.log",
     conda:
-        "../../../environments/genomad.yml"
+        ENVS / "genomad.yml"
     shell:
         """
         genomad download-database \
@@ -37,7 +37,7 @@ rule viruses__cluster__genomad__run:
     log:
         VIR_GENOMADC / "{assembly_id}.log",
     conda:
-        "../../../environments/genomad.yml"
+        ENVS / "genomad.yml"
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         genomad_workdir=VIR_GENOMADC,
@@ -103,7 +103,7 @@ rule viruses__cluster__genomad__concatenate_fastas:
     log:
         VIR_CLUSTER / "genomad.fastas.log",
     conda:
-        "../../../environments/genomad.yml"
+        ENVS / "genomad.yml"
     threads: 24
     shell:
         """
@@ -143,7 +143,7 @@ rule viruses__cluster__genomad__aggregate_tsvs:
         VIR_CLUSTER / "genomad.tsvs.log",
     threads: 24
     conda:
-        "../../../environments/genomad.yml"
+        ENVS / "genomad.yml"
     shell:
         """
         csvtk concat \

@@ -4,7 +4,7 @@ rule viruses__annotate__virsorter2__download:
     log:
         f"{features["databases"]["virsorter2"]}.log",
     conda:
-        "../../../environments/virsorter2.yml"
+        ENVS / "virsorter2.yml"
     shell:
         """
         virsorter setup \
@@ -28,7 +28,7 @@ rule viruses__annotate__virsorter2__run:
     log:
         VIR_VIRSORTER2 / "{assembly_id}.log",
     conda:
-        "../../../environments/virsorter2.yml"
+        ENVS / "virsorter2.yml"
     params:
         workdir=lambda w: VIR_VIRSORTER2 / w.assembly_id,
     # shadow:
@@ -90,7 +90,7 @@ rule viruses__annotate__virsorter2__aggregate_tsvs:
     log:
         VIR_VIRSORTER2 / "aggregate_tsvs.log",
     conda:
-        "../../../environments/virsorter2.yml"
+        ENVS / "virsorter2.yml"
     threads: 24
     shell:
         """
@@ -132,7 +132,7 @@ rule viruses__annotate__virsorter2__concatenate_fastas:
     log:
         VIR_VIRSORTER2 / "concatenate_fastas.log",
     conda:
-        "../../../environments/virsorter2.yml"
+        ENVS / "virsorter2.yml"
     shell:
         """
         (

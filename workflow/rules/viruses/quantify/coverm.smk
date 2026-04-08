@@ -6,8 +6,6 @@ use rule coverm__contig as viruses__quantify__coverm__contig with:
         temp(VIR_COVERM / "contig" / "{method}.rep_seq.{sample_id}.{library_id}.tsv.gz"),
     log:
         VIR_COVERM / "contig" / "{method}.{sample_id}.{library_id}.log",
-    conda:
-        "../../../environments/coverm.yml"
     params:
         method=lambda w: w.method,
 

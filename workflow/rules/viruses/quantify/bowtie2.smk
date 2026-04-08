@@ -43,8 +43,6 @@ use rule bowtie2__map as viruses__quantify__bowtie2__map with:
         bowtie2_extra=params["preprocess"]["bowtie2"]["bowtie2_extra"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    conda:
-        "../../../environments/bowtie2.yml"
 
 
 rule viruses__quantify__bowtie2__map__all:

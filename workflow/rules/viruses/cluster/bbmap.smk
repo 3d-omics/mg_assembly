@@ -6,7 +6,7 @@ rule viruses__cluster__bbmap__dedupe:
     log:
         VIR_CLUSTER / "bbmap.dedupe.log",
     conda:
-        "../../../environments/bbmap.yml"
+        ENVS / "bbmap.yml"
     params:
         fastas_comma=lambda w, input: ",".join(input),
         minimum_length=500,
@@ -37,7 +37,7 @@ rule viruses__cluster__bbmap__clean:
     log:
         VIR_CLUSTER / "bbmap.clean.log",
     conda:
-        "../../../environments/bbmap.yml"
+        ENVS / "bbmap.yml"
     shell:
         """
         ( seqtk seq {input} \

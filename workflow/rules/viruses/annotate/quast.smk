@@ -7,7 +7,7 @@ rule viruses__annotate__quast__all:
     log:
         VIR / "quast.log",
     conda:
-        "../../../environments/quast.yml"
+        ENVS / "quast.yml"
     threads: 4
     resources:
         mem_mb=8 * 1024,
