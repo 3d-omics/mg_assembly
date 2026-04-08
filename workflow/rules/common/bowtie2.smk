@@ -50,7 +50,7 @@ rule bowtie2__map:
         rg_id="",  # compose_rg_id
         rg_extra="",  # compose_rg_extra
     conda:
-        "../../environments/bowtie2.yml"
+        ENVS / "bowtie2.yml"
     threads: 24
     resources:
         mem_mb=double_ram(32 * 1024),

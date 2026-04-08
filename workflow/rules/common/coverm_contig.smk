@@ -7,7 +7,7 @@ rule coverm__contig:
     log:
         "sample.{method}.log",
     conda:
-        "../../environments/coverm.yml"
+        ENVS / "coverm.yml"
     params:
         method=lambda w: w.method,
     shell:
