@@ -85,7 +85,7 @@ rule viruses__cluster__genomad__concatenate_fastas:
             VIR_GENOMADC / f"{assembly_id}_plasmid.fna" for assembly_id in ASSEMBLIES
         ],
         plasmid_proteins_fnas=[
-            VIR_GENOMADC / f"{assembly_id}_plasmid_genes.tsv"
+            VIR_GENOMADC / f"{assembly_id}_plasmid_proteins.faa"
             for assembly_id in ASSEMBLIES
         ],
         virus_fnas=[
