@@ -79,100 +79,118 @@ rule viruses__cluster__genomad__run:
         """
 
 
-rule viruses__cluster__genomad__concatenate_fastas:
+use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_plasmid_fna with:
     input:
-        plasmid_fnas=[
-            VIR_GENOMADC / f"{assembly_id}_plasmid.fna" for assembly_id in ASSEMBLIES
-        ],
-        plasmid_proteins_fnas=[
+        [VIR_GENOMADC / f"{assembly_id}_plasmid.fna" for assembly_id in ASSEMBLIES]
+        + ["/dev/null"],
+    output:
+        VIR_CLUSTER / "genomad_plasmid.fna.gz",
+    log:
+        VIR_CLUSTER / "genomad_plasmid.log",
+
+
+use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_plasmid_proteins_faa with:
+    input:
+        [
             VIR_GENOMADC / f"{assembly_id}_plasmid_proteins.faa"
             for assembly_id in ASSEMBLIES
-        ],
-        virus_fnas=[
-            VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES
-        ],
-        virus_proteins_fnas=[
+        ]
+        + ["/dev/null"],
+    output:
+        VIR_CLUSTER / "genomad_plasmid_proteins.faa.gz",
+    log:
+        VIR_CLUSTER / "genomad_plasmid_proteins.log",
+
+
+use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_virus_fna with:
+    input:
+        [VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES]
+        + ["/dev/null"],
+    output:
+        VIR_CLUSTER / "genomad_virus.fna.gz",
+    log:
+        VIR_CLUSTER / "genomad_virus.log",
+
+
+use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_virus_proteins_faa with:
+    input:
+        [
             VIR_GENOMADC / f"{assembly_id}_virus_proteins.faa"
             for assembly_id in ASSEMBLIES
-        ],
+        ]
+        + ["/dev/null"],
     output:
-        plasmid_fna=VIR_CLUSTER / "genomad_plasmid.fna.gz",
-        plasmid_proteins_fna=VIR_CLUSTER / "genomad_plasmid_proteins.fna.gz",
-        virus_fna=VIR_CLUSTER / "genomad_virus.fna.gz",
-        virus_proteins_fna=VIR_CLUSTER / "genomad_virus_proteins.fna.gz",
+        VIR_CLUSTER / "genomad_virus_proteins.faa.gz",
     log:
-        VIR_CLUSTER / "genomad.fastas.log",
-    conda:
-        ENVS / "genomad.yml"
-    threads: 24
-    shell:
-        """
-        (
-            cat {input.plasmid_fnas} | bgzip --threads {threads} > {output.plasmid_fna}
-            cat {input.plasmid_proteins_fnas} | bgzip --threads {threads} > {output.plasmid_proteins_fna}
-            cat {input.virus_fnas} | bgzip --threads {threads} > {output.virus_fna}
-            cat {input.virus_proteins_fnas} | bgzip --threads {threads} > {output.virus_proteins_fna}
-        ) 2> {log}
-        """
+        VIR_CLUSTER / "genomad_virus_proteins.log",
 
 
-rule viruses__cluster__genomad__aggregate_tsvs:
+rule viruses__cluster__genomad__concatenate_fastas:
     input:
-        plasmid_genes=[
+        VIR_CLUSTER / "genomad_plasmid.fna.gz",
+        VIR_CLUSTER / "genomad_plasmid_proteins.faa.gz",
+        VIR_CLUSTER / "genomad_virus.fna.gz",
+        VIR_CLUSTER / "genomad_virus_proteins.faa.gz",
+
+
+use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_genes with:
+    input:
+        [
             VIR_GENOMADC / f"{assembly_id}_plasmid_genes.tsv"
             for assembly_id in ASSEMBLIES
-        ],
-        plasmid_summary=[
+        ]
+        + ["/dev/null"],
+    output:
+        VIR_CLUSTER / "genomad_plasmid_genes.tsv.gz",
+    log:
+        VIR_CLUSTER / "genomad_plasmid_genes.log",
+
+
+use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_summary with:
+    input:
+        [
             VIR_GENOMADC / f"{assembly_id}_plasmid_summary.tsv"
             for assembly_id in ASSEMBLIES
-        ],
-        virus_genes=[
-            VIR_GENOMADC / f"{assembly_id}_virus_genes.tsv"
-            for assembly_id in ASSEMBLIES
-        ],
-        virus_summary_tsv=[
+        ]
+        + ["/dev/null"],
+    output:
+        VIR_CLUSTER / "genomad_plasmid_summary.tsv.gz",
+    log:
+        VIR_CLUSTER / "genomad_plasmid_summary.log",
+
+
+use rule csvtk__concat as viruses__cluster__genomad__concatenate__virus_genes with:
+    input:
+        [VIR_GENOMADC / f"{assembly_id}_virus_genes.tsv" for assembly_id in ASSEMBLIES]
+        + ["/dev/null"],
+    output:
+        VIR_CLUSTER / "genomad_virus_genes.tsv.gz",
+    log:
+        VIR_CLUSTER / "genomad_virus_genes.log",
+
+
+use rule csvtk__concat as viruses__cluster__genomad__concatenate__virus_summary with:
+    input:
+        [
             VIR_GENOMADC / f"{assembly_id}_virus_summary.tsv"
             for assembly_id in ASSEMBLIES
-        ],
+        ]
+        + ["/dev/null"],
     output:
-        plasmid_genes=VIR_CLUSTER / "genomad_plasmid_genes.tsv.gz",
-        plasmid_summary=VIR_CLUSTER / "genomad.plasmid_summary.tsv.gz",
-        virus_genes=VIR_CLUSTER / "genomad.virus_genes.tsv.gz",
-        virus_summary_tsv=VIR_CLUSTER / "genomad.virus_summary.tsv.gz",
+        VIR_CLUSTER / "genomad_virus_summary.tsv.gz",
     log:
-        VIR_CLUSTER / "genomad.tsvs.log",
-    threads: 24
-    conda:
-        ENVS / "genomad.yml"
-    shell:
-        """
-        csvtk concat \
-            --tabs \
-            {input.plasmid_genes} \
-        | bgzip --compress-level 0 --threads {threads} \
-        > {output.plasmid_genes}
+        VIR_CLUSTER / "genomad_virus_summary.log",
 
-        csvtk concat \
-            --tabs \
-            {input.plasmid_summary} \
-        | bgzip --compress-level 0 --threads {threads} \
-        > {output.plasmid_summary}
 
-        csvtk concat \
-            --tabs \
-            {input.virus_genes} \
-        | bgzip --compress-level 0 --threads {threads} \
-        > {output.virus_genes}
-
-        csvtk concat \
-            --tabs \
-            {input.virus_summary_tsv} \
-        | bgzip --compress-level 0 --threads {threads} \
-        > {output.virus_summary_tsv}
-        """
+rule viruses__cluster__genomad__concatenate_tsvs:
+    input:
+        VIR_CLUSTER / "genomad_plasmid_genes.tsv.gz",
+        VIR_CLUSTER / "genomad_plasmid_summary.tsv.gz",
+        VIR_CLUSTER / "genomad_virus_genes.tsv.gz",
+        VIR_CLUSTER / "genomad_virus_summary.tsv.gz",
 
 
 rule viruses__cluster__genomad__all:
     input:
         rules.viruses__cluster__genomad__concatenate_fastas.output,
-        rules.viruses__cluster__genomad__aggregate_tsvs.output,
+        rules.viruses__cluster__genomad__concatenate_tsvs.output,
