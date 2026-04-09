@@ -182,7 +182,10 @@ rule viruses__annotate__dramv__distill:
 rule viruses__annotate__dramv__all:
     input:
         [
-            VIR_DRAMV / "product.html",
+            VIR_DRAMV / "annotations.tsv.gz",
             VIR_ANN / "dram.genes.fna.gz",
             VIR_ANN / "dram.genes.faa.gz",
+            VIR_ANN / "dram.scaffolds.fna.gz",
+            VIR_ANN / "dram.genes.gff.gz",
+            VIR_DRAMV / "product.html",
         ],
