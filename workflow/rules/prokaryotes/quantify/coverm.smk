@@ -17,7 +17,7 @@ use rule coverm__genome as prokaryotes__quantify__coverm__genome with:
         separator=params["quantify"]["coverm"]["genome"]["separator"],
 
 
-rule prokaryotes__quantify__coverm__genome__join:
+use rule csvtk__join__left as prokaryotes__quantify__coverm__genome__join with:
     input:
         lambda w: [
             PROK_COVERM
@@ -29,14 +29,6 @@ rule prokaryotes__quantify__coverm__genome__join:
         PROK_COVERM / "genome.{method}.drep.{secondary_ani}.tsv.gz",
     log:
         PROK_COVERM / "genome.{method}.drep.{secondary_ani}.log",
-    params:
-        subcommand="join",
-        extra="--left-join --tabs --out-tabs",
-    resources:
-        runtime=60,
-        mem_mb=8 * 1024,
-    wrapper:
-        "v5.2.1/utils/csvtk"
 
 
 rule prokaryotes__quantify__coverm__genome__all:
