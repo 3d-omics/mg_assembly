@@ -15,7 +15,7 @@ use rule coverm__contig as assemble__coverm__contig with:
         method=lambda w: w.method,
 
 
-rule assemble__coverm__join:
+use rule csvtk__join__left as assemble__coverm__join with:
     input:
         lambda w: [
             ASMB_COVERM
@@ -29,11 +29,7 @@ rule assemble__coverm__join:
         ASMB_COVERM / "contig.{method}.{assembly_id}.tsv.gz",
     log:
         ASMB_COVERM / "contig.{method}.{assembly_id}.log",
-    params:
-        subcommand="join",
-        extra="--left-join --tabs --out-tabs",
-    wrapper:
-        "v5.2.1/utils/csvtk"
+
 
 
 rule assemble__coverm__all:

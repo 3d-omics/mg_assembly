@@ -3,6 +3,8 @@ rule viruses__annotate__checkv__download:
         features["databases"]["checkv"],
     log:
         f"{features["databases"]["checkv"]}.log",
+    conda:
+        "base"
     shell:
         """
         checkv download_database \
@@ -66,84 +68,83 @@ rule viruses__annotate__checkv__end_to_end__all:
         ],
 
 
-rule viruses__annotate__checkv__aggregate_tsvs:
+use rule csvtk__concat as viruses__annotate__checkv__concatenate_complete_genomes with:
     input:
-        complete_genomes=[
+        [
             VIR_CHECKV / f"{assembly_id}" / "complete_genomes.tsv"
             for assembly_id in ASSEMBLIES
-        ],
-        completeness=[
+        ] + ["/dev/null"]
+    output:
+        VIR_CHECKV / "checkv.complete_genomes.tsv.gz",
+    log:
+        VIR_CHECKV / "checkv.complete_genomes.log",
+
+
+use rule csvtk__concat as viruses__annotate__checkv__concatenate_completeness with:
+    input:
+        [
             VIR_CHECKV / f"{assembly_id}" / "completeness.tsv"
             for assembly_id in ASSEMBLIES
-        ],
-        contamination=[
+        ] +  ["/dev/null"],
+    output:
+        VIR_CHECKV / "checkv.completeness.tsv.gz",
+    log:
+        VIR_CHECKV / "checkv.completeness.log"
+
+
+use rule csvtk__concat as viruses__annotate__checkv__concatenate_contamination with:
+    input:
+        [
             VIR_CHECKV / f"{assembly_id}" / "contamination.tsv"
             for assembly_id in ASSEMBLIES
-        ],
-        summary=[
+        ] + ["/dev/null"],
+    output:
+        VIR_CHECKV / "checkv.contamination.tsv.gz"
+    log:
+        VIR_CHECKV / "checkv.contamination.tsv.gz"
+
+
+use rule csvtk__concat as viruses__annotate__checkv__concatenate_summary with:
+    input:
+        [
             VIR_CHECKV / f"{assembly_id}" / "quality_summary.tsv"
             for assembly_id in ASSEMBLIES
-        ],
+        ] + ["/dev/null"]
     output:
-        complete_genomes=VIR_CHECKV / "checkv.complete_genomes.tsv.gz",
-        completeness=VIR_CHECKV / "checkv.completeness.tsv.gz",
-        contamination=VIR_CHECKV / "checkv.contamination.tsv.gz",
-        summary=VIR_CHECKV / "checkv.quality_summary.tsv.gz",
+        VIR_CHECKV / "checkv.quality_summary.tsv.gz"
     log:
-        VIR_CHECKV / "checkv.aggregate_tsvs.log",
-    conda:
-        ENVS / "checkv.yml"
-    shell:
-        """
-        ( csvtk concat --tabs {input.complete_genomes} \
-        | bgzip --compress-level 9 --threads {threads} \
-        > {output.complete_genomes} ) 2> {log}
-
-        ( csvtk concat --tabs {input.completeness} \
-        | bgzip --compress-level 9 --threads {threads} \
-        > {output.completeness} ) 2>> {log}
-
-        ( csvtk concat --tabs {input.contamination} \
-        | bgzip --compress-level 9 --threads {threads} \
-        > {output.contamination} ) 2>> {log}
-
-        ( csvtk concat --tabs {input.summary} \
-        | bgzip --compress-level 9 --threads {threads} \
-        > {output.summary} ) 2>> {log}
-        """
+        VIR_CHECKV / "checkv.quality_summary.tsv.gz"
 
 
-rule viruses__annotate__checkv__concatenate_fastas:
+use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_proviruses with:
     input:
-        proviruses=[
+        [
             VIR_CHECKV / f"{assembly_id}" / "proviruses.fna"
             for assembly_id in ASSEMBLIES
-        ],
-        viruses=[
+        ] + ["/dev/null"],
+    output:
+        VIR_CHECKV / "checkv.proviruses.fna.gz"
+    log:
+        VIR_CHECKV / "checkv.proviruses.log"
+
+use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_viruses with:
+    input:
+        [
             VIR_CHECKV / f"{assembly_id}" / "viruses.fna" for assembly_id in ASSEMBLIES
         ],
     output:
-        proviruses=VIR_CHECKV / "checkv.proviruses.fna.gz",
-        viruses=VIR_CHECKV / "checkv.viruses.fna.gz",
+        VIR_CHECKV / "checkv.viruses.fna.gz",
     log:
-        VIR_CHECKV / "checkv.concatenate_fastas.log",
-    conda:
-        ENVS / "checkv.yml"
-    shell:
-        """
-        ( cat {input.proviruses} \
-        | bgzip --compress-level 9 --threads {threads} \
-        > {output.proviruses} \
-        ) 2> {log}
-
-        ( cat {input.viruses} \
-        | bgzip --compress-level 9 --threads {threads} \
-        > {output.viruses} \
-        ) 2>> {log}
-        """
+        VIR_CHECKV / "checkv.viruses.log",
 
 
 rule viruses__annotate__checkv__all:
     input:
-        rules.viruses__annotate__checkv__aggregate_tsvs.output,
-        rules.viruses__annotate__checkv__concatenate_fastas.output,
+        [
+            VIR_CHECKV / "checkv.complete_genomes.tsv.gz",
+            VIR_CHECKV / "checkv.completeness.tsv.gz",
+            VIR_CHECKV / "checkv.contamination.tsv.gz",
+            VIR_CHECKV / "checkv.quality_summary.tsv.gz",
+            VIR_CHECKV / "checkv.proviruses.fna.gz",
+            VIR_CHECKV / "checkv.viruses.fna.gz",
+        ],

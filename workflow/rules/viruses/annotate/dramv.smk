@@ -83,7 +83,7 @@ rule viruses__annotate__dramv__annotate__all:
         ],
 
 
-use rule concatenate_tsv_ungzipped as viruses__annotate__dramv__concatenate_annotations_tsv with:
+use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_annotations_tsv with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "annotations.tsv"
@@ -95,7 +95,7 @@ use rule concatenate_tsv_ungzipped as viruses__annotate__dramv__concatenate_anno
         VIR_DRAMV / "annotate" / "annotations.log",
 
 
-use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_genes_fna with:
+use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_genes_fna with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.fna"
@@ -107,7 +107,7 @@ use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_gen
         VIR_ANN / "dram.genes.fna.log",
 
 
-use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_genes_faa with:
+use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_genes_faa with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.faa"
@@ -119,7 +119,7 @@ use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_gen
         VIR_ANN / "dram.genes.faa.log",
 
 
-use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_scaffolds_fna with:
+use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_scaffolds_fna with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "scaffolds.fna"
@@ -131,7 +131,7 @@ use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_sca
         VIR_ANN / "dram.scaffolds.fna.log",
 
 
-use rule concatenate_flat_ungzipped as viruses__annotate__dramv__concatenate_genes_gff with:
+use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_genes_gff with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.gff"
