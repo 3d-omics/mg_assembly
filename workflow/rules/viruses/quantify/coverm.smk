@@ -17,7 +17,7 @@ rule viruses__quantify__coverm__contig__join:
             / "contig"
             / f"{w.method}.rep_seq.{sample_id}.{library_id}.tsv.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
-        ],
+        ] + ["/dev/null"],
     output:
         VIR_COVERM / "contig.{method}.rep_seq.tsv.gz",
     log:
