@@ -69,80 +69,70 @@ rule viruses__annotate__virsorter2__run__all:
         ],
 
 
-rule viruses__annotate__virsorter2__aggregate_tsvs:
+use rule csvtk__concat as viruses__annotate__virsorter2__concatenate_viral_boundary with:
     input:
-        boundary=[
+        [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-boundary.tsv"
             for assembly_id in ASSEMBLIES
-        ],
-        score=[
+        ] + ["/dev/null"]
+    output:
+        VIR_VIRSORTER2 / "final-viral-boundary.tsv.gz",
+    log:
+        VIR_VIRSORTER2 / "final-viral-boundary.log"
+
+
+use rule csvtk__concat as viruses__annotate__virsorter2__concatenate_viral_score with:
+    input:
+        [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-score.tsv"
             for assembly_id in ASSEMBLIES
-        ],
-        contigs=[
+        ] + ["/dev/null"]
+    output:
+        VIR_VIRSORTER2 / "final-viral-score.tsv.gz",
+    log:
+        VIR_VIRSORTER2 / "final-viral-score.log",
+
+
+use rule csvtk__concat as viruses__annotate__virsorter2__concatenate_viral_contigs_for_dramv with:
+    input:
+        [
             VIR_VIRSORTER2 / f"{assembly_id}" / "viral-affi-contigs-for-dramv.tab"
             for assembly_id in ASSEMBLIES
-        ],
+        ] + ["/dev/null"]
     output:
-        boundary=VIR_VIRSORTER2 / "final-viral-boundary.tsv.gz",
-        score=VIR_VIRSORTER2 / "final-viral-score.tsv.gz",
-        contigs=VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
+        VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
     log:
-        VIR_VIRSORTER2 / "aggregate_tsvs.log",
-    conda:
-        ENVS / "virsorter2.yml"
-    threads: 24
-    shell:
-        """
-        (
-            csvtk concat \
-                --tabs \
-                {input.boundary} \
-            | bgzip --compress-level 0 --threads {threads} \
-            > {output.boundary}
-
-            csvtk concat \
-                --tabs \
-                {input.score} \
-            | bgzip --compress-level 0 --threads {threads} \
-            > {output.score}
-
-            csvtk concat \
-                --tabs \
-                {input.contigs} \
-            | bgzip --compress-level 0 --threads {threads} \
-            > {output.contigs}
-        ) 2> {log}
-        """
+        VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.log",
 
 
-rule viruses__annotate__virsorter2__concatenate_fastas:
+use rule concatenate__flat_to_gzipped as viruses__annotate__virsorter2__concatenate_viral_combined with:
     input:
-        combined=[
+        [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-combined.fa"
             for assembly_id in ASSEMBLIES
-        ],
-        dramv_fa=[
+        ] + ["/dev/null"],
+    output:
+        VIR_VIRSORTER2 / "final-viral-combined.fa.gz",
+    log:
+        VIR_VIRSORTER2 / "final-viral-combined.log",
+
+
+use rule concatenate__flat_to_gzipped as viruses__annotate__virsorter2__concatenate_viral_combined_for_dramv with:
+    input:
+        [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-combined-for-dramv.fa"
             for assembly_id in ASSEMBLIES
-        ],
+        ] + ["/dev/null"],
     output:
-        combined=VIR_VIRSORTER2 / "final-viral-combined.fa.gz",
-        dramv_fa=VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
-    log:
-        VIR_VIRSORTER2 / "concatenate_fastas.log",
-    conda:
-        ENVS / "virsorter2.yml"
-    shell:
-        """
-        (
-            cat {input.combined} | bgzip --threads {threads} > {output.combined} 2> {log}
-            cat {input.dramv_fa} | bgzip --threads {threads} > {output.dramv_fa} 2> {log}
-        ) 2> {log}
-        """
+        VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
+    log: 
+        VIR_VIRSORTER2 / "final-viral-combined-for-dramv.log",
 
 
 rule viruses__annotate__virsorter2__all:
     input:
-        rules.viruses__annotate__virsorter2__aggregate_tsvs.output,
-        rules.viruses__annotate__virsorter2__concatenate_fastas.output,
+        VIR_VIRSORTER2 / "final-viral-boundary.tsv.gz",
+        VIR_VIRSORTER2 / "final-viral-score.tsv.gz",
+        VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
+        VIR_VIRSORTER2 / "final-viral-combined.fa.gz",
+        VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
