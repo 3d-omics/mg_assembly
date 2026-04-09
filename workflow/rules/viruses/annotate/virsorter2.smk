@@ -74,11 +74,12 @@ use rule csvtk__concat as viruses__annotate__virsorter2__concatenate_viral_bound
         [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-boundary.tsv"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"]
+        ]
+        + ["/dev/null"],
     output:
         VIR_VIRSORTER2 / "final-viral-boundary.tsv.gz",
     log:
-        VIR_VIRSORTER2 / "final-viral-boundary.log"
+        VIR_VIRSORTER2 / "final-viral-boundary.log",
 
 
 use rule csvtk__concat as viruses__annotate__virsorter2__concatenate_viral_score with:
@@ -86,7 +87,8 @@ use rule csvtk__concat as viruses__annotate__virsorter2__concatenate_viral_score
         [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-score.tsv"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"]
+        ]
+        + ["/dev/null"],
     output:
         VIR_VIRSORTER2 / "final-viral-score.tsv.gz",
     log:
@@ -98,7 +100,8 @@ use rule csvtk__concat as viruses__annotate__virsorter2__concatenate_viral_conti
         [
             VIR_VIRSORTER2 / f"{assembly_id}" / "viral-affi-contigs-for-dramv.tab"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"]
+        ]
+        + ["/dev/null"],
     output:
         VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.tab.gz",
     log:
@@ -110,7 +113,8 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__virsorter2__concaten
         [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-combined.fa"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"],
+        ]
+        + ["/dev/null"],
     output:
         VIR_VIRSORTER2 / "final-viral-combined.fa.gz",
     log:
@@ -122,10 +126,11 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__virsorter2__concaten
         [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-combined-for-dramv.fa"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"],
+        ]
+        + ["/dev/null"],
     output:
         VIR_VIRSORTER2 / "final-viral-combined-for-dramv.fa.gz",
-    log: 
+    log:
         VIR_VIRSORTER2 / "final-viral-combined-for-dramv.log",
 
 

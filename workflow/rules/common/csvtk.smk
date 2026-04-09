@@ -1,22 +1,22 @@
 rule csvtk__concat:
     input:
-        ["filein1.tsv.gz", "filein2.tsv.gz"]
+        ["filein1.tsv.gz", "filein2.tsv.gz"],
     output:
-        "fileout.tsv.gz"
+        "fileout.tsv.gz",
     log:
-        "out.log"
+        "out.log",
     params:
         subcommand="concat",
-        extra="--tabs --out-tabs"
+        extra="--tabs --out-tabs",
     wrapper:
         "v5.2.1/utils/csvtk"
 
 
 rule csvtk__join__left:
     input:
-        ["filein1.tsv.gz", "filein2.tsv.gz"]
+        ["filein1.tsv.gz", "filein2.tsv.gz"],
     output:
-        "fileout.tsv.gz"
+        "fileout.tsv.gz",
     log:
         "log",
     params:
