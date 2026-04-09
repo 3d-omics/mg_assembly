@@ -83,7 +83,7 @@ rule viruses__annotate__dramv__annotate__all:
         ],
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_annotations_tsv with:
+use rule csvtk__concat as viruses__annotate__dramv__concatenate_annotations_tsv with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "annotations.tsv"
