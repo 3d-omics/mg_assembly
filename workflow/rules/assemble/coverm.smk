@@ -31,7 +31,6 @@ use rule csvtk__join__left as assemble__coverm__join with:
         ASMB_COVERM / "contig.{method}.{assembly_id}.log",
 
 
-
 rule assemble__coverm__all:
     input:
         [

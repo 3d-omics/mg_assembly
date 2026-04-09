@@ -73,7 +73,8 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_complete_genome
         [
             VIR_CHECKV / f"{assembly_id}" / "complete_genomes.tsv"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"]
+        ]
+        + ["/dev/null"],
     output:
         VIR_CHECKV / "checkv.complete_genomes.tsv.gz",
     log:
@@ -85,11 +86,12 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_completeness wi
         [
             VIR_CHECKV / f"{assembly_id}" / "completeness.tsv"
             for assembly_id in ASSEMBLIES
-        ] +  ["/dev/null"],
+        ]
+        + ["/dev/null"],
     output:
         VIR_CHECKV / "checkv.completeness.tsv.gz",
     log:
-        VIR_CHECKV / "checkv.completeness.log"
+        VIR_CHECKV / "checkv.completeness.log",
 
 
 use rule csvtk__concat as viruses__annotate__checkv__concatenate_contamination with:
@@ -97,11 +99,12 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_contamination w
         [
             VIR_CHECKV / f"{assembly_id}" / "contamination.tsv"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"],
+        ]
+        + ["/dev/null"],
     output:
-        VIR_CHECKV / "checkv.contamination.tsv.gz"
+        VIR_CHECKV / "checkv.contamination.tsv.gz",
     log:
-        VIR_CHECKV / "checkv.contamination.tsv.gz"
+        VIR_CHECKV / "checkv.contamination.tsv.gz",
 
 
 use rule csvtk__concat as viruses__annotate__checkv__concatenate_summary with:
@@ -109,11 +112,12 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_summary with:
         [
             VIR_CHECKV / f"{assembly_id}" / "quality_summary.tsv"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"]
+        ]
+        + ["/dev/null"],
     output:
-        VIR_CHECKV / "checkv.quality_summary.tsv.gz"
+        VIR_CHECKV / "checkv.quality_summary.tsv.gz",
     log:
-        VIR_CHECKV / "checkv.quality_summary.tsv.gz"
+        VIR_CHECKV / "checkv.quality_summary.tsv.gz",
 
 
 use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_proviruses with:
@@ -121,17 +125,17 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_
         [
             VIR_CHECKV / f"{assembly_id}" / "proviruses.fna"
             for assembly_id in ASSEMBLIES
-        ] + ["/dev/null"],
+        ]
+        + ["/dev/null"],
     output:
-        VIR_CHECKV / "checkv.proviruses.fna.gz"
+        VIR_CHECKV / "checkv.proviruses.fna.gz",
     log:
-        VIR_CHECKV / "checkv.proviruses.log"
+        VIR_CHECKV / "checkv.proviruses.log",
+
 
 use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_viruses with:
     input:
-        [
-            VIR_CHECKV / f"{assembly_id}" / "viruses.fna" for assembly_id in ASSEMBLIES
-        ],
+        [VIR_CHECKV / f"{assembly_id}" / "viruses.fna" for assembly_id in ASSEMBLIES],
     output:
         VIR_CHECKV / "checkv.viruses.fna.gz",
     log:
