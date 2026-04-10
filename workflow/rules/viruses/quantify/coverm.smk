@@ -18,7 +18,7 @@ use rule csvtk__join__left as viruses__quantify__coverm__contig__join with:
             / f"{w.method}.rep_seq.{sample_id}.{library_id}.tsv.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_COVERM / "contig.{method}.rep_seq.tsv.gz",
     log:

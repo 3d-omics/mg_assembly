@@ -74,7 +74,7 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_complete_genome
             VIR_CHECKV / f"{assembly_id}" / "complete_genomes.tsv"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CHECKV / "checkv.complete_genomes.tsv.gz",
     log:
@@ -87,7 +87,7 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_completeness wi
             VIR_CHECKV / f"{assembly_id}" / "completeness.tsv"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CHECKV / "checkv.completeness.tsv.gz",
     log:
@@ -100,7 +100,7 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_contamination w
             VIR_CHECKV / f"{assembly_id}" / "contamination.tsv"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CHECKV / "checkv.contamination.tsv.gz",
     log:
@@ -113,7 +113,7 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_summary with:
             VIR_CHECKV / f"{assembly_id}" / "quality_summary.tsv"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CHECKV / "checkv.quality_summary.tsv.gz",
     log:
@@ -126,7 +126,7 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_
             VIR_CHECKV / f"{assembly_id}" / "proviruses.fna"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CHECKV / "checkv.proviruses.fna.gz",
     log:

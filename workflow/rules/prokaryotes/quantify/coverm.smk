@@ -25,7 +25,7 @@ use rule csvtk__join__left as prokaryotes__quantify__coverm__genome__join with:
             / f"{w.method}.drep.{w.secondary_ani}.{sample_id}.{library_id}.tsv.gz"
             for sample_id, library_id in SAMPLE_LIBRARY
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         PROK_COVERM / "genome.{method}.drep.{secondary_ani}.tsv.gz",
     log:

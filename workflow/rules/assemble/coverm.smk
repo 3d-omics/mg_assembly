@@ -24,7 +24,7 @@ use rule csvtk__join__left as assemble__coverm__join with:
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
             if assembly_id == w.assembly_id
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         ASMB_COVERM / "contig.{method}.{assembly_id}.tsv.gz",
     log:

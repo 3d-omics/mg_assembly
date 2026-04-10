@@ -82,7 +82,7 @@ rule viruses__cluster__genomad__run:
 use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_plasmid_fna with:
     input:
         [VIR_GENOMADC / f"{assembly_id}_plasmid.fna" for assembly_id in ASSEMBLIES]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CLUSTER / "genomad_plasmid.fna.gz",
     log:
@@ -95,7 +95,7 @@ use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_
             VIR_GENOMADC / f"{assembly_id}_plasmid_proteins.faa"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CLUSTER / "genomad_plasmid_proteins.faa.gz",
     log:
@@ -105,7 +105,7 @@ use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_
 use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_virus_fna with:
     input:
         [VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CLUSTER / "genomad_virus.fna.gz",
     log:
@@ -118,7 +118,7 @@ use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_
             VIR_GENOMADC / f"{assembly_id}_virus_proteins.faa"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CLUSTER / "genomad_virus_proteins.faa.gz",
     log:
@@ -139,7 +139,7 @@ use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_genes 
             VIR_GENOMADC / f"{assembly_id}_plasmid_genes.tsv"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CLUSTER / "genomad_plasmid_genes.tsv.gz",
     log:
@@ -152,7 +152,7 @@ use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_summar
             VIR_GENOMADC / f"{assembly_id}_plasmid_summary.tsv"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CLUSTER / "genomad_plasmid_summary.tsv.gz",
     log:
@@ -162,7 +162,7 @@ use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_summar
 use rule csvtk__concat as viruses__cluster__genomad__concatenate__virus_genes with:
     input:
         [VIR_GENOMADC / f"{assembly_id}_virus_genes.tsv" for assembly_id in ASSEMBLIES]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CLUSTER / "genomad_virus_genes.tsv.gz",
     log:
@@ -175,7 +175,7 @@ use rule csvtk__concat as viruses__cluster__genomad__concatenate__virus_summary 
             VIR_GENOMADC / f"{assembly_id}_virus_summary.tsv"
             for assembly_id in ASSEMBLIES
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         VIR_CLUSTER / "genomad_virus_summary.tsv.gz",
     log:

@@ -2,6 +2,8 @@
 # REFERENCE = Path("results/reference/")
 # HOSTS = REFERENCE / "hosts"
 
+NULL = [Path(os.devnull)]  # this to make the linter shut up about an absolute path to /dev/null 
+
 ENVS = Path("workflow/environments").resolve()
 
 RESULTS = Path("results/")
