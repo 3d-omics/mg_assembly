@@ -12,7 +12,7 @@ rule prokaryotes__annotate__dram__setup:
     log:
         PROK_ANN / "dram.setup.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -48,7 +48,7 @@ rule prokaryotes__annotate__dram__annotate:
     log:
         PROK_ANN / "dram.annotate" / "{mag_id}.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     params:
         min_contig_size=params["prokaryotes"]["annotate"]["dram"]["annotate"][
             "min_contig_size"
@@ -83,7 +83,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_tsvs:
     log:
         PROK_ANN / "dram.aggregate_tsvs.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     threads: 24
@@ -114,7 +114,7 @@ rule prokaryotes__annotate__dram__annotate__concatenate_fastas:
     log:
         PROK_ANN / f"dram.concatenate_fastas.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     params:
         work_dir=PROK_ANN / "dram.annotate",
     threads: 24
@@ -125,7 +125,7 @@ rule prokaryotes__annotate__dram__annotate__concatenate_fastas:
             sed \
                 -r 's/[[:graph:]]+:bin_[0-9]+_([[:graph:]]+:bin_[0-9]+@contig_[0-9]+)/>\\1/g' \
                 {params.work_dir}/*/$file \
-            | bgzip
+            | bgzip \
                 --compress-level 9 \
                 --threads {threads} \
             > {PROK_ANN}/dram.$file.gz \

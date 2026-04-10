@@ -3,5 +3,3 @@ channels:
   - bioconda
 dependencies:
   - checkv =1.0.3
-  - htslib =1.23.1
-  - csvtk =0.36.0

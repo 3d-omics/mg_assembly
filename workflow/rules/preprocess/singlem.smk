@@ -111,7 +111,7 @@ rule preprocess__singlem__microbial_fraction__join:
         [
             PRE_SINGLEM / "microbial_fraction" / f"{sample_id}.{library_id}.tsv"
             for sample_id, library_id in SAMPLE_LIBRARY
-        ],
+        ] + ["/dev/null"] ,
     output:
         PRE_SINGLEM / "microbial_fraction.tsv.gz",
     log:
