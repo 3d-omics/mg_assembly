@@ -4,9 +4,9 @@ include: "megahit_functions.smk"
 rule assemble__megahit:
     """Run megahit over one sample, merging all libraries in the process
 
-    Note: the initial rm -rf is to delete the folder that snakemake creates.
-    megahit refuses to overwrite an existing folder
-    """
+Note: the initial rm -rf is to delete the folder that snakemake creates.
+megahit refuses to overwrite an existing folder
+"""
     input:
         forwards=get_forwards_from_assembly_id,
         reverses=get_reverses_from_assembly_id,
@@ -14,17 +14,17 @@ rule assemble__megahit:
         temp(directory(ASMB_MEGAHIT / "{assembly_id}.dir")),
     log:
         log=ASMB_MEGAHIT / "{assembly_id}.log",
+    retries: 5
     conda:
         ENVS / "megahit.yml"
-    params:
-        forwards=aggregate_forwards_for_megahit,
-        reverses=aggregate_reverses_for_megahit,
-        extra=params["assemble"]["megahit"]["extra"],
-    retries: 5
     threads: 24
     resources:
         mem_mb=double_ram(32 * 1024),
         runtime=7 * 24 * 60,
+    params:
+        forwards=aggregate_forwards_for_megahit,
+        reverses=aggregate_reverses_for_megahit,
+        extra=params["assemble"]["megahit"]["extra"],
     shell:
         """
         megahit \
@@ -49,9 +49,9 @@ rule assemble__megahit__rename:
         ASMB_MEGAHIT / "{assembly_id}.rename.log",
     conda:
         "../../environments/megahit.yml"
+    threads: 24
     params:
         assembly_id=lambda w: w.assembly_id,
-    threads: 24
     shell:
         """
         ( seqtk seq \
@@ -61,8 +61,7 @@ rule assemble__megahit__rename:
         | awk \
             '{{printf(">{params.assembly_id}:bin_NA@contig_%08d\\n%s\\n", NR, $2)}}' \
         | bgzip \
-            -l 9 \
-            -@ {threads} \
+            --threads {threads} \
         > {output} \
         ) 2> {log}
         """

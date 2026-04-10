@@ -95,7 +95,7 @@ use rule csvtk__concat as viruses__annotate__dramv__concatenate_annotations_tsv 
         VIR_DRAMV / "annotate" / "annotations.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_genes_fna with:
+use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_genes_fna with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.fna"
@@ -107,7 +107,7 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_g
         VIR_ANN / "dram.genes.fna.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_genes_faa with:
+use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_genes_faa with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.faa"
@@ -119,7 +119,7 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_g
         VIR_ANN / "dram.genes.faa.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_scaffolds_fna with:
+use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_scaffolds_fna with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "scaffolds.fna"
@@ -131,7 +131,7 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_s
         VIR_ANN / "dram.scaffolds.fna.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__dramv__concatenate_genes_gff with:
+use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_genes_gff with:
     input:
         [
             VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.gff"

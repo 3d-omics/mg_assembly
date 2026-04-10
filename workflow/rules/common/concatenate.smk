@@ -1,9 +1,9 @@
-rule concatenate__flat_to_gzipped:
-    """Concatenate multiple flat files (fasta, txt, gff, genbank) and recompress into a single one"""
+rule concatenate__gzip_text_files:
+    """Concatenate multiple text files and output a single text file"""
     input:
-        ["fasta1.fa", "fasta2.fa"],
+        ["file1.fa", "file2.fa.gz"],
     output:
-        "fasta_out.fa.gz",
+        ["fasta_out.fa.gz"],
     log:
         "fasta_out.log",
     conda:
@@ -13,38 +13,21 @@ rule concatenate__flat_to_gzipped:
         compress_level=5,
     shell:
         """
-        ( cat \
-            {input} \
-        | bgzip \
-            --compress-level {params.compress_level} \
-            --threads {threads} \
-        > {output} \
-        ) 2> {log}
-        """
+        touch {output}
 
-
-rule concatenate__gzipped_to_gzipped:
-    """Concatenate multiple gzipped files (fasta, txt, gff, genbank) and recompress into a single one"""
-    input:
-        ["fasta1.fa.gz", "fasta2.fa.gz"],
-    output:
-        "fasta_out.fa.gz",
-    log:
-        "fasta_out.log",
-    conda:
-        ENVS / "concatenate.yml"
-    threads: 24
-    params:
-        compress_level=5,
-    shell:
-        """
-        ( gzip \
-            --decompress \
-            --stdout \
-            {input} \
+        ( for file in {input} ; do
+            if [[ "$file" == *.gz ]] ; then
+                gzip \
+                    --decompress \
+                    --stdout \
+                    $file \
+            else 
+                cat $file
+            fi \
+        done \
         | bgzip \
-            --compress-level {params.compress_level} \
+            --compression-level {params.compress_level} \
             --threads {threads} \
-        > {output} \
+        >> {output} \
         ) 2> {log}
         """

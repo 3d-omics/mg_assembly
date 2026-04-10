@@ -36,19 +36,19 @@ rule viruses__cluster__genomad__run:
         virus_summary_tsv=temp(VIR_GENOMADC / "{assembly_id}_virus_summary.tsv"),
     log:
         VIR_GENOMADC / "{assembly_id}.log",
+    shadow:
+        "minimal"
     conda:
         ENVS / "genomad.yml"
+    threads: 24
+    resources:
+        mem_mb=double_ram(32 * 1024),
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         genomad_workdir=VIR_GENOMADC,
         genomad_summary_dir=lambda w: VIR_GENOMADC / f"{w.assembly_id}_summary",
         extra=params["viral"]["genomad"]["extra"],
         use_cuda=params["viral"]["genomad"]["use_cuda"],
-    shadow:
-        "minimal"
-    threads: 24
-    resources:
-        mem_mb=double_ram(32 * 1024),
     shell:
         """
         if [[ $(gzip -dc {input.fasta} | wc -l ) -lt 2 ]] ; then
@@ -79,7 +79,7 @@ rule viruses__cluster__genomad__run:
         """
 
 
-use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_plasmid_fna with:
+use rule concatenate__gzip_text_files as viruses__cluster__genomad__concatenate_plasmid_fna with:
     input:
         [VIR_GENOMADC / f"{assembly_id}_plasmid.fna" for assembly_id in ASSEMBLIES]
         + NULL,
@@ -89,7 +89,7 @@ use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_
         VIR_CLUSTER / "genomad_plasmid.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_plasmid_proteins_faa with:
+use rule concatenate__gzip_text_files as viruses__cluster__genomad__concatenate_plasmid_proteins_faa with:
     input:
         [
             VIR_GENOMADC / f"{assembly_id}_plasmid_proteins.faa"
@@ -102,7 +102,7 @@ use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_
         VIR_CLUSTER / "genomad_plasmid_proteins.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_virus_fna with:
+use rule concatenate__gzip_text_files as viruses__cluster__genomad__concatenate_virus_fna with:
     input:
         [VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES] + NULL,
     output:
@@ -111,7 +111,7 @@ use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_
         VIR_CLUSTER / "genomad_virus.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_virus_proteins_faa with:
+use rule concatenate__gzip_text_files as viruses__cluster__genomad__concatenate_virus_proteins_faa with:
     input:
         [
             VIR_GENOMADC / f"{assembly_id}_virus_proteins.faa"

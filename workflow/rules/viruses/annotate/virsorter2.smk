@@ -29,14 +29,14 @@ rule viruses__annotate__virsorter2__run:
         VIR_VIRSORTER2 / "{assembly_id}.log",
     conda:
         ENVS / "virsorter2.yml"
-    params:
-        workdir=lambda w: VIR_VIRSORTER2 / w.assembly_id,
     # shadow:
     #     "minimal"
     threads: 1
     resources:
         mem_mb=8 * 1024,
         runtime=24 * 60,
+    params:
+        workdir=lambda w: VIR_VIRSORTER2 / w.assembly_id,
     shell:
         """
         virsorter run \
@@ -108,7 +108,7 @@ use rule csvtk__concat as viruses__annotate__virsorter2__concatenate_viral_conti
         VIR_VIRSORTER2 / "viral-affi-contigs-for-dramv.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__virsorter2__concatenate_viral_combined with:
+use rule concatenate__gzip_text_files as viruses__annotate__virsorter2__concatenate_viral_combined with:
     input:
         [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-combined.fa"
@@ -121,7 +121,7 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__virsorter2__concaten
         VIR_VIRSORTER2 / "final-viral-combined.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__virsorter2__concatenate_viral_combined_for_dramv with:
+use rule concatenate__gzip_text_files as viruses__annotate__virsorter2__concatenate_viral_combined_for_dramv with:
     input:
         [
             VIR_VIRSORTER2 / f"{assembly_id}" / "final-viral-combined-for-dramv.fa"

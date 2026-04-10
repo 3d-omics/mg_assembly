@@ -34,12 +34,12 @@ rule viruses__annotate__checkv__end_to_end:
         VIR_CHECKV / "{assembly_id}" / "checkv.log",
     conda:
         ENVS / "checkv.yml"
-    params:
-        workdir=lambda w: VIR_CHECKV / f"{w.assembly_id}",
     threads: 24
     resources:
         mem_mb=8 * 1024,
         runtime=24 * 60,
+    params:
+        workdir=lambda w: VIR_CHECKV / f"{w.assembly_id}",
     shell:
         """
         checkv end_to_end \
@@ -120,7 +120,7 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_summary with:
         VIR_CHECKV / "checkv.quality_summary.tsv.gz",
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_proviruses with:
+use rule concatenate__gzip_text_files as viruses__annotate__checkv__concatenate_proviruses with:
     input:
         [
             VIR_CHECKV / f"{assembly_id}" / "proviruses.fna"
@@ -133,7 +133,7 @@ use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_
         VIR_CHECKV / "checkv.proviruses.log",
 
 
-use rule concatenate__flat_to_gzipped as viruses__annotate__checkv__concatenate_viruses with:
+use rule concatenate__gzip_text_files as viruses__annotate__checkv__concatenate_viruses with:
     input:
         [VIR_CHECKV / f"{assembly_id}" / "viruses.fna" for assembly_id in ASSEMBLIES],
     output:
