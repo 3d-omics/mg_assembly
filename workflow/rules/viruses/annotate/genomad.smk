@@ -49,8 +49,7 @@ rule viruses__annotate__genomad:
             {params.workdir} \
         2>> {log} 1>&2
 
-        bgzip \
-            --threads {threads} \
+        gzip \
             {params.workdir}/*.faa \
             {params.workdir}/*.fna \
             {params.workdir}/*.tsv \
