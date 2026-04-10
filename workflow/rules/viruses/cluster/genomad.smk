@@ -104,8 +104,7 @@ use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_
 
 use rule concatenate__flat_to_gzipped as viruses__cluster__genomad__concatenate_virus_fna with:
     input:
-        [VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES]
-        + NULL,
+        [VIR_GENOMADC / f"{assembly_id}_virus.fna" for assembly_id in ASSEMBLIES] + NULL,
     output:
         VIR_CLUSTER / "genomad_virus.fna.gz",
     log:

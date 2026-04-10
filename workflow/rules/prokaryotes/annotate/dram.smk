@@ -86,7 +86,7 @@ rule prokaryotes__annotate__dram__annotate__aggregate_tsvs:
         ENVS / "dram.yml"
     params:
         input_dir=PROK_ANN / "dram.annotate",
-        output_dir=PROK_ANN
+        output_dir=PROK_ANN,
     threads: 24
     shell:
         """
@@ -120,7 +120,7 @@ rule prokaryotes__annotate__dram__annotate__concatenate_fastas:
         ENVS / "dram.yml"
     params:
         input_dir=PROK_ANN / "dram.annotate",
-        output_dir=PROK_ANN
+        output_dir=PROK_ANN,
     threads: 24
     shell:
         """
