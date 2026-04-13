@@ -14,20 +14,20 @@ rule viruses__annotate__genomad:
         virus_summary=VIR_GENOMADA / "mmseqs.rep_seq_virus_summary.tsv.gz",
     log:
         VIR_GENOMADA / "genomad.log",
+    shadow:
+        "minimal"
     conda:
         ENVS / "genomad.yml"
+    threads: 24
+    resources:
+        mem_mb=double_ram(32 * 1024),
+        runtime=60,
     params:
         filtering=params["viral"]["genomad"]["filtering"],
         workdir=VIR_GENOMADA,
         extra=params["viral"]["genomad"]["extra"],
         tmp_prefix=VIR_GENOMADA / "mmseqs.rep_seq_summary",
         use_cuda=params["viral"]["genomad"]["use_cuda"],
-    shadow:
-        "minimal"
-    threads: 24
-    resources:
-        mem_mb=double_ram(32 * 1024),
-        runtime=60,
     shell:
         """
         {params.use_cuda}

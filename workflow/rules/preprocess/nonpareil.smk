@@ -9,13 +9,13 @@ rule preprocess__nonpareil__run:
         redund_sum=touch(PRE_NONPAREIL / "{sample_id}.{library_id}.npo"),
     log:
         PRE_NONPAREIL / "{sample_id}.{library_id}.log",
+    resources:
+        mem_mb=8 * 1024,
+        runtime=6 * 60,
     params:
         alg="kmer",
         infer_X=True,
         extra="",
-    resources:
-        mem_mb=8 * 1024,
-        runtime=6 * 60,
     wrapper:
         "v5.2.1/bio/nonpareil/infer"
 

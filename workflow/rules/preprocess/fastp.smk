@@ -4,9 +4,9 @@ include: "fastp_functions.smk"
 rule preprocess__fastp:
     """Run fastp on one PE library
 
-    NOTE: don't use process substitution not because fastp cannot handle it,
-    but because MultiQC reports will show /dev/fd/{63,64} as the sample names.
-    """
+NOTE: don't use process substitution not because fastp cannot handle it,
+but because MultiQC reports will show /dev/fd/{63,64} as the sample names.
+"""
     input:
         sample=[
             PRE_READS / "{sample_id}.{library_id}_1.fq.gz",
@@ -21,13 +21,13 @@ rule preprocess__fastp:
         json=PRE_FASTP / "{sample_id}.{library_id}_fastp.json",
     log:
         PRE_FASTP / "{sample_id}.{library_id}.log",
-    params:
-        extra=params["preprocess"]["fastp"]["extra"],
-        adapters=compose_adapters,
     threads: 8
     resources:
         mem_mb=8 * 1024,
         runtime=60,
+    params:
+        extra=params["preprocess"]["fastp"]["extra"],
+        adapters=compose_adapters,
     wrapper:
         "v9.4.0/bio/fastp"
 

@@ -7,10 +7,10 @@ rule viruses__cluster__bbmap__dedupe:
         VIR_CLUSTER / "bbmap.dedupe.log",
     conda:
         ENVS / "bbmap.yml"
+    threads: 24
     params:
         fastas_comma=lambda w, input: ",".join(input),
         minimum_length=500,
-    threads: 24
     shell:
         """
         dedupe.sh \
@@ -28,8 +28,9 @@ rule viruses__cluster__bbmap__dedupe:
 
 rule viruses__cluster__bbmap__clean:
     """
-    Clean up the deduped fasta file since merged sequences headers contain multiple ">"
-    """
+Clean up the deduped fasta file since merged sequences headers contain multiple ">"
+
+"""
     input:
         VIR_CLUSTER / "bbmap.dedupe.fa.gz",
     output:

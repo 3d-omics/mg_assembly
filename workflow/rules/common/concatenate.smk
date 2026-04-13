@@ -8,9 +8,7 @@ rule concatenate__gzip_text_files:
         "fasta_out.log",
     conda:
         ENVS / "concatenate.yml"
-    threads: 24
-    params:
-        compress_level=5,
+    threads: 8
     shell:
         """
         touch {output}
@@ -21,12 +19,11 @@ rule concatenate__gzip_text_files:
                     --decompress \
                     --stdout \
                     $file \
-            else 
+            else
                 cat $file
             fi \
         done \
         | bgzip \
-            --compression-level {params.compress_level} \
             --threads {threads} \
         >> {output} \
         ) 2> {log}

@@ -33,7 +33,6 @@ rule preprocess__clean:
             --stdout \
             {input.reverse_} \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
         > {output.reverse_} \
         ) 2>> {log}

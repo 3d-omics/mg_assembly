@@ -7,14 +7,14 @@ rule viruses__cluster__mmseqs__easy_cluster:
         rep_seq=VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
     log:
         VIR_CLUSTER / "mmseqs.easy_cluster.log",
+    shadow:
+        "minimal"
     conda:
         ENVS / "mmseqs.yml"
+    threads: 24
     params:
         prefix=VIR_CLUSTER / "tmp",
         tmpdir=VIR_CLUSTER,
-    shadow:
-        "minimal"
-    threads: 24
     shell:
         """
         mmseqs easy-cluster \

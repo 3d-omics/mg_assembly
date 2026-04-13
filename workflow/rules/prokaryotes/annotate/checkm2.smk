@@ -8,13 +8,13 @@ rule prokaryotes__annotate__checkm2:
         tmp_dir=temp(directory(PROK_ANN / "checkm2.quality_report")),
     log:
         PROK_ANN / "checkm2.quality_report.log",
+    retries: 5
     conda:
         ENVS / "checkm2.yml"
     threads: 24
     resources:
         mem_mb=double_ram(32 * 1024),
         runtime=24 * 60,
-    retries: 5
     shell:
         """
         checkm2 predict \

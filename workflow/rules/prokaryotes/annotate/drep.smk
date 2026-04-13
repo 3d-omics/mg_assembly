@@ -35,6 +35,10 @@ rule prokaryotes__annotate__drep__dereplicate:
         PROK_ANN / "drep.{secondary_ani}.log",
     conda:
         ENVS / "drep.yml"
+    threads: 24
+    resources:
+        mem_mb=double_ram(4 * 1024),
+        runtime=6 * 60,
     params:
         secondary_ani=lambda w: w.secondary_ani,
         minimum_completeness=params["prokaryotes"]["annotate"]["drep"][
@@ -43,10 +47,6 @@ rule prokaryotes__annotate__drep__dereplicate:
         maximum_contamination=params["prokaryotes"]["annotate"]["drep"][
             "maximum_contamination"
         ],
-    threads: 24
-    resources:
-        mem_mb=double_ram(4 * 1024),
-        runtime=6 * 60,
     shell:
         """
         dRep dereplicate \
@@ -70,13 +70,12 @@ rule prokaryotes__annotate__drep__get_fasta:
         PROK_ANN / "drep.{secondary_ani}.fa.log",
     conda:
         ENVS / "drep.yml"
-    threads: 24
+    threads: 8
     shell:
         """
         ( cat \
             {input.work_dir}/dereplicated_genomes/*.fa \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
         > {output.fasta} \
         ) 2> {log}

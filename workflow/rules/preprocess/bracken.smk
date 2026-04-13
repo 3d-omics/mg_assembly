@@ -182,8 +182,8 @@ rule preprocess__bracken__beta_diversity:
 rule preprocess__bracken__beta_diversity__all:
     """Run preprocess__bracken__beta_diversity for all databases and some levels
 
-    Note: Beta diversity is only computed for Order, Family, Genus and Species
-    """
+Note: Beta diversity is only computed for Order, Family, Genus and Species
+"""
     input:
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"

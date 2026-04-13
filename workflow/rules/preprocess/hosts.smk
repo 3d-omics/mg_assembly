@@ -6,9 +6,9 @@ rule preprocess__hosts:
         fa_gz=PRE_HOSTS / "{host}.fa.gz",
     log:
         PRE_HOSTS / "{host}.log",
+    cache: "omit-software"
     conda:
         ENVS / "hosts.yml"
-    cache: "omit-software"
     threads: 8
     shell:
         """
@@ -16,7 +16,6 @@ rule preprocess__hosts:
             --decompress \
             --stdout {input.fa_gz} \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
             --stdout \
             /dev/stdin \

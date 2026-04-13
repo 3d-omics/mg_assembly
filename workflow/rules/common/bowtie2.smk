@@ -25,8 +25,8 @@ rule bowtie2__build:
 rule bowtie2__map:
     """Map one library to a reference genome using bowtie2
 
-    Output SAM file is piped to samtools sort to generate a CRAM file.
-    """
+Output SAM file is piped to samtools sort to generate a CRAM file.
+"""
     input:
         forward_="reads_1.fq.gz",
         reverse_="reads_2.fq.gz",
@@ -43,18 +43,18 @@ rule bowtie2__map:
         "reads.bam",
     log:
         "reads.log",
-    params:
-        index=lambda w, input: os.path.splitext(input.mock)[0],  # or use a string
-        samtools_extra="",
-        bowtie2_extra="",
-        rg_id="",  # compose_rg_id
-        rg_extra="",  # compose_rg_extra
     conda:
         ENVS / "bowtie2.yml"
     threads: 24
     resources:
         mem_mb=double_ram(32 * 1024),
         runtime="1d",
+    params:
+        index=lambda w, input: os.path.splitext(input.mock)[0],  # or use a string
+        samtools_extra="",
+        bowtie2_extra="",
+        rg_id="",  # compose_rg_id
+        rg_extra="",  # compose_rg_extra
     shell:
         """
         ( bowtie2 \

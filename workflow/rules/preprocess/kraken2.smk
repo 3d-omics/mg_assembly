@@ -28,16 +28,16 @@ rule preprocess__kraken2__join_libraries:
 
 rule preprocess__kraken2__assign:
     """
-    Run kraken2 over all samples at once using the /dev/shm/ trick.
+Run kraken2 over all samples at once using the /dev/shm/ trick.
 
-    NOTE:
-        - /dev/shm may be not empty after the job is done.
-        - Specify twice the amount of RAM needed: Linux systems usually
-            come configured with /dev/shm to be half the RAM size
-        - After read classification the report generation step uses suddenly
-            ~10GB of RAM per sample processed in parallel. The 2x RAM usage
-            comes handy to avoid OOM errors.
-    """
+NOTE:
+    - /dev/shm may be not empty after the job is done.
+    - Specify twice the amount of RAM needed: Linux systems usually
+        come configured with /dev/shm to be half the RAM size
+    - After read classification the report generation step uses suddenly
+        ~10GB of RAM per sample processed in parallel. The 2x RAM usage
+        comes handy to avoid OOM errors.
+"""
     input:
         forwards=[
             PRE_KRAKEN2 / "samples" / f"{sample_id}_1.fq.gz" for sample_id in SAMPLES
@@ -57,17 +57,17 @@ rule preprocess__kraken2__assign:
         ],
     log:
         PRE_KRAKEN2 / "{kraken2_db}.log",
+    conda:
+        ENVS / "kraken2.yml"
+    threads: 24
+    resources:
+        mem_mb=2 * 800 * 1024,  # Use twice the size of the database, we use /dev/shm
+        runtime=24 * 60,
     params:
         in_folder=PRE_KRAKEN2 / "samples",
         out_folder=lambda w: PRE_KRAKEN2 / w.kraken2_db,
         kraken_db_name=lambda w: w.kraken2_db,
         samples=" ".join(SAMPLES),
-    threads: 24
-    resources:
-        mem_mb=2 * 800 * 1024,  # Use twice the size of the database, we use /dev/shm
-        runtime=24 * 60,
-    conda:
-        ENVS / "kraken2.yml"
     shell:
         """
         {{

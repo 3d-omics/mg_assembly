@@ -1,11 +1,12 @@
 rule preprocess__singlem__pipe:
     """Run singlem over one sample
 
-    NOTE: SingleM asks in the documentation for the raw reads. Here we are
-    passing it the non-host and trimmed ones.
-    NOTE 2: reads come from FASTP. If fastp trims everything, it returns 0 size uncompressed file,
-    not a 20 bytes compressed file. This is why we check for the size of the file, rather than the gzipped content.
-    """
+NOTE: SingleM asks in the documentation for the raw reads. Here we are
+passing it the non-host and trimmed ones.
+NOTE 2: reads come from FASTP. If fastp trims everything, it returns 0 size uncompressed file,
+not a 20 bytes compressed file. This is why we check for the size of the file, rather than the gzipped content.
+
+"""
     input:
         forward_=PRE_FASTP / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_FASTP / "{sample_id}.{library_id}_2.fq.gz",
@@ -55,10 +56,10 @@ rule preprocess__singlem__condense:
         PRE_SINGLEM / "singlem.log",
     conda:
         ENVS / "singlem.yml"
-    params:
-        input_dir=PRE_SINGLEM,
     resources:
         runtime=6 * 60,
+    params:
+        input_dir=PRE_SINGLEM,
     shell:
         """
         singlem condense \
@@ -72,9 +73,10 @@ rule preprocess__singlem__condense:
 rule preprocess__singlem__microbial_fraction:
     """Run singlem microbial_fraction over one sample
 
-    NOTE: reads come from FASTP. If fastp trims everything, it returns 0 size uncompressed file,
-    not a 20 bytes compressed file. This is why we check for the size of the file, rather than the gzipped content.
-    """
+NOTE: reads come from FASTP. If fastp trims everything, it returns 0 size uncompressed file,
+not a 20 bytes compressed file. This is why we check for the size of the file, rather than the gzipped content.
+
+"""
     input:
         forward_=PRE_FASTP / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_FASTP / "{sample_id}.{library_id}_2.fq.gz",
