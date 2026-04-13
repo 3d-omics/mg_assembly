@@ -9,13 +9,12 @@ rule prokaryotes__cluster__maxbin2:
         PROK_MAXBIN2 / "{assembly_id}.log",
     conda:
         ENVS / "maxbin2.yml"
-    params:
-        seed=1,
-        coverage=lambda w: PROK_MAXBIN2 / w.assembly_id / "maxbin2.coverage",
     threads: 4
     resources:
         mem_mb=double_ram(8 * 1024),
         runtime=24 * 60,
+    params:
+        coverage=lambda w: PROK_MAXBIN2 / w.assembly_id / "maxbin2.coverage",
     shell:
         """
         mkdir --parents {output.workdir}
@@ -39,7 +38,6 @@ rule prokaryotes__cluster__maxbin2:
         2>> {log}
 
         bgzip \
-            --compress-level 9 \
             {output.workdir}/*.fa \
         2>> {log} 1>&2
 
