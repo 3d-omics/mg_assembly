@@ -16,8 +16,9 @@ from Bio import SeqIO
 def get_bin_id(file_path):
     """Get the bin ID from the file path"""
     basename = os.path.basename(file_path)
-    # Strip common extensions to get the bin ID
-    for ext in [".fa.gz", ".fa"]:
+    if basename.endswith(".gz"):
+        basename = basename[:-3]
+    for ext in [".fa", ".fasta", ".fna"]:
         if basename.endswith(ext):
             return basename[: -len(ext)]
     return basename
@@ -43,7 +44,7 @@ def validate_directories(binners):
 
 
 def extract_contigs_from_fasta(file_path):
-    """Generator yielding contig IDs from a FASTA file (handles .gz)"""
+    """Generator yielding contig IDs from a FASTA file (can handle .gz)"""
     opener = gzip.open if file_path.endswith(".gz") else open
     with opener(file_path, "rt", encoding="utf-8") as f:
         for record in SeqIO.parse(f, "fasta"):
@@ -52,9 +53,21 @@ def extract_contigs_from_fasta(file_path):
 
 def process_binner_directory(binner_dir, binner_name, out_f):
     """List files in a binner directory and write contig-to-bin mappings to out_f"""
+
+    fasta_extensions = (
+        ".fa",
+        ".fasta",
+        ".fna",
+        ".fna",
+        ".fa.gz",
+        ".fasta.gz",
+        ".fna.gz",
+        ".faa.gz",
+    )
+
     for file_name in sorted(os.listdir(binner_dir)):
         file_path = os.path.join(binner_dir, file_name)
-        if os.path.isfile(file_path) and file_name.endswith((".fa.gz", ".fa")):
+        if os.path.isfile(file_path) and file_name.endswith(fasta_extensions):
             bin_id = get_bin_id(file_path)
             for contig_id in extract_contigs_from_fasta(file_path):
                 out_f.write(f"bin_{bin_id}\t{contig_id}\t{binner_name}\n")
