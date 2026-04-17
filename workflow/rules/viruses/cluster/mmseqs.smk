@@ -1,20 +1,20 @@
-rule viruses__cluster__mmseqs:
+rule viruses__cluster__mmseqs__easy_cluster:
     input:
-        fasta=VIR_DEDUPE / "clean.fa.gz",
+        fasta=VIR_CLUSTER / "bbmap.clean.fa.gz",
     output:
-        all_seq=VIR_MMSEQS / "all_seqs.fa.gz",
-        cluster=VIR_MMSEQS / "cluster.tsv.gz",
-        rep_seq=VIR_MMSEQS / "rep_seq.fa.gz",
+        all_seq=VIR_CLUSTER / "mmseqs.all_seqs.fa.gz",
+        cluster=VIR_CLUSTER / "mmseqs.cluster.tsv.gz",
+        rep_seq=VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
     log:
-        VIR_MMSEQS / "easy_cluster.log",
-    conda:
-        "../../../environments/mmseqs.yml"
-    params:
-        prefix=VIR_MMSEQS / "tmp",
-        tmpdir=VIR_MMSEQS,
+        VIR_CLUSTER / "mmseqs.easy_cluster.log",
     shadow:
         "minimal"
+    conda:
+        ENVS / "mmseqs.yml"
     threads: 24
+    params:
+        prefix=VIR_CLUSTER / "tmp",
+        tmpdir=VIR_CLUSTER,
     shell:
         """
         mmseqs easy-cluster \
@@ -49,4 +49,4 @@ rule viruses__cluster__mmseqs:
 
 rule viruses__cluster__mmseqs__all:
     input:
-        rules.viruses__cluster__mmseqs.output,
+        rules.viruses__cluster__mmseqs__easy_cluster.output,

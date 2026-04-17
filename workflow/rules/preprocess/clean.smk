@@ -12,8 +12,8 @@ rule preprocess__clean:
     log:
         PRE_CLEAN / "{sample_id}.{library_id}.log",
     conda:
-        "../../environments/bowtie2.yml"  # It has htslib in it
-    threads: 24
+        ENVS / "bowtie2.yml"  # It has htslib in it
+    threads: 8
     resources:
         mem_mb=1 * 1024,
         runtime=1 * 60,
@@ -24,7 +24,6 @@ rule preprocess__clean:
             --stdout \
             {input.forward_} \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
         > {output.forward_} \
         ) 2> {log}
@@ -34,7 +33,6 @@ rule preprocess__clean:
             --stdout \
             {input.reverse_} \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
         > {output.reverse_} \
         ) 2>> {log}

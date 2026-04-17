@@ -2,5 +2,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - genomad =1.8.1
-  - htslib =1.21
+  - genomad =1.11.2

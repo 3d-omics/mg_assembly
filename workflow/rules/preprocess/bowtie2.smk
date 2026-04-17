@@ -64,9 +64,10 @@ use rule bowtie2__map as preprocess__bowtie2__map with:
 rule preprocess__bowtie2__fastq:
     """Convert BAM to FASTQ using samtools and using the correct reference
 
-    NOTE: bowtie2 does not like CRAM files, and although can use a BAM file as an input,
-    bowtie2 fails to receive a piped SAM input. Therefore, we need to convert the CRAM file to a physical FASTQ file.
-    """
+NOTE: bowtie2 does not like CRAM files, and although can use a BAM file as an input,
+bowtie2 fails to receive a piped SAM input. Therefore, we need to convert the CRAM file to a physical FASTQ file.
+
+"""
     input:
         bam=PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.bam",
         bai=PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.bam.bai",
@@ -76,7 +77,7 @@ rule preprocess__bowtie2__fastq:
     log:
         PRE_BOWTIE2 / "{host}" / "{sample_id}.{library_id}.unaligned.log",
     conda:
-        "../../environments/bowtie2.yml"
+        ENVS / "bowtie2.yml"
     shell:
         """
         rm \
@@ -88,7 +89,7 @@ rule preprocess__bowtie2__fastq:
             -f 12 \
             -u \
             --threads {threads} \
-            {input} \
+            {input.bam} \
             "*" \
         | samtools collate \
             -O \

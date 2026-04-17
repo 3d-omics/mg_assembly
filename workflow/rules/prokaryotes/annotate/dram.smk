@@ -3,8 +3,8 @@ include: "dram_functions.smk"
 
 rule prokaryotes__annotate__dram__setup:
     """
-    Set up the databases from DRAM, no matter what the config file says.
-    """
+Set up the databases from DRAM, no matter what the config file says.
+"""
     input:
         dram_db=features["databases"]["dram"],
     output:
@@ -12,7 +12,7 @@ rule prokaryotes__annotate__dram__setup:
     log:
         PROK_ANN / "dram.setup.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     shell:
         """
         DRAM-setup.py set_database_locations \
@@ -48,14 +48,14 @@ rule prokaryotes__annotate__dram__annotate:
     log:
         PROK_ANN / "dram.annotate" / "{mag_id}.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
+    resources:
+        mem_mb=8 * 1024,
+        runtime=24 * 60,
     params:
         min_contig_size=params["prokaryotes"]["annotate"]["dram"]["annotate"][
             "min_contig_size"
         ],
-    resources:
-        mem_mb=8 * 1024,
-        runtime=24 * 60,
     shell:
         """
         rm \
@@ -83,19 +83,23 @@ rule prokaryotes__annotate__dram__annotate__aggregate_tsvs:
     log:
         PROK_ANN / "dram.aggregate_tsvs.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
+    threads: 8
     params:
-        work_dir=PROK_ANN / "dram.annotate",
-    threads: 24
+        input_dir=PROK_ANN / "dram.annotate",
+        output_dir=PROK_ANN,
     shell:
         """
         for file in annotations trnas rrnas ; do
 
-            csvtk concat --tabs {params.work_dir}/*/$file.tsv \
+            csvtk concat \
+                --tabs \
+                {params.input_dir}/*/$file.tsv \
             | sed -r \
                 's/[[:graph:]]+:bin_[0-9]+_([[:graph:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
-            | bgzip --compress-level 9 --threads {threads} \
-            > {PROK_ANN}/dram.$file.tsv.gz \
+            | bgzip \
+                --threads {threads} \
+            > {params.output_dir}/dram.$file.tsv.gz \
 
         done 2> {log} 1>&2
         """
@@ -105,26 +109,28 @@ rule prokaryotes__annotate__dram__annotate__concatenate_fastas:
     input:
         collect_dram_annotate,
     output:
-        PROK_ANN / f"dram.genes.fna.gz",
-        PROK_ANN / f"dram.genes.faa.gz",
-        PROK_ANN / f"dram.scaffolds.fna.gz",
-        PROK_ANN / f"dram.genes.gff.gz",
+        PROK_ANN / "dram.genes.fna.gz",
+        PROK_ANN / "dram.genes.faa.gz",
+        PROK_ANN / "dram.scaffolds.fna.gz",
+        PROK_ANN / "dram.genes.gff.gz",
     log:
-        PROK_ANN / f"dram.concatenate_fastas.log",
+        PROK_ANN / "dram.concatenate_fastas.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
+    threads: 8
     params:
-        work_dir=PROK_ANN / "dram.annotate",
-    threads: 24
+        input_dir=PROK_ANN / "dram.annotate",
+        output_dir=PROK_ANN,
     shell:
         """
         for file in genes.fna genes.faa scaffolds.fna genes.gff ; do
 
             sed \
-                -r 's/[[:graph:]]+:bin_[0-9]+_([[:graph:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
-                {params.work_dir}/*/$file \
-            | bgzip --compress-level 9 --threads {threads} \
-            > {PROK_ANN}/dram.$file.gz \
+                -r 's/[[:graph:]]+:bin_[0-9]+_([[:graph:]]+:bin_[0-9]+@contig_[0-9]+)/>\\1/g' \
+                {params.input_dir}/*/$file \
+            | bgzip \
+                --threads {threads} \
+            > {params.output_dir}/dram.$file.gz \
 
         done 2> {log}
         """
@@ -139,17 +145,16 @@ rule prokaryotes__annotate__dram__annotate__aggregate_genbank:
     log:
         PROK_ANN / "dram.genbank.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
+    threads: 8
     params:
-        work_dir=PROK_ANN / "dram.annotate",
-    threads: 24
+        input_dir=PROK_ANN / "dram.annotate",
     shell:
         """
         ( sed \
             -r 's/[[:graph:]]+:bin_[0-9]+_([[:graph:]]+:bin_[0-9]+@contig_[0-9]+)/\\1/g' \
-            {params.work_dir}/*/genbank/*.gbk \
+            {params.input_dir}/*/genbank/*.gbk \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
         > {output} \
         ) 2> {log}
@@ -158,8 +163,8 @@ rule prokaryotes__annotate__dram__annotate__aggregate_genbank:
 
 rule prokaryotes__annotate__dram__annotate__archive:
     """
-    Create tarball once annotations are merged done
-    """
+Create tarball once annotations are merged done
+"""
     input:
         annotations=PROK_ANN / "dram.annotations.tsv.gz",
         trnas=PROK_ANN / "dram.trnas.tsv.gz",
@@ -174,7 +179,7 @@ rule prokaryotes__annotate__dram__annotate__archive:
     log:
         PROK_ANN / "dram.archive.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     threads: 24
     params:
         out_dir=PROK_ANN,
@@ -206,7 +211,7 @@ rule prokaryotes__annotate__dram__distill:
     log:
         PROK_ANN / "dram.distill.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     resources:
         mem_mb=32 * 1024,
         runtime=24 * 60,
@@ -231,10 +236,9 @@ rule prokaryotes__annotate__dram__distill__archive:
     log:
         PROK_ANN / "dram.distill_archive.log",
     conda:
-        "../../../environments/dram.yml"
+        ENVS / "dram.yml"
     params:
         out_dir=PROK_ANN,
-    threads: 24
     shell:
         """
         for file in genome_stats.tsv metabolism_summary.xlsx product.tsv ; do

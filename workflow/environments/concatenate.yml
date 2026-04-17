@@ -2,5 +2,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - csvtk =0.36.0
-  - gtdbtk =2.7
+  - htslib =1.23.1

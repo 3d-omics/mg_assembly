@@ -1,6 +1,6 @@
 use rule bowtie2__build as viruses__quantify__bowtie2__build with:
     input:
-        ref=VIR_MMSEQS / "rep_seq.fa.gz",
+        ref=VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
     output:
         multiext(
             str(VIR_BUILD / "viruses"),
@@ -43,8 +43,6 @@ use rule bowtie2__map as viruses__quantify__bowtie2__map with:
         bowtie2_extra=params["preprocess"]["bowtie2"]["bowtie2_extra"],
         rg_id=compose_rg_id,
         rg_extra=compose_rg_extra,
-    conda:
-        "../../../environments/bowtie2.yml"
 
 
 rule viruses__quantify__bowtie2__map__all:

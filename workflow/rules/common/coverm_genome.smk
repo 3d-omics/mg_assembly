@@ -7,7 +7,7 @@ rule coverm__genome:
     log:
         "sample.{method}.log",
     conda:
-        "../../environments/coverm.yml"
+        ENVS / "coverm.yml"
     params:
         method=lambda w: w.method,
         separator="@",

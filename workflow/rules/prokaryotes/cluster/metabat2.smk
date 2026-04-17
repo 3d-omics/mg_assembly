@@ -8,16 +8,16 @@ rule prokaryotes__cluster__metabat2:
     log:
         PROK_METABAT2 / "{assembly_id}.log",
     conda:
-        "../../../environments/metabat2.yml"
+        ENVS / "metabat2.yml"
+    threads: 24
+    resources:
+        mem_mb=double_ram(8 * 1024),
+        runtime=24 * 60,
     params:
         bins_prefix=lambda w: PROK_METABAT2 / w.assembly_id / "bin",
         depth=lambda w: PROK_METABAT2 / f"{w.assembly_id}.depth",
         paired=lambda w: PROK_METABAT2 / f"{w.assembly_id}.paired",
         workdir=PROK_METABAT2,
-    threads: 24
-    resources:
-        mem_mb=double_ram(8 * 1024),
-        runtime=24 * 60,
     shell:
         """
         jgi_summarize_bam_contig_depths \
@@ -43,7 +43,6 @@ rule prokaryotes__cluster__metabat2:
 
         parallel --jobs {threads} \
             bgzip \
-                --compress-level 9 \
                 {{}} \
         ::: {output.bins}/*.fa \
         2>> {log} 1>&2

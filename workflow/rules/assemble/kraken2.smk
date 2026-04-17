@@ -14,15 +14,15 @@ rule assemble__kraken2__assign_contigs:
     log:
         ASMB_KRAKEN2 / "{kraken2_db}.log",
     conda:
-        "../../environments/kraken2.yml"
-    params:
-        in_folder=ASMB_MEGAHIT,
-        out_folder=lambda w: ASMB_KRAKEN2 / w.kraken2_db,
-        kraken_db_name=lambda w: w.kraken2_db,
+        ENVS / "kraken2.yml"
     threads: 8
     resources:
         mem_mb=800 * 1024,
         runtime=6 * 60,
+    params:
+        in_folder=ASMB_MEGAHIT,
+        out_folder=lambda w: ASMB_KRAKEN2 / w.kraken2_db,
+        kraken_db_name=lambda w: w.kraken2_db,
     shell:
         """
         {{

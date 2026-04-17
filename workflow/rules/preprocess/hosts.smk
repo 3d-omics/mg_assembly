@@ -1,14 +1,14 @@
 rule preprocess__hosts:
-    """Extract the fasta.gz on config.yaml into genome.fa,gz with bgzip"""
+    """Extract the fasta.gz on config.yaml into genome.fa.gz with bgzip"""
     input:
         fa_gz=lambda wildcards: features["hosts"][wildcards.host],
     output:
         fa_gz=PRE_HOSTS / "{host}.fa.gz",
     log:
         PRE_HOSTS / "{host}.log",
-    conda:
-        "../../environments/hosts.yml"
     cache: "omit-software"
+    conda:
+        ENVS / "hosts.yml"
     threads: 8
     shell:
         """
@@ -16,7 +16,6 @@ rule preprocess__hosts:
             --decompress \
             --stdout {input.fa_gz} \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
             --stdout \
             /dev/stdin \

@@ -10,12 +10,12 @@ use rule coverm__contig as assemble__coverm__contig with:
     log:
         ASMB_COVERM / "contig" / "{method}.{assembly_id}.{sample_id}.{library_id}.log",
     conda:
-        "../../environments/coverm.yml"
+        ENVS / "coverm.yml"
     params:
         method=lambda w: w.method,
 
 
-rule assemble__coverm__join:
+use rule csvtk__join__left as assemble__coverm__join with:
     input:
         lambda w: [
             ASMB_COVERM
@@ -24,16 +24,11 @@ rule assemble__coverm__join:
             for assembly_id, sample_id, library_id in ASSEMBLY_SAMPLE_LIBRARY
             if assembly_id == w.assembly_id
         ]
-        + ["/dev/null"],
+        + NULL,
     output:
         ASMB_COVERM / "contig.{method}.{assembly_id}.tsv.gz",
     log:
         ASMB_COVERM / "contig.{method}.{assembly_id}.log",
-    params:
-        subcommand="join",
-        extra="--left-join --tabs --out-tabs",
-    wrapper:
-        "v5.2.1/utils/csvtk"
 
 
 rule assemble__coverm__all:

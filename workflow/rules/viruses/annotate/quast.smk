@@ -1,13 +1,13 @@
 rule viruses__annotate__quast__all:
     """Run quast over one the dereplicated mags"""
     input:
-        VIR_MMSEQS / "rep_seq.fa.gz",
+        VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
     output:
         directory(VIR_QUAST),
     log:
         VIR / "quast.log",
     conda:
-        "../../../environments/quast.yml"
+        ENVS / "quast.yml"
     threads: 4
     resources:
         mem_mb=8 * 1024,

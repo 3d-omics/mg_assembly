@@ -6,7 +6,7 @@ rule prokaryotes__annotate__drep__quality_report:
     log:
         PROK_ANN / "drep.quality_report.log",
     conda:
-        "../../../environments/drep.yml"
+        ENVS / "drep.yml"
     shell:
         """
         echo \
@@ -34,7 +34,11 @@ rule prokaryotes__annotate__drep__dereplicate:
     log:
         PROK_ANN / "drep.{secondary_ani}.log",
     conda:
-        "../../../environments/drep.yml"
+        ENVS / "drep.yml"
+    threads: 24
+    resources:
+        mem_mb=double_ram(4 * 1024),
+        runtime=6 * 60,
     params:
         secondary_ani=lambda w: w.secondary_ani,
         minimum_completeness=params["prokaryotes"]["annotate"]["drep"][
@@ -43,10 +47,6 @@ rule prokaryotes__annotate__drep__dereplicate:
         maximum_contamination=params["prokaryotes"]["annotate"]["drep"][
             "maximum_contamination"
         ],
-    threads: 24
-    resources:
-        mem_mb=double_ram(4 * 1024),
-        runtime=6 * 60,
     shell:
         """
         dRep dereplicate \
@@ -69,14 +69,13 @@ rule prokaryotes__annotate__drep__get_fasta:
     log:
         PROK_ANN / "drep.{secondary_ani}.fa.log",
     conda:
-        "../../../environments/drep.yml"
-    threads: 24
+        ENVS / "drep.yml"
+    threads: 8
     shell:
         """
         ( cat \
             {input.work_dir}/dereplicated_genomes/*.fa \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
         > {output.fasta} \
         ) 2> {log}
@@ -91,7 +90,7 @@ rule prokaryotes__annotate__drep__tarball:
     log:
         PROK_ANN / "drep.{secondary_ani}.tar.log",
     conda:
-        "../../../environments/drep.yml"
+        ENVS / "drep.yml"
     threads: 24
     shell:
         """

@@ -16,13 +16,13 @@ rule assemble__multiqc:
         RESULTS / "assemble_data.zip",
     log:
         RESULTS / "assemble.log",
-    params:
-        extra="--title assemble --dirs --fullnames --fn_as_s_name --force",
     resources:
         mem_mb=double_ram(8 * 1024),
         runtime=6 * 60,
+    params:
+        extra="--title assemble --dirs --fullnames --fn_as_s_name --force",
     wrapper:
-        "v6.0.0/bio/multiqc"
+        "v9.4.0/bio/multiqc"
 
 
 rule assemble__multiqc__all:

@@ -6,3 +6,4 @@ dependencies:
   - dram =1.4.6
   - parallel =20241122
   - htslib =1.21
+  - setuptools <82

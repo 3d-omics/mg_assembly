@@ -16,7 +16,7 @@ rule preprocess__bracken__recompute:
     log:
         PRE_BRACKEN / "{kraken2_db}" / "recompute" / "{sample_id}.{level}.log",
     conda:
-        "../../environments/bracken.yml"
+        ENVS / "bracken.yml"
     params:
         read_length=params["preprocess"]["bracken"]["read_length"],
         threshold=params["preprocess"]["bracken"]["threshold"],
@@ -65,7 +65,7 @@ rule preprocess__bracken__report:
     log:
         PRE_BRACKEN / "{kraken2_db}" / "report" / "{sample_id}.log",
     conda:
-        "../../environments/bracken.yml"
+        ENVS / "bracken.yml"
     shell:
         """
         cp --verbose {input} {output} 2> {log} 1>&2
@@ -94,7 +94,7 @@ rule preprocess__bracken__combine:
     log:
         PRE_BRACKEN / "{kraken2_db}" / "combine" / "{level}.log",
     conda:
-        "../../environments/bracken.yml"
+        ENVS / "bracken.yml"
     shell:
         """
         combine_bracken_outputs.py \
@@ -126,7 +126,7 @@ rule preprocess__bracken__alpha_diversity:
     log:
         PRE_BRACKEN / "{kraken2_db}" / "alpha.{level}.log",
     conda:
-        "../../environments/bracken.yml"
+        ENVS / "bracken.yml"
     threads: 8
     shell:
         """
@@ -168,7 +168,7 @@ rule preprocess__bracken__beta_diversity:
     log:
         PRE_BRACKEN / "{kraken2_db}" / "beta.{level}.log",
     conda:
-        "../../environments/bracken.yml"
+        ENVS / "bracken.yml"
     shell:
         """
         beta_diversity.py \
@@ -182,8 +182,8 @@ rule preprocess__bracken__beta_diversity:
 rule preprocess__bracken__beta_diversity__all:
     """Run preprocess__bracken__beta_diversity for all databases and some levels
 
-    Note: Beta diversity is only computed for Order, Family, Genus and Species
-    """
+Note: Beta diversity is only computed for Order, Family, Genus and Species
+"""
     input:
         [
             PRE_BRACKEN / kraken2_db / f"beta.{level}.tsv"

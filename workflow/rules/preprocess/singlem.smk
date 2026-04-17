@@ -1,11 +1,12 @@
 rule preprocess__singlem__pipe:
     """Run singlem over one sample
 
-    NOTE: SingleM asks in the documentation for the raw reads. Here we are
-    passing it the non-host and trimmed ones.
-    NOTE 2: reads come from FASTP. If fastp trims everything, it returns 0 size uncompressed file,
-    not a 20 bytes compressed file. This is why we check for the size of the file, rather than the gzipped content.
-    """
+NOTE: SingleM asks in the documentation for the raw reads. Here we are
+passing it the non-host and trimmed ones.
+NOTE 2: reads come from FASTP. If fastp trims everything, it returns 0 size uncompressed file,
+not a 20 bytes compressed file. This is why we check for the size of the file, rather than the gzipped content.
+
+"""
     input:
         forward_=PRE_FASTP / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_FASTP / "{sample_id}.{library_id}_2.fq.gz",
@@ -17,7 +18,7 @@ rule preprocess__singlem__pipe:
     log:
         PRE_SINGLEM / "pipe" / "{sample_id}.{library_id}.log",
     conda:
-        "../../environments/singlem.yml"
+        ENVS / "singlem.yml"
     resources:
         mem_mb=16 * 1024,
         runtime=2 * 60,
@@ -54,11 +55,11 @@ rule preprocess__singlem__condense:
     log:
         PRE_SINGLEM / "singlem.log",
     conda:
-        "../../environments/singlem.yml"
-    params:
-        input_dir=PRE_SINGLEM,
+        ENVS / "singlem.yml"
     resources:
         runtime=6 * 60,
+    params:
+        input_dir=PRE_SINGLEM,
     shell:
         """
         singlem condense \
@@ -72,9 +73,10 @@ rule preprocess__singlem__condense:
 rule preprocess__singlem__microbial_fraction:
     """Run singlem microbial_fraction over one sample
 
-    NOTE: reads come from FASTP. If fastp trims everything, it returns 0 size uncompressed file,
-    not a 20 bytes compressed file. This is why we check for the size of the file, rather than the gzipped content.
-    """
+NOTE: reads come from FASTP. If fastp trims everything, it returns 0 size uncompressed file,
+not a 20 bytes compressed file. This is why we check for the size of the file, rather than the gzipped content.
+
+"""
     input:
         forward_=PRE_FASTP / "{sample_id}.{library_id}_1.fq.gz",
         reverse_=PRE_FASTP / "{sample_id}.{library_id}_2.fq.gz",
@@ -87,7 +89,7 @@ rule preprocess__singlem__microbial_fraction:
     log:
         PRE_SINGLEM / "microbial_fraction" / "{sample_id}.{library_id}.log",
     conda:
-        "../../environments/singlem.yml"
+        ENVS / "singlem.yml"
     shell:
         """
         if [ ! -s {input.condense} ]; then
@@ -111,7 +113,8 @@ rule preprocess__singlem__microbial_fraction__join:
         [
             PRE_SINGLEM / "microbial_fraction" / f"{sample_id}.{library_id}.tsv"
             for sample_id, library_id in SAMPLE_LIBRARY
-        ],
+        ]
+        + NULL,
     output:
         PRE_SINGLEM / "microbial_fraction.tsv.gz",
     log:

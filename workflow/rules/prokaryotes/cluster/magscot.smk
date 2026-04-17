@@ -7,10 +7,7 @@ rule prokaryotes__cluster__magscot__prodigal:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "prodigal.log",
     conda:
-        "../../../environments/magscot.yml"
-    resources:
-        attempt=get_attempt,
-    retries: 5
+        ENVS / "magscot.yml"
     threads: 24
     resources:
         mem_mb=double_ram(8 * 1024),
@@ -33,17 +30,15 @@ rule prokaryotes__cluster__magscot__prodigal:
                 -d /dev/null  \
                 -o /dev/null \
         > {output.proteins} \
-        ) 2> {log}.{resources.attempt}
-
-        mv {log}.{resources.attempt} {log}
+        ) 2> {log}
         """
 
 
 rule prokaryotes__cluster__magscot__hmmsearch_pfam:
     """Run hmmsearch over the predicted proteins of an assembly using Pfam as database
 
-    Note: hmmsearch must be decompressed
-    """
+Note: hmmsearch must be decompressed
+"""
     input:
         proteins=PROK_MAGSCOT / "{assembly_id}" / "prodigal.faa",
         hmm=features["magscot"]["pfam_hmm"],
@@ -52,7 +47,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_pfam:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "pfam.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     threads: 4
     resources:
         mem_mb=double_ram(8 * 1024),
@@ -82,7 +77,7 @@ rule prokaryotes__cluster__magscot__hmmsearch_tigr:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "tigr.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     threads: 4
     resources:
         mem_mb=double_ram(8 * 1024),
@@ -105,8 +100,9 @@ rule prokaryotes__cluster__magscot__hmmsearch_tigr:
 rule prokaryotes__cluster__magscot__join_hmms:
     """Join the results of hmmsearch over TIGR and Pfam
 
-    Note: "|| true" is used to avoid grep returning an error code when no lines are found
-    """
+Note: "|| true" is used to avoid grep returning an error code when no lines are found
+
+"""
     input:
         tigr_tblout=PROK_MAGSCOT / "{assembly_id}" / "tigr.tblout.gz",
         pfam_tblout=PROK_MAGSCOT / "{assembly_id}" / "pfam.tblout.gz",
@@ -115,7 +111,7 @@ rule prokaryotes__cluster__magscot__join_hmms:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "hmm.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     shell:
         """
         ( (zgrep -v "^#" {input.tigr_tblout} || true) \
@@ -131,9 +127,9 @@ rule prokaryotes__cluster__magscot__join_hmms:
 rule prokaryotes__cluster__magscot__merge_contig_to_bin:
     """Merge the contig to bin files from CONCOCT, MaxBin2 and MetaBAT2
 
-    The output file should have the following format:
-    BIN_ID <TAB> CONTIG_ID <TAB> METHOD
-    """
+The output file should have the following format:
+BIN_ID <TAB> CONTIG_ID <TAB> METHOD
+"""
     input:
         concoct=PROK_CONCOCT / "{assembly_id}",
         maxbin2=PROK_MAXBIN2 / "{assembly_id}",
@@ -143,26 +139,15 @@ rule prokaryotes__cluster__magscot__merge_contig_to_bin:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "contigs_to_bin.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     shell:
         """
-        for file in $(find {input.concoct} -name "*.fa.gz" -type f) ; do
-            bin_id=$(basename $file .fa)
-            zgrep ^">" $file | tr -d ">" \
-            | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tconcoct"}}'
-        done > {output} 2> {log}
-
-        for file in $(find {input.maxbin2} -name "*.fa.gz" -type f) ; do
-            bin_id=$(basename $file .fa)
-            zgrep ^">" $file | tr -d ">" \
-            | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmaxbin2"}}'
-        done >> {output} 2>> {log}
-
-        for file in $(find {input.metabat2} -name "*.fa.gz" -type f) ; do
-            bin_id=$(basename $file .fa)
-            zgrep ^">" $file | tr -d ">" \
-            | awk -v bin_id=$bin_id '{{print "bin_" bin_id "\\t" $1 "\\tmetabat2"}}'
-        done >> {output} 2>> {log}
+        python workflow/scripts/contig_to_bin.py \
+            --concoct {input.concoct} \
+            --maxbin2 {input.maxbin2} \
+            --metabat2 {input.metabat2} \
+            --output {output} \
+        2> {log}
         """
 
 
@@ -182,15 +167,15 @@ rule prokaryotes__cluster__magscot__run:
     log:
         PROK_MAGSCOT / "{assembly_id}/magscot.log",
     conda:
-        "../../../environments/magscot.yml"
-    params:
-        out_prefix=lambda w: PROK_MAGSCOT / w.assembly_id / "magscot",
+        ENVS / "magscot.yml"
     resources:
         mem_mb=8 * 1024,
         runtime=12 * 60,
+    params:
+        out_prefix=lambda w: PROK_MAGSCOT / w.assembly_id / "magscot",
     shell:
         """
-        Rscript --no-init-file workflow/scripts/MAGScoT/MAGScoT.R \
+        Rscript --vanilla workflow/scripts/MAGScoT/MAGScoT.R \
             --input {input.contigs_to_bin} \
             --hmm {input.hmm} \
             --out {params.out_prefix} \
@@ -209,12 +194,12 @@ rule prokaryotes__cluster__magscot__reformat:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "magscot.reformat.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     resources:
         mem_mb=8 * 1024,
     shell:
         """
-        Rscript --no-init-file workflow/scripts/clean_magscot_bin_to_contig.R \
+        Rscript --vanilla --verbose workflow/scripts/clean_magscot_bin_to_contig.R \
             --input-file {input.refined_contig_to_bin} \
             --output-file {output.clean} \
         2> {log} 1>&2
@@ -231,7 +216,7 @@ rule prokaryotes__cluster__magscot__rename:
     log:
         PROK_MAGSCOT / "{assembly_id}" / "magscot.rename.log",
     conda:
-        "../../../environments/magscot.yml"
+        ENVS / "magscot.yml"
     resources:
         mem_mb=8 * 1024,
     shell:
@@ -240,7 +225,6 @@ rule prokaryotes__cluster__magscot__rename:
             <(gzip -dc {input.assembly}) \
             {input.clean} \
         | bgzip \
-            --compress-level 9 \
             --threads {threads} \
         > {output.fasta} \
         ) 2> {log}

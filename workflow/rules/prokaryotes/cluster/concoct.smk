@@ -1,10 +1,10 @@
 rule prokaryotes__cluster__concoct:
     """
-    Run the entire concoct pipeline
+Run the entire concoct pipeline
 
-    Note: don't try to separate it. As it is it is amazing: only the bins remain
-    in the folder
-    """
+Note: don't try to separate it. As it is it is amazing: only the bins remain
+in the folder
+"""
     input:
         assembly=ASMB_MEGAHIT / "{assembly_id}.fa.gz",
         bams=get_bams_from_assembly_id,
@@ -13,15 +13,15 @@ rule prokaryotes__cluster__concoct:
         directory(PROK_CONCOCT / "{assembly_id}"),
     log:
         PROK_CONCOCT / "{assembly_id}.log",
-    conda:
-        "../../../environments/concoct.yml"
     retries: 5
-    params:
-        workdir=lambda w: PROK_CONCOCT / w.assembly_id,
+    conda:
+        ENVS / "concoct.yml"
     threads: 24
     resources:
         memory_mb=double_ram(8 * 1024),
         runtime=24 * 60,
+    params:
+        workdir=lambda w: PROK_CONCOCT / w.assembly_id,
     shell:
         """
         mkdir --parents --verbose {params.workdir} 2> {log} 1>&2
@@ -70,7 +70,6 @@ rule prokaryotes__cluster__concoct:
         2>> {log} 1>&2
 
         bgzip \
-            --compress-level 9 \
             {params.workdir}/*.fa \
         2>> {log} 1>&2
         """
