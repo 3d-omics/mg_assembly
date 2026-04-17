@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.7.0](https://github.com/3d-omics/mg_assembly/compare/v1.6.0...v1.7.0) (2026-04-17)
+
+
+### Features
+
+* add concatenate_fastas common rule ([ba1dd49](https://github.com/3d-omics/mg_assembly/commit/ba1dd497b101c3bd6a4172cafbb6848f5c2aa034))
+* add csvtk common rules ([6e5f8e0](https://github.com/3d-omics/mg_assembly/commit/6e5f8e0bc31b613bfc0b459c6682c9547861f64d))
+* add genomad download rule ([c2aae1f](https://github.com/3d-omics/mg_assembly/commit/c2aae1f782761a6c57a693251903c1a52ad96237))
+* checkv assembly-wise and aggregators ([574d45f](https://github.com/3d-omics/mg_assembly/commit/574d45fb0540b08e7024d0e81bb4614f8c7294c4))
+* concatenate tsvs, ENVS ([594ca01](https://github.com/3d-omics/mg_assembly/commit/594ca0131f0e40b02a0fb150b2925d4687805c92))
+* dramv in a split-apply-combine manner ([aad491f](https://github.com/3d-omics/mg_assembly/commit/aad491fabc102e0a2de1d38080adb63900c972d0))
+* force update genomad ([383a165](https://github.com/3d-omics/mg_assembly/commit/383a165411fcf61e14281bb4446d381e6b2cce1a))
+* join genomad files ([8c504ef](https://github.com/3d-omics/mg_assembly/commit/8c504effcb11f139df47f48c8f7b8b1532b27eec))
+* put in folder above bbmap and mmseqs since they only generate a file ([9382cdc](https://github.com/3d-omics/mg_assembly/commit/9382cdcc0a04198f0ce1c0ff15a2942f83135c52))
+* update assemble environments ([953b33c](https://github.com/3d-omics/mg_assembly/commit/953b33c136370ef9f8113c51dec94f1cf00ed676))
+* update genomad ([3694618](https://github.com/3d-omics/mg_assembly/commit/36946188948fbadbd7fe2c04424d0877a040826e))
+* update gtdb to r232 and gtdb-tk to 2.7 ([ab07202](https://github.com/3d-omics/mg_assembly/commit/ab0720227a7c6174379fe3e761027a91de868291))
+* update preprocess environments ([0f36575](https://github.com/3d-omics/mg_assembly/commit/0f36575ea0235a5294daf1e9806dd3bbc0f620ba))
+* update prokaryotes__annotate environments ([20068d3](https://github.com/3d-omics/mg_assembly/commit/20068d331de8392115e0a75338e573698219ee4c))
+* update prokaryotes__cluster environments ([6935ed6](https://github.com/3d-omics/mg_assembly/commit/6935ed68378215ef01e1cdf2fe98d45b416b9987))
+* update toolchain ([fef8fd1](https://github.com/3d-omics/mg_assembly/commit/fef8fd1c599470e72a9e0984ad3ceadebaf86f8d))
+* update viruses environments ([b9bdcc1](https://github.com/3d-omics/mg_assembly/commit/b9bdcc1cde41679493cab7b3a52121d7636abf2f))
+* virsorter2 in a split-apply-combine manner ([f9dcad5](https://github.com/3d-omics/mg_assembly/commit/f9dcad5b42bcb0e902f3f166ba957820c36c0d42))
+
+
+### Bug Fixes
+
+* add &gt; to fasta ([952e791](https://github.com/3d-omics/mg_assembly/commit/952e791736ef2d5ed211371ce0051612864660e7))
+* add ruleorder to differentiate stats bam and cram ([27000e5](https://github.com/3d-omics/mg_assembly/commit/27000e5d88c3b18dfc959e81fe449da582a512a0))
+* annotate/genomad ([15cf779](https://github.com/3d-omics/mg_assembly/commit/15cf779c4bf1f943c820c89187cccd7fa73ebc2e))
+* corner case ([ddedc6e](https://github.com/3d-omics/mg_assembly/commit/ddedc6e3c30e9a50565eae1fb53983f1702762e0))
+* expand outputs ([a63b717](https://github.com/3d-omics/mg_assembly/commit/a63b71754c76315e8e7437c0da74440a16274d65))
+* gzip in favor of htslib ([46defd9](https://github.com/3d-omics/mg_assembly/commit/46defd982c5fbbef23a2a46ec8b80875fbdbb142))
+* manage genomad with empty assemblies ([e9617a2](https://github.com/3d-omics/mg_assembly/commit/e9617a26692b850c3be5fe8eb3da32529fdef9e5))
+* pin correct envs. remove htslib and csvtk from envs that don't need it anymore. corner cases in csvtk ([481a6c9](https://github.com/3d-omics/mg_assembly/commit/481a6c967cec8ffd093dfc089bc6118dcf53561c))
+* point to correct files ([b97533b](https://github.com/3d-omics/mg_assembly/commit/b97533b35c3f468c6fa007bb6eaca1499e11a935))
+* wrong file constructed ([24a1252](https://github.com/3d-omics/mg_assembly/commit/24a1252a70be908204cae20cd75e7374e5a24686))
+
 ## [1.6.0](https://github.com/3d-omics/mg_assembly/compare/v1.5.0...v1.6.0) (2025-11-10)
 
 
