@@ -11,7 +11,7 @@ rule prokaryotes__annotate__gtdbtk__classify_wf:
         ENVS / "gtdbtk.yml"
     threads: 24
     resources:
-        mem_mb=128 * 1024,
+        mem_mb=160 * 1024,
         runtime=24 * 60,
     shell:
         """
@@ -22,7 +22,6 @@ rule prokaryotes__annotate__gtdbtk__classify_wf:
             --extension fa \
             --out_dir {output.work_dir} \
             --cpus {threads} \
-            --skip_ani_screen \
         2> {log} 1>&2
         """
 
