@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.7.1](https://github.com/3d-omics/mg_assembly/compare/v1.7.0...v1.7.1) (2026-05-11)
+
+
+### Bug Fixes
+
+* add resources to tsv concatenation files, update gtdbtk ([f74dd2c](https://github.com/3d-omics/mg_assembly/commit/f74dd2c7d39ba01a129bfd2d439127d0ab4b8f36))
+* **concatenate:** add resources everywhere ([04e30e7](https://github.com/3d-omics/mg_assembly/commit/04e30e79c895e34e0564c01b851f9e4959f86bb0))
+* update gtdbtk ([9edaca4](https://github.com/3d-omics/mg_assembly/commit/9edaca4bd250dd6333188c45141ed9f30fecca5f))
+
+
+### Performance Improvements
+
+* simplify tsv concatenation ([db3e0d9](https://github.com/3d-omics/mg_assembly/commit/db3e0d9208296d98554ec734446140d93ae3f59b))
+
 ## [1.7.0](https://github.com/3d-omics/mg_assembly/compare/v1.6.0...v1.7.0) (2026-04-17)
 
 
