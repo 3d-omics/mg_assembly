@@ -49,6 +49,13 @@ rule viruses__annotate__checkv__end_to_end:
             {input.fasta} \
             {params.workdir} \
         2> {log} 1>&2
+
+        rm \
+            --recursive \
+            --force \
+            --verbose \
+            {params.workdir}/tmp/ \
+        2>> {log} 1>&2
         """
 
 

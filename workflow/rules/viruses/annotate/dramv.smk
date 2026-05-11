@@ -157,6 +157,8 @@ rule viruses__annotate__dramv__distill:
     params:
         outdir=VIR_DRAMV,
         workdir=VIR_DRAMV / "tmp",
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         rm -rfv {params.workdir} 2> {log}

@@ -3,4 +3,4 @@ channels:
   - bioconda
 dependencies:
   - csvtk =0.36.0
-  - gtdbtk =2.7
+  - gtdbtk =2.7.1
