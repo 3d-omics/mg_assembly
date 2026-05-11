@@ -14,17 +14,17 @@ rule concatenate__gzip_text_files:
         touch {output}
 
         ( for file in {input} ; do
-            if [[ "$file" == *.gz ]] ; then
-                gzip \
-                    --decompress \
-                    --stdout \
-                    $file \
+            if [[ $file =~ \.gz$ ]] ; then
+                command="gzip --decompress --stdout"
             else
-                cat $file
-            fi \
+                command="cat"
+            fi
+
+            $command $file
         done \
         | bgzip \
             --threads {threads} \
+            --stdout \
         >> {output} \
         ) 2> {log}
         """
