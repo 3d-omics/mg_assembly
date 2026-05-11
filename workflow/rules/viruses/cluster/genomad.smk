@@ -143,8 +143,6 @@ use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_genes 
         VIR_CLUSTER / "genomad_plasmid_genes.tsv.gz",
     log:
         VIR_CLUSTER / "genomad_plasmid_genes.log",
-    resources:
-        mem_mb=8 * 1024,
 
 
 use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_summary with:
@@ -158,8 +156,6 @@ use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_summar
         VIR_CLUSTER / "genomad_plasmid_summary.tsv.gz",
     log:
         VIR_CLUSTER / "genomad_plasmid_summary.log",
-    resources:
-        mem_mb=8 * 1024,
 
 
 use rule csvtk__concat as viruses__cluster__genomad__concatenate__virus_genes with:

@@ -86,8 +86,6 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_complete_genome
         VIR_CHECKV / "checkv.complete_genomes.tsv.gz",
     log:
         VIR_CHECKV / "checkv.complete_genomes.log",
-    resources:
-        mem_mb=8 * 1024,
 
 
 use rule csvtk__concat as viruses__annotate__checkv__concatenate_completeness with:
@@ -101,8 +99,6 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_completeness wi
         VIR_CHECKV / "checkv.completeness.tsv.gz",
     log:
         VIR_CHECKV / "checkv.completeness.log",
-    resources:
-        mem_mb=8 * 1024,
 
 
 use rule csvtk__concat as viruses__annotate__checkv__concatenate_contamination with:
@@ -116,8 +112,6 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_contamination w
         VIR_CHECKV / "checkv.contamination.tsv.gz",
     log:
         VIR_CHECKV / "checkv.contamination.tsv.gz",
-    resources:
-        mem_mb=8 * 1024,
 
 
 use rule csvtk__concat as viruses__annotate__checkv__concatenate_summary with:
@@ -131,8 +125,6 @@ use rule csvtk__concat as viruses__annotate__checkv__concatenate_summary with:
         VIR_CHECKV / "checkv.quality_summary.tsv.gz",
     log:
         VIR_CHECKV / "checkv.quality_summary.tsv.gz",
-    resources:
-        mem_mb=8 * 1024,
 
 
 use rule concatenate__gzip_text_files as viruses__annotate__checkv__concatenate_proviruses with:

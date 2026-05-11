@@ -8,6 +8,8 @@ rule csvtk__concat:
     params:
         subcommand="concat",
         extra="--tabs --out-tabs",
+    resources:
+        mem_mb=8 * 1024,
     wrapper:
         "v5.2.1/utils/csvtk"
 
