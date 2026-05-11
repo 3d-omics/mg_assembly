@@ -88,6 +88,8 @@ rule prokaryotes__annotate__dram__annotate__aggregate_tsvs:
     params:
         input_dir=PROK_ANN / "dram.annotate",
         output_dir=PROK_ANN,
+    resources:
+        mem_mb=16 * 1024,
     shell:
         """
         for file in annotations trnas rrnas ; do

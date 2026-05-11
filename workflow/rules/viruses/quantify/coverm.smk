@@ -8,6 +8,8 @@ use rule coverm__contig as viruses__quantify__coverm__contig with:
         VIR_COVERM / "contig" / "{method}.{sample_id}.{library_id}.log",
     params:
         method=lambda w: w.method,
+    resources:
+        mem_mb=8 * 1024,
 
 
 use rule csvtk__join__left as viruses__quantify__coverm__contig__join with:
@@ -23,6 +25,8 @@ use rule csvtk__join__left as viruses__quantify__coverm__contig__join with:
         VIR_COVERM / "contig.{method}.rep_seq.tsv.gz",
     log:
         VIR_COVERM / "contig.{method}.rep_seq.log",
+    resources:
+        mem_mb=8 * 1024,
 
 
 rule viruses__quantify__coverm__contig__all:

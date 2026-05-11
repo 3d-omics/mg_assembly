@@ -25,15 +25,15 @@ rule viruses__cluster__genomad__run:
         fasta=ASMB_MEGAHIT / "{assembly_id}.fa.gz",
         database=features["databases"]["genomad"],
     output:
-        plasmid=temp(VIR_GENOMADC / "{assembly_id}_plasmid.fna"),
-        plasmid_genes=temp(VIR_GENOMADC / "{assembly_id}_plasmid_genes.tsv"),
-        plasmid_proteins=temp(VIR_GENOMADC / "{assembly_id}_plasmid_proteins.faa"),
-        plasmid_summary=temp(VIR_GENOMADC / "{assembly_id}_plasmid_summary.tsv"),
+        plasmid=VIR_GENOMADC / "{assembly_id}_plasmid.fna",
+        plasmid_genes=VIR_GENOMADC / "{assembly_id}_plasmid_genes.tsv",
+        plasmid_proteins=VIR_GENOMADC / "{assembly_id}_plasmid_proteins.faa",
+        plasmid_summary=VIR_GENOMADC / "{assembly_id}_plasmid_summary.tsv",
         json=VIR_GENOMADC / "{assembly_id}_summary.json",
-        virus=temp(VIR_GENOMADC / "{assembly_id}_virus.fna"),
-        virus_genes=temp(VIR_GENOMADC / "{assembly_id}_virus_genes.tsv"),
-        virus_proteins=temp(VIR_GENOMADC / "{assembly_id}_virus_proteins.faa"),
-        virus_summary_tsv=temp(VIR_GENOMADC / "{assembly_id}_virus_summary.tsv"),
+        virus=VIR_GENOMADC / "{assembly_id}_virus.fna",
+        virus_genes=VIR_GENOMADC / "{assembly_id}_virus_genes.tsv",
+        virus_proteins=VIR_GENOMADC / "{assembly_id}_virus_proteins.faa",
+        virus_summary_tsv=VIR_GENOMADC / "{assembly_id}_virus_summary.tsv",
     log:
         VIR_GENOMADC / "{assembly_id}.log",
     shadow:
@@ -143,6 +143,8 @@ use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_genes 
         VIR_CLUSTER / "genomad_plasmid_genes.tsv.gz",
     log:
         VIR_CLUSTER / "genomad_plasmid_genes.log",
+    resources:
+        mem_mb=8 * 1024,
 
 
 use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_summary with:
@@ -156,6 +158,8 @@ use rule csvtk__concat as viruses__cluster__genomad__concatenate__plasmid_summar
         VIR_CLUSTER / "genomad_plasmid_summary.tsv.gz",
     log:
         VIR_CLUSTER / "genomad_plasmid_summary.log",
+    resources:
+        mem_mb=8 * 1024,
 
 
 use rule csvtk__concat as viruses__cluster__genomad__concatenate__virus_genes with:
@@ -191,5 +195,5 @@ rule viruses__cluster__genomad__concatenate_tsvs:
 
 rule viruses__cluster__genomad__all:
     input:
-        rules.viruses__cluster__genomad__concatenate_fastas.output,
-        rules.viruses__cluster__genomad__concatenate_tsvs.output,
+        rules.viruses__cluster__genomad__concatenate_fastas.input,
+        rules.viruses__cluster__genomad__concatenate_tsvs.input,

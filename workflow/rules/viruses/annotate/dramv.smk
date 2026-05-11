@@ -93,6 +93,8 @@ use rule csvtk__concat as viruses__annotate__dramv__concatenate_annotations_tsv 
         VIR_DRAMV / "annotations.tsv.gz",
     log:
         VIR_DRAMV / "annotate" / "annotations.log",
+    resources:
+        mem_mb=8 * 1024,
 
 
 use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_genes_fna with:
@@ -157,6 +159,8 @@ rule viruses__annotate__dramv__distill:
     params:
         outdir=VIR_DRAMV,
         workdir=VIR_DRAMV / "tmp",
+    resources:
+        mem_mb=8 * 1024,
     shell:
         """
         rm -rfv {params.workdir} 2> {log}
