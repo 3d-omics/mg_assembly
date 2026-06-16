@@ -19,7 +19,7 @@ rule prokaryotes__multiqc:
     params:
         extra="--title prokaryotes --dirs --fullnames --fn_as_s_name --force",
     wrapper:
-        "v6.0.0/bio/multiqc"
+        "v9.4.0/bio/multiqc"
 
 
 rule prokaryotes__multiqc__all:
