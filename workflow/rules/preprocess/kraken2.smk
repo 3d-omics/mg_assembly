@@ -42,7 +42,7 @@ NOTE:
         forwards=[
             PRE_KRAKEN2 / "samples" / f"{sample_id}_1.fq.gz" for sample_id in SAMPLES
         ],
-        rerverses=[
+        reverses=[
             PRE_KRAKEN2 / "samples" / f"{sample_id}_2.fq.gz" for sample_id in SAMPLES
         ],
         database=lambda w: features["databases"]["kraken2"][w.kraken2_db],
