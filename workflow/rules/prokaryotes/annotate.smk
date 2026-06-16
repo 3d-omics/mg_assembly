@@ -15,3 +15,4 @@ rule prokaryotes__annotate__all:
         rules.prokaryotes__annotate__gtdbtk__all.input,
         rules.prokaryotes__annotate__drep__all.input,
         rules.prokaryotes__annotate__bakta__all.input,
+        rules.prokaryotes__annotate__quast__all.input,
