@@ -13,6 +13,7 @@ include: "preprocess/multiqc.smk"
 rule preprocess__all:
     input:
         rules.preprocess__reads__all.input,
+        rules.preprocess__hosts__all.input,
         rules.preprocess__fastp__all.input,
         rules.preprocess__bowtie2__all.input,
         rules.preprocess__clean__all.input,

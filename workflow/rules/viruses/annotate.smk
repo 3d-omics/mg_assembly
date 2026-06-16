@@ -11,3 +11,4 @@ rule viruses__annotate__all:
         rules.viruses__annotate__dramv__all.input,
         rules.viruses__annotate__quast__all.input,
         rules.viruses__annotate__checkv__all.input,
+        rules.viruses__annotate__virsorter2__all.input,

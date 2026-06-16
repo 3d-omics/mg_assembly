@@ -10,6 +10,7 @@ include: "annotate/bakta.smk"
 rule prokaryotes__annotate__all:
     """Evaluate the dereplication steps"""
     input:
+        rules.prokaryotes__annotate__mags__all.input,
         rules.prokaryotes__annotate__checkm2__all.input,
         rules.prokaryotes__annotate__dram__all.input,
         rules.prokaryotes__annotate__gtdbtk__all.input,
