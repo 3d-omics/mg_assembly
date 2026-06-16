@@ -1,4 +1,4 @@
-rule prokaryotes__multiqc:
+use rule multiqc as prokaryotes__multiqc with:
     input:
         bowtie2=[
             PROK_BOWTIE2
@@ -13,13 +13,8 @@ rule prokaryotes__multiqc:
         RESULTS / "prokaryotes_data.zip",
     log:
         RESULTS / "prokaryotes.log",
-    resources:
-        mem_mb=double_ram(8 * 1024),
-        runtime=6 * 60,
     params:
         extra="--title prokaryotes --dirs --fullnames --fn_as_s_name --force",
-    wrapper:
-        "v9.4.0/bio/multiqc"
 
 
 rule prokaryotes__multiqc__all:
