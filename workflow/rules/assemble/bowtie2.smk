@@ -14,10 +14,6 @@ use rule bowtie2__build as assemble__bowtie2__build with:
     log:
         ASMB_BUILD / "{assembly_id}.log",
     retries: 5
-    threads: 24
-    resources:
-        mem_mb=double_ram(8 * 1024),
-        runtime=60,
 
 
 rule assemble__bowtie2__build__all:
@@ -60,9 +56,6 @@ use rule bowtie2__map as assemble__bowtie2__map with:
         rg_extra=compose_rg_extra,
         samtools_extra="",
         bowtie2_extra="",
-    resources:
-        mem_mb=64 * 1024,
-        runtime=2 * 60,
 
 
 rule assemble__bowtie2__map__all:

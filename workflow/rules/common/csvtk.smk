@@ -21,6 +21,8 @@ rule csvtk__join__left:
         "fileout.tsv.gz",
     log:
         "log",
+    resources:
+        mem_mb=8 * 1024,
     params:
         subcommand="join",
         extra="--left-join --tabs --out-tabs",
