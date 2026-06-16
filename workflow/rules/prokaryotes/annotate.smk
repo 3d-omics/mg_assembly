@@ -4,6 +4,7 @@ include: "annotate/dram.smk"
 include: "annotate/checkm2.smk"
 include: "annotate/drep.smk"
 include: "annotate/quast.smk"
+include: "annotate/bakta.smk"
 
 
 rule prokaryotes__annotate__all:
@@ -13,3 +14,4 @@ rule prokaryotes__annotate__all:
         rules.prokaryotes__annotate__dram__all.input,
         rules.prokaryotes__annotate__gtdbtk__all.input,
         rules.prokaryotes__annotate__drep__all.input,
+        rules.prokaryotes__annotate__bakta__all.input,
