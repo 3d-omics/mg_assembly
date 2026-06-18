@@ -16,7 +16,7 @@ jobs:
   Pre-Commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           lfs: 'true'
       - name: Run pre-commit on all files
@@ -30,12 +30,12 @@ jobs:
       - Pre-Commit
     steps:
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           lfs: 'true'
 
       - name: Set up caches
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .snakemake/conda
@@ -46,7 +46,7 @@ jobs:
         run: conda clean --all --yes
 
       - name: Test workflow - Test
-        uses: snakemake/snakemake-github-action@v1
+        uses: snakemake/snakemake-github-action@v2
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -61,7 +61,7 @@ jobs:
             test
 
       - name: Test workflow - Print the commands to everything else
-        uses: snakemake/snakemake-github-action@v1
+        uses: snakemake/snakemake-github-action@v2
         with:
           directory: .
           snakefile: workflow/Snakefile
@@ -85,7 +85,7 @@ jobs:
       - name: Give permissions to cache
         run: sudo chown -R $USER:$USER .snakemake/conda
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: results

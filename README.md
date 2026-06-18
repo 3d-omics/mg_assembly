@@ -19,7 +19,7 @@ A Snakemake workflow for Genome Resolved Metagenomics
   - Assembly quantification with `bowtie2` and `coverm`
 - Bacterial metagenomics:
   - Binning with `CONCOCT`, `Maxbin2`, `MetaBAT2`, and aggregated with `MAGScoT`.
-  - Annotation with `quast` (mag and contig lengths), `gtdbtk` (taxonomy), `dram` (functions) and `checkm2` (completeness and contamination)
+  - Annotation with `quast` (mag and contig lengths), `gtdbtk` (taxonomy), `dram` (functions), `bakta` (gene annotation) and `checkm2` (completeness and contamination)
   - Dereplication with `dRep`, using multiple secondary ANIs, in case you need one for read mapping (eg. 95%), and a different for something like pangenomics (98 and 99%).
   - Quantification with `bowtie2` and `coverm`. One per secondary ANI
 - Viral metagenomics:
@@ -134,6 +134,7 @@ A Snakemake workflow for Genome Resolved Metagenomics
   - [`QUAST`](https://github.com/ablab/quast)
   - [`GTDB-TK`](https://github.com/Ecogenomics/GTDBTk)
   - [`DRAM`](https://github.com/WrightonLabCSU/DRAM)
+  - [`Bakta`](https://github.com/oschwengers/bakta)
   - [`CoverM`](https://github.com/wwood/CoverM)
 
 - Viruses

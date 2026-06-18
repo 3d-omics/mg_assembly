@@ -12,7 +12,7 @@ use rule bowtie2__build as viruses__quantify__bowtie2__build with:
             ".rev.2.bt2",
         ),
     log:
-        VIR_BUILD / "virues.log",
+        VIR_BUILD / "viruses.log",
 
 
 rule viruses__quantify__bowtie2__build__all:

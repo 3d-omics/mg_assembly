@@ -29,6 +29,8 @@ quantify:
 
 prokaryotes:
   annotate:
+    bakta:
+      extra: ""
     drep:
       secondary_anis:
         - 0.95

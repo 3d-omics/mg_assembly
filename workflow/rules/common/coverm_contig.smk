@@ -8,6 +8,8 @@ rule coverm__contig:
         "sample.{method}.log",
     conda:
         ENVS / "coverm.yml"
+    resources:
+        mem_mb=8 * 1024,
     params:
         method=lambda w: w.method,
     shell:

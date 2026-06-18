@@ -1,4 +1,4 @@
-rule preprocess__multiqc:
+use rule multiqc as preprocess__multiqc with:
     input:
         reads=[
             PRE_READS / f"{sample_id}.{library_id}_{end}_fastqc.zip"
@@ -34,13 +34,8 @@ rule preprocess__multiqc:
         RESULTS / "preprocess_data.zip",
     log:
         RESULTS / "preprocess.log",
-    resources:
-        mem_mb=double_ram(4 * 1024),
-        runtime=6 * 60,
     params:
         extra="--title preprocess --dirs --fullnames --fn_as_s_name --force",
-    wrapper:
-        "v9.4.0/bio/multiqc"
 
 
 rule preprocess__multiqc__all:

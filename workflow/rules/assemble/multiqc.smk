@@ -1,4 +1,4 @@
-rule assemble__multiqc:
+use rule multiqc as assemble__multiqc with:
     input:
         bowtie2=[
             ASMB_BOWTIE2 / assembly_id / f"{sample_id}.{library_id}.{report}"
@@ -16,13 +16,8 @@ rule assemble__multiqc:
         RESULTS / "assemble_data.zip",
     log:
         RESULTS / "assemble.log",
-    resources:
-        mem_mb=double_ram(8 * 1024),
-        runtime=6 * 60,
     params:
         extra="--title assemble --dirs --fullnames --fn_as_s_name --force",
-    wrapper:
-        "v9.4.0/bio/multiqc"
 
 
 rule assemble__multiqc__all:

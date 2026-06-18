@@ -183,6 +183,7 @@ rule viruses__annotate__dramv__distill:
 
 rule viruses__annotate__dramv__all:
     input:
+        rules.viruses__annotate__dramv__annotate__all.input,
         [
             VIR_DRAMV / "annotations.tsv.gz",
             VIR_ANN / "dram.genes.fna.gz",

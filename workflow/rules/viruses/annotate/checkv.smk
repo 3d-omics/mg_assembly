@@ -151,6 +151,7 @@ use rule concatenate__gzip_text_files as viruses__annotate__checkv__concatenate_
 
 rule viruses__annotate__checkv__all:
     input:
+        rules.viruses__annotate__checkv__end_to_end__all.input,
         [
             VIR_CHECKV / "checkv.complete_genomes.tsv.gz",
             VIR_CHECKV / "checkv.completeness.tsv.gz",
