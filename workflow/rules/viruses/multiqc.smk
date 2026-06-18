@@ -1,9 +1,8 @@
 use rule multiqc as viruses__multiqc with:
     input:
         bowtie2=[
-            VIR_BOWTIE2 / "rep_seq" / f"{sample_id}.{library_id}.{report}"
-            for sample_id, library_id in SAMPLE_LIBRARY
-            for report in BAM_REPORTS
+            VIR_MVP_READ_MAPPING / f"{sample_id}" / f"{sample_id}_sorted.stats.tsv"
+            for sample_id in SAMPLES
         ],
         quast=VIR_QUAST,
     output:

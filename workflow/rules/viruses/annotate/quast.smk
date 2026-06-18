@@ -1,6 +1,7 @@
 use rule quast as viruses__annotate__quast with:
     input:
-        VIR_CLUSTER / "mmseqs.rep_seq.fa.gz",
+        VIR_MVP_CLUSTERING
+        / "MVP_03_All_Sample_Filtered_Relaxed_Representative_Virus_Provirus_Sequences.fna",
     output:
         directory(VIR_QUAST),
     log:

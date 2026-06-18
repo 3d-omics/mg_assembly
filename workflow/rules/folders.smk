@@ -62,23 +62,18 @@ PROK_COVERM = PROK_QUANT / "coverm/"
 # Viruses
 VIR = RESULTS / "viruses"
 
-## Viruses - Cluster
-VIR_CLUSTER = VIR / "cluster"
-VIR_GENOMADC = VIR_CLUSTER / "genomad"
-# VIR_CHECKVC = VIR_CLUSTER / "checkv"
-VIR_DEDUPE = VIR_CLUSTER / "dedupe"
-VIR_MMSEQS = VIR_CLUSTER / "mmseqs"
+## Viruses - MVP (mvip owns the 0X_* subfolders under VIR_MVP)
+VIR_MVP = VIR
+VIR_MVP_INPUT = VIR_MVP / "00_INPUT"  # our own decompressed assemblies + renamed reads
+VIR_MVP_GENOMAD = VIR_MVP / "01_GENOMAD"
+VIR_MVP_CHECKV = VIR_MVP / "02_CHECK_V"
+VIR_MVP_CLUSTERING = VIR_MVP / "03_CLUSTERING"
+VIR_MVP_READ_MAPPING = VIR_MVP / "04_READ_MAPPING"
+VIR_MVP_VOTU_TABLES = VIR_MVP / "05_VOTU_TABLES"
+VIR_MVP_FUNCTIONAL_ANNOTATION = VIR_MVP / "06_FUNCTIONAL_ANNOTATION"
+VIR_MVP_BINNING = VIR_MVP / "07_BINNING"
 
-## Viruses - Annotation
+## Viruses - Annotation (kept, repointed at MVP outputs)
 VIR_ANN = VIR / "annotate"
-VIR_VIRSORTER2 = VIR_ANN / "virsorter2"
-VIR_GENOMADA = VIR_ANN / "genomad"
 VIR_DRAMV = VIR_ANN / "dramv"
 VIR_QUAST = VIR_ANN / "quast"
-VIR_CHECKV = VIR_ANN / "checkv"
-
-## Viruses - Quantify
-VIR_QUANT = VIR / "quantify"
-VIR_BUILD = VIR_QUANT / "build"
-VIR_BOWTIE2 = VIR_QUANT / "bowtie2"
-VIR_COVERM = VIR_QUANT / "coverm"

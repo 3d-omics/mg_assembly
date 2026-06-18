@@ -32,31 +32,33 @@ rule viruses__annotate__dramv__setup:
 
 
 rule viruses__annotate__dramv__annotate:
+    """Annotate MVP's representative viral catalog with DRAM-v.
+
+    Fed by MVP_06's --DRAM output (a fasta + an affi-contigs-style tsv mimicking
+    VirSorter2's format), which is cohort-wide, so unlike before this is a single
+    run rather than one per assembly_id.
+    """
     input:
-        fasta=VIR_VIRSORTER2 / "{assembly_id}" / "final-viral-combined-for-dramv.fa",
-        tsv=VIR_VIRSORTER2 / "{assembly_id}" / "viral-affi-contigs-for-dramv.tab",
+        fasta=get_dram_input_fasta,
+        tsv=get_dram_input_tsv,
         dram_db=features["databases"]["dram"],
         setup=VIR_DRAMV / "setup.done",
     output:
-        annotations=VIR_DRAMV / "annotate" / "{assembly_id}" / "annotations.tsv",
-        genes_faa=VIR_DRAMV / "annotate" / "{assembly_id}" / "genes.faa",
-        genes_fna=VIR_DRAMV / "annotate" / "{assembly_id}" / "genes.fna",
-        genes_gff=VIR_DRAMV / "annotate" / "{assembly_id}" / "genes.gff",
-        scaffolds_fna=VIR_DRAMV / "annotate" / "{assembly_id}" / "scaffolds.fna",
-        genbank=VIR_DRAMV
-        / "annotate"
-        / "{assembly_id}"
-        / "genbank"
-        / "final-viral-combined-for-dramv.gbk",
+        annotations=VIR_DRAMV / "annotate" / "annotations.tsv.gz",
+        genes_faa=VIR_DRAMV / "annotate" / "genes.faa.gz",
+        genes_fna=VIR_DRAMV / "annotate" / "genes.fna.gz",
+        genes_gff=VIR_DRAMV / "annotate" / "genes.gff.gz",
+        scaffolds_fna=VIR_DRAMV / "annotate" / "scaffolds.fna.gz",
     log:
-        VIR_DRAMV / "annotate" / "{assembly_id}.log",
+        VIR_DRAMV / "annotate.log",
     conda:
         ENVS / "dram.yml"
+    threads: 8
     resources:
-        mem_mb=8 * 1024,
+        mem_mb=double_ram(32 * 1024),
         runtime=24 * 60,
     params:
-        workdir=lambda w: VIR_DRAMV / "annotate" / w.assembly_id,
+        workdir=VIR_DRAMV / "annotate",
     shell:
         """
         rm \
@@ -71,81 +73,23 @@ rule viruses__annotate__dramv__annotate:
             --output_dir {params.workdir} \
             --skip_trnascan \
             --virsorter_affi_contigs {input.tsv} \
+            --threads {threads} \
+        2>> {log} 1>&2
+
+        bgzip \
+            --threads {threads} \
+            {params.workdir}/annotations.tsv \
+            {params.workdir}/genes.faa \
+            {params.workdir}/genes.fna \
+            {params.workdir}/genes.gff \
+            {params.workdir}/scaffolds.fna \
         2>> {log} 1>&2
         """
 
 
-rule viruses__annotate__dramv__annotate__all:
-    input:
-        [
-            VIR_DRAMV / "annotate" / f"{assembly_id}" / "annotations.tsv"
-            for assembly_id in ASSEMBLIES
-        ],
-
-
-use rule csvtk__concat as viruses__annotate__dramv__concatenate_annotations_tsv with:
-    input:
-        [
-            VIR_DRAMV / "annotate" / f"{assembly_id}" / "annotations.tsv"
-            for assembly_id in ASSEMBLIES
-        ],
-    output:
-        VIR_DRAMV / "annotations.tsv.gz",
-    log:
-        VIR_DRAMV / "annotate" / "annotations.log",
-
-
-use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_genes_fna with:
-    input:
-        [
-            VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.fna"
-            for assembly_id in ASSEMBLIES
-        ],
-    output:
-        VIR_ANN / "dram.genes.fna.gz",
-    log:
-        VIR_ANN / "dram.genes.fna.log",
-
-
-use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_genes_faa with:
-    input:
-        [
-            VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.faa"
-            for assembly_id in ASSEMBLIES
-        ],
-    output:
-        VIR_ANN / "dram.genes.faa.gz",
-    log:
-        VIR_ANN / "dram.genes.faa.log",
-
-
-use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_scaffolds_fna with:
-    input:
-        [
-            VIR_DRAMV / "annotate" / f"{assembly_id}" / "scaffolds.fna"
-            for assembly_id in ASSEMBLIES
-        ],
-    output:
-        VIR_ANN / "dram.scaffolds.fna.gz",
-    log:
-        VIR_ANN / "dram.scaffolds.fna.log",
-
-
-use rule concatenate__gzip_text_files as viruses__annotate__dramv__concatenate_genes_gff with:
-    input:
-        [
-            VIR_DRAMV / "annotate" / f"{assembly_id}" / "genes.gff"
-            for assembly_id in ASSEMBLIES
-        ],
-    output:
-        VIR_ANN / "dram.genes.gff.gz",
-    log:
-        VIR_ANN / "dram.genes.gff.log",
-
-
 rule viruses__annotate__dramv__distill:
     input:
-        annotations=VIR_DRAMV / "annotations.tsv.gz",
+        annotations=VIR_DRAMV / "annotate" / "annotations.tsv.gz",
     output:
         amg_summary=VIR_DRAMV / "amg_summary.tsv.gz",
         vmag_stats=VIR_DRAMV / "vMAG_stats.tsv.gz",
@@ -183,12 +127,5 @@ rule viruses__annotate__dramv__distill:
 
 rule viruses__annotate__dramv__all:
     input:
-        rules.viruses__annotate__dramv__annotate__all.input,
-        [
-            VIR_DRAMV / "annotations.tsv.gz",
-            VIR_ANN / "dram.genes.fna.gz",
-            VIR_ANN / "dram.genes.faa.gz",
-            VIR_ANN / "dram.scaffolds.fna.gz",
-            VIR_ANN / "dram.genes.gff.gz",
-            VIR_DRAMV / "product.html",
-        ],
+        rules.viruses__annotate__dramv__annotate.output,
+        rules.viruses__annotate__dramv__distill.output,

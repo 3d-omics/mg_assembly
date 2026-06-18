@@ -44,7 +44,37 @@ prokaryotes:
 
 
 viral:
-  genomad:
-    filtering: ""  # nothing, --conservative, or --relaxed
-    use_cuda: "export CUDA_VISIBLE_DEVICES=-1"  # in case you have problems with cuda and tensorflow
-    extra: "--disable-nn-classification"  # leave empty if you want to use. it is here to disable it for testing
+  mvp:
+    genomad_checkv:  # MVP_01
+      min_seq_size: 0
+      genomad_mode: ""  # "", --genomad_relaxed, or --genomad_conservative
+    filter:  # MVP_02
+      viral_min_genes: 1
+      host_viral_genes_ratio: 1
+    clustering:  # MVP_03
+      min_ani: 95
+      min_tcov: 85
+      min_qcov: 0
+      read_type: short
+    read_mapping:  # MVP_04
+      read_type: short
+      interleaved: "FALSE"
+    votu_table:  # MVP_05
+      covered_fraction: [0.1, 0.5, 0.9]
+      normalization: RPKM
+      filtration: conservative
+      viral_min_genes: 1
+      host_viral_genes_ratio: 1
+    functional_annotation:  # MVP_06
+      fasta_files: representative
+      phrogs_evalue: 0.01
+      phrogs_score: 50
+      pfam_evalue: 0.01
+      pfam_score: 50
+    binning:  # MVP_07
+      normalization: RPKM
+      filtration: conservative
+      viral_min_genes: 0
+      host_viral_genes_ratio: 1
+      read_type: short
+      interleaved: "FALSE"

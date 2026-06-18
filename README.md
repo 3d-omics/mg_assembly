@@ -22,10 +22,9 @@ A Snakemake workflow for Genome Resolved Metagenomics
   - Annotation with `quast` (mag and contig lengths), `gtdbtk` (taxonomy), `dram` (functions), `bakta` (gene annotation) and `checkm2` (completeness and contamination)
   - Dereplication with `dRep`, using multiple secondary ANIs, in case you need one for read mapping (eg. 95%), and a different for something like pangenomics (98 and 99%).
   - Quantification with `bowtie2` and `coverm`. One per secondary ANI
-- Viral metagenomics:
-  - Identification and clustering with `genomad`, `bbmap` and `mmseqs`.
-  - Quantification with `bowtie2` and `coverm`.
-  - Annotation with `dram`, `virsorter2`, `checkv` and `quast`.
+- Viral metagenomics, via [MVP](https://gitlab.com/ccoclet/mvp) (identification with `geNomad`+`CheckV`, ANI clustering, read mapping, vOTU tables, functional annotation, and `vRhyme` binning), parallelized per sample instead of MVP's own sequential looping.
+  - Annotation with `dram-v` (fed by MVP's functional annotation output) and `quast`.
+  - **Requires each sample to have its own single-sample assembly** (i.e. `assembly_ids` must include the sample's own `sample_id`, not just a coassembly) — see `samples.tsv` below.
 - Module reporting with `multiqc`, assisted with `samtools` and `fastqc`.
 
 
@@ -55,11 +54,13 @@ A Snakemake workflow for Genome Resolved Metagenomics
 
     ```tsv
     sample_id	library_id	forward_filename	reverse_filename	forward_adapter	reverse_adapter	assembly_ids
-    sample1	lib1	resources/reads/sample1_1.fq.gz	resources/reads/sample1_2.fq.gz	AGATCGGAAGAGCACACGTCTGAACTCCAGTCA	AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT	sample, all
+    sample1	lib1	resources/reads/sample1_1.fq.gz	resources/reads/sample1_2.fq.gz	AGATCGGAAGAGCACACGTCTGAACTCCAGTCA	AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT	sample1, all
     sample2	lib1	resources/reads/sample2_1.fq.gz	resources/reads/sample2_2.fq.gz	AGATCGGAAGAGCACACGTCTGAACTCCAGTCA	AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT	all
     ```
 
     In the `assembly_ids` you can name all the coassemblies each library will belong to. If you don't want to use a sample (a blank or a failed sample), leave the field empty.
+
+    Note: the viral module (MVP) needs one assembly per sample, so each sample's `assembly_ids` must include its own `sample_id` (as `sample1` does above), in addition to any coassembly.
 
 
     2. Edit `config/features.yml` with reference databases:
@@ -82,7 +83,6 @@ A Snakemake workflow for Genome Resolved Metagenomics
       kraken2:  # add entries as necessary
         refseq500: resources/databases/kraken2/kraken2_RefSeqV205_Complete_500GB/20220505/
       singlem: resources/databases/singlem/S3.2.1.GTDB_r214.metapackage_20231006.smpkg.zb
-      virsorter2: resources/databases/virsorter2/20200511/
     ```
 
     3. Edit `config/params.yml` with execution parameters. The defaults are reasonable.
@@ -138,11 +138,9 @@ A Snakemake workflow for Genome Resolved Metagenomics
   - [`CoverM`](https://github.com/wwood/CoverM)
 
 - Viruses
-  - [`genomad`](https://github.com/apcamargo/genomad)
-  - [`bbmap`](https://sourceforge.net/projects/bbmap/)
-  - [`mmseqs2`](https://github.com/soedinglab/MMseqs2)
-  - [`virsorter2`](https://github.com/jiarong/VirSorter2)
-  - [`checkv`](https://bitbucket.org/berkeleylab/checkv/src)
+  - [`MVP`](https://gitlab.com/ccoclet/mvp) (bundles `geNomad`, `CheckV`, `bowtie2`, `CoverM`, `vRhyme` and more)
+  - [`DRAM`](https://github.com/WrightonLabCSU/DRAM) (DRAM-v, fed by MVP's functional annotation step)
+  - [`QUAST`](https://github.com/ablab/quast)
 
 - Report
   - [`FastQC`](https://github.com/s-andrews/FastQC)

@@ -78,12 +78,14 @@ digraph snakemake_dag {
 
             gtdbtk  [label = "GTDB-TK",  color = "0.34 0.6 0.85",    style = "rounded"];
             dram    [label = "DRAM",     color = "0.01 0.6 0.85",    style = "rounded"];
+            bakta   [label = "Bakta",    color = "0.07 0.6 0.85",    style = "rounded"];
             checkm2 [label = "CheckM2",  color = "0.35 0.44 0.72"];
             drep    [label = "dRep",     color = "0.32 0.6 0.85",    style = "rounded"];
 
             // magscot ->  dram
             magscot ->  checkm2
             magscot ->  gtdbtk
+            magscot ->  bakta
             gtdbtk -> dram
             checkm2 -> drep
 
@@ -101,48 +103,34 @@ digraph snakemake_dag {
         shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin="10,10";
 
         subgraph cluster_4_1 {
-            label = "Cluster";
+            label = "MVP (per-sample parallel where possible)";
             shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin="10,10";
 
-            genomad     [label = "geNomad",     color = green,              style = "rounded"];
-            dedupe      [label = "Dedupe",      color = green,              style = "rounded"];
-            mmseqs2     [label = "MMseqs2",     color = red,                style = "rounded"];
+            mvp_id      [label = "geNomad +\nCheckV",      color = green, style = "rounded"];
+            mvp_cluster [label = "ANI\nClustering",        color = green, style = "rounded"];
+            mvp_map     [label = "Read mapping",           color = green, style = "rounded"];
+            mvp_votu    [label = "vOTU table",             color = green, style = "rounded"];
+            mvp_func    [label = "Functional\nannotation", color = green, style = "rounded"];
+            mvp_bin     [label = "vRhyme",                 color = red,   style = "rounded"];
 
-            genomad -> dedupe -> mmseqs2
-
+            mvp_id -> mvp_cluster -> mvp_map -> mvp_votu
+            mvp_cluster -> mvp_func
+            mvp_cluster -> mvp_bin
+            mvp_map -> mvp_bin
         }
 
-        megahit -> genomad
+        megahit -> mvp_id
 
         subgraph cluster_4_2 {
-            label = "Quantify";
-            shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin=10;
-
-            bowtie2v     [label = "bowtie2\nvOTUs",  color = "0.22 0.86 0.33"];
-            covermv      [label = "CoverM",          color = "0.44 0.60 0.85"];
-
-            bowtie2v -> covermv
-        }
-
-        mmseqs2 -> bowtie2v
-
-        subgraph cluster_4_3 {
             label = "Annotate";
             shape=box; style="rounded"; fontname=sans; fontsize=10; penwidth=2; margin=10;
 
-            genomad2    [label = "geNomad",     color = green,              style = "rounded"];
-            virsorter2  [label = "VirSorter2",   color = green];
-            dramv      [label = "DRAM-V",      color = green];
-            quastv     [label = "QUAST",       color = "0.76 0.55 0.22"];
-            checkv  [label = "CheckV",   color = "0.76 0.55 0.22"];
-
-            genomad2 -> virsorter2 -> dramv
-            mmseqs2 -> checkv
+            dramv  [label = "DRAM-V",  color = green];
+            quastv [label = "QUAST",   color = "0.76 0.55 0.22"];
         }
 
-        mmseqs2 -> genomad2
-        mmseqs2 -> quastv
-
+        mvp_func -> dramv
+        mvp_cluster -> quastv
     }
 
 }
