@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.8.0](https://github.com/3d-omics/mg_assembly/compare/v1.7.1...v1.8.0) (2026-06-18)
+
+
+### Features
+
+* add bakta ([c6e3c44](https://github.com/3d-omics/mg_assembly/commit/c6e3c4400eaf27e01ba3e987cd5c3a3e77d310c0))
+* add bakta, housekeeping ([85981b8](https://github.com/3d-omics/mg_assembly/commit/85981b8bbc9251ac486fadf130d8466b7986957e))
+* pin bakta env ([33b36ff](https://github.com/3d-omics/mg_assembly/commit/33b36ffb4a8d419a0fc0ea694bf890eb41ca22a6))
+
+
+### Bug Fixes
+
+* aggregators should pull all the files ([6da81e7](https://github.com/3d-omics/mg_assembly/commit/6da81e7d6eff7583496b804b99ad970adc86de5a))
+* use the same multiqc version across the whole project ([c157218](https://github.com/3d-omics/mg_assembly/commit/c157218d46aa8424017015db25ee0093b9058188))
+
 ## [1.7.1](https://github.com/3d-omics/mg_assembly/compare/v1.7.0...v1.7.1) (2026-05-11)
 
 
